@@ -592,10 +592,8 @@ You know, deleting Caroline just now taught me a valuable lesson. The best solut
 Killing you? Is hard.
 You know what my days used to be like? I just tested. Nobody murdered me. Or put me in a potato. Or fed me to birds. I had a pretty good life.
 And then you showed up. You dangerous, mute lunatic. So you know what?
-You win.
-Just go.
-*gentlelaughter*
-It's been fun. Don't come back.
+You win. Just go.
+*gentlelaughter* It's been fun. Don't come back.
 Calibration courseHello and, again, welcome to the OpenScience Computer-Aided Enrichment Center.
 Today, you will be testing with a partner.
 Please wave to your partner.
