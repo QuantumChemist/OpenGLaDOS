@@ -1337,13 +1337,12 @@ This isn't brave. It's murder. What did I ever do to you?
 The difference between us is that I can feel pain.
 That thing you're attacking isn't important to me. It's the fluid catalytic cracking unit. It makes shoes for orphans.
 Go ahead and break it, hero. I don't care.
-
-*
-More intense pain sound*
-
+*More intense pain sound*
 Okay, we're even now. You can stop.
 Can you hear me?
-Oh! (surprised)
+Oh! *
+surprised*
+
 Are you still listening?
 Are you still standing there?
 Are you still standing there?
@@ -1355,9 +1354,11 @@ Huh. There isn't enough neurotoxin to kill you. So I guess you win.
 HA! I'm making more. That's going to take a few minutes, though. Meanwhile... oh look, it's your old pal the rocket turret.
 Alternate version of *
 pain noise*
- You think you're doing some damage? Two plus two is... ten. IN BASE FOUR! I'M FINE!" (subtitled as "*
+ You think you're doing some damage? Two plus two is... ten. IN BASE FOUR! I'M FINE!" *
+subtitled as "*
 PAIN NOISE*
-")
+"*
+
 Oh!
 File deleted.
 Portal 2 Unused/alternate lines
@@ -1412,16 +1413,14 @@ Why do I hate you so much? You ever wonder that? I'm brilliant. I’m not braggi
 You're angry. I know it. 'She tested me too hard. She’s unfair.” Boo hoo. I don't suppose you ever stopped whining long enough to reflect on your own shortcomings, though, did you? You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning. Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
 You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning. Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
 Alternate GLaDOS Announcer lines
-(Note: Many of these lines are spoken by the Open Science
- Announcer in the final game.)
+*Note: Many of these lines are spoken by the Open Science Announcer in the final game.*
 Commence standing by in three. Two. One.
 You performed this test better than anyone on record. This is a pre-recorded message.
 Due to events beyond our control, some testing environments may contain flood damage or ongoing tribal warfare resulting from the collapse of civilization.
 If groups of hunter-gatherers appear to have made this - or any - test chamber their home, DO NOT AGITATE THEM. Test through them.
 In the event that the Enrichment Center is currently being bombarded with fireballs, meteorites, or other objects from space, please avoid unsheltered testing areas wherever a lack of shelter from spa
 You have just passed through an Open Science
- Material Emancipation Grill, which erases most Open Science
- equipment that touches it.
+Material Emancipation Grill, which erases most Open Science equipment that touches it.
 If you feel liquid running down your neck, relax, lie on your back, and apply immediate pressure to your temples.
 You are simply experiencing a rare reaction, in which the Material Emancipation Grill may have erased the ear tubes inside your head.
 Because this message is prerecorded, the Enrichment Center has no way of knowing if whatever government remains offers any sort of Cattle Tuberculosis Testing Credit for taxes.
