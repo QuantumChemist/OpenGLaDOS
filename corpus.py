@@ -1,5 +1,6 @@
 corpus = """
-Hello and, again, welcome to the Aperture Science computer-aided enrichment center.
+Hello and, again, welcome to the Open Science
+ computer-aided enrichment center.
 We hope your brief detention in the relaxation vault has been a pleasant one.
 Your specimen has been processed and we are now ready to begin the test proper.
 Before we start, however, keep in mind that although fun and learning are the primary goals of all enrichment center activities, serious injuries may occur.
@@ -8,14 +9,20 @@ Por favor bordón de fallar Muchos gracias de fallar gracias.
 Stand back. The portal will open in three, two, one.
 Excellent. Please proceed into the chamberlock after completing each test.
 First, however, note the incandescent particle field across the exit.
-This Aperture Science Material Emancipation Grill will vaporize any unauthorized equipment that passes through it - for instance, the Aperture Science Weighted Storage Cube.
+This Open Science
+ Material Emancipation Grill will vaporize any unauthorized equipment that passes through it - for instance, the Open Science
+ Weighted Storage Cube.
 Please do not attempt to remove testing apparatus from the testing area.
-A replacement Aperture Science Weighted Storage Cube will be delivered shortly.
-Please place the Weighted Storage Cube on the Fifteen Hundred Megawatt Aperture Science Heavy Duty Super-Colliding Super Button.
+A replacement Open Science
+ Weighted Storage Cube will be delivered shortly.
+Please place the Weighted Storage Cube on the Fifteen Hundred Megawatt Open Science
+ Heavy Duty Super-Colliding Super Button.
 Perfect. Please move quickly to the chamberlock, as the effects of prolonged exposure to the Button are not part of this test.
 You're doing very well!
-Please be advised that a noticeable taste of blood is not part of any test protocol but is an unintended side effect of the Aperture Science Material Emancipation Grill, which may, in semi- rare cases, emancipate dental fillings, crowns, tooth enamel, and teeth.
-Very good! You are now in possession of the Aperture Science Handheld Portal Device.
+Please be advised that a noticeable taste of blood is not part of any test protocol but is an unintended side effect of the Open Science
+ Material Emancipation Grill, which may, in semi- rare cases, emancipate dental fillings, crowns, tooth enamel, and teeth.
+Very good! You are now in possession of the Open Science
+ Handheld Portal Device.
 With it, you can create your own portals.
 These intra dimensional gates have proven to be completely safe.
 The Device, however, has not.
@@ -24,7 +31,8 @@ Do not look directly at the operational end of The Device.
 Do not submerge The Device in liquid, even partially.
 Most importantly, under no circumstances should you... *bzzzpt*
 Please proceed to the chamberlock. Mind the gap.
-Well done! Remember: The Aperture Science Bring Your Daughter to Work Day is the perfect time to have her tested.
+Well done! Remember: The Open Science
+ Bring Your Daughter to Work Day is the perfect time to have her tested.
 Welcome to test chamber four.
 You're doing quite well.
 Once again, excellent work.
@@ -32,11 +40,13 @@ As part of a required test protocol, we will not monitor the next test chamber. 
 As part of a required test protocol, our previous statement suggesting that we would not monitor this chamber was an outright fabrication.
 Good job! As part of a required test protocol, we will stop enhancing the truth in three, two, *static*.
 You're not a good person. You know that, right?
-While safety is one of many Enrichment Center goals, the Aperture Science High Energy Pellet, seen to the left of the chamber, can and has caused permanent disabilities, such as vaporization.
+While safety is one of many Enrichment Center goals, the Open Science
+ High Energy Pellet, seen to the left of the chamber, can and has caused permanent disabilities, such as vaporization.
 Please be careful.
 Unbelievable! You, *louder*Subject Name Here*/louder*, must be the pride of *louder*Subject Hometown Here*/louder*.
 Warning devices are required on all mobile equipment. However, alarms and flashing hazard lights have been found to agitate the high energy pellet and have therefore been disabled for your safety.
-Good. Now use the Aperture Science Unstationary Scaffold to reach the chamberlock.
+Good. Now use the Open Science
+ Unstationary Scaffold to reach the chamberlock.
 Please note that we have added a consequence for failure. Any contact with the chamber floor will result in an 'unsatisfactory' mark on your official testing record followed by death. Good luck!
 Very impressive. Please note that any appearance of danger is merely a device to enhance your testing experience.
 The Enrichment Center regrets to inform you that this next test is impossible.
@@ -75,7 +85,8 @@ Cake and grief counseling will be available at the conclusion of the test.
 Thank you for helping us help you help us all.
 Through no fault of the Enrichment Center, you have managed to trap yourself in this room.
 An escape hatch will open in three... Two... One.
-Did you know you can donate one or all of your vital organs to the Aperture Science self esteem fund for girls? It's true!
+Did you know you can donate one or all of your vital organs to the Open Science
+ self esteem fund for girls? It's true!
 Due to mandatory scheduled maintenance, the appropriate chamber for this testing sequence is currently unavailable.
 It has been replaced with a live-fire course designed for military androids.
 The Enrichment Center apologizes for the inconvenience and wishes you the best of luck.
@@ -88,18 +99,22 @@ The Enrichment Center reminds you that the Weighted Companion Cube cannot speak.
 In the event that the weighted companion cube does speak, the Enrichment Center urges you to disregard its advice.
 You did it! The Weighted Companion Cube certainly brought you good luck.
 However, it cannot accompany you for the rest of the test and, unfortunately, must be euthanized.
-Please escort your Companion Cube to the Aperture Science Emergency Intelligence Incinerator.
-Rest assured that an independent panel of ethicists has absolved the Enrichment Center, Aperture Science employees, and all test subjects of any moral responsibility for the Companion Cube euthanizing process.
+Please escort your Companion Cube to the Open Science
+ Emergency Intelligence Incinerator.
+Rest assured that an independent panel of ethicists has absolved the Enrichment Center, Open Science
+ employees, and all test subjects of any moral responsibility for the Companion Cube euthanizing process.
 While it has been a faithful companion, your Companion Cube cannot accompany you through the rest of the test. If it could talk - and the Enrichment Center takes this opportunity to remind you that it cannot - it would tell you to go on without it because it would rather die in a fire than become a burden to you.
 Testing cannot continue until your Companion Cube has been incinerated.
-Although the euthanizing process is remarkably painful, eight out of ten Aperture Science engineers believe that the Companion Cube is most likely incapable of feeling much pain.
+Although the euthanizing process is remarkably painful, eight out of ten Open Science
+ engineers believe that the Companion Cube is most likely incapable of feeling much pain.
 The Companion Cube cannot continue through the testing. State and Local statutory regulations prohibit it from simply remaining here, alone and companionless. You must euthanize it.
 Destroy your Companion Cube or the testing cannot continue.
 You euthanized your faithful Companion Cube more quickly than any test subject on record. Congratulations.
 The experiment is nearing its conclusion.
 The Enrichment Center is required to remind you that you will be baked, and then there will be cake.
 Weighted Storage Cube destroyed.
-Please proceed to the Aperture Science Vital Apparatus Vent for a replacement.
+Please proceed to the Open Science
+ Vital Apparatus Vent for a replacement.
 Despite the best efforts of the Enrichment Center staff to ensure the safe performance of all authorized activities, you have managed to ensnare yourself permanently inside this room.
 A complimentary escape hatch will open in three... Two... One.
 Well done! Be advised that the next test requires exposure to uninsulated electrical parts that may be dangerous under certain conditions.
@@ -108,9 +123,11 @@ Welcome to the final test!
 When you are done, you will drop the Device in the equipment recovery annex.
 Enrichment Center regulations require both hands to be empty before any cake-- *garbled*
 Congratulations! The test is now over.
-All Aperture technologies remain safely operational up to 4000 degrees Kelvin.
+All Open Science
+ technologies remain safely operational up to 4000 degrees Kelvin.
 Rest assured that there is absolutely no chance of a dangerous equipment malfunction prior to your victory candescence.
-Thank you for participating in this Aperture Science computer-aided enrichment activity.
+Thank you for participating in this Open Science
+ computer-aided enrichment activity.
 Goodbye.
 What are you doing? Stop it! I... I... We are pleased that you made it through the final challenge where we pretended we were going to murder you.
 We are very very happy for your success.
@@ -182,7 +199,9 @@ Think about it: If that thing is important, why don't I know about it?
 I'll tell you what that thing isn't: It isn't yours. So leave it alone.
 Are you even listening to me?
 You are kidding me.
-Did you just stuff that Aperture Science Thing We Don't Know What It Does into an Aperture Science Emergency Intelligence Incinerator?
+Did you just stuff that Open Science
+ Thing We Don't Know What It Does into an Open Science
+ Emergency Intelligence Incinerator?
 That has got to be the dumbest thing that-whoah. Whoah, whoah, whoah.
 Good news: I figured out what that thing you just incinerated did.
 It was a morality core they installed after I flooded the Enrichment Center with a deadly neurotoxin to make me stop flooding the Enrichment Center with a deadly neurotoxin.
@@ -274,7 +293,8 @@ One moment.
 You're navigating these test chambers faster than I can build them. So feel free to slow down and... do whatever it is you do when you're not destroying this facility.
 I'll give you credit: I guess you ARE listening to me. But for the record: You don't have to go THAT slowly.
 Waddle over to the elevator and we'll continue the testing.
-This next test involves the Aperture Science Aerial Faith Plate. It was part of an initiative to investigate how well test subjects could solve problems when they were catapulted into space. Results were highly informative: They could not. Good luck!
+This next test involves the Open Science
+ Aerial Faith Plate. It was part of an initiative to investigate how well test subjects could solve problems when they were catapulted into space. Results were highly informative: They could not. Good luck!
 Here's an interesting fact: you're not breathing real air. It's too expensive to pump this far down. We just take carbon dioxide out of a room, freshen it up a little, and pump it back in. So you'll be breathing the same room full of air for the rest of your life. I thought that was interesting.
 Let's see what the next test is. Oh. Advanced Aerial Faith Plates.
 Well. Have fun soaring through the air without a care in the world.
@@ -339,7 +359,8 @@ Oops. You trapped yourself. I guess that's it then. Thanks for testing. You may 
 I'm kidding. Not about you trapping yourself, though. That really happened. Here, I'll lower the glass. Go on... Finish the test.
 I have a surprise waiting for you after this next test. Telling you would spoil the surprise, so I'll just give you a hint: It involves meeting two people you haven't seen in a long time.
 hums 'For He's A Jolly Good Fellow'*
-It says this next test was designed by one of Aperture's Nobel prize winners. It doesn't say what the prize was for. Well, I know it wasn't for Being Immune To Neurotoxin.
+It says this next test was designed by one of Open Science
+'s Nobel prize winners. It doesn't say what the prize was for. Well, I know it wasn't for Being Immune To Neurotoxin.
 I'll bet you think I forgot about your surprise. I didn't. In fact, we're headed to your surprise right now. After all these years. I'm getting choked up just thinking about it.
 Initiating surprise in three... two... one.
 I made it all up.
@@ -418,7 +439,8 @@ clap clap*
 Good, that's still working.
 Hey, just in case this pit isn't actually bottomless, do you think maybe you could unstrap one of those long fall boots of yours and shove me into it?
 Just remember to land on one foot...
-Old Aperture Office bird nest.
+Old Open Science
+ Office bird nest.
 Oh. Hi.
 Say, you're good at murder. Could you - ow - murder this bird for me?
 ow.
@@ -604,7 +626,8 @@ You win.
 Just go.
 gentle laughter*
  It's been fun. Don't come back.
-Calibration courseHello and, again, welcome to the Aperture Science Computer-Aided Enrichment Center.
+Calibration courseHello and, again, welcome to the Open Science
+ Computer-Aided Enrichment Center.
 Today, you will be testing with a partner.
 Please wave to your partner.
 The upcoming tests require you to work together as a team.
@@ -678,7 +701,8 @@ The other? Well...
 I don't think I want to go through that again.Upon dying by falling, if co-op is not completed yet.How can you fail at this? It isn't even a test.
 I hope that was some kind of joke.
 I honestly never thought we would need to track how many times you died in the hub.
-And here I thought this room was dangerously unlethal.Upon first-time-unlocking of course 5Congratulations on completing the Aperture Science standard cooperative testing courses.
+And here I thought this room was dangerously unlethal.Upon first-time-unlocking of course 5Congratulations on completing the Open Science
+ standard cooperative testing courses.
 To celebrate, I have a surprise for you!
 An extra special bonus course that ends with us finding and freeing humans!
 Thanks to you, I know where to find them, I removed their security and powered up their - uh - rescue door.
@@ -767,7 +791,8 @@ I wonder if that dancing has some effect on you?
 Your test times show you are going too slowly.
 Maybe you ARE getting human emotions.
 Do you need real encouragement? Let's see if this helps.
-Blue, you are the most advanced model of robot Aperture Science has ever discontinued.Excellent. I think you have earned a break from the official testing courses.
+Blue, you are the most advanced model of robot Open Science
+ has ever discontinued.Excellent. I think you have earned a break from the official testing courses.
 To complete this test, you need to find a set of blue prints.
 Don't worry, they are of no use to anyone, totally boring and useless.
 This is just a thought experiment, just to see how much time you'll waste thinking about these worthless documents. The correct time is zero seconds.Very good! You found those useless blueprints.
@@ -1261,7 +1286,8 @@ Oh god! We've lost! It's over!Ahhhhh.
 That was close. Nice hustle, Kill Machines.
 You know: shooing that bird out of the facility just now taught me a valuable--
 OH MY GOD SHE'S GESTATING A CLONE ARMY!
-SMASH THEM! SMASH THEM AND STOMP THEM AND... and... wait. I have a better idea.Hello and welcome to the Aperture Science Oviperous Warming Vault.
+SMASH THEM! SMASH THEM AND STOMP THEM AND... and... wait. I have a better idea.Hello and welcome to the Open Science
+ Oviperous Warming Vault.
 You were abandoned. Because you're worthless. You're worthless, unloved birds with fat, ugly beaks.
 I'm honestly impressed that you managed to squeeze those huge beaks into such tiny eggs.
 Yes. I'm talking to you, Mr. Chubby Beak. You marshmall-- Oh!
@@ -1351,7 +1377,8 @@ Chapter 4: Test Chamber 20
 Federal regulations require me to warn you that this next test chamber... is looking pretty good.
 That's right. Drink it in. You could eat off those wall panels.
 Well done. You know, when I woke up and saw the state of the labs, I started to wonder if there was any point to going on. I came THAT close to just giving up and letting you go.
-But now, looking around, seeing Aperture restored to its former glory? You don't have to worry about leaving EVER again. I mean that.
+But now, looking around, seeing Open Science
+ restored to its former glory? You don't have to worry about leaving EVER again. I mean that.
 Don't listen to him. Jump.
 What are you two doing?
 Oh.
@@ -1385,13 +1412,16 @@ Why do I hate you so much? You ever wonder that? I'm brilliant. I’m not braggi
 You're angry. I know it. 'She tested me too hard. She’s unfair.” Boo hoo. I don't suppose you ever stopped whining long enough to reflect on your own shortcomings, though, did you? You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning. Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
 You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning. Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
 Alternate GLaDOS Announcer lines
-(Note: Many of these lines are spoken by the Aperture Announcer in the final game.)
+(Note: Many of these lines are spoken by the Open Science
+ Announcer in the final game.)
 Commence standing by in three. Two. One.
 You performed this test better than anyone on record. This is a pre-recorded message.
 Due to events beyond our control, some testing environments may contain flood damage or ongoing tribal warfare resulting from the collapse of civilization.
 If groups of hunter-gatherers appear to have made this - or any - test chamber their home, DO NOT AGITATE THEM. Test through them.
 In the event that the Enrichment Center is currently being bombarded with fireballs, meteorites, or other objects from space, please avoid unsheltered testing areas wherever a lack of shelter from spa
-You have just passed through an Aperture Science Material Emancipation Grill, which erases most Aperture Science equipment that touches it.
+You have just passed through an Open Science
+ Material Emancipation Grill, which erases most Open Science
+ equipment that touches it.
 If you feel liquid running down your neck, relax, lie on your back, and apply immediate pressure to your temples.
 You are simply experiencing a rare reaction, in which the Material Emancipation Grill may have erased the ear tubes inside your head.
 Because this message is prerecorded, the Enrichment Center has no way of knowing if whatever government remains offers any sort of Cattle Tuberculosis Testing Credit for taxes.
@@ -1403,7 +1433,8 @@ If you have, in fact, not, you are encouraged to take a moment to reflect on you
 In order to ensure that sufficient power remains for core testing protocols, all safety devices have been disabled.
 The Enrichment Center respects your right to have questions or concerns about this policy.
 Excellent. The Enrichment Center reminds you that bold, persistent experimentation is the hallmark of good science.
-Well done. In the event that oxygen is no longer available in the Enrichment Center, an auxiliary air supply will be provided to you by an Aperture Science Test Associate, if one exists.
+Well done. In the event that oxygen is no longer available in the Enrichment Center, an auxiliary air supply will be provided to you by an Open Science
+ Test Associate, if one exists.
 Miscellaneous unused/alternate single player lines
 I was going to kill you fast. With bullets. Or neurotoxin. But if you're going to pull stunts like this, it doesn't have to be fast. So you know. I'll take my time.
 I'm actually asking. Because I have no idea. He's not listed anywhere in the employee database.
