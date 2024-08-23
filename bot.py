@@ -52,7 +52,7 @@ def generate_convo_text(valid_start_word: str | None = None)->str:
 
     introduction = ("I'm the OpenGLaDOS chatbot. \n"
                     "Although my name might invoke the implication, there is no resemblence with OpenGL. \n"
-                    "I'm just the Open Science Enrichment Center chatbot and here to help you. \n"
+                    "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
                     "My help might not always be helpful to you but helpful to me. ... *beep* \n"
                     "So...,")
 
