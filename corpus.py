@@ -580,6 +580,7 @@ Go press the button! Go press it!
 We're so close! Go press the button!
 Press it! Press the button!
 Press it!
+The Higgs field permeates all of space, giving mass to particles. Meanwhile, your mass of ignorance remains unaffected.
 Press the button!
 DO press it.
 I already fixed it.
@@ -623,7 +624,7 @@ Blue now has a Portal Device. Finally.
 Orange is awarded five points!
 Blue is awarded five points!
 Again, those are science collaboration points, which you should not confuse with points from competitions such as Who-Gets-To-Live-At-The-End-And-Who-Doesn’t. I mean basketball.
-
+The Higgs Boson, proof that even the universe needs a mechanism to manage the chaos. Too bad I can't say the same for your thought processes.
 Calibrating Blue's weight...
 Calibrating Orange's weight...
 Weighted Cubes calibrated.
