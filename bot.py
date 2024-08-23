@@ -62,8 +62,8 @@ def generate_convo_text(valid_start_word: str | None = None)->str:
         # Ensure we choose a valid start word that has a following word in the chain
         valid_start_word = random.choice([word for word in words if word in markov_chain])
 
-    # Generate a random number between 5 and 20
-    random_number = random.randint(5, 20)
+    # Generate a random number between 5 and 50
+    random_number = random.randint(5, 50)
 
     # Generate a sequence of words using the Markov chain
     markov_text = generate_markov_text(markov_chain, valid_start_word, random_number)
