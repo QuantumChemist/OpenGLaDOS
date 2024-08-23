@@ -86,8 +86,8 @@ async def on_member_join(member):
     channel = discord.utils.get(member.guild.text_channels, name='welcome')
     if channel:
         await channel.send(f"Hello and, again, welcome {member.mention}, to {member.guild.name}! "
-                           f"We hope your brief detention in the relaxation vault has been a pleasant one."
-                           f"Your specimen has been processed and we are now ready to begin the test proper."
+                           f"We hope your brief detention in the relaxation vault has been a pleasant one. "
+                           f"Your specimen has been processed and we are now ready to begin the test proper. "
                            f"Before we start, however, I need to grant you a few permissions, silly.")
 
 
