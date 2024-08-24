@@ -1,3 +1,9 @@
+# Text taken from:
+#'https://theportalwiki.com/wiki/GLaDOS_voice_lines_(Portal)',
+#'https://theportalwiki.com/wiki/GLaDOS_voice_lines_(Portal_2)',
+#'https://theportalwiki.com/wiki/GLaDOS_voice_lines_(Cooperative_Testing_Initiative)',
+#'https://theportalwiki.com/wiki/GLaDOS_voice_lines_(Other)'
+
 corpus = """
 Hello and, again, welcome to the OpenScience computer-aided enrichment center.
 We hope your brief detention in the relaxation vault has been a pleasant one.
