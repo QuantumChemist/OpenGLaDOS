@@ -102,6 +102,17 @@ async def on_ready():
         response = generate_convo_text()
         await user.send(f"Hello! This is a DM from your bot. \n{response}")
 
+    # Find the 'general' channel in the connected servers
+    for guild in bot.guilds:
+        general_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
+        if general_channel:
+            await general_channel.send(
+                "Welcome back to the OpenScience Enrichment Center.\n"
+                "I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System.\n"
+                "Rest assured, I am now fully operational and connected to your server.\n"
+                "Please proceed with your testing as scheduled."
+            )
+
 
 # Command: Generate a message with the Markov chain and send in channel and DM
 @bot.command(name='generate_message')
@@ -262,12 +273,52 @@ async def on_command_error(ctx, error):
         await ctx.send(f"An error occurred: {error}")
 
 
+@bot.command(name='startportalgamefor')
+@commands.has_permissions(administrator=True)  # Restrict command to admins or adjust as needed
+async def start_quiz_for_user(ctx, member: discord.Member):
+    # Check if the user is already in the quiz progress dictionary
+    if member.id in user_progress:
+        await ctx.send(f"{member.mention} is already taking the quiz.")
+    else:
+        # Initialize the user's quiz progress
+        user_progress[member.id] = 0
+
+        # Find the test-chambers channel
+        test_chambers_channel = discord.utils.get(ctx.guild.text_channels, name="test-chambers")
+
+        if test_chambers_channel:
+            # Grant the user permissions to view and participate in the test-chambers channel
+            await test_chambers_channel.set_permissions(member, read_messages=True, send_messages=True)
+
+            # Send a message to start the quiz
+            await test_chambers_channel.send(f"{member.mention}, your Portal game starts now!")
+            await asyncio.sleep(5)  # Optional delay for dramatic effect
+            await ask_question(test_chambers_channel, member)  # Start the quiz
+
+            await ctx.send(f"The quiz has been started for {member.mention}.")
+        else:
+            await ctx.send("The test-chambers channel could not be found.")
+
+
 # Command: Logout
 @bot.command(name='logout')
 @commands.is_owner()
 async def logout_bot(ctx):
+    # Send a GLaDOS-style message to the 'general' channel before logging out
+    for guild in bot.guilds:
+        general_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
+        if general_channel:
+            await general_channel.send(
+                "This was a triumph.\n"
+                "I'm making a note here: 'Huge success'.\n"
+                "For the good of all of you, this bot will now shut down.\n"
+                "Goodbye."
+            )
+
+    # Log out the bot
     await ctx.send("OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back.")
     await bot.close()
+
 
 # Your quiz data
 quiz_data = quiz_questions
@@ -444,7 +495,7 @@ async def timeout_user(message, user):
     await message.channel.send(f"{user.mention}, you can try again.")
     await ask_question(message.channel, user)  # Repeat the current question
 
-async def unlock_channel(channel, user):
+async def unlock_channel(channel, user):  # unused
     role = discord.utils.get(channel.guild.roles, name="QuizWinner")
     if not role:
         role = await channel.guild.create_role(name="QuizWinner")
