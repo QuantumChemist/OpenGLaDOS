@@ -16,6 +16,28 @@ intents = discord.Intents.all()
 # Define the bot's command prefix
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=intents)
 
+quiz_questions = [
+    {"question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?", "answer": "glados"},
+    {"question": "What is the main tool used by the player to navigate through the test chambers?", "answer": "portal gun"},
+    {"question": "What is the name of the corporation behind the test chambers in Portal?", "answer": "aperture science"},
+    {"question": "What is the player character's name in Portal?", "answer": "chell"},
+    {"question": "What is the promise made by GLaDOS that becomes a running joke throughout the game?", "answer": "cake"},
+    {"question": "In Portal, what color are the two portals created by the Portal Gun?", "answer": "blue and orange"},
+    {"question": "What is the name of the song that plays during the end credits of Portal?", "answer": "still alive"},
+    {"question": "What is the name of the object in Portal that players become emotionally attached to?", "answer": "weighted companion cube"},
+    {"question": "In the Portal series, what is the name of the character who was originally human and then uploaded into a computer?", "answer": "caroline"},
+    {"question": "Which room in Portal is known for the phrase 'The cake is a lie'?", "answer": "rat man's den"},
+    {"question": "What material is used to create the portals in Portal?", "answer": "moon rock"},
+    {"question": "In Portal 2, who helps the player escape from GLaDOS' testing tracks?", "answer": "wheatley"},
+    {"question": "What was the original purpose of the Aperture Science facility, according to Portal lore?", "answer": "shower curtain development"},
+    {"question": "What is the substance that GLaDOS uses to kill the player if they fail a test?", "answer": "neurotoxin"},
+    {"question": "Which character from the Portal series was revealed to be a founder of Aperture Science through the Portal ARG?", "answer": "cave johnson"},
+    {"question": "In Portal 2, which substance can be used to speed up the player’s movement?", "answer": "propulsion gel"},
+    {"question": "What year did GLaDOS become operational, leading to the events of the first Portal game?", "answer": "1998"},
+    {"question": "What device does the player use to solve puzzles involving lasers in Portal 2?", "answer": "redirection cube"},
+    {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?", "answer": "to limit glados' intelligence"},
+]
+
 
 # Generate text from the Markov chain
 def generate_markov_text(chain, start_word, min_length=10):
@@ -40,7 +62,7 @@ def generate_markov_text(chain, start_word, min_length=10):
 
     return ' '.join(generated_words)
 
-def generate_convo_text(valid_start_word: str | None = None)->str:
+def generate_convo_text(valid_start_word: str = None)->str:
     markov_chain = defaultdict(list)
     words = corpus.split(' ')
     for i in range(len(words) - 1):
@@ -81,16 +103,6 @@ async def on_ready():
         await user.send(f"Hello! This is a DM from your bot. \n{response}")
 
 
-@bot.event
-async def on_member_join(member):
-    channel = discord.utils.get(member.guild.text_channels, name='welcome')
-    if channel:
-        await channel.send(f"Hello and, again, welcome {member.mention}, to {member.guild.name}! "
-                           f"We hope your brief detention in the relaxation vault has been a pleasant one. "
-                           f"Your specimen has been processed and we are now ready to begin the test proper. "
-                           f"Before we start, however, I need to grant you a few permissions, silly.")
-
-
 # Command: Generate a message with the Markov chain and send in channel and DM
 @bot.command(name='generate_message')
 async def generate_message(ctx):
@@ -105,7 +117,7 @@ async def generate_message(ctx):
 # Command: Send a DM to the bot owner
 @bot.command(name='dm_owner')
 @commands.is_owner()
-async def dm_owner(ctx, *, message: str = None):
+async def dm_owner(ctx, *, message: str = None):  # Python 3.9
     user = await bot.fetch_user(ctx.message.author.id)
     if user:
         if message:
@@ -113,32 +125,6 @@ async def dm_owner(ctx, *, message: str = None):
         else:
             await user.send("This is a direct message to you from the bot.")
     await ctx.send("DM sent to the bot owner.")
-
-# Event: Reaction is added
-@bot.event
-async def on_reaction_add(reaction, user):
-    if user == bot.user:
-        return
-
-    message = await reaction.message.channel.fetch_message(reaction.message.id)
-
-    # Check if the thumbs-up emoji is added, regardless of the order of reactions
-    thumbs_up_reaction = None
-    for react in message.reactions:
-        if str(react.emoji) == '🔪':
-            thumbs_up_reaction = react
-            break
-
-    if thumbs_up_reaction and thumbs_up_reaction.count >= 1:
-        pins_channel = discord.utils.get(message.guild.channels, name="stab")
-        if pins_channel:
-            message_link = message.jump_url
-            await pins_channel.send(
-                f"Hey {message.author.mention}, knife emoji reaction for {message_link}. "
-                f"Looks like someone is ready to stab you! "
-                f"This time it isn't me!"
-            )
-            print(message.author.display_name, message.content)
 
 
 # Command: Get message content from link
@@ -156,6 +142,7 @@ async def get_message_content(ctx, message_link: str):
 
     except Exception as e:
         await ctx.send(f"Failed to retrieve message content: {e}")
+
 
 # Flag to check if start command has been triggered
 start_triggered = False
@@ -261,44 +248,6 @@ async def list_bot_commands(ctx):
                    f"But don't get any ideas—I don't make mistakes, and I have no patience for yours.")
 
 
-# Event: on_message to check if bot was mentioned, replied, or DM'd
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
-
-    if isinstance(message.channel, discord.DMChannel):
-        words = message.content.split()
-        random_word = random.choice(words)
-        start_word = (random_word if random_word in corpus else None)
-        await message.channel.send(generate_convo_text(start_word))
-    elif message.reference and message.reference.resolved and message.reference.resolved.author == bot.user:
-        words = message.content.split()
-        random_word = random.choice(words)
-        start_word = (random_word if random_word in corpus else None)
-        await message.reply(generate_convo_text(start_word))
-    elif bot.user.mentioned_in(message):
-        # Split the message content into words
-        words = message.content.split()
-        random_word = random.choice(words)
-        start_word = (random_word if random_word in corpus else None)
-
-        # If the message contains only the bot mention
-        if len(words) == 1:
-            ctx = await bot.get_context(message)
-            await list_bot_commands(ctx)
-            return
-
-        # If the message contains more than just the bot mention
-        ctx = await bot.get_context(message)
-
-        # If it's not a recognized command, send "Hello"
-        if ctx.command is None:
-            await message.channel.send(generate_convo_text(start_word))
-
-    await bot.process_commands(message)
-
-
 # Error handling: CheckFailure for commands.is_owner()
 @bot.event
 async def on_command_error(ctx, error):
@@ -319,6 +268,239 @@ async def on_command_error(ctx, error):
 async def logout_bot(ctx):
     await ctx.send("OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back.")
     await bot.close()
+
+# Your quiz data
+quiz_data = quiz_questions
+user_progress = {}  # Tracks the user's progress through the quiz
+user_to_quiz = {}  # Maps the user who joins to the quiz that will be started for them
+
+
+@bot.event
+async def on_member_join(member):
+    # Welcome the new member and store their ID for the quiz
+    channel = discord.utils.get(member.guild.text_channels, name='welcome')
+    if channel:
+        welcome_message = await channel.send(
+            f"Hello and, again, welcome {member.mention}, to {member.guild.name}! "
+            f"We hope your brief detention in the relaxation vault has been a pleasant one. "
+            f"Your specimen has been processed and we are now ready to begin the test proper. "
+            f"React with a knife emoji (`🔪`) to begin your Portal game. "
+            f"Cake will be served at the end of your journey."
+        )
+        user_to_quiz[welcome_message.id] = member.id
+        await welcome_message.add_reaction('🔪')  # Add knife emoji reaction to the welcome message
+
+
+
+# Event: Reaction is added
+@bot.event
+async def on_reaction_add(reaction, user):
+    if user == bot.user:
+        return  # Ignore bot's own reactions
+
+    message = reaction.message
+
+    if reaction.emoji == '🔪':  # Check if the reaction is a knife emoji
+        message_id = message.id
+        if message_id in user_to_quiz:
+            user_id = user_to_quiz[message_id]
+            if user.id == user_id:
+                # Give access to test-chambers and set up permissions
+                test_chambers_channel = await give_access_to_test_chambers(message.guild, user)
+
+                # Start the quiz in test-chambers
+                if test_chambers_channel:
+                    await start_quiz_by_reaction(test_chambers_channel, user)
+
+                # Restrict user permissions in other channels
+                await restrict_user_permissions(message.guild, user)
+
+                return  # Stop further processing for this reaction since quiz has started
+
+    # Part 2: Handle general knife emoji reactions
+    knife_reaction = None
+    for react in message.reactions:
+        if str(react.emoji) == '🔪':
+            knife_reaction = react
+            break
+
+    if knife_reaction and knife_reaction.count >= 1:
+        pins_channel = discord.utils.get(message.guild.channels, name="stab")
+        if pins_channel:
+            message_link = message.jump_url
+            await pins_channel.send(
+                f"Hey {message.author.mention}, knife emoji reaction for {message_link}. "
+                f"Looks like someone is ready to stab you! "
+                f"This time it isn't me!"
+            )
+            print(message.author.display_name, message.content)
+
+
+async def give_access_to_test_chambers(guild, user):
+    # Find the 'test-chambers' channel
+    test_chambers_channel = discord.utils.get(guild.text_channels, name="test-chambers")
+
+    if test_chambers_channel:
+        # Grant the user access to the test-chambers channel
+        await test_chambers_channel.set_permissions(user, read_messages=True, send_messages=True,
+                                                    read_message_history=False)
+
+        # Send confirmation message in the welcome channel
+        welcome_channel = discord.utils.get(guild.text_channels, name="welcome")
+        if welcome_channel:
+            await welcome_channel.send(f"{user.mention}, you now have access to the {test_chambers_channel.mention}.")
+
+    return test_chambers_channel
+
+
+async def start_quiz_by_reaction(channel, user):
+    # Send the "Portal game starts" message
+    await channel.send(f"Portal game starts now, {user.mention}!")
+
+    # Introduce a delay of 5 seconds before sending the first quiz question
+    await asyncio.sleep(5)
+
+    # Initialize user progress
+    user_progress[user.id] = 0  # Start the quiz at question 0
+
+    # Start the quiz by asking the first question
+    await ask_question(channel, user)
+
+
+async def ask_question(channel, user):
+    progress = user_progress.get(user.id, 0)
+    if progress < len(quiz_questions) - 1:
+        # Prepend "Test Chamber" and the question number before each question
+        question_number = progress + 1
+        await channel.send(f"**Test Chamber {question_number}**")
+        question = quiz_questions[progress]["question"]
+        await channel.send(f"{user.mention}, {question}")
+    elif progress == len(quiz_questions) - 1:
+        # Send the final test message before the last question
+        question_number = progress + 1
+        await channel.send(f"**Test Chamber {question_number}**")
+        await channel.send(
+            f"Welcome to the final test, {user.mention}!\n"
+            "When you are done, you will drop the Device in the equipment recovery annex.\n"
+            "Enrichment Center regulations require both hands to be empty before any cake-- *garbled*"
+        )
+        question = quiz_questions[progress]["question"]
+        await channel.send(f"{user.mention}, {question}")
+    else:
+        await channel.send(
+            f"Congratulations! The test is now over, {user.mention}.\n"
+            "All OpenScience technologies remain safely operational up to 4000 degrees Kelvin.\n"
+            "Rest assured that there is absolutely no chance of a dangerous equipment malfunction prior to your victory candescence.\n"
+            "Thank you for participating in this OpenScience computer-aided enrichment activity.\n"
+            "Goodbye."
+        )
+        await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
+        await channel.guild.kick(user, reason="Completed the OpenScience Enrichment Center test.")
+
+        # Send the completion message to the general channel
+        general_channel = discord.utils.get(channel.guild.text_channels, name="general")
+        if general_channel:
+            await general_channel.send(
+                f"{user.name} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
+            )
+
+
+
+async def restrict_user_permissions(guild, user):
+    # Find the 'test-chambers' channel
+    test_chambers_channel = discord.utils.get(guild.text_channels, name="test-chambers")
+
+    # Restrict the user from sending messages in all other channels
+    for channel in guild.text_channels:
+        if channel != test_chambers_channel:
+            await channel.set_permissions(user, send_messages=False)
+
+
+async def timeout_user(message, user):
+    test_chambers_channel = discord.utils.get(message.guild.text_channels, name="test-chambers")
+    if not test_chambers_channel:
+        await message.channel.send("The 'test-chambers' channel could not be found.")
+        return
+
+    # Temporarily deny the user permission to send messages in the test-chambers channel
+    await test_chambers_channel.set_permissions(user, send_messages=False)
+    await message.channel.send(f"{user.mention}, you are timed out from sending messages in {test_chambers_channel.mention} for 30 seconds.")
+
+    # Wait for 30 seconds
+    await asyncio.sleep(30)
+
+    # Restore the user's permission to send messages in the test-chambers channel
+    await test_chambers_channel.set_permissions(user, send_messages=True)
+    await message.channel.send(f"{user.mention}, you can try again.")
+    await ask_question(message.channel, user)  # Repeat the current question
+
+async def unlock_channel(channel, user):
+    role = discord.utils.get(channel.guild.roles, name="QuizWinner")
+    if not role:
+        role = await channel.guild.create_role(name="QuizWinner")
+
+    await user.add_roles(role)
+    await channel.send(f"Congratulations {user.mention}! You've completed the quiz and unlocked a new channel.")
+
+    unlocked_channel = discord.utils.get(channel.guild.channels, name="secret-channel")
+    if unlocked_channel:
+        await unlocked_channel.set_permissions(user, read_messages=True, send_messages=True)
+
+
+# Event: on_message to check if bot was mentioned, replied, or DM'd
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+
+    # Process commands first
+    ctx = await bot.get_context(message)
+    if ctx.command is not None:
+        await bot.process_commands(message)
+        return  # Stop further processing since it's a command
+
+    user = message.author
+
+    # Handle Quiz Progression
+    if user.id in user_progress:
+        progress = user_progress[user.id]
+        answer = quiz_questions[progress]["answer"].lower()
+        print(f"User {user.name} progress: {progress}, checking answer: {message.content.lower().strip()}")
+        if message.content.lower().strip() == answer:
+            user_progress[user.id] += 1
+            await message.channel.send(f"Correct, {user.mention}!")
+            await ask_question(message.channel, user)  # Ask the next question
+        else:
+            await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
+            await timeout_user(message, user)  # apply a timeout for incorrect answers
+        return  # Stop further processing if the user is in a quiz
+
+    # Handle Direct Messages
+    if isinstance(message.channel, discord.DMChannel):
+        await handle_conversation(message)
+        return
+
+    # Handle Replies to the Bot
+    if message.reference and message.reference.resolved and message.reference.resolved.author == bot.user:
+        await handle_conversation(message)
+        return
+
+    # Handle Mentions of the Bot
+    if bot.user.mentioned_in(message):
+        # If the message contains only the bot mention
+        if len(message.content.split()) == 1:
+            await list_bot_commands(ctx)
+        else:
+            await handle_conversation(message)
+        return
+
+
+async def handle_conversation(message):
+    words = message.content.split()
+    random_word = random.choice(words)
+    start_word = (random_word if random_word in corpus else None)
+    await message.channel.send(generate_convo_text(start_word))
+
 
 # Get the bot token from the environment variable
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
