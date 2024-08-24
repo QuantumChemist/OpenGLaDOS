@@ -416,8 +416,6 @@ async def ask_question(channel, user):
                 )
 
 
-
-
 async def restrict_user_permissions(guild, user):
     # Find the 'test-chambers' channel
     test_chambers_channel = discord.utils.get(guild.text_channels, name="test-chambers")
