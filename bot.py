@@ -394,15 +394,27 @@ async def ask_question(channel, user):
             "Thank you for participating in this OpenScience computer-aided enrichment activity.\n"
             "Goodbye."
         )
-        await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
-        await channel.guild.kick(user, reason="Completed the OpenScience Enrichment Center test.")
+        await asyncio.sleep(10)  # Wait for 10 seconds before kicking the user
 
-        # Send the completion message to the general channel
-        general_channel = discord.utils.get(channel.guild.text_channels, name="general")
-        if general_channel:
-            await general_channel.send(
-                f"{user.name} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
-            )
+        # Check if the user has the "Survivor" role
+        survivor_role = discord.utils.get(channel.guild.roles, name="survivor")
+        if survivor_role and survivor_role in user.roles:
+            general_channel = discord.utils.get(channel.guild.text_channels, name="general")
+            if general_channel:
+                await general_channel.send(
+                    f"{user.name} has successfully completed the OpenScience Enrichment Center test and survived because they are a `survivor`."
+                )
+        else:
+            # Kick the user from the guild if they don't have the "Survivor" role
+            await channel.guild.kick(user, reason="Completed the OpenScience Enrichment Center test.")
+
+            # Send the completion message to the general channel
+            general_channel = discord.utils.get(channel.guild.text_channels, name="general")
+            if general_channel:
+                await general_channel.send(
+                    f"{user.name} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
+                )
+
 
 
 
