@@ -352,17 +352,14 @@ class OpenGLaDOS(commands.Cog):
                 if message.content.lower().strip() == answer:
                     user_progress[user.id] += 1
                     await message.channel.send(f"Correct, {user.mention}!")
-
-                    if user_progress[user.id] == len(quiz_questions):  # Check if all questions are answered
-                        print(f"{user.mention} has completed the quiz!")
-                        user_progress[user.id] = 0  # Reset the user's progress
-                        print(f"{user.mention}'s progress has been reset.")
-                    else:
-                        await ask_question(message.channel, user)  # Ask the next question
-
+                    await ask_question(message.channel, user)  # Ask the next question
                 else:
                     await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
                     await timeout_user(message, user)  # Apply a timeout for incorrect answers
+            else:
+                print(f"{user.mention} has completed the quiz!")
+                user_progress[user.id] = 0  # Reset the user's progress
+                print(f"{user.mention}'s progress has been reset.")
 
             return  # Stop further processing if the user is in a quiz
 
