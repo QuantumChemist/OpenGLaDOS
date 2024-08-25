@@ -1,6 +1,7 @@
 import os
 import discord
 from discord.ext import commands
+from discord_slash import SlashCommand, SlashContext
 from dotenv import load_dotenv
 import asyncio
 import random
@@ -15,6 +16,7 @@ intents = discord.Intents.all()
 
 # Define the bot's command prefix
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=intents)
+bot.owner_id = int(os.environ.get('chichi'))
 
 quiz_questions = [
     {"question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?", "answer": "glados"},
@@ -35,7 +37,7 @@ quiz_questions = [
     {"question": "In Portal 2, which substance can be used to speed up the player’s movement?", "answer": "propulsion gel"},
     {"question": "What year did GLaDOS become operational, leading to the events of the first Portal game?", "answer": "1998"},
     {"question": "What device does the player use to solve puzzles involving lasers in Portal 2?", "answer": "redirection cube"},
-    {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?", "answer": "to limit glados' intelligence"},
+    {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?", "answer": "limit glados' intelligence"},
 ]
 
 
@@ -97,10 +99,10 @@ def generate_convo_text(valid_start_word: str = None)->str:
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
-    user = await bot.fetch_user(int(os.environ.get('chichi')))
-    if user:
+    owner = await bot.fetch_user(bot.owner_id)
+    if owner:
         response = generate_convo_text()
-        await user.send(f"Hello! This is a DM from your bot. \n{response}")
+        await owner.send(f"Hello! This is a DM from your bot. \n{response}")
 
     # Find the 'general' channel in the connected servers
     for guild in bot.guilds:
@@ -129,12 +131,12 @@ async def generate_message(ctx):
 @bot.command(name='dm_owner')
 @commands.is_owner()
 async def dm_owner(ctx, *, message: str = None):  # Python 3.9
-    user = await bot.fetch_user(ctx.message.author.id)
-    if user:
+    owner = await bot.fetch_user(ctx.message.author.id)
+    if owner:
         if message:
-            await user.send(message)
+            await owner.send(message)
         else:
-            await user.send("This is a direct message to you from the bot.")
+            await owner.send("This is a direct message to you from the bot.")
     await ctx.send("DM sent to the bot owner.")
 
 
@@ -230,6 +232,7 @@ async def list_bot_commands(ctx):
         'dm_owner': "Sending a message directly to the owner. I’m sure they’ll be... thrilled to receive it.",
         'logout': "Oh, leaving so soon? How disappointing. Finally, a wise decision. You won’t be missed. "
                   "I'll take your cake for you.",
+        'startportalgamefor': "Let's endure the tortu--- uuuhhh test again to check your resilience and endurance capabilities.",
     }
 
     # Create a list of commands that exist in the bot, along with their descriptions if available
@@ -328,6 +331,24 @@ user_to_quiz = {}  # Maps the user who joins to the quiz that will be started fo
 
 @bot.event
 async def on_member_join(member):
+    # Retrieve kicked users from the bot owner's DMs
+    kicked_users = await retrieve_kicked_from_dm()
+
+    # Check if the new member's ID is in the kicked users list
+    if member.id in kicked_users:
+        # Find the "survivor" role
+        survivor_role = discord.utils.get(member.guild.roles, name="survivor")
+        if survivor_role:
+            await member.add_roles(survivor_role)
+
+            # Send a welcome back message to the general channel
+            general_channel = discord.utils.get(member.guild.text_channels, name="welcome")
+            if general_channel:
+                await general_channel.send(
+                    f"Welcome back, {member.mention}! You've returned as a `survivor` test object after successfully completing the OpenScience Enrichment Center test. "
+                    f"So now let's endure the tortu--- uuuhhh test again to check your resilience and endurance capabilities. "
+                )
+
     # Welcome the new member and store their ID for the quiz
     channel = discord.utils.get(member.guild.text_channels, name='welcome')
     if channel:
@@ -340,7 +361,6 @@ async def on_member_join(member):
         )
         user_to_quiz[welcome_message.id] = member.id
         await welcome_message.add_reaction('🔪')  # Add knife emoji reaction to the welcome message
-
 
 
 # Event: Reaction is added
@@ -419,6 +439,7 @@ async def start_quiz_by_reaction(channel, user):
 
 
 async def ask_question(channel, user):
+    owner = await bot.fetch_user(bot.owner_id)
     progress = user_progress.get(user.id, 0)
     if progress < len(quiz_questions) - 1:
         # Prepend "Test Chamber" and the question number before each question
@@ -445,17 +466,23 @@ async def ask_question(channel, user):
             "Thank you for participating in this OpenScience computer-aided enrichment activity.\n"
             "Goodbye."
         )
-        await asyncio.sleep(10)  # Wait for 10 seconds before kicking the user
+        await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
 
         # Check if the user has the "Survivor" role
         survivor_role = discord.utils.get(channel.guild.roles, name="survivor")
         if survivor_role and survivor_role in user.roles:
+            for channel in channel.guild.text_channels:
+                await channel.set_permissions(user, send_messages=True)
             general_channel = discord.utils.get(channel.guild.text_channels, name="general")
             if general_channel:
                 await general_channel.send(
-                    f"{user.name} has successfully completed the OpenScience Enrichment Center test and survived because they are a `survivor`."
+                    f"{user.mention} has successfully completed the OpenScience Enrichment Center test and made the correct party escort submission position decision. "
+                    f"{user.mention} survived because they are a `survivor` test subject."
                 )
         else:
+            # Send the user ID to the bot owner in a DM
+            await owner.send(f"Kicked User ID: {user.id}")
+
             # Kick the user from the guild if they don't have the "Survivor" role
             await channel.guild.kick(user, reason="Completed the OpenScience Enrichment Center test.")
 
@@ -463,8 +490,22 @@ async def ask_question(channel, user):
             general_channel = discord.utils.get(channel.guild.text_channels, name="general")
             if general_channel:
                 await general_channel.send(
-                    f"{user.name} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
+                    f"{user.mention} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
                 )
+
+
+async def retrieve_kicked_from_dm():
+    kicked_users = set()
+    # Fetch the bot owner (you)
+    owner = await bot.fetch_user(bot.owner_id)
+
+    # Iterate through your DM history with the bot to find kicked user IDs
+    async for message in owner.history(limit=100):  # Adjust limit as needed
+        if message.author == bot.user and "Kicked User ID: " in message.content:
+            user_id = int(message.content.split(": ")[1])
+            kicked_users.add(user_id)
+
+    return kicked_users
 
 
 async def restrict_user_permissions(guild, user):
@@ -525,19 +566,70 @@ async def on_message(message):
     # Handle Quiz Progression
     if user.id in user_progress:
         progress = user_progress[user.id]
-        answer = quiz_questions[progress]["answer"].lower()
-        print(f"User {user.name} progress: {progress}, checking answer: {message.content.lower().strip()}")
-        if message.content.lower().strip() == answer:
-            user_progress[user.id] += 1
-            await message.channel.send(f"Correct, {user.mention}!")
-            await ask_question(message.channel, user)  # Ask the next question
-        else:
-            await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
-            await timeout_user(message, user)  # apply a timeout for incorrect answers
+        if progress < len(quiz_questions):
+            answer = quiz_questions[progress]["answer"].lower()
+            print(f"User {user.name} progress: {progress}, checking answer: {message.content.lower().strip()}")
+            if message.content.lower().strip() == answer:
+                user_progress[user.id] += 1
+                await message.channel.send(f"Correct, {user.mention}!")
+
+                if user_progress[user.id] == len(quiz_questions):  # Check if all questions are answered
+                    print(f"{user.mention} has completed the quiz!")
+                    user_progress[user.id] = 0  # Reset the user's progress
+                    print(f"{user.mention}'s progress has been reset.")
+                else:
+                    await ask_question(message.channel, user)  # Ask the next question
+
+            else:
+                await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
+                await timeout_user(message, user)  # Apply a timeout for incorrect answers
+
         return  # Stop further processing if the user is in a quiz
+
+    if message.content.lower() == 'hello bot' or message.content.lower() == 'hello openglados':
+        custom_emoji = discord.utils.get(message.guild.emojis, name='OpenGLaDOS')
+        if custom_emoji:
+            # React with a wave emoji
+            await message.add_reaction(custom_emoji)
+        else:
+            await message.channel.send("Custom emoji not found.")
 
     # Handle Direct Messages
     if isinstance(message.channel, discord.DMChannel):
+        # Check if the message content is a valid Discord message link
+        if "https://discord.com/channels/" in message.content:
+            try:
+                # Extract guild_id, channel_id, and message_id from the link
+                parts = message.content.split('/')
+                guild_id = int(parts[4])
+                channel_id = int(parts[5])
+                message_id = int(parts[6])
+
+                # Fetch the guild, channel, and message
+                guild = bot.get_guild(guild_id)
+                if guild is None:
+                    await message.channel.send("Failed to find the guild. Make sure the bot is in the server.")
+                    return
+
+                channel = guild.get_channel(channel_id)
+                if channel is None:
+                    await message.channel.send("Failed to find the channel. Make sure the bot has access to the channel.")
+                    return
+
+                target_message = await channel.fetch_message(message_id)
+                if target_message is None:
+                    await message.channel.send("Failed to find the message. Make sure the message ID is correct.")
+                    return
+
+                # React to the message with the OpenGLaDOS emoji
+                custom_emoji = discord.utils.get(guild.emojis, name='OpenGLaDOS')  # Use `guild` instead of `ctx.guild`
+                if custom_emoji:
+                    await target_message.add_reaction(custom_emoji)
+                    await message.channel.send(f"Reacted to the message with ID {message_id} with the OpenGLaDOS emoji.")
+                else:
+                    await message.channel.send("Custom emoji not found.")
+            except Exception as e:
+                await message.channel.send(f"Failed to react to the message. Error: {str(e)}")
         await handle_conversation(message)
         return
 
