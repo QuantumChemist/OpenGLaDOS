@@ -5,8 +5,8 @@ from discord import app_commands
 from dotenv import load_dotenv
 import asyncio
 import random
-from collections import defaultdict
 from corpus import corpus
+import markovify
 
 # Load environment variables from .env file
 load_dotenv()
@@ -37,35 +37,7 @@ quiz_questions = [
     {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?", "answer": "limit glados' intelligence"},
 ]
 
-# Generate text from the Markov chain
-def generate_markov_text(chain, start_word, min_length=10):
-    word = start_word
-    generated_words = [word]
-
-    for _ in range(min_length - 1):  # Ensure we attempt to generate at least min_length words
-        next_words = chain.get(word)
-        if not next_words:  # If no next words are found, choose another random word from the chain
-            word = random.choice(list(chain.keys()))
-            generated_words.append(word)
-        else:
-            word = random.choice(next_words)
-            generated_words.append(word)
-
-        if word in ['.', '!', '?']:
-            break
-
-    # Ensure the sentence ends with a punctuation mark
-    if generated_words[-1] not in ['.', '!', '?']:
-        generated_words.append('... *beep*')
-
-    return ' '.join(generated_words)
-
-def generate_convo_text(valid_start_word: str = None)->str:
-    markov_chain = defaultdict(list)
-    words = corpus.split(' ')
-    for i in range(len(words) - 1):
-        markov_chain[words[i]].append(words[i + 1])
-
+def generate_convo_text(start_word: str = "")->str:
     # Randomly select a greeting
     greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
                  "Good night"]
@@ -74,22 +46,32 @@ def generate_convo_text(valid_start_word: str = None)->str:
                     "Although my name might invoke the implication, there is no resemblence with OpenGL. \n"
                     "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
                     "My help might not always be helpful to you but helpful to me. ... *beep* \n"
-                    "So...,")
+                    "So...")
 
     selected_greeting = random.choice(greetings)
 
-    if valid_start_word is None:
-        # Ensure we choose a valid start word that has a following word in the chain
-        valid_start_word = random.choice([word for word in words if word in markov_chain])
+    # Get raw text as string.
+    with open("corpus.txt") as file:
+        lines = file.readlines()  # Read all lines into a list
+        random_index = random.randint(0, len(lines))
+        lines.insert(random_index, start_word)
+        text = ''.join(lines[6:])  # Join the lines starting from index 6 (line 7)
 
-    # Generate a random number between 5 and 50
-    random_number = random.randint(5, 50)
+    # Build the model.
+    text_model = markovify.Text(text, state_size=3)
+    text_lines = ""
 
-    # Generate a sequence of words using the Markov chain
-    markov_text = generate_markov_text(markov_chain, valid_start_word, random_number)
+    # Generate a random number between 5 and 10
+    random_number = random.randint(5, 10)
+
+    # randomly-generated sentences
+    for i in range(random_number):
+        sentence = text_model.make_sentence()
+        if sentence is not None:
+            text_lines += sentence + " \n"
 
     # Concatenate the greeting with the generated text
-    return f"{selected_greeting}, {introduction} {markov_text}"
+    return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
 class OpenGLaDOS(commands.Cog):
     def __init__(self, bot):
@@ -190,7 +172,7 @@ class OpenGLaDOS(commands.Cog):
             await interaction.response.send_message(f"Failed to retrieve message content: {e}")
 
     @app_commands.command(name="start", description="Start chat mode to send messages manually.")
-    async def start_send_message(self, interaction: discord.Interaction):
+    async def start_slash(self, interaction: discord.Interaction):
         start_triggered = False
         if start_triggered:
             await interaction.response.send_message("The start command has already been triggered and cannot be run again.")
@@ -200,7 +182,7 @@ class OpenGLaDOS(commands.Cog):
         await interaction.response.send_message("Chat mode started!")
         channel_id = None
 
-        while True:
+        while start_triggered:
             try:
                 if channel_id is None:
                     await interaction.response.send_message("Enter the channel ID where you want to send the message:")
@@ -234,6 +216,56 @@ class OpenGLaDOS(commands.Cog):
                 await interaction.followup.send("Invalid input. Please enter a valid channel ID.")
             except Exception as e:
                 await interaction.followup.send(f"An unexpected error occurred: {e}")
+
+    # Regular bot command implementation
+    @commands.command(name="start", help="Start chat mode to send messages manually.")
+    async def start_text(self, ctx: commands.Context):
+        start_triggered = False
+        if start_triggered:
+            await ctx.send("The start command has already been triggered and cannot be run again.")
+            return
+
+        start_triggered = True  # Set the flag to indicate the command has been triggered
+        await ctx.send("Chat mode started!")
+        channel_id = None  # Initialize channel_id variable
+
+        while start_triggered:
+            try:
+                if channel_id is None:
+                    channel_id = await bot.loop.run_in_executor(None, input,
+                                                                "Enter the channel ID where you want to send the message: ")
+                message = await bot.loop.run_in_executor(None, input,
+                                                         "Enter the message to send to Discord "
+                                                         "(or type '_switch' to enter a new channel ID or '_quit' to exit): ")
+
+                if message.lower() == '_quit':
+                    await ctx.send("Chat mode stopped!")
+                    start_triggered = False  # Reset the flag so the command can be triggered again if needed
+                    break
+
+                if message.lower() == '_switch':
+                    channel_id = None
+                    continue  # Skip sending the message and reset the channel ID
+
+                # Check if the message is empty
+                if not message.strip():
+                    print("Cannot send an empty message. Please enter a valid message.")
+                    continue
+
+                channel = bot.get_channel(int(channel_id))
+                if channel:
+                    try:
+                        await channel.send(message)
+                    except discord.HTTPException as e:
+                        print(f"Failed to send message: {e}")
+                else:
+                    print("Invalid channel ID. Please enter a valid channel ID.")
+
+            except ValueError:
+                print("Invalid input. Please enter a valid channel ID.")
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
+                # The loop will automatically continue after handling the exception
 
     @app_commands.command(name="hello", description="Say hello and receive a custom message.")
     async def hello(self, interaction: discord.Interaction):
@@ -287,13 +319,22 @@ class OpenGLaDOS(commands.Cog):
 
     @commands.Cog.listener()
     async def on_app_command_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError):
+        # Check if the command is used in a DM and prevent execution
+        if isinstance(interaction.channel, discord.DMChannel):
+            await interaction.response.send_message(
+                "This command is not available in direct messages.", ephemeral=True)
+            return
+
+        # Handle missing permissions error
         if isinstance(error, app_commands.MissingPermissions):
             if interaction.command.name == "logout":
                 await interaction.response.send_message(
                     "Error: You do not have permission to use this command. Only the bot owner can use the `logout` command.", ephemeral=True)
+        # Handle command not found error
         elif isinstance(error, app_commands.CommandNotFound):
             await interaction.response.send_message(
                 f"In case you wanted to use a bot command, use `/{self.bot.user.name}` to see a list of available commands.", ephemeral=True)
+        # Handle other errors
         else:
             await interaction.response.send_message(f"An error occurred: {error}", ephemeral=True)
 
@@ -626,8 +667,7 @@ async def unlock_channel(channel, user):  # unused
 async def handle_conversation(message):
     words = message.content.split()
     random_word = random.choice(words)
-    start_word = (random_word if random_word in corpus else None)
-    await message.channel.send(generate_convo_text(start_word))
+    await message.channel.send(generate_convo_text(random_word))
 
 async def main():
     await bot.add_cog(OpenGLaDOS(bot))
