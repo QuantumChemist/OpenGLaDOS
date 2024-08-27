@@ -41,7 +41,7 @@ quiz_questions = [
     {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?", "answer": "limit glados' intelligence"},
 ]
 
-def generate_convo_text(start_line: str = "Hello")->str:
+def generate_convo_text(start_line: str = None)->str:
     # Randomly select a greeting
     greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
                  "Good night"]
@@ -54,7 +54,8 @@ def generate_convo_text(start_line: str = "Hello")->str:
 
     selected_greeting = random.choice(greetings)
 
-    line = start_line
+    if start_line is None:
+        start_line = "Hello".split()
 
     # Get raw text as string.
     with open("corpus.txt") as file:
@@ -68,8 +69,7 @@ def generate_convo_text(start_line: str = "Hello")->str:
 
     # Generate a random number between 5 and 10
     random_number = random.randint(5, 10)
-    startwords = line.split()
-    random_word = random.choice(startwords)
+    random_word = random.choice(start_line)
     pattern = r'\b' + re.escape(random_word) + r'\b'
     if re.search(pattern, text):
         text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
