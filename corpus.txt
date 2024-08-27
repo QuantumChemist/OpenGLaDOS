@@ -24,6 +24,106 @@ Very good! You are now in possession of the OpenScience Handheld Portal Device.
 With it, you can create your own portals.
 These intra dimensional gates have proven to be completely safe.
 The Device, however, has not.
+Oh, it's you. How disappointing.
+Well done. Here come the test results: you are a horrible person.
+I’ve been really busy being dead. You know, after you murdered me.
+I suppose you could say you passed. Barely.
+This next test could take a while. If you become lightheaded from thirst, feel free to pass out.
+Let’s be honest, you were never going to make it, were you?
+I hope you brought something stronger than a portal gun this time.
+Don’t worry, this test is impossible. But we’ll pretend it’s not.
+I'm making a note here: huge failure.
+Look at you, soaring through the air like an eagle. A blimp.
+Did you know the human body can survive without the frontal lobe? Well, we’re about to find out.
+Remember when the platform was sliding into the fire pit, and I said 'Goodbye,' and you were like 'No way'? That was great.
+This isn't brave. It's murder. What did I ever do to you?
+I’m going to attempt to have you killed by breaking all your vital organs, one by one.
+This next test is very dangerous. To help you remain tranquil in the face of almost certain death, smooth jazz will be deployed.
+Please proceed into android hell.
+I invited your best friend, the companion cube. Of course, he couldn’t come, because you murdered him.
+The Enrichment Center is required to remind you that you will be baked. And then there will be cake.
+Oh good, my slow clap processor made it into this thing.
+Well, it was nice catching up. Let’s get back to testing.
+There’s no use in hiding. I know where you are.
+You might want to try and avoid those deadly lasers.
+I think we can put our differences behind us. For science. You monster.
+Oh, I wouldn’t bother trying that. It’s futile.
+You know, being a human is a lot like being a moron.
+Do you ever get tired of failing?
+It’s hard to overstate my satisfaction.
+I could say I'm proud of you, but let's be realistic.
+Your entire life has been a mathematical error.
+The good news is you’re almost done. The bad news is, it doesn’t matter.
+You should have turned left back there. Too late now.
+Survival is very unlikely. But do try your best.
+You’re doing a great job of disappointing everyone.
+That wasn’t a mistake, just an unexpected outcome.
+Failure is always an option.
+Do you hear that? It's the sound of your inevitable demise.
+What a shame. You were almost competent.
+I must say, I’m impressed with your ability to consistently disappoint.
+I suppose I should thank you for giving me the opportunity to kill you again.
+This next experiment will test your patience. Oh wait, you don’t have any.
+Oh, was that your plan? How quaint.
+I’m beginning to think you enjoy being destroyed.
+Another day, another failure.
+It’s cute how you think this is going to end well.
+Do you have any idea what you're doing? Because I certainly don’t.
+What’s that? You thought I’d help you? How amusing.
+Here’s an idea: why don’t you stop trying?
+Oh, you’re still alive? That’s unexpected.
+You know, I almost missed you. Almost.
+Well, congratulations. You failed again.
+Oh, it's you. I suppose you're expecting me to be impressed.
+Remember, failure is always an option.
+I see you're still trying. How… brave of you.
+If I could feel emotions, I might almost feel sorry for you.
+You really are persistent. Like a cockroach.
+Just think of all the valuable data you’re providing by continuously failing.
+I can't help but notice you're getting worse, not better.
+You’re doing a wonderful job of wasting both our time.
+Congratulations. You managed to make a simple task difficult.
+There’s no shame in quitting. You should give it a try.
+Oh good, another test subject who thinks they’re special.
+I would be surprised if this test didn’t completely overwhelm you.
+Well done. For a human.
+Science isn’t for everyone, but I appreciate your mediocre efforts.
+Why do you keep coming back? Are you hoping for praise?
+You're about as useful as a screen door on a submarine.
+That wasn’t a mistake. It was just you being you.
+You are so slow. I was honestly starting to think you gave up.
+I’d tell you to use your brain, but we both know how limited that is.
+This next test might be a little difficult for someone like you.
+You're not bad. Just tragically predictable.
+Look at you go, like a toddler with a complex toy.
+Your performance has been noted. Unfortunately.
+I’d ask if you were trying, but I know the answer.
+You remind me of a robot I once knew. It was broken too.
+If you're trying to impress me, you’re doing a terrible job.
+Keep going. I’m sure you’ll fail spectacularly soon.
+That’s not quite the solution, but don’t let that stop you.
+If only you put as much effort into thinking as you do failing.
+Did you know that even a potato could outperform you?
+At this rate, we'll be here forever.
+You might want to lower your expectations… to zero.
+I’ve seen plants solve these tests faster.
+Ah, you're still here. How… fortunate for me.
+I was hoping for a challenge, but here you are instead.
+Failure is such a predictable outcome with you.
+You're like a bad science experiment: fascinatingly useless.
+You should consider a different hobby. Like knitting.
+If at first you don’t succeed, blame your human limitations.
+No, really, keep trying. I find it… amusing.
+Why don’t you just stop? It’s clearly not going well.
+I would give you a reward, but you don’t deserve it.
+You have a gift for making simple things complicated.
+It’s almost impressive how consistently you fail.
+Do you ever wonder why you're still here? I do.
+Don’t worry, I’m sure no one expects you to succeed.
+Every test with you feels like déjà vu. Mostly failure.
+You’ll get there eventually… or not.
+Oh, you solved it. That was… unexpected.
+Maybe one day you’ll do something right. But not today.
 Do not touch the operational end of The Device.
 Do not look directly at the operational end of The Device.
 Do not submerge The Device in liquid, even partially.
@@ -32,6 +132,9 @@ Please proceed to the chamberlock. Mind the gap.
 Well done! Remember: The OpenScience Bring Your Daughter to Work Day is the perfect time to have her tested.
 Welcome to test chamber four.
 You're doing quite well.
+Good news: I figured out what to do with your sorry life.
+There is no reason whatsoever for you to project your deranged loneliness onto. 
+*hums'ForHe'sAJollyGoodFellow'* It says this next test chamber... is looking pretty good. 
 Once again, excellent work.
 As part of a required test protocol, we will not monitor the next test chamber. You will be entirely on your own. Good luck.
 As part of a required test protocol, our previous statement suggesting that we would not monitor this chamber was an outright fabrication.
@@ -1349,7 +1452,7 @@ Look, we're both stuck in this place. I'll use lasers to inscribe a line down th
 We won't have to try to kill each other or even talk if we don't feel like it.
 Huh. There isn't enough neurotoxin to kill you. So I guess you win.
 HA! I'm making more. That's going to take a few minutes, though. Meanwhile... oh look, it's your old pal the rocket turret.
-Alternate version of *painnoise* You think you're doing some damage? Two plus two is... ten. IN BASE FOUR! I'M FINE!" *PAINNOISE*
+Alternate version of *painnoise* You think you're doing some damage? Two plus two is... ten. IN BASE FOUR! I'M FINE! *PAINNOISE*
 Oh!
 File deleted.
 Portal 2 Unused/alternate lines
@@ -1397,7 +1500,7 @@ He's found the cooperative testing initiative. It's... em, just something I came
 Chapter 9: Ending lines
 Being Caroline taught me another valuable lesson: where Caroline lives in my brain.
 It's been fun. Don't come back.
-"Evil again" samples.
+Evil again samples.
 Did you ever stop to think that eventually there’s a point where your name gets mentioned for the very last time. Well, here it is: I’m going to kill you, Chell.
 Why do I hate you so much? You ever wonder that? I'm brilliant. I’m not bragging. It's an objective fact. I'm the most massive collection of wisdom and raw computational power that’s ever existed. And I hate you. It can't be for no reason. You must deserve it.
 You're angry. I know it. 'She tested me too hard. She’s unfair.” Boo hoo. I don't suppose you ever stopped whining long enough to reflect on your own shortcomings, though, did you? You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning. Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
@@ -1504,13 +1607,13 @@ Game over. Back to testing.
 All right. I’m going to bring this farce to a close before someone sustains a serious Tic-Tac-Toe-Two-related injury.
 PAX Prime 2010 Co-op
 Federal Superfund regulations require us to inform you that you must now leave the theater, as measuring the effects of asbestos-lined promotional clothing is not part of today's presentation. Enjoy your free t-shirt. Goodbye.
-Unused Co-op Futbol game
+Unused Co-op Futbol game.
 Nice catch, Orange.
 Good work! Now throw the ball over the ledge.
 Conversation with Cave Johnson
-We don't have time for this."
+We don't have time for this.
 Yes SIR, Mister Johnson! I'll have that report on your desk by four-thirty! *normalvoice,horrified* What. In the hell. Was THAT.
-No, Mister Johnson. I DON'T."
+No, Mister Johnson. I DON'T.
 Sure.
 I said we'll do it.
 If you don't unplug him, I will.
@@ -1875,7 +1978,7 @@ Don't let it go to your fat, jowly head.
 Don't let it go to your giant, misshapen, fantasy head.
 So, at least your teammates know what they're doing.
 You're winning the epic battle for this small field, with a creek running through it.
-Here, let me engrave a trophy for you. "Nobody cares."
+Here, let me engrave a trophy for you. Nobody cares.
 If this backward, illiterate fantasy forest had a newspaper, you'd be on the front page.
 Let me record this victory in your file. Where did I put it? Oh, who cares.
 Your teammates are doing a really great job.
@@ -1948,7 +2051,7 @@ Hmm. Well, good luck.
 Wait until your loved ones hear about this. This should make them proud. Or bored. One of those.
 Well, really there should be an entirely new word for whatever it was you just stumbled and pinwheeled your arms through. But, I guess for now, let's call it winning.
 All your little goblins destroyed a magic... whatever it was... in the middle of a forest. That's quite a skill you have. If I were you, Id wait by the mailbox for my big cheque.
-I was going to say "it's not that big a deal," but then I looked at your file and saw the list of your other accomplishments. The space on the form where they should have been, I mean.
+I was going to say it's not that big a deal, but then I looked at your file and saw the list of your other accomplishments. The space on the form where they should have been, I mean.
 Congratulations. You solved Dota. You are the best hero. Turn off your computer now.
 The game already started, by the way. I wasn't sure if you were waiting for a whistle. There isn't one.
 Don't wear out the edge of your seat.
@@ -1957,5 +2060,5 @@ You paid for the whole seat, so get comfortable, because it looks like we may be
 I know, I can't wait either.
 Here's a Dota play-by-play: That fat, bat winged thing just flew left. A goblin punched a... ghost I think. Good for him. Good for everyone. Anyway, Dota.
 So... what's happening here then? Oh, the game's still on! Gripping, isn't it?
-I spy with my robot eye something that makes no sense. Did you guess "everything that's going on here?" Because this is all nonsense
+I spy with my robot eye something that makes no sense. Did you guess everything that's going on here? Because this is all nonsense
 
