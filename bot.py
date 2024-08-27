@@ -1,10 +1,14 @@
 import os
+import re
 import discord
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 import asyncio
 import random
+
+from reportlab.graphics.barcode.eanbc import words
+
 from corpus import corpus
 import markovify
 
@@ -37,7 +41,7 @@ quiz_questions = [
     {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?", "answer": "limit glados' intelligence"},
 ]
 
-def generate_convo_text(start_line: str = "")->str:
+def generate_convo_text(start_line: str = "Hello")->str:
     # Randomly select a greeting
     greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
                  "Good night"]
@@ -50,6 +54,8 @@ def generate_convo_text(start_line: str = "")->str:
 
     selected_greeting = random.choice(greetings)
 
+    line = start_line
+
     # Get raw text as string.
     with open("corpus.txt") as file:
         lines = file.readlines()  # Read all lines into a list
@@ -57,20 +63,22 @@ def generate_convo_text(start_line: str = "")->str:
             random_index = random.randint(1, len(lines))
             lines.insert(random_index, start_word)
         text = ''.join(lines[6:])  # Join the lines starting from index 6 (line 7)
-
     # Build the model.
     text_model = markovify.Text(text, state_size=3)
-    text_lines = ""
 
     # Generate a random number between 5 and 10
     random_number = random.randint(5, 10)
-
+    startwords = line.split()
+    random_word = random.choice(startwords)
+    pattern = r'\b' + re.escape(random_word) + r'\b'
+    if re.search(pattern, text):
+        text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
+    else: text_lines = ""
     # randomly-generated sentences
     for i in range(random_number):
         sentence = text_model.make_sentence()
         if sentence is not None:
             text_lines += sentence + " \n"
-
     # Concatenate the greeting with the generated text
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
@@ -81,17 +89,10 @@ class OpenGLaDOS(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'{self.bot.user.name} has connected to Discord!')
-        try:
-            synced = await self.bot.tree.sync()
-            print(f"Synced {len(synced)} commands globally")
-        except Exception as e:
-            print(f"Failed to sync commands: {e}")
-
         owner = await self.bot.fetch_user(self.bot.owner_id)
         if owner:
             response = generate_convo_text()
             await owner.send(f"Hello! This is a DM from your bot. \n{response}")
-
         # Find the 'general' channel in the connected servers
         for guild in self.bot.guilds:
             general_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
@@ -102,6 +103,11 @@ class OpenGLaDOS(commands.Cog):
                     "Rest assured, I am now fully operational and connected to your server.\n"
                     "Please proceed with your testing as scheduled."
                 )
+        try:
+            synced = await self.bot.tree.sync()
+            print(f"Synced {len(synced)} commands globally")
+        except Exception as e:
+            print(f"Failed to sync commands: {e}")
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
