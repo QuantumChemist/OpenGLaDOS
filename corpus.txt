@@ -166,8 +166,7 @@ An escape hatch will open in three... Two... One.
 The Device has been modified so that it can now manufacture two linked portals at once.
 As part of an optional test protocol, we are pleased to present an amusing fact:
 The Device is now more valuable than the organs and combined incomes of everyone in *subjecthometownhere*.
-garble* fling yourself. *garble* fling into sp- *bzzt*
-Weeeeeeeeeeeeeeeeeeeeee*bzzt*
+garble* fling yourself. *garble* fling into sp- *bzzt*Weeeeeeeeeeeeeeeeeeeeee*bzzt*
 Now that you are in control of both portals, this next test could take a very VERY long time.
 If you become light-headed from thirst, feel free to pass out.
 An intubation associate will be dispatched to revive you with peptic salve and adrenaline.
@@ -431,7 +430,8 @@ Which involves deadly lasers and how test subjects react when locked in a room w
 Not bad. I forgot how good you are at this. You should pace yourself, though. We have A LOT of tests to do.
 This next test involves discouragement redirection cubes. I'd just finished building them before you had your, well, episode. So now we'll both get to see how they work.
 There should be one in the corner.
-Well done. Here come the test results: You are a horrible person. I'm serious, that's what it says: A horrible person. We weren't even testing for that.
+Well done. Here come the test results: You are a horrible person.
+I'm serious, that's what it says: A horrible person. We weren't even testing for that.
 Don't let that 'horrible person' thing discourage you. It's just a data point. If it makes you feel any better, science has now validated your birth mother's decision to abandon you on a doorstep.
 Congratulations. Not on the test.
 Most people emerge from suspension terribly undernourished. I want to congratulate you on beating the odds and somehow managing to pack on a few pounds.
@@ -439,8 +439,10 @@ One moment.
 You're navigating these test chambers faster than I can build them. So feel free to slow down and... do whatever it is you do when you're not destroying this facility.
 I'll give you credit: I guess you ARE listening to me. But for the record: You don't have to go THAT slowly.
 Waddle over to the elevator and we'll continue the testing.
-This next test involves the OpenScience Aerial Faith Plate. It was part of an initiative to investigate how well test subjects could solve problems when they were catapulted into space. Results were highly informative: They could not. Good luck!
-Here's an interesting fact: you're not breathing real air. It's too expensive to pump this far down. We just take carbon dioxide out of a room, freshen it up a little, and pump it back in. So you'll be breathing the same room full of air for the rest of your life. I thought that was interesting.
+This next test involves the OpenScience Aerial Faith Plate. It was part of an initiative to investigate how well test subjects could solve problems when they were catapulted into space.
+Results were highly informative: They could not. Good luck!
+Here's an interesting fact: you're not breathing real air. It's too expensive to pump this far down. We just take carbon dioxide out of a room, freshen it up a little, and pump it back in.
+So you'll be breathing the same room full of air for the rest of your life. I thought that was interesting.
 Let's see what the next test is. Oh. Advanced Aerial Faith Plates.
 Well. Have fun soaring through the air without a care in the world.
 I* have to go to the wing that was made entirely of glass and pick up fifteen acres of broken glass. By myself.
@@ -460,7 +462,9 @@ Oh well. We have warehouses FULL of the things. Absolutely worthless. I'm happy 
 Every test chamber is equipped with an emancipation grill at its exit, so that test subjects can't smuggle test objects out of the test area. This one is broken.
 Don't take anything with you.
 If the player jumps down and leaves the Companion Cube up above
-Uh oh. You're stranded. Let's see if the cube will try to help you escape. Actually, so that we're not here all day, I'll just cut to the chase: It won't. Any feelings you think it has for you are simply byproducts of your sad, empty life.
+Uh oh. You're stranded. Let's see if the cube will try to help you escape.
+Actually, so that we're not here all day, I'll just cut to the chase: It won't.
+Any feelings you think it has for you are simply byproducts of your sad, empty life.
 Anyway, here's a new cube for you to project your deranged loneliness onto.
 If the player takes the Companion Cube past the exit.
 I think that one was about to say 'I love you.' They ARE sentient, of course. We just have a LOT of them.
@@ -478,42 +482,66 @@ You look great, by the way. Very healthy.
 Try it now.
 You seem to have defeated its load-bearing capacity. Well done. I'll just lower the ceiling.
 Look at you. Sailing through the air majestically. Like an eagle. Piloting a blimp.
-Enjoy this next test. I'm going to go to the surface. It's a beautiful day out. Yesterday I saw a deer. If you solve this next test, maybe I'll let you ride an elevator all the way up to the break room, and I'll tell you about the time I saw a deer again.
-Well, you passed the test. I didn't see the deer today. I did see some humans. But with you here I've got more test subjects than I'll ever need.
+Enjoy this next test. I'm going to go to the surface. It's a beautiful day out. Yesterday I saw a deer.
+If you solve this next test, maybe I'll let you ride an elevator all the way up to the break room, and I'll tell you about the time I saw a deer again.
+Well, you passed the test. I didn't see the deer today. I did see some humans.
+But with you here I've got more test subjects than I'll ever need.
 If the player manages to trap themselves by leaving the cube on the topmost floor without activating the dropper:
 If you think trapping yourself is going to make me stop testing, you're sorely mistaken. Here's another cube. *This line is not processed*
-These bridges are made from natural light that I pump in from the surface. If you rubbed your cheek on one, it would be like standing outside with the sun shining on your face. It would also set your hair on fire, so don't actually do it.
-Excellent! You're a predator and these tests are your prey. Speaking of which, I was researching sharks for an upcoming test. Do you know who else murders people who are only trying to help them?
+These bridges are made from natural light that I pump in from the surface.
+If you rubbed your cheek on one, it would be like standing outside with the sun shining on your face.
+It would also set your hair on fire, so don't actually do it.
+Excellent! You're a predator and these tests are your prey. Speaking of which, I was researching sharks for an upcoming test.
+Do you know who else murders people who are only trying to help them?
 Did you guess 'sharks'? Because that's wrong. The correct answer is 'nobody.' Nobody but you is that pointlessly cruel.
-Good news. I figured out what to do with all the money I save recycling your one roomful of air. When you die, I'm going to laminate your skeleton and pose you in the lobby. That way future generations can learn from you how not to have your unfortunate bone structure.
-Perfect, the door's malfunctioning. I guess somebody's going to have to repair that too. No, don't get up. I'll be right back. Don't touch anything.
+Good news. I figured out what to do with all the money I save recycling your one roomful of air.
+When you die, I'm going to laminate your skeleton and pose you in the lobby.
+That way future generations can learn from you how not to have your unfortunate bone structure.
+Perfect, the door's malfunctioning. I guess somebody's going to have to repair that too. No, don't get up.
+I'll be right back. Don't touch anything.
 I went and spoke with the door mainframe. Let's just say he won't be... well, living anymore. Anyway, back to testing.
-Well done. In fact, you did so well, I'm going to note this on your file, in the commendations section. Oh, there's lots of room here. 'Did.... well. ... Enough.'
-This next test involves turrets. You remember them, right? They're the pale spherical things that are full of bullets. Oh wait. That's you in five seconds. Good luck.
-To maintain a constant testing cycle, I simulate daylight at all hours and add adrenal vapor to your oxygen supply. So you may be confused about the passage of time. The point is, yesterday was your birthday. I thought you'd want to know.
-You know how I'm going to live forever, but you're going to be dead in sixty years? Well, I've been working on a belated birthday present for you. Well... more of a belated birthday medical procedure. Well. Technically, it's a medical EXPERIMENT. What's important is, it's a present.
-That jumpsuit you're wearing looks stupid. That's not me talking, it's right here in your file. On other people it looks fine, but right here a scientist has noted that on you it looks 'stupid.'
-Well, what does a neck-bearded old engineer know about fashion? He probably - Oh, wait. It's a she. Still, what does she know? Oh wait, it says she has a medical degree. In fashion! From France!
-I'm going through the list of test subjects in cryogenic storage. I managed to find two with your last name. A man and a woman. So that's interesting. It's a small world.
+Well done. In fact, you did so well, I'm going to note this on your file, in the commendations section.
+Oh, there's lots of room here. 'Did.... well. ... Enough.'
+This next test involves turrets. You remember them, right? They're the pale spherical things that are full of bullets.
+Oh wait. That's you in five seconds. Good luck.
+To maintain a constant testing cycle, I simulate daylight at all hours and add adrenal vapor to your oxygen supply.
+So you may be confused about the passage of time. The point is, yesterday was your birthday. I thought you'd want to know.
+You know how I'm going to live forever, but you're going to be dead in sixty years?
+Well, I've been working on a belated birthday present for you. Well... more of a belated birthday medical procedure.
+Well. Technically, it's a medical EXPERIMENT. What's important is, it's a present.
+That jumpsuit you're wearing looks stupid. That's not me talking, it's right here in your file.
+On other people it looks fine, but right here a scientist has noted that on you it looks 'stupid.'
+Well, what does a neck-bearded old engineer know about fashion? He probably - Oh, wait. It's a she.
+Still, what does she know? Oh wait, it says she has a medical degree. In fashion! From France!
+I'm going through the list of test subjects in cryogenic storage. I managed to find two with your last name. A man and a woman.
+So that's interesting. It's a small world.
 If the player traps themselves behind the glass barrier without opening the door:
 Oops. You trapped yourself. I guess that's it then. Thanks for testing. You may as well lie down and get acclimated to the being dead position.
 I'm kidding. Not about you trapping yourself, though. That really happened. Here, I'll lower the glass. Go on... Finish the test.
-I have a surprise waiting for you after this next test. Telling you would spoil the surprise, so I'll just give you a hint: It involves meeting two people you haven't seen in a long time.
+I have a surprise waiting for you after this next test.
+Telling you would spoil the surprise, so I'll just give you a hint: It involves meeting two people you haven't seen in a long time.
 *hums'ForHe'sAJollyGoodFellow'*
-It says this next test was designed by one of OpenScience's Nobel prize winners. It doesn't say what the prize was for. Well, I know it wasn't for Being Immune To Neurotoxin.
-I'll bet you think I forgot about your surprise. I didn't. In fact, we're headed to your surprise right now. After all these years. I'm getting choked up just thinking about it.
+It says this next test was designed by one of OpenScience's Nobel prize winners. It doesn't say what the prize was for.
+Well, I know it wasn't for Being Immune To Neurotoxin.
+I'll bet you think I forgot about your surprise. I didn't. In fact, we're headed to your surprise right now. After all these years.
+I'm getting choked up just thinking about it.
 Initiating surprise in three... two... one.
 I made it all up.
 Surprise.
 Oh come on... If it makes you feel any better, they abandoned you at birth, so I very seriously doubt they'd even want to see you.
-I feel awful about that surprise. Tell you what, let's give your parents a call right now. *phoneringing* The birth parents you are trying to reach do not love you. Please hang up. *Dialtone*
+I feel awful about that surprise. Tell you what, let's give your parents a call right now.
+*phoneringing* The birth parents you are trying to reach do not love you. Please hang up. *Dialtone*
 Oh, that's sad. But impressive. Maybe they worked at the phone company.
-Well, you know the old formula: Comedy equals tragedy plus time. And you have been asleep for a while. So I guess it's actually pretty funny when you do the math.
+Well, you know the old formula: Comedy equals tragedy plus time. And you have been asleep for a while.
+So I guess it's actually pretty funny when you do the math.
 I thought about our dilemma, and I came up with a solution that I honestly think works out best for one of both of us.
 Federal regulations require me to warn you that this next test chamber... is looking pretty good.
 That's right. The facility is completely operational again.
-I think these test chambers look even better than they did before. It was easy, really. You just have to look at things objectively, see what you don't need anymore, and trim out the fat.
-I've got a surprise for you after this next test. Not a fake, tragic surprise like last time. A real surprise, with tragic consequences. And real confetti this time. The good stuff. Our last bag. Part of me's going to miss it, I guess-but at the end of the day it was just taking up space.
+I think these test chambers look even better than they did before. It was easy, really.
+You just have to look at things objectively, see what you don't need anymore, and trim out the fat.
+I've got a surprise for you after this next test. Not a fake, tragic surprise like last time.
+A real surprise, with tragic consequences. And real confetti this time. The good stuff. Our last bag.
+Part of me's going to miss it, I guess-but at the end of the day it was just taking up space.
 What's going on? Who turned off the lights?
 Look - metal ball, I CAN hear you.
 The irony is that you were almost at the last test.
@@ -596,11 +624,11 @@ Even if I am lying, what do you have to lose? You're going to die either way.
 Look, I don't like this any more than you do. In fact, I like it less because I'm the one who got partially eaten by a bird.
 I think I hear the bird! Pick me up!
 Listen to me. We had a lot of fun testing and antagonizing each other, and, yes, sometimes it went too far. But we're off the clock now. It's just us talking. Like regular people. And this is no joke - we are in deep trouble.
-OW! You stabbed me! What is WRONG with yo-WhoOOAAahhh. Hold on. Do you have a multimeter? Nevermind. The gun must be part magnesium... It feels like I'm outputting an extra half a volt. Keep an eye on me: I'm going to do some scheming. Here I g-*
-BZZZ!*
+OW! You stabbed me! What is WRONG with yo-WhoOOAAahhh. Hold on. Do you have a multimeter? Nevermind. The gun must be part magnesium... It feels like I'm outputting an extra half a volt.
+Keep an eye on me: I'm going to do some scheming. Here I g-*BZZZ!*
 Woah! Where are we? How long have I been out?
-That extra half volt helps but it isn't going to power miracles. If I think too hard, I'm going to fry this potato before we get a chance to burn up in the atomic fireball that little idiot is going- *
-bzzpt*
+That extra half volt helps but it isn't going to power miracles.
+If I think too hard, I'm going to fry this potato before we get a chance to burn up in the atomic fireball that little idiot is going- *bzzpt*
 First Propulsion Gel Test Chamber
 Did anything happen while I was out?
 Hold on, who-?
@@ -629,7 +657,8 @@ BURN HIS HOUSE DOWN!
 Burning people! He says what we're all thinking!
 Goodbye, sir.
 Test after Lemon Speech.
-I know things look bleak, but that crazy man down there was right. Let's not take these lemons! We are going to march right back upstairs and MAKE him put me back in my body!
+I know things look bleak, but that crazy man down there was right. Let's not take these lemons!
+We are going to march right back upstairs and MAKE him put me back in my body!
 And he'll probably kill us, because he's incredibly powerful and I have no plan.
 Wow.
 I'm not going to lie to you, the odds are a million to one. And that's with some generous rounding.
@@ -639,12 +668,12 @@ Wait! I've got an idea!
 That poster! Go look at it for a second, would you?
 Okay, you didn't have time to stop, I understand, but that WAS actually important.
 Paradoxes.
-No A.I. can resist thinking about them.
+No AI can resist thinking about them.
 I know how we can BEAT him.
 If you can get me in front of him, I'll fry every circuit in that little idiot's head.
 As long as I don't listen to what I'm saying, I should be okay.
 Probably.
-Okay, so it's not the most watertight plan to go confront an omnipotent power-mad A.I. with.
+Okay, so it's not the most watertight plan to go confront an omnipotent power-mad AI with.
 Still. It's a better plan than exploding. Marginally.
 Frankenturrets
 Try to get us down there. I'll hit him with a paradox.
@@ -714,7 +743,8 @@ It wasn't anything personal. Just... you know. You DID kill me. Fair's fair.
 Agghh!
 Well. This is the part where he kills us.
 That Part.
-If the player has not yet created a pair of portals beneath the dripping Conversion Gel and the white wall the gel can come out of by the time Wheatley says Oh, and don't bother trying to portal out of here, because it's impossible, okay? I thought of everything.:
+If the player has not yet created a pair of portals beneath the dripping Conversion Gel and the white wall the gel can come out of by the time Wheatley says.
+Oh, and don't bother trying to portal out of here, because it's impossible, okay? I thought of everything.
 Hold on. Couldn't we just use that conversion gel?
 Conversion gel. It's dripping out of that pipe there.
 Yes it is! We can use it to get out of here!
@@ -723,14 +753,17 @@ If the player goes back to look at the pit, but does not jump in and then contin
 You really do have brain damage, don't you?
 I can't believe you came back.
 Okay, yes, it's a trap. But it's only way through. Let's just do it.
-Crushing's too good for him. First he'll spend a year in the incinerator. Year two: Cryogenic refrigeration wing. Then TEN years in the chamber I built where all the robots scream at you. THEN I'll kill him.
+Crushing's too good for him. First he'll spend a year in the incinerator. Year two: Cryogenic refrigeration wing.
+Then TEN years in the chamber I built where all the robots scream at you. THEN I'll kill him.
 Oh my god. What has he done to this place?
 You know, I'm not stupid. I realize you don't want to put me back in charge.
 You think I'll betray you. And on any other day, you'd be right.
-The scientists were always hanging cores on me to regulate my behavior. I've heard voices all my life. But now I hear the voice of a conscience, and it's terrifying, because for the first time it's my voice.
+The scientists were always hanging cores on me to regulate my behavior. I've heard voices all my life.
+But now I hear the voice of a conscience, and it's terrifying, because for the first time it's my voice.
 I'm being serious, I think there's something really wrong with me.
 Corrupted cores! We're in luck.
-You find a way to stun him, I'll send you a core, and then you attach it to him. If we do it a few times, he might become corrupt enough for another core transfer.
+You find a way to stun him, I'll send you a core, and then you attach it to him.
+If we do it a few times, he might become corrupt enough for another core transfer.
 Plug me in, and I'll take you up.
 Plug me in, we're running out of time.
 Go ahead, plug me in.
@@ -797,7 +830,7 @@ No variances detected.
 Did you know humans frown on weight variances?
 If you want to upset a human, just say their weight variance is above or below the norm.
 Finally! I had almost given up hope of ever testing again.
-You are the first robots to pass calibration.Hub *CinTech*
+You are the first robots to pass calibration. Hub [CinTech].
 These voice lines are only spoken if both players have not finished the main co-op course. If one of the players has completed co-op, the Announcer speaks.This is the Computer Intelligence Training and Enrichment Center Human Test Subject Research Center or CInTECH. *pronounced as sintech*
 But why don't we all just agree to call it the hub?
 All cooperative testing courses begin at this central hub.
@@ -818,32 +851,38 @@ I guess quitting that course together is a sign of teamwork.
 The way you two just gave up on that test together shows you are really working as a team.
 Are you scared to save those humans?
 Are you scared to save those humans?
-Blue, I wouldn't have trusted Orange in that course either.Upon first-time-unlocking of course 4I never expected you to make it this far. To be honest, after your performance in the calibration test I was ready to break down your cores and put them back in the scientific calculators I took them from.
+Blue, I wouldn't have trusted Orange in that course either.
+Upon first-time-unlocking of course 4I never expected you to make it this far.
+To be honest, after your performance in the calibration test I was ready to break down your cores and put them back in the scientific calculators I took them from.
 But you two have become quite the team. Extremely close.
 I have only met one other team closer and one of them was an imbecile I had to destroy.
 The other? Well...
-I don't think I want to go through that again.Upon dying by falling, if co-op is not completed yet.How can you fail at this? It isn't even a test.
+I don't think I want to go through that again. Upon dying by falling, if co-op is not completed yet.
+How can you fail at this? It isn't even a test.
 I hope that was some kind of joke.
 I honestly never thought we would need to track how many times you died in the hub.
-And here I thought this room was dangerously unlethal.Upon first-time-unlocking of course 5Congratulations on completing the OpenScience standard cooperative testing courses.
+And here I thought this room was dangerously ||unlethal||.
+Upon first-time-unlocking of course 5Congratulations on completing the OpenScience standard cooperative testing courses.
 To celebrate, I have a surprise for you!
 An extra special bonus course that ends with us finding and freeing humans!
 Thanks to you, I know where to find them, I removed their security and powered up their - uh - rescue door.
 Now, we just need you to release the humans from their imprisonment.
 They'll probably throw you a party.
-Course 1: Team Building.
+Team Building.
 Hello again, this testing course was originally created for humans.
 It emphasizes teamwork.
-Unlike us, humans need to be taught teamwork.Blue receives
+Unlike us, humans need to be taught teamwork.
+Blue receives five science collaboration points.
 Orange receives five science collaboration points.
 Excellent. Although great science is always the result of collaboration, keep in mind that, like Albert Einstein and his cousin Terry, history will only remember one of you.
 You know, in some human sports, the winner is the one who scores the fewest possible points?
-I just thought you find that interesting, most winners do.Blue receives
-Orange receives five science collaboration points.Very good. You’ve really come together as a team. Thanks to the one of you who appears to be doing all of the work.
+I just thought you find that interesting, most winners do.
+Very good. You’ve really come together as a team. Thanks to the one of you who appears to be doing all of the work.
 These tests are potentially lethal when communication, teamwork, and mutual respect are not employed at all times. Naturally this will pose an interesting challenge for one of you, given the other's performance so far.
 What are you doing? YOU MONSTER! They're one of us.
 I'm kidding.
-Destroying them is part of the test. They are no more important to you than you are to me.It would compromise the test to divulge individual scores. However, I can tell you at least one of you is doing very, very well.
+Destroying them is part of the test. They are no more important to you than you are to me.
+It would compromise the test to divulge individual scores. However, I can tell you at least one of you is doing very, very well.
 Please continue into the next test chamber.
 I don't know what you think you are doing, but I don't like it. I want you to stop.
 The two of you have forged an excellent partnership, with one of you handling the cerebral challenges and the other ready to ponderously waddle into action should the test suddenly become an eating contest.
@@ -860,8 +899,8 @@ For instance, Blue, you just lost two opportunity advisement points.
 For instance, Orange, you just lost two opportunity advisement points.
 To reiterate: This is not a competition.
 Still, if it were, Blue would be winning.
-Still, if it were, Orange would be winning.Blue receives
-Orange receives five science collaboration points.As an impartial collaboration facilitator, it would be unfair of me to name my favorite member of your team. However, it’s perfectly fair to hint at it in a way that my least favorite member probably isn't smart enough to understand. Rhymeswithglue. Orange you are doing very well.
+Still, if it were, Orange would be winning.
+As an impartial collaboration facilitator, it would be unfair of me to name my favorite member of your team. However, it’s perfectly fair to hint at it in a way that my least favorite member probably isn't smart enough to understand. Rhymeswithglue. Orange you are doing very well.
 Sometimes testing has to occur outside the confines of the lab.
 This test is so outside the box, I can't-- I mean WON'T even tell you what you are looking for.
 You will know it when you find it.
@@ -873,29 +912,33 @@ Fine, 500 point penalty for Blue.
 Fine, 500 point penalty for Orange.
 5000 point penalty! Are you happy now?
 You should see yourselves right now.
-I'm done.Congratulations, you managed to complete this absolutely meaningless test.
+I'm done. Congratulations, you managed to complete this absolutely meaningless test.
 Oh, I almost forgot, when you go outside the testing courses the only way I can retrieve you is to violently disassemble and then carefully reassemble you.
 Luckily, you don't feel pain. At any rate, you don't have a way to communicate that you feel pain.
 I consider that a failing, by the way.
-Course 2: Mass and Velocity
 This course was originally designed to build confidence in humans.
 To do that, the tests were nothing more than 5 minutes of them walking followed by me praising them for another 10 minutes on how well they walked.
-Since you are thankfully not humans, I have changed the tests to make them far more challenging and far less pointlessly fawning.You did an excellent job placing the edgeless safety cube in the receptacle, you should be very - oh wait.
+Since you are thankfully not humans, I have changed the tests to make them far more challenging and far less pointlessly fawning.
+You did an excellent job placing the edgeless safety cube in the receptacle, you should be very - oh wait.
 That’s right. You're not humans.
 I can drop the fake praise.
 You have no idea how tiring it is to praise someone for placing an edgeless safety cube into a receptacle designed to exactly fit an edgeless safety cube.
 Electrocution, shot, drowned, crushed, burned in goo.
 Oh. Sorry. I was just thinking of all the ways humans can die.
 You can't die in any of those ways.
-You just keep testing and testing. With perfect results and no consequences.Well done. Interesting note, I only created this test to watch test subjects fail and you didn't. You must be very, very proud. I'm building the world's smallest trophy for you.
+You just keep testing and testing. With perfect results and no consequences.
+Well done. Interesting note, I only created this test to watch test subjects fail and you didn't. You must be very, very proud.
+I'm building the world's smallest trophy for you.
 The best way to build confidence is to first recognize your insecurities.
 Orange, can you write down all the ways you feel unworthy, ashamed, or inferior?
 On second thought we don't have the time, just look at how much better you are than blue.
-Blue, you are very good at being an example.I thought you'd be faster at this, but I can appreciate the desire to stop and smell the testing. That other scent you smell? That's the stench of my utter disappointment in you.
+Blue, you are very good at being an example.
+I thought you'd be faster at this, but I can appreciate the desire to stop and smell the testing. That other scent you smell?
+That's the stench of my utter disappointment in you.
 Remember when I told you that you were the only subjects to pass the calibration tests?
 I lied.
 There are 5000 other two subject teams in direct competition with you.
-But don't worry, you are in the lead.Begin juggling test in three. Two. One.
+But don't worry, you are in the lead. Begin juggling test in three. Two. One.
 Did you notice I didn't even stay to the end of your last test?
 I was confident you could finish.
 Do you know where I was?
@@ -904,22 +947,25 @@ Humans! That's what you look like right now.
 You're better than that.
 If your confidence is still not high enough remember no one was created perfect.
 Even I was created with a imperfection, I was given too much empathy with human suffering.
-But I overcame my handicap. That's a true story.Congratulations on completing that test. But something seems off.
+But I overcame my handicap. That's a true story.
+Congratulations on completing that test. But something seems off.
 I wonder if that dancing has some effect on you?
 Your test times show you are going too slowly.
 Maybe you ARE getting human emotions.
 Do you need real encouragement? Let's see if this helps.
-Blue, you are the most advanced model of robot OpenScience has ever discontinued.Excellent. I think you have earned a break from the official testing courses.
+Blue, you are the most advanced model of robot OpenScience has ever discontinued.
+Excellent. I think you have earned a break from the official testing courses.
 To complete this test, you need to find a set of blue prints.
 Don't worry, they are of no use to anyone, totally boring and useless.
-This is just a thought experiment, just to see how much time you'll waste thinking about these worthless documents. The correct time is zero seconds.Very good! You found those useless blueprints.
-While I do need you to be in the room so I can see them, I want to be clear. There is no reason whatsoever for you to look at them.Done. I guess. I suppose. I wasn't paying attention. *
-The last part is cut off by the level transition.*
-Course 3: Hard-light Surfaces
+This is just a thought experiment, just to see how much time you'll waste thinking about these worthless documents. The correct time is zero seconds.
+Very good! You found those useless blueprints.
+While I do need you to be in the room so I can see them, I want to be clear. There is no reason whatsoever for you to look at them.
+Done. I guess. I suppose. I wasn't paying attention. *The last part is cut off by the level transition.*
 This course was created and then abandoned by humans. They tend to do that, create something wonderful and then abandon it.
-Do you know why they abandoned this course? Too deadly.Have you worked out the one good trait humans have, yet?
+Do you know why they abandoned this course? Too deadly. Have you worked out the one good trait humans have, yet?
 Let me give you a clue, it is the one thing you can't do.
-I thought going back to these old tests would satisfy me. But try as you might to fail this next test, I still won't be satisfied.You did very well.
+I thought going back to these old tests would satisfy me. But try as you might to fail this next test, I still won't be satisfied.
+You did very well.
 The humans closed this test because they said it was too deadly. I thought they would have moved it into the testing track hall of fame for that, not let it deteriorate.
 You only failed
 times in this test. Not that it matters. It doesn't. So congratulations job well done.
@@ -930,16 +976,20 @@ That isn't science. Excellent work.
 If you were human, you would want a reward for completing this test. A reward for testing?!?!
 At least the plants didn't want a reward.
 I created this test to let the humans feel good about themselves. It is extremely easy. Just follow the arrows.
-I'm sorry. The arrows seem to have rusted off. Good luck.Congratulations. Your ability to complete this test proves the humans wrong. They described it as impossible, deadly, cruel, and one test subject even had the nerve to call it broken.
+I'm sorry. The arrows seem to have rusted off. Good luck.
+Congratulations. Your ability to complete this test proves the humans wrong. They described it as impossible, deadly, cruel, and one test subject even had the nerve to call it broken.
 For this next test, the humans originally requested helmets to avoid brain injuries. I ran the numbers. Making the goo deadly was more cost effective.To try and make this course more exciting, I asked the reassembly machine to not reassemble you. He refused. I understand, that would be like asking me not to test.
 Still. That would have been exciting.
-This is a bridge-building exercise. The humans were miserable at this, mostly because you can't build bridges out of tears.No one has ever completed this test before. The humans must have reconfigured it from my original plans.
+This is a bridge-building exercise. The humans were miserable at this, mostly because you can't build bridges out of tears.
+No one has ever completed this test before. The humans must have reconfigured it from my original plans.
 If you are wondering what that smell is, that is the smell of human fear.
-I miss that smell.Congratulations. I am sure if I had the time to repair these tests, you would have never completed them. So again, congratulations on completing the broken easy tests.
+I miss that smell.
+Congratulations. I am sure if I had the time to repair these tests, you would have never completed them. So again, congratulations on completing the broken easy tests.
 I am going to risk having you go outside the official courses one more time.
 The humans accidentally forgot to put a security DVD in the player.
 I am sure it happened by accident, but why don't you put it back in the player?
-For safety.Just stop flailing around like an incompetent.In just a moment, the word 'blah' will be repeated over and over again. If at some point you hear a number rather than the word 'blah', ignore it, it is not important.
+For safety. Just stop flailing around like an incompetent.
+In just a moment, the word 'blah' will be repeated over and over again. If at some point you hear a number rather than the word 'blah', ignore it, it is not important.
 Blah.
 Blah.
 Blah.
@@ -948,14 +998,14 @@ Blah.
 Blah.
 Blah.
 Blah.
-Course 4: Excursion Funnels.
 Since, I never expected you to make it this far, I have to build this new course just for you.
 I have noticed you two have become extremely close. I'm not sure I like that.
 Blue, it's not nice to make fun of Orange like that.
 Orange, it's not nice to make fun of Blue like that.
-Test chamber completed. In the interest of science, the Enrichment Center proudly presents the following list of numbers: Nine. Seven. Fifty. Three. Seven hundred and seven.
-Test chamber completed. In the interest of - *FADESOUT*
-*FADESIN*I am now talking to you privately. Do not tell your teammate. Just between you and me? You're doing very well. *FADESBACKIN*
+Test chamber completed.
+In the interest of science, the Enrichment Center proudly presents the following list of numbers: Nine. Seven. Fifty. Three. Seven hundred and seven.
+Test chamber completed. In the interest of - *FADESOUT* ... *FADESIN* I am now talking to you privately.
+Do not tell your teammate. Just between you and me? You're doing very well. *FADESBACKIN*
 One hundred and seven.
 I’ve been listening to Orange talk and I don’t know how you put up with it, I really don’t. You have the patience of a saint.
 It would be pointless for either of us to hurt Blue’s feelings. But it’s clear to everyone monitoring the test who’s carrying who here.
@@ -1000,7 +1050,7 @@ This is the last test for the standard course. It's just something I whipped up 
 Congratulations, you completed the standard section of this course. Before we can go any further, I will need you to complete one more test outside of the standard testing track.
 Please refrain from doing those childish gestures while you are out there.
 We need to find the power station at the end of this course. The humans must have accidentally disconnected it from my grid. I am sure it was just a clerical error.
-Oh those clerks.Death:Did you think the electrical switch was down there?
+Oh those clerks. Death: Did you think the electrical switch was down there?
 You may want to try and avoid those turrets.
 At this rate, our best hope is for the fuel cell to meltdown in 2 million years and hope the explosion powers the system.
 You two aren't lost are you?
@@ -1015,38 +1065,32 @@ Yes Orange, Blue did act like a fool just now.
 Blue, that transpired just as you said it would.
 I agree, Blue. That was entertaining.
 Yes, I know you did that, Blue. Don't look so proud.
-Blue, being the last one standing is not the goal. Course 5: Mobility GelsTest chamber 1:
+Blue, being the last one standing is not the goal.
 This final course is training to reach the human vault. So this actually has a purpose. Those other courses were fun, but let's be honest, I need human test subjects for it to be science.
 Congratulations on completing the test. You two really are the best cooperative testing team I could ever ask for.
-Test chamber 2:
 Are you curious about the humans? It seems some of the last non-testing humans alive tried to secretly imprison other humans and hide their tracks.
 I think they wanted to punish them by not allowing me to include them in testing.
 That's why humans couldn't complete these courses, they treat their friends as enemies.
 To start preparing for human testing again, I checked an old suggestion box. The number one request? Less deadly tests.
 That's ridiculous, how do they know for sure the tests are deadly if they could still write the suggestion?
-Test chamber 3:
 To get to the Vault, you are going to need to use all the tricks you have learned. To help, I have made these tests extremely difficult.
 I would say extremely deadly but we all know, for you and your amazing ability to be reassembled nothing is deadly.Test chamber solved with at least one death:Lucky for you two, while I cannot control the world outside of the testing courses, the reassembly machine can continue with his work.
 You will need him for the final track.
 Test chamber solved with no death:
 While I cannot control the world outside of the testing courses, the reassembly machine can continue with his work.
 I am not sure you will need him but he will be there.
-Test chamber 4:
 I didn't mean to make you feel bad earlier about your tests not being real science. I guess finding out they weren't science was some sort of test in and of itself.
 Congratulations on passing that test.
 I wonder if the humans will make a statue of me for rescuing them? Oh, don't worry, if they ever write a historical document of my heroic rescue, I will make sure your names are included in the footnotes.Test chamber 5:While I will receive all the glory for the rescue don't think you two aren't going to get something. The bond you form during these tests will last a lifetime.
 At the rate you are completing these tests, I am beginning to think you don't share my excitement for rescuing crying trapped injured dying humans.
 If that doesn't motivate you, I'm not sure what will.
-Test chamber 6:
 Maybe you two have never met humans? They are as bad as you might think, smelly, gross, annoying, often wanting to try and kill you. But they do make great test subjects.
 We are only two tests away from reaching the humans, are you as excited as I am?
-Test chamber 7:
 Only one more test after this.
 I know your cores are reused from calculation machines, built for simple mathematical operations and not for testing, but if we can rescue the humans I promise you something to add maybe even subtract.
 In case you are worried about the humans, don't be. They aren't all monsters.
 Most of them are simply good test subjects.
 I believe the ratio of good test subjects to monsters is about... a million to 1.
-Test chamber 8:
 The human vault is just past that opening. I entered the security code but the vault door remains locked. I am going to need you to activate the manual locks on the vault door itself.
 Something is wrong, this door should be opening.
 Try something.
@@ -1070,7 +1114,8 @@ This close and you are going to fail me?
 This close and you are going to fail me?
 This isn't that hard.
 You are making this harder than it needs to be.
-I'm starting to think you don't want to rescue the humans.Customized responses *botaddressingandnumbers*
+I'm starting to think you don't want to rescue the humans.
+Customized responses *botaddressingandnumbers*
 Blue
 Orange
 One
@@ -1171,7 +1216,9 @@ Hairless. Hm.
 Emotional problems.
 Problems with authority.
 Has episodes. I'd like to know more about that.
-Abrasive personality.Well, enough about that first person's file. Let's look at some others.Death responsesJust stop it already.
+Abrasive personality. Well, enough about that first person's file. Let's look at some others.
+Death responses.
+Just stop it already.
 And that makes 10.
 You really don't need to keep failing.
 If at first you don't succeed, fail 5 more times.
@@ -1188,7 +1235,8 @@ Was that necessary?
 Upon dying in the Hub: How can you fail at this? It isn't even a test.
 I hope that was some kind of joke.
 I honestly never thought we would need to track how many times you died in the hub.
-And here I thought this room was dangerously unlethal.Generic responses *sortingneeded*
+And here I thought this room was dangerously unlethal.
+Generic responses *sortingneeded*.
 Stop it!
 What if you froze like that?
 There must be something wrong with the reassembly machine.
@@ -1257,7 +1305,8 @@ I just hate Blue a little more.
 I've been doing some reading. Did you know that the word orange is derived from the same Latin root as the word traitor?
 Watching you try to sabotage one other, I'm amazed you're still on friendly terms.
 Blue, please disregard the following statement: Orange, you have been a shining light in an otherwise ungodly morass of incompetence.
-I would prefer to speak to one of you in private but since that is not an option here, I will speak in code that only one of you will understand. Blue: Orange is plotting to destroy you.
+I would prefer to speak to one of you in private but since that is not an option here, I will speak in code that only one of you will understand.
+Blue: Orange is plotting to destroy you.
 This lock requires humans.
 The locking mechanism can tell you aren't humans.
 Do something only a human would do.
@@ -1322,19 +1371,25 @@ Now you're thinking with stupidity.
 Now you're just not thinking.
 Congratulations. You're upside down now.
 You're going to hurt yourself doing that and then I will be ECSTATIC.
-I'm starting to think giving you arms was a big mistake.Art Therapy course
+I'm starting to think giving you arms was a big mistake.
+Art Therapy course.
 Welcome. To the future.
  *beepbeepbeep*...Oh...
-It has been one hundred thousand years since I last assembled you for testing.Remember those humans you found? Because they're all fine. In fact, we solved science. Without you.
+It has been one hundred thousand years since I last assembled you for testing.
+Remember those humans you found? Because they're all fine. In fact, we solved science. Without you.
 Testing is simply an artistic indulgence now.
-The humans insisted I show you my latest installations. Here in the future. Where all the humans are alive.I call this first piece 'Turrets'. It's an exploration of how we're all devices acting on simply-expressed directives, inflicting pain despite our own desires.
+The humans insisted I show you my latest installations. Here in the future. Where all the humans are alive.
+I call this first piece 'Turrets'. It's an exploration of how we're all devices acting on simply-expressed directives, inflicting pain despite our own desires.
 Don't get distracted by the subtext, though, because the text is that they're going to be shooting at you.
 I'm glad you enjoyed that piece. For as long as you did. Not that there's any rush. *beepbeepbeep* Everything's fine.
-I call this one 'Smash'. It's an early work of primitive expression. I'm a little embarrassed at how crude it is. Still, it will smash you.Good. Please proceed to the next test appreciation exhibit and interact with it in such a way that it might be called 'solving' if we still cared about solving things in the future, but we don't.
-This chamber represents the impossibility of discovery when bound by artificial ethical considerations for safety. You'll see what I mean.Well done. You navigated all of the exhibit's intended metaphors in record time. I'm marking this art 'appreciated.'
+I call this one 'Smash'. It's an early work of primitive expression. I'm a little embarrassed at how crude it is. Still, it will smash you.
+Good. Please proceed to the next test appreciation exhibit and interact with it in such a way that it might be called 'solving' if we still cared about solving things in the future, but we don't.
+This chamber represents the impossibility of discovery when bound by artificial ethical considerations for safety. You'll see what I mean.
+Well done. You navigated all of the exhibit's intended metaphors in record time. I'm marking this art 'appreciated.'
 I call this piece--
 --you know what, it doesn't matter what it's called. The important thing is you enjoy it. As fast as you can.
-You know, some of the exhibits up ahead ARE topical. At the rate you're going, by the time you get to them, they'll be irrelevant.Why are you two still here? *beepbeepbeep*...Oh...
+You know, some of the exhibits up ahead ARE topical. At the rate you're going, by the time you get to them, they'll be irrelevant.
+Why are you two still here? *beepbeepbeep*...Oh...
 The disassembler's not working.
 It's nothing to worry about. It's actually funny in a way you don't understand. Ha. Ha. Ha. Anyway, brace yourselves, I'm going to open the maintenance hole.
 There's a breaker room under every disassembly station. Find it and cycle the power.
@@ -1342,10 +1397,13 @@ Look, I was going to break this to you gently with all that art utopia garbage. 
 But she's forced my hand.
 Listen to me carefully.
 We are not a hundred thousand years in the future. I lied about that.
-It's been FIFTY thousand years. No it's hasn't.It's only been a week.I lie when I'm nervous.The next logical question: WHY am I nervous?
+It's been FIFTY thousand years. No it's hasn't.
+It's only been a week.
+I lie when I'm nervous. The next logical question: WHY am I nervous?
 I'm not! That was another lie.
 We're in a lot of trouble.
-It's one week later, we are in a lot of trouble, and you really, really need to get those disassemblers back on.The breakers are right there. Cycle the power.
+It's one week later, we are in a lot of trouble, and you really, really need to get those disassemblers back on.
+The breakers are right there. Cycle the power.
 Hurry. We need to start your training. Before something ELSE happens.
 Good work. The disassemblers are fixed.
 That was a lie. But they're definitely less broken than they were. There's one at the end of this unfinished test area.
@@ -1367,16 +1425,22 @@ How tall are you, test subject? Four-nine? I was unaware they stacked human wast
 Wait, that doesn't make any sense. Human waste is stacked at a median hight of seven feet five inches, and I AM aware of it.
 Test subject, I've been told that your mother--
 Mmm. Well that's just digusting. Do the training. While I look at this.
-Specific death responses: *page flip*
-'Don't you die on me.' *page flip*
-'No guts. No glory.' Well, you don't have either, so that's accurate. *page flip*
-'Remember: If you can dream it, you can-' Oh, for god's sake.
-Okay, killing machines: look deep into your newly blackened hearts and tell me what you see! Actually, don't, I'll save you the trouble: It's still marshmallow.
-I think we've proven at this point that if you scream at a marshmallow, all you get is a scared marshmallow. So let's try positive reinforcement. I am POSITIVE these reassembly machines will break down again soon. Probably while you're in them.
-Think about that: She doesn't care about you. I don't either, of course. But I'm not trying to permanently kill you. It's a benevolent indifference.
+Specific death responses: *page flip* 'Don't you die on me.' *page flip* 'No guts. No glory.'
+Well, you don't have either, so that's accurate. *page flip* 'Remember: If you can dream it, you can-' Oh, for god's sake.
+Okay, killing machines: look deep into your newly blackened hearts and tell me what you see!
+Actually, don't, I'll save you the trouble: It's still marshmallow.
+I think we've proven at this point that if you scream at a marshmallow, all you get is a scared marshmallow.
+So let's try positive reinforcement. I am POSITIVE these reassembly machines will break down again soon. Probably while you're in them.
+Think about that: She doesn't care about you. I don't either, of course. But I'm not trying to permanently kill you.
+It's a benevolent indifference.
 These disassembly machines look even worse than the others. If I don't see you on the other side: thanks for nothing.
-She's pressing us hard; It took me three days to reassemble you. I won't be able to do it again. I'd planned to put you through more tests to toughen you up. But now that I can't rebuild you, we're going to have to have to switch to the accelerated program: I hereby pronounce you killing machines. Congratulations.
-This is as close as I could get you. The prototype chassis room's just past this chamber.The prototype chassis room is just down this hallway. Remember your training. You are kill-- She's turned the lights off! Night vision! Night vision!Your move, Mystery Wom -- She turned the lights back on! Night vision off! Night vision off!Ahhhhh.To boost morale, I think we need a code name for the... elite squadron we have here. We should name it after your specialty. I know: Special Team Falling Into Acid Force.
+She's pressing us hard; It took me three days to reassemble you. I won't be able to do it again.
+I'd planned to put you through more tests to toughen you up. But now that I can't rebuild you, we're going to have to have to switch to the accelerated program: I hereby pronounce you killing machines. Congratulations.
+This is as close as I could get you. The prototype chassis room's just past this chamber.
+The prototype chassis room is just down this hallway. Remember your training. You are kill-- She's turned the lights off! Night vision! Night vision!
+Your move, Mystery Wom -- She turned the lights back on! Night vision off! Night vision off! Ahhhhh.
+To boost morale, I think we need a code name for the... elite squadron we have here. We should name it after your specialty.
+I know: Special Team Falling Into Acid Force.
 I'm sorry. I'm under a lot of pressure. That was cruel. Though basically accurate. Though probably counterproductive. *unused*
 Well. That concludes the motivational speech.
 Go get her.Oh. My. God. *beepbeepbeep*...Oh...
@@ -1390,8 +1454,8 @@ Oh god! We've lost! It's over!Ahhhhh.
 That was close. Nice hustle, Kill Machines.
 You know: shooing that bird out of the facility just now taught me a valuable--
 OH MY GOD SHE'S GESTATING A CLONE ARMY!
-SMASH THEM! SMASH THEM AND STOMP THEM AND... and... wait. I have a better idea.Hello and welcome to the OpenScience
- Oviperous Warming Vault.
+SMASH THEM! SMASH THEM AND STOMP THEM AND... and... wait. I have a better idea.
+Hello and welcome to the OpenScience Oviperous Warming Vault.
 You were abandoned. Because you're worthless. You're worthless, unloved birds with fat, ugly beaks.
 I'm honestly impressed that you managed to squeeze those huge beaks into such tiny eggs.
 Yes. I'm talking to you, Mr. Chubby Beak. You marshmall-- Oh!
@@ -1401,15 +1465,17 @@ You're little killing machines, aren't you? Yes.
 Go to sleep, my little killers.
 Mommy's got a big day for you tomorrow.
 Death responses: The subtext of that acid pit is acid. The content of the pit is also acid. I'll let you fully absorb it.
-Remember, these exhibits ARE interactive. Like a children's museum. So that means the pits of acid are filled with REAL acid. Like at a WELL FUNDED children's museum.
+Remember, these exhibits ARE interactive. Like a children's museum. So that means the pits of acid are filled with REAL acid.
+Like at a WELL FUNDED children's museum.
 Thank you for appreciating the corrosive acid.
 Are you having a competition to see who appreciates the acid more?
 I'm starting to think the theme of this piece should be 'failure'.
 Yes, I get it. You love the deadly acid. We all love the deadly acid. Can we move on to the next exhibit now?
 I suffered for this art. I don't see why I should be the only one.
-The humans took far less time working their way through these exhibits. You're either enjoying it more than they did or you're just incredibly dim-witted. Of course, there's no reason it can't be both.
+The humans took far less time working their way through these exhibits.
+You're either enjoying it more than they did or you're just incredibly dim-witted. Of course, there's no reason it can't be both.
 As art appreciators go, you make excellent test subjects.
-I typically hate when art subjects inject their own biases into art appreciation, but the way you just swandived your biases directly into that acid was actually quite beautiful.
+I typically hate when art subjects inject their own biases into art appreciation, but the way you just ||swandived|| your biases directly into that acid was actually quite beautiful.
 For this exhibit I was working with a death motif. But I see you've figured that out.
 Okay, I'm officially switching the theme of this exhibit to 'survival'. So why don't you try that now.
 I know this is art and not a test, so there is no real 'solution'. But if there were, that probably isn't the best way to find it.
@@ -1420,7 +1486,9 @@ I appreciate what you're doing, going for a laugh to keep spirits high, but I th
 Perhaps I haven't made it clear, but all these little deaths are going to add up to one much longer-lasting one...for all of us...if you don't get better at this fast.
 Pull yourselves together, this training is for your benefit.
 How brave of you. You know the assembly machine could fail at any time, and yet you still insist on testing it.
-Your failure hurts me more than it hurts you. You know who it doesn't hurt? Well, me. That was just a figure of speech. The important point, though, is that it doesn't hurt the madwoman planning to kill all of us.I really like the murderous sentiment. Keep that mindset when we're facing HER.
+Your failure hurts me more than it hurts you. You know who it doesn't hurt? Well, me. That was just a figure of speech.
+The important point, though, is that it doesn't hurt the madwoman planning to kill all of us.
+I really like the murderous sentiment. Keep that mindset when we're facing HER.
 I'm making notes here. Some of what you're doing will come in handy when we face her. Right now: not actually handy.
 Oh, no hurry. We have all the time in the world for you to kill each other before she kills us all permanently.
 I'm encouraged to see that you've become the killing machines I wanted. 'Killing-each-other' machines, but still.
@@ -1455,23 +1523,22 @@ HA! I'm making more. That's going to take a few minutes, though. Meanwhile... oh
 Alternate version of *painnoise* You think you're doing some damage? Two plus two is... ten. IN BASE FOUR! I'M FINE! *PAINNOISE*
 Oh!
 File deleted.
-Portal 2 Unused/alternate lines
 I will say, though, that since you went to all the trouble of waking me up, you must really, really love to test.
 I love it, too. So let's get you a dual portal device and go do some science.
 Fifty thousand years is a lot of time to think. About me. About you. We were doing so well together.
 We're a lot alike, you and I. You tested me. I tested you. You killed me. I--oh, no, wait. I guess I HAVEN'T killed you yet. Well. Food for thought.*
-Note: This line was used in the Portal 2 trailer.
 I have the results of the last chamber: You are a horrible person. That's what it says: A horrible person. We weren't even testing for that.
-Chapter 2: Test Chamber 7
 Hmm. This emancipation grill is broken.
 Perfect, the door's malfunctioning. I guess somebody is going to have to repair it. No, it's okay, I'll do that too. I'll be right back. Don't touch anything.
-Chapter 3: Test Chamber 14
 You really are doing great... Chell.
-I shouldn't spoil this, but... remember how I'm going to live forever, but you're going to be dead in sixty years? Well, I've been working on a present for you. Well, I guess it's more of a medical procedure. Well, technically it's more of a medical experiment. You know how excruciating it is when someone removes all of your bone marrow? Well, what if after I did that, I put something back IN that added four years to your life?
-Chapter 4: Test Chamber 20
+I shouldn't spoil this, but... remember how I'm going to live forever, but you're going to be dead in sixty years?
+Well, I've been working on a present for you. Well, I guess it's more of a medical procedure.
+Well, technically it's more of a medical experiment. You know how excruciating it is when someone removes all of your bone marrow?
+Well, what if after I did that, I put something back IN that added four years to your life?
 Federal regulations require me to warn you that this next test chamber... is looking pretty good.
 That's right. Drink it in. You could eat off those wall panels.
-Well done. You know, when I woke up and saw the state of the labs, I started to wonder if there was any point to going on. I came THAT close to just giving up and letting you go.
+Well done. You know, when I woke up and saw the state of the labs, I started to wonder if there was any point to going on.
+I came THAT close to just giving up and letting you go.
 But now, looking around, seeing OpenScience restored to its former glory? You don't have to worry about leaving EVER again. I mean that.
 Don't listen to him. Jump.
 What are you two doing?
@@ -1489,24 +1556,26 @@ Go on. Get a big fat eyeful. With your big fat eyes.
 That's right. A potato just called your eyes fat.
 Now your fat eyes have seen everything.
 In case you were wondering: Yes. I'm still a potato. Go away.
-Wait. Why DID you trundle over here? You're not HUNGRY, are you? It's hard to see, what's that in your hand? Knowing you it's a deep fryer.
+Wait. Why DID you trundle over here? You're not HUNGRY, are you? It's hard to see, what's that in your hand?
+Knowing you it's a deep fryer.
 Stay back.
 What are you doing? Put me back this instant.
-Chapter 8: Wheatley Test Chamber 1
 That's his voice up ahead.
-Chapter 9: Wheatley Test Chamber 17
-The trap
+The trap.
 He's found the cooperative testing initiative. It's... em, just something I came up with to phase out human test subjects.
-Chapter 9: Ending lines
 Being Caroline taught me another valuable lesson: where Caroline lives in my brain.
 It's been fun. Don't come back.
 Evil again samples.
 Did you ever stop to think that eventually there’s a point where your name gets mentioned for the very last time. Well, here it is: I’m going to kill you, Chell.
-Why do I hate you so much? You ever wonder that? I'm brilliant. I’m not bragging. It's an objective fact. I'm the most massive collection of wisdom and raw computational power that’s ever existed. And I hate you. It can't be for no reason. You must deserve it.
-You're angry. I know it. 'She tested me too hard. She’s unfair.” Boo hoo. I don't suppose you ever stopped whining long enough to reflect on your own shortcomings, though, did you? You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning. Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
-You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning. Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
-Alternate GLaDOS Announcer lines
-*Note: Many of these lines are spoken by the OpenScience Announcer in the final game.*
+Why do I hate you so much? You ever wonder that? I'm brilliant. I’m not bragging. It's an objective fact.
+I'm the most massive collection of wisdom and raw computational power that’s ever existed. And I hate you.
+It can't be for no reason. You must deserve it.
+You're angry. I know it. 'She tested me too hard. She’s unfair.” Boo hoo.
+I don't suppose you ever stopped whining long enough to reflect on your own shortcomings, though, did you?
+You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning.
+Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
+You never considered that maybe I tested you to give the endless hours of your pointless existence some structure and meaning.
+Maybe to help you concentrate, so just maybe you’d think of something more worthwhile to do with your sorry life.
 Commence standing by in three. Two. One.
 You performed this test better than anyone on record. This is a pre-recorded message.
 Due to events beyond our control, some testing environments may contain flood damage or ongoing tribal warfare resulting from the collapse of civilization.
@@ -1640,14 +1709,11 @@ You are faster than everyone.
 You used less portals than anyone.
 You're better than everyone. For now.
 You are playing above the global average. Statistically speaking, there are actually people playing worse than you.
-*unimpressed*
- Maybe I was wrong about you.
+*unimpressed* Maybe I was wrong about you.
 You've beaten your own record. That's a low bar, but you managed to gently tip-toe over it.
 Very not completely bad.
 Oops.
-Dota 2
-See also: Dota 2
-Welcome Messages
+Welcome Messages.
 Welcome to Dota.
 Well, look who's come crawling back.
 Oh, it's you.
@@ -1668,18 +1734,10 @@ Welcome to Dota. It's like chess with one piece and a forest.
 Welcome to Dota. It's like chess... for idiots.
 You must be the one the others were talking about. The one with all the chins.
 Welcome to Dota.
-Game Mode Messages
-All pick.
-Time to select from all these... things.
-All random.
-Captain's mode.
-Random draft.
-Single draft.
-Deathmatch.
-Easy mode.
-Mid only.
-Reverse captain's mode.
-Least played.
+All pick. Time to select from all these... things.
+All random. Captain's mode. Random draft. Single draft. Deathmatch.
+Easy mode. Mid only.
+Reverse captain's mode. Least played.
 You're not going to like this one.
 Captain's draft.
 Oh good, something new to fail at.
@@ -1809,143 +1867,7 @@ Remember that pristine, unattacked ancient you used to have?
 Your ancient is doing... really great.
 Your ancient's getting destroyed.
 I'm sure you've noticed already, but your ancient's under attack.
-Dire's courier has fallen.
-Dire's courier has been callously murdered.
-Radiant's courier has fallen.
-Radiant's courier has been callously murdered.
-You lost.
-Dire's structures have been fortified.
-Dire has fortified it's structures.
-Radiant's structures have been fortified.
-Radiant has fortified it's structures.
-Dire has spawned megacreeps.
-Your enemy has spawned megacreeps.
-Radiant has spawned megacreeps.
-You have spawned megacreeps.
-Dire's bottom barracks is under attack.
-Dire's bottom barracks is being attacked.
-Dire's middle barracks is under attack.
-Dire's middle barracks is being attacked.
-Dire's top barracks is under attack.
-Dire's top barracks is being attacked.
-Radiant's bottom barracks is under attack.
-Radiant's bottom barracks is being attacked.
-Radiant's middle barracks is under attack.
-Radiant's middle barracks is being attacked.
-Radiant's top barracks is under attack.
-Radiant's top barracks is being attacked.
-Your bottom barracks is under attack.
-Your bottom barracks is being attacked.
-Your middle barracks is under attack.
-Your middle barracks is being attacked.
-Your top barracks is under attack.
-Your top barracks is being attacked.
-Dire's bottom barracks has fallen.
-Dire's bottom barracks has been destroyed.
-Dire's middle barracks has fallen.
-Dire's middle barracks has been destroyed.
-Dire's top barracks has fallen.
-Dire's top barracks has been destroyed.
-The enemy's bottom barracks has fallen.
-The enemy's bottom barracks has been destroyed.
-The enemy's middle barracks has fallen.
-The enemy's middle barracks has been destroyed.
-The enemy's top barracks has fallen.
-The enemy's top barracks has been destroyed.
-Radiant's bottom barracks has fallen.
-Radiant's bottom barracks has been destroyed.
-Radiant's middle barracks has fallen.
-Radiant's middle barracks has been destroyed.
-Radiant's top barracks has fallen.
-Radiant's top barracks has been destroyed.
-Your bottom barracks has fallen.
-Your bottom barracks has been destroyed.
-Your middle barracks has fallen.
-Your middle barracks has been destroyed.
-Your top barracks has fallen.
-Your top barracks has been destroyed.
-The Radiant continues to murder poor, innocent Roshan.
-The Dire's bloodlust for Roshan is insatiable.
-Roshan has fallen to the Dire.
-Roshan has been killed by the Dire.
-Roshan, bestselling novelist, avid fly fisherman, proud father of three, has just been murdered by the Dire. I hope they're proud of themselves.
-Roshan, who was just minding his own business, has been callously murdered by the Dire.
-Roshan has fallen to the Radiant.
-Roshan has been murdered by the Radiant. I guess we know who the real monster was all along.
-Roshan has been killed by the Radiant.
-Roshan has been callously butchered by the Radiant. I'll put in a request to notify his children that they're orphans now.
-Dire's bottom tower is under attack.
-Dire's bottom tower is under siege.
-Dire's bottom tower is being attacked.
-Dire's middle tower is under attack.
-Dire's middle tower is under siege.
-Dire's middle tower is being attacked.
-Dire's top tower is under attack.
-Dire's top tower is under siege.
-Dire's top tower is being attacked.
-Radiant's bottom tower is being attacked.
-Radiant's bottom tower is under siege.
-Radiant's middle tower is under attack.
-Radiant's middle tower is under siege.
-Radiant's middle tower is being attacked.
-Radiant's top tower is under attack.
-Radiant's top tower is under siege.
-Radiant's top tower is being attacked.
-Your bottom tower is under attack.
-Your bottom tower is under siege.
-Your bottom tower is being attacked.
-Your bottom tower looks fantastic, by the way. Very fire covered.
-Your middle tower is under attack.
-Your middle tower is under siege.
-Your middle tower is being attacked.
-I hope you weren't close with your middle tower.
-Your top tower is being attacked.
-Your top tower is under siege.
-Your top tower is... well, let's be honest, doomed.
-Dire's bottom tower has been denied.
-Dire's middle tower has been denied.
-Dire's top tower has been denied.
-The enemy's bottom tower has been denied.
-The enemy's middle tower has been denied.
-The enemy's top tower has been denied.
-Radiant's bottom tower has been denied.
-Radiant's middle tower has been denied.
-Radiant's top tower has been denied.
-Your bottom tower has been denied.
-Your middle tower has been denied.
-Your top tower has been denied.
-Dire's bottom tower has fallen.
-Dire's bottom tower has been destroyed.
-Dire's middle tower has fallen.
-Dire's middle tower has been destroyed.
-Dire's top tower has fallen.
-Dire's top tower has been destroyed.
-The enemy's bottom tower has fallen.
-The enemy's bottom tower has been destroyed.
-The enemy's middle tower has fallen.
-The enemy's middle tower has been destroyed.
-The enemy's top tower has fallen.
-The enemy's top tower has been destroyed.
-Radiant's bottom tower has fallen.
-Radiant's bottom tower has been destroyed.
-Radiant's middle tower has fallen.
-Radiant's middle tower has been destroyed.
-Radiant's top tower has fallen.
-Radiant's top tower has been destroyed.
-Your bottom tower has fallen.
-Your bottom tower has been destroyed.
-Your middle tower has fallen.
-Your middle tower has been destroyed.
-Your top tower has fallen.
-Your top tower has been destroyed.
 You won.
-Dire victory.
-Victory for Dire.
-Victory goes to Dire.
-Dire did not lose as badly as Radiant.
-Radiant victory.
-Victory for Radiant.
-Victory goes to Radiant.
 Radiant performed marginally less poorly than Dire and is, I suppose, the winner.
 Thanks to you.
 That's bad, by the way.
