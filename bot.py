@@ -37,7 +37,7 @@ quiz_questions = [
     {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?", "answer": "limit glados' intelligence"},
 ]
 
-def generate_convo_text(start_word: str = "")->str:
+def generate_convo_text(start_line: str = "")->str:
     # Randomly select a greeting
     greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
                  "Good night"]
@@ -53,8 +53,9 @@ def generate_convo_text(start_word: str = "")->str:
     # Get raw text as string.
     with open("corpus.txt") as file:
         lines = file.readlines()  # Read all lines into a list
-        random_index = random.randint(0, len(lines))
-        lines.insert(random_index, start_word)
+        for start_word in start_line:
+            random_index = random.randint(1, len(lines))
+            lines.insert(random_index, start_word)
         text = ''.join(lines[6:])  # Join the lines starting from index 6 (line 7)
 
     # Build the model.
@@ -666,8 +667,7 @@ async def unlock_channel(channel, user):  # unused
 
 async def handle_conversation(message):
     words = message.content.split()
-    random_word = random.choice(words)
-    await message.channel.send(generate_convo_text(random_word))
+    await message.channel.send(generate_convo_text(words))
 
 async def main():
     await bot.add_cog(OpenGLaDOS(bot))
