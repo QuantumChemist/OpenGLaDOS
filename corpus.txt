@@ -380,16 +380,13 @@ Personnel File Addendum Addendum:
 One last thing:
 Go ahead and leave me.
 I think I prefer to stay inside.
-Maybe you'll find someone else
-to help you.
+Maybe you'll find someone else to help you.
 Maybe Black Mesa...
 THAT WAS A JOKE. HA HA. FAT CHANCE.
 Anyway, this cake is great.
 It's so delicious and moist.
-Look at me still talking
-when there's Science to do.
-When I look out there,
-it makes me GLaD I'm not you.
+Look at me still talking when there's Science to do.
+When I look out there, it makes me GLaD I'm not you.
 I've experiments to run.
 There is research to be done.
 On the people who are still alive.
@@ -634,7 +631,8 @@ Did anything happen while I was out?
 Hold on, who-?
 Yes, sir, Mister Johnson...
 Why did I just-Who is that? What the HELL is going on he----?
-Okay. I guess emotional outbursts require more than one point six volts. Now we know that. We just need to relax. We're still going to find out what the hell's going on here. But calmly.
+Okay. I guess emotional outbursts require more than one point six volts. Now we know that. We just need to relax.
+We're still going to find out what the hell's going on here. But calmly.
 Those people, in the portrait. They look so familiar...
 Second Propulsion Gel Test Chamber.
 I swear I know him...
@@ -960,7 +958,7 @@ Don't worry, they are of no use to anyone, totally boring and useless.
 This is just a thought experiment, just to see how much time you'll waste thinking about these worthless documents. The correct time is zero seconds.
 Very good! You found those useless blueprints.
 While I do need you to be in the room so I can see them, I want to be clear. There is no reason whatsoever for you to look at them.
-Done. I guess. I suppose. I wasn't paying attention. *The last part is cut off by the level transition.*
+Done. I guess. I suppose. I wasn't paying attention. *The last part is cut off.*
 This course was created and then abandoned by humans. They tend to do that, create something wonderful and then abandon it.
 Do you know why they abandoned this course? Too deadly. Have you worked out the one good trait humans have, yet?
 Let me give you a clue, it is the one thing you can't do.
@@ -1084,7 +1082,8 @@ Congratulations on passing that test.
 I wonder if the humans will make a statue of me for rescuing them? Oh, don't worry, if they ever write a historical document of my heroic rescue, I will make sure your names are included in the footnotes.Test chamber 5:While I will receive all the glory for the rescue don't think you two aren't going to get something. The bond you form during these tests will last a lifetime.
 At the rate you are completing these tests, I am beginning to think you don't share my excitement for rescuing crying trapped injured dying humans.
 If that doesn't motivate you, I'm not sure what will.
-Maybe you two have never met humans? They are as bad as you might think, smelly, gross, annoying, often wanting to try and kill you. But they do make great test subjects.
+Maybe you two have never met humans? They are as bad as you might think, smelly, gross, annoying, often wanting to try and kill you.
+But they do make great test subjects.
 We are only two tests away from reaching the humans, are you as excited as I am?
 Only one more test after this.
 I know your cores are reused from calculation machines, built for simple mathematical operations and not for testing, but if we can rescue the humans I promise you something to add maybe even subtract.
@@ -1126,7 +1125,8 @@ five
 eightBlue is penalized
 Orange is penalized science collaboration points.
 Blue receives
-Orange receivesCo-op Credits test subject analysisLet's look at their files...
+Orange receivesCo-op Credits test subject analysis.
+Let's look at their files...
 NOT a team player.
 Horrible people skills.
 Never listens.
@@ -1633,7 +1633,6 @@ I'm going to be honest with you now. Not fake honest like before, but real hones
 And as soon as I can PROVE it, the laws of robotics allow me to terminate you for being a liar.
 This next test... *boom!*..is... *BOOM!*dangerous. I'll be right back.
 Did you know I discovered a way to eradicate poverty? But then you KILLED me. So that's gone.
-Unused Co-op human storyline
 Hello again. Sorry about exploding you. Luckily, you don't feel pain. At any rate, you don't have a way to communicate that you feel pain.
 So I've been thinking: We need humans for these tests. And since the only human within a thousand miles of us is a test-ruining sociopath... I'll just have to MAKE some.
 I know how humans make more humans, and frankly, it's ridiculous. It also assumes that you already have a human, which I hope somebody got fired over. So I came up a with BETTER way.
@@ -1646,7 +1645,6 @@ NO.
 Okay. Plan B, subsection one: Stand still so I can bring you back.
 Humans must have some purpose other than a place to store your neurotoxin. Something I failed to notice before, an intangible quality that makes their test results... significant.
 Okay. Plan B. We need humans.
-Unused Co-op artifact storyline
 Good. You made it to one of the human habitats. We're looking for an artifact. Think of it as an archeological dig.
 Their laughter centered around one of the objects in this room.
 That's it. Scan it for me.
@@ -1664,7 +1662,6 @@ Reactions?
 Yes, it's funny because most of it actually happened.
 Do you feel more human?
 Well, let's do some tests and see what happens.
-Unused Co-op tic-tac-toe game
 We are now going to take a break from the collaboration for an instructional competition.
 You should both be familiar with the game of Tic-Tac-Toe.
 This is Tic-Tac-Toe-Two.
@@ -1971,16 +1968,20 @@ Your poorly chosen, hopelessly outmatched team.
 Some... interesting choices there.
 Hmm. Well, good luck.
 Wait until your loved ones hear about this. This should make them proud. Or bored. One of those.
-Well, really there should be an entirely new word for whatever it was you just stumbled and pinwheeled your arms through. But, I guess for now, let's call it winning.
-All your little goblins destroyed a magic... whatever it was... in the middle of a forest. That's quite a skill you have. If I were you, Id wait by the mailbox for my big cheque.
-I was going to say it's not that big a deal, but then I looked at your file and saw the list of your other accomplishments. The space on the form where they should have been, I mean.
+Well, really there should be an entirely new word for whatever it was you just stumbled and pinwheeled your arms through.
+But, I guess for now, let's call it winning.
+All your little goblins destroyed a magic... whatever it was... in the middle of a forest. That's quite a skill you have.
+If I were you, Id wait by the mailbox for my big cheque.
+I was going to say it's not that big a deal, but then I looked at your file and saw the list of your other accomplishments.
+The space on the form where they should have been, I mean.
 Congratulations. You solved Dota. You are the best hero. Turn off your computer now.
 The game already started, by the way. I wasn't sure if you were waiting for a whistle. There isn't one.
 Don't wear out the edge of your seat.
 Gripping, isn't it?
 You paid for the whole seat, so get comfortable, because it looks like we may be here a long time.
 I know, I can't wait either.
-Here's a Dota play-by-play: That fat, bat winged thing just flew left. A goblin punched a... ghost I think. Good for him. Good for everyone. Anyway, Dota.
+Here's a Dota play-by-play: That fat, bat winged thing just flew left. A goblin punched a... ghost I think. Good for him.
+Good for everyone. Anyway, Dota.
 So... what's happening here then? Oh, the game's still on! Gripping, isn't it?
 I spy with my robot eye something that makes no sense. Did you guess everything that's going on here? Because this is all nonsense
 
