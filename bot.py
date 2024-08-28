@@ -65,7 +65,8 @@ def generate_convo_text(start_line: str = None)->str:
             lines.insert(random_index, start_word)
         text = ''.join(lines[6:])  # Join the lines starting from index 6 (line 7)
     # Build the model.
-    text_model = markovify.Text(text, state_size=3)
+    state = random.choice([2,3])
+    text_model = markovify.Text(text, state_size=state)
 
     # Generate a random number between 5 and 10
     random_number = random.randint(5, 10)
@@ -463,7 +464,8 @@ class OpenGLaDOS(commands.Cog):
 
         # Handle Replies to the Bot
         if message.reference and message.reference.resolved and message.reference.resolved.author == bot.user:
-            await handle_conversation(message)
+            words = message.content.split()
+            await message.reply(generate_convo_text(words))
             return
 
         # Handle Mentions of the Bot
