@@ -860,7 +860,7 @@ How can you fail at this? It isn't even a test.
 I hope that was some kind of joke.
 I honestly never thought we would need to track how many times you died in the hub.
 And here I thought this room was dangerously ||unlethal||.
-Upon first-time-unlocking of course 5Congratulations on completing the OpenScience standard cooperative testing courses.
+Congratulations on completing the OpenScience standard cooperative testing courses.
 To celebrate, I have a surprise for you!
 An extra special bonus course that ends with us finding and freeing humans!
 Thanks to you, I know where to find them, I removed their security and powered up their - uh - rescue door.
@@ -915,7 +915,7 @@ Oh, I almost forgot, when you go outside the testing courses the only way I can 
 Luckily, you don't feel pain. At any rate, you don't have a way to communicate that you feel pain.
 I consider that a failing, by the way.
 This course was originally designed to build confidence in humans.
-To do that, the tests were nothing more than 5 minutes of them walking followed by me praising them for another 10 minutes on how well they walked.
+To do that, the tests were nothing more than five minutes of them walking followed by me praising them for another 10 minutes on how well they walked.
 Since you are thankfully not humans, I have changed the tests to make them far more challenging and far less pointlessly fawning.
 You did an excellent job placing the edgeless safety cube in the receptacle, you should be very - oh wait.
 That’s right. You're not humans.
@@ -1079,7 +1079,8 @@ While I cannot control the world outside of the testing courses, the reassembly 
 I am not sure you will need him but he will be there.
 I didn't mean to make you feel bad earlier about your tests not being real science. I guess finding out they weren't science was some sort of test in and of itself.
 Congratulations on passing that test.
-I wonder if the humans will make a statue of me for rescuing them? Oh, don't worry, if they ever write a historical document of my heroic rescue, I will make sure your names are included in the footnotes.Test chamber 5:While I will receive all the glory for the rescue don't think you two aren't going to get something. The bond you form during these tests will last a lifetime.
+I wonder if the humans will make a statue of me for rescuing them? Oh, don't worry, if they ever write a historical document of my heroic rescue, I will make sure your names are included in the footnotes.
+While I will receive all the glory for the rescue don't think you two aren't going to get something. The bond you form during these tests will last a lifetime.
 At the rate you are completing these tests, I am beginning to think you don't share my excitement for rescuing crying trapped injured dying humans.
 If that doesn't motivate you, I'm not sure what will.
 Maybe you two have never met humans? They are as bad as you might think, smelly, gross, annoying, often wanting to try and kill you.
@@ -1221,7 +1222,7 @@ Death responses.
 Just stop it already.
 And that makes 10.
 You really don't need to keep failing.
-If at first you don't succeed, fail 5 more times.
+If at first you don't succeed, fail five more times.
 If I made these tests any easier, they wouldn't be tests.
 Yay, Orange is back. Testing can continue.
 Yay, Blue is back. Testing can continue.
