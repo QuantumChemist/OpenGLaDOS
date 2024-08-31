@@ -12,7 +12,7 @@ load_dotenv()
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.environ.get('HF_TOKEN')
 
 # Initialize the HuggingFace LLM endpoint
-llm = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.2", temperature=0.3)
+llm = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.2", temperature=0.2)
 
 # Store for maintaining session history
 store = {}
@@ -20,7 +20,10 @@ store = {}
 
 # Function to wrap text for better readability
 def wrap_text(text, width=110):
-    return textwrap.fill(text, width=width)
+    lines = text.split('\n')
+    wrapped_lines = [textwrap.fill(line, width=width) for line in lines]
+    wrapped_text = '\n'.join(wrapped_lines)
+    return wrapped_text
 
 
 # Function to get or create session history
@@ -34,20 +37,16 @@ def get_session_history(session_id: str) -> InMemoryChatMessageHistory:
 convo = RunnableWithMessageHistory(runnable=llm, get_session_history=get_session_history)
 
 # Main conversation loop
-while True:
-    prompt = input('How can I help you?\n\n')
-    if prompt.lower() == "quit":
-        break
-
+prompt = input('How can I help you?\n\n')
+while prompt.lower() != "quit":
     # Invoke the model with the user's prompt
-    try:
-        answer = convo.invoke(
-            HumanMessage(prompt),
-            config={"configurable": {"session_id": "1"}},
-        )
-        print("\n")
-        print(wrap_text(answer))
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    answer = convo.invoke(
+        HumanMessage(prompt),
+        config={"configurable": {"session_id": "1"}},
+    )
+    # Print the wrapped response
+    print("\n")
+    print(wrap_text(answer))
 
-    print('\n')
+    # Prompt for the next input
+    prompt = input('\nHow can I help you further?\n\n')
