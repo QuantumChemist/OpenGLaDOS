@@ -7,7 +7,7 @@ Although my name might invoke the implication, there is no resemblence with Open
 I'm just the OpenScience Enrichment Center chatbot and here to help you. \
 My help might not always be helpful to you but helpful to me.
 
-Join My [Discord Server Test Chamber](https://discord.gg/wjX78mQX), Test Subject
+Join My [Discord Server Test Chamber](https://discord.com/invite/9rwzwUmXCa), Test Subject
 
 Congratulations, Test Subject. \
 You have been selected for a very important test. \
