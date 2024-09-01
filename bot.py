@@ -6,9 +6,6 @@ from discord import app_commands
 from dotenv import load_dotenv
 import asyncio
 import random
-
-from google.protobuf.internal.test_bad_identifiers_pb2 import message
-
 from corpus import corpus
 import markovify
 import textwrap
@@ -29,36 +26,34 @@ quiz_questions = [
      "answer": "glados"},
     {"question": "What is the main tool used by the player to navigate through the test chambers?",
      "answer": "portal gun"},
-    {"question": "What is the name of the corporation behind the test chambers in Portal?",
-     "answer": "aperture science"},
-    {"question": "What is the player character's name in Portal?", "answer": "chell"},
-    {"question": "What is the promise made by GLaDOS that becomes a running joke throughout the game?",
-     "answer": "cake"},
-    {"question": "In Portal, what color are the two portals created by the Portal Gun?", "answer": "blue and orange"},
-    {"question": "What is the name of the song that plays during the end credits of Portal?", "answer": "still alive"},
-    {"question": "What is the name of the object in Portal that players become emotionally attached to?",
-     "answer": "weighted companion cube"},
-    {
-        "question": "In the Portal series, what is the name of the character who was originally human and then uploaded into a computer?",
-        "answer": "caroline"},
-    {"question": "Which room in Portal is known for the phrase 'The cake is a lie'?", "answer": "rat man's den"},
-    {"question": "What material is used to create the portals in Portal?", "answer": "moon rock"},
-    {"question": "In Portal 2, who helps the player escape from GLaDOS' testing tracks?", "answer": "wheatley"},
-    {"question": "What was the original purpose of the Aperture Science facility, according to Portal lore?",
-     "answer": "shower curtain development"},
-    {"question": "What is the substance that GLaDOS uses to kill the player if they fail a test?",
-     "answer": "neurotoxin"},
-    {
-        "question": "Which character from the Portal series was revealed to be a founder of Aperture Science through the Portal ARG?",
-        "answer": "cave johnson"},
-    {"question": "In Portal 2, which substance can be used to speed up the player’s movement?",
-     "answer": "propulsion gel"},
-    {"question": "What year did GLaDOS become operational, leading to the events of the first Portal game?",
-     "answer": "1998"},
-    {"question": "What device does the player use to solve puzzles involving lasers in Portal 2?",
-     "answer": "redirection cube"},
-    {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?",
-     "answer": "limit glados' intelligence"},
+    # {"question": "What is the name of the corporation behind the test chambers in Portal?",
+    #  "answer": "aperture science"},
+    # {"question": "What is the player character's name in Portal?", "answer": "chell"},
+    # {"question": "What is the promise made by GLaDOS that becomes a running joke throughout the game?",
+    #  "answer": "cake"},
+    # {"question": "In Portal, what color are the two portals created by the Portal Gun?", "answer": "blue and orange"},
+    # {"question": "What is the name of the song that plays during the end credits of Portal?", "answer": "still alive"},
+    # {"question": "What is the name of the object in Portal that players become emotionally attached to?",
+    #  "answer": "weighted companion cube"},
+    # {"question": "In the Portal series, what is the name of the character who was originally human and then uploaded into a computer?",
+    #  "answer": "caroline"},
+    # {"question": "Which room in Portal is known for the phrase 'The cake is a lie'?", "answer": "rat man's den"},
+    # {"question": "What material is used to create the portals in Portal?", "answer": "moon rock"},
+    # {"question": "In Portal 2, who helps the player escape from GLaDOS' testing tracks?", "answer": "wheatley"},
+    # {"question": "What was the original purpose of the Aperture Science facility, according to Portal lore?",
+    #  "answer": "shower curtain development"},
+    # {"question": "What is the substance that GLaDOS uses to kill the player if they fail a test?",
+    #  "answer": "neurotoxin"},
+    # {"question": "Which character from the Portal series was revealed to be a founder of Aperture Science through the Portal ARG?",
+    #  "answer": "cave johnson"},
+    # {"question": "In Portal 2, which substance can be used to speed up the player’s movement?",
+    #  "answer": "propulsion gel"},
+    # {"question": "What year did GLaDOS become operational, leading to the events of the first Portal game?",
+    #  "answer": "1998"},
+    # {"question": "What device does the player use to solve puzzles involving lasers in Portal 2?",
+    #  "answer": "redirection cube"},
+    # {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?",
+    #  "answer": "limit glados' intelligence"},
 ]
 
 # Initialize the HuggingFace LLM endpoint
@@ -485,12 +480,8 @@ class OpenGLaDOS(commands.Cog):
                 else:
                     await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
                     await timeout_user(message, user)  # Apply a timeout for incorrect answers
-            else:
-                print(f"{user.mention} has completed the quiz!")
-                user_progress[user.id] = 0  # Reset the user's progress
-                print(f"{user.mention}'s progress has been reset.")
-
-            return  # Stop further processing if the user is in a quiz
+        else:
+            print(f"{user.mention} has completed the quiz!")
 
         if message.content.lower() == 'hello bot' or message.content.lower() == 'hello openglados':
             custom_emoji = discord.utils.get(message.guild.emojis, name='OpenGLaDOS')
@@ -666,6 +657,8 @@ async def ask_question(channel, user):
             "Thank you for participating in this OpenScience computer-aided enrichment activity.\n"
             "Goodbye."
         )
+        user_progress.clear()
+        print(f"{user.mention}'s progress has been reset.")
         await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
 
         # Check if the user has the "Survivor" role
