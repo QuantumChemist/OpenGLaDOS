@@ -77,19 +77,7 @@ def fetch_random_fact():
         return "Error occurred while fetching a fact."
 
 
-# repetitive task:
-# Task to send a science fact daily
-@tasks.loop(hours=24)  # Run every 24 hours
-async def send_science_fact():
-    await bot.wait_until_ready()  # Wait until the bot is fully ready
-    channel = discord.utils.get(bot.get_all_channels(), name='random-useless-fact-of-the-day')
-
-    if channel:
-        fact = fetch_random_fact()  # Fetch a random fact from the API
-        await channel.send(f"🌍 **Random Useless Fact of the Day** 🌍\n{fact}")
-    else:
-        print("Channel not found!")
-
+# repetitive tasks:
 # Function to fetch a random Black Forest cake GIF from Tenor
 def fetch_random_gif():
     try:
@@ -117,6 +105,18 @@ async def send_random_cake_gif():
     if channel:
         gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
         await channel.send(f"🍰 **Black Forest Cake of the Day!** 🍰\n{gif_url}")
+    else:
+        print("Channel not found!")
+
+# Task to send a science fact daily
+@tasks.loop(hours=24)  # Run every 24 hours
+async def send_science_fact():
+    await bot.wait_until_ready()  # Wait until the bot is fully ready
+    channel = discord.utils.get(bot.get_all_channels(), name='random-useless-fact-of-the-day')
+
+    if channel:
+        fact = fetch_random_fact()  # Fetch a random fact from the API
+        await channel.send(f"🌍 **Random Useless Fact of the Day** 🌍\n{fact}")
     else:
         print("Channel not found!")
 
@@ -210,8 +210,9 @@ def generate_llm_convo_text(start_line: str = None, message: str = None):
 
 
 class OpenGLaDOS(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, discord_bot):
+        self.bot = discord_bot
+        self.start_triggered = False
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -323,78 +324,32 @@ class OpenGLaDOS(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(f"Failed to retrieve message content: {e}")
 
-    @app_commands.command(name="start", description="Start chat mode to send messages manually.")
-    async def start_slash(self, interaction: discord.Interaction):
-        start_triggered = False
-        if start_triggered:
-            await interaction.response.send_message(
-                "The start command has already been triggered and cannot be run again.")
-            return
-
-        start_triggered = True
-        await interaction.response.send_message("Chat mode started!")
-        channel_id = None
-
-        while start_triggered:
-            try:
-                if channel_id is None:
-                    await interaction.response.send_message("Enter the channel ID where you want to send the message:")
-                    channel_id = await bot.loop.run_in_executor(None, input)
-
-                await interaction.response.send_message(
-                    "Enter the message to send to Discord (or type '_switch' to enter a new channel ID or '_quit' to exit):")
-                message = await bot.loop.run_in_executor(None, input)
-
-                if message.lower() == '_quit':
-                    await interaction.followup.send("Chat mode stopped!")
-                    start_triggered = False
-                    break
-
-                if message.lower() == '_switch':
-                    channel_id = None
-                    continue
-
-                if not message.strip():
-                    await interaction.followup.send("Cannot send an empty message. Please enter a valid message.")
-                    continue
-
-                channel = self.bot.get_channel(int(channel_id))
-                if channel:
-                    try:
-                        await channel.send(message)
-                    except discord.HTTPException as e:
-                        await interaction.followup.send(f"Failed to send message: {e}")
-                else:
-                    await interaction.followup.send("Invalid channel ID. Please enter a valid channel ID.")
-            except ValueError:
-                await interaction.followup.send("Invalid input. Please enter a valid channel ID.")
-            except Exception as e:
-                await interaction.followup.send(f"An unexpected error occurred: {e}")
-
     # Regular bot command implementation
     @commands.command(name="start", help="Start chat mode to send messages manually.")
     async def start_text(self, ctx: commands.Context):
-        start_triggered = False
-        if start_triggered:
+        if self.start_triggered:
             await ctx.send("The start command has already been triggered and cannot be run again.")
             return
 
-        start_triggered = True  # Set the flag to indicate the command has been triggered
+        self.start_triggered = True  # Set the flag to indicate the command has been triggered
         await ctx.send("Chat mode started!")
         channel_id = None  # Initialize channel_id variable
 
-        while start_triggered:
+        while self.start_triggered:
             try:
                 if channel_id is None:
-                    channel_id = await bot.loop.run_in_executor(None, input,
-                                                                "Enter the channel ID where you want to send the message: ")
-                message = await bot.loop.run_in_executor(None, input,
-                                                         "Enter the message to send to Discord "
-                                                         "(or type '_switch' to enter a new channel ID or '_quit' to exit): ")
+                    # Get input from the terminal using asyncio to prevent blocking
+                    channel_id = await asyncio.to_thread(input, "Enter the channel ID where you want to send the message: ")
+
+                # Get the message to send using asyncio to prevent blocking
+                message = await asyncio.to_thread(
+                    input,
+                    "Enter the message to send to Discord (or type '_switch' to enter a new channel ID or '_quit' to exit): "
+                )
 
                 if message.lower() == '_quit':
                     await ctx.send("Chat mode stopped!")
-                    start_triggered = False  # Reset the flag so the command can be triggered again if needed
+                    self.start_triggered = False  # Reset the flag so the command can be triggered again if needed
                     break
 
                 if message.lower() == '_switch':
@@ -406,7 +361,7 @@ class OpenGLaDOS(commands.Cog):
                     print("Cannot send an empty message. Please enter a valid message.")
                     continue
 
-                channel = bot.get_channel(int(channel_id))
+                channel = self.bot.get_channel(int(channel_id))
                 if channel:
                     try:
                         await channel.send(message)
@@ -419,7 +374,6 @@ class OpenGLaDOS(commands.Cog):
                 print("Invalid input. Please enter a valid channel ID.")
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
-                # The loop will automatically continue after handling the exception
 
     @app_commands.command(name="hello", description="Say hello and receive a custom message.")
     async def hello(self, interaction: discord.Interaction):
@@ -829,10 +783,10 @@ async def handle_conversation(message):
     await message.channel.send(generate_markov_chain_convo_text(words))
 
 
-async def main():
-    await bot.add_cog(OpenGLaDOS(bot))
-    await bot.start(os.environ.get('BOT_TOKEN'))
+async def main(openglados: commands.Bot):
+    await openglados.add_cog(OpenGLaDOS(openglados))
+    await openglados.start(os.environ.get('BOT_TOKEN'))
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    asyncio.run(main(bot))
