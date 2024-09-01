@@ -470,6 +470,16 @@ class OpenGLaDOS(commands.Cog):
             await bot.process_commands(message)
             return  # Stop further processing since it's a command
 
+        # Handle Replies to the Bot
+        if message.reference and message.reference.resolved and message.reference.resolved.author == bot.user:
+            words = message.content.split()
+            await message.reply(generate_llm_convo_text(words, message.content))
+            return
+
+        # Handle Mentions of the Bot
+        if self.bot.user.mentioned_in(message):
+            await handle_conversation(message)
+
         user = message.author
 
         # Handle Quiz Progression
@@ -537,16 +547,6 @@ class OpenGLaDOS(commands.Cog):
                     await message.channel.send(f"Failed to react to the message. Error: {str(e)}")
             await handle_conversation(message)
             return
-
-        # Handle Replies to the Bot
-        if message.reference and message.reference.resolved and message.reference.resolved.author == bot.user:
-            words = message.content.split()
-            await message.reply(generate_llm_convo_text(words, message.content))
-            return
-
-        # Handle Mentions of the Bot
-        if self.bot.user.mentioned_in(message):
-            await handle_conversation(message)
 
 
 async def setup(bot):
