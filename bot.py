@@ -133,7 +133,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
 
     # Concatenate the greeting with the generated text
     if llm_bool:
-        return (f"{selected_greeting}, {user_message} {introduction_llm}. "
+        return (f"{selected_greeting}, {user_message}.. {introduction_llm}. "
                 f"So while acting as OpenGLaDOS your style of replying to my inquiries could be inspired by "
                 f"something like the following lines: '{text_lines}'...*beep*...")
 
