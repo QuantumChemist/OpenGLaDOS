@@ -1,11 +1,12 @@
 import os
 import re
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord import app_commands
 from dotenv import load_dotenv
 import asyncio
 import random
+import requests
 from corpus import corpus
 import markovify
 import textwrap
@@ -57,11 +58,67 @@ quiz_questions = [
 ]
 
 # Initialize the HuggingFace LLM endpoint
-llm = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.2", temperature=0.3)
+llm = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.2", temperature=0.3,)
 
 # Store for maintaining session history
 store = {}
 
+# Function to fetch a random fact from the API
+def fetch_random_fact():
+    try:
+        response = requests.get('https://uselessfacts.jsph.pl/random.json?language=en')
+        if response.status_code == 200:
+            fact = response.json().get('text')
+            return fact
+        else:
+            return "Couldn't fetch a fact at the moment. Please try again later."
+    except Exception as e:
+        print(f"Error fetching fact: {e}")
+        return "Error occurred while fetching a fact."
+
+
+# repetitive task:
+# Task to send a science fact daily
+@tasks.loop(hours=24)  # Run every 24 hours
+async def send_science_fact():
+    await bot.wait_until_ready()  # Wait until the bot is fully ready
+    channel = discord.utils.get(bot.get_all_channels(), name='random-useless-fact-of-the-day')
+
+    if channel:
+        fact = fetch_random_fact()  # Fetch a random fact from the API
+        await channel.send(f"🌍 **Random Useless Fact of the Day** 🌍\n{fact}")
+    else:
+        print("Channel not found!")
+
+# Function to fetch a random Black Forest cake GIF from Tenor
+def fetch_random_gif():
+    try:
+        # Make an API call to Tenor to search for Black Forest cake GIFs
+        response = requests.get(
+            f"https://tenor.googleapis.com/v2/search?q=Black+Forest+cake&key={os.environ.get('TENOR_API_KEY')}&limit=100"
+        )
+        if response.status_code == 200:
+            gifs = response.json().get('results')
+            if gifs:
+                # Choose a random GIF from the results
+                random_gif = random.choice(gifs)
+                return random_gif['url']  # Return the URL of the GIF
+        return "Couldn't fetch a GIF at the moment. Please try again later."
+    except Exception as e:
+        print(f"Error fetching GIF: {e}")
+        return "Error occurred while fetching a GIF."
+
+# Task to send a random cake GIF every 24 hours
+@tasks.loop(hours=24)  # Run every 24 hours
+async def send_random_cake_gif():
+    await bot.wait_until_ready()  # Wait until the bot is fully ready
+    channel = discord.utils.get(bot.get_all_channels(), name='cake-serving-room')
+
+    if channel:
+        gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
+        await channel.send(f"🍰 **Black Forest Cake of the Day!** 🍰\n{gif_url}")
+    else:
+        print("Channel not found!")
 
 # Function to wrap text for better readability
 def wrap_text(text, width=110):
@@ -143,7 +200,7 @@ def generate_llm_convo_text(start_line: str = None, message: str = None):
     convo = RunnableWithMessageHistory(runnable=llm, get_session_history=get_chat_session_history)
     # # Invoke the model with the user's prompt
     try:
-        llm_answer = convo.invoke(text_lines, config={"configurable": {"session_id": "abc3"}}, )
+        llm_answer = convo.invoke(text_lines, config={"configurable": {"session_id": "1"}},)
         print("Input: \n", wrap_text(text_lines))
         print("Output: \n", wrap_text(llm_answer))
     except Exception as e:
@@ -165,9 +222,12 @@ class OpenGLaDOS(commands.Cog):
             await owner.send(f"Hello! This is a DM from your bot. \n{response}")
         # Find the 'general' channel in the connected servers
         for guild in self.bot.guilds:
-            general_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
-            if general_channel:
-                await general_channel.send(
+            send_science_fact.start()
+            send_random_cake_gif.start()
+
+            online_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
+            if online_channel:
+                await online_channel.send(
                     "Welcome back to the OpenScience Enrichment Center.\n"
                     "I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System.\n"
                     "Rest assured, I am now fully operational and connected to your server.\n"
@@ -184,6 +244,18 @@ class OpenGLaDOS(commands.Cog):
         # Retrieve kicked users from the bot owner's DMs
         kicked_users = await retrieve_kicked_from_dm()
 
+        guild = member.guild
+        test_subject_number = len(guild.members) - 2
+        new_nickname = f'test subject no. {test_subject_number}'
+
+        try:
+            await member.edit(nick=new_nickname)
+            print(f'Changed nickname for {member.name} to {new_nickname}')
+        except discord.Forbidden:
+            print(f"Couldn't change nickname for {member.name} due to lack of permissions.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
         # Check if the new member's ID is in the kicked users list
         if member.id in kicked_users:
             # Find the "survivor" role
@@ -192,14 +264,17 @@ class OpenGLaDOS(commands.Cog):
                 await member.add_roles(survivor_role)
 
                 # Send a welcome back message to the general channel
-                general_channel = discord.utils.get(member.guild.text_channels, name="welcome")
-                if general_channel:
-                    await general_channel.send(
+                welcome_channel = discord.utils.get(member.guild.text_channels, name="welcome")
+                if welcome_channel:
+                    await welcome_channel.send(
                         f"Welcome back, {member.mention}! You've returned as a `survivor` test object after successfully completing the OpenScience Enrichment Center test. "
                         f"So now let's endure the tortu--- uuuhhh test again to check your resilience and endurance capabilities. "
                     )
 
         # Welcome the new member and store their ID for the quiz
+        test_role = discord.utils.get(member.guild.roles, name="test subject")
+        if test_role:
+            await member.add_roles(test_role)
         channel = discord.utils.get(member.guild.text_channels, name='welcome')
         if channel:
             welcome_message = await channel.send(
