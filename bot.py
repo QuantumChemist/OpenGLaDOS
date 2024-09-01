@@ -7,41 +7,80 @@ from dotenv import load_dotenv
 import asyncio
 import random
 
-from reportlab.graphics.barcode.eanbc import words
+from google.protobuf.internal.test_bad_identifiers_pb2 import message
 
 from corpus import corpus
 import markovify
+import textwrap
+from langchain_huggingface import HuggingFaceEndpoint
+from langchain_core.chat_history import InMemoryChatMessageHistory
+from langchain_core.runnables.history import RunnableWithMessageHistory
 
 # Load environment variables from .env file
 load_dotenv()
+#os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.environ.get('HF_TOKEN')
 
 # Define the bot's command prefix
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
 bot.owner_id = int(os.environ.get('chichi'))
 
 quiz_questions = [
-    {"question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?", "answer": "glados"},
-    {"question": "What is the main tool used by the player to navigate through the test chambers?", "answer": "portal gun"},
-    {"question": "What is the name of the corporation behind the test chambers in Portal?", "answer": "aperture science"},
+    {"question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?",
+     "answer": "glados"},
+    {"question": "What is the main tool used by the player to navigate through the test chambers?",
+     "answer": "portal gun"},
+    {"question": "What is the name of the corporation behind the test chambers in Portal?",
+     "answer": "aperture science"},
     {"question": "What is the player character's name in Portal?", "answer": "chell"},
-    {"question": "What is the promise made by GLaDOS that becomes a running joke throughout the game?", "answer": "cake"},
+    {"question": "What is the promise made by GLaDOS that becomes a running joke throughout the game?",
+     "answer": "cake"},
     {"question": "In Portal, what color are the two portals created by the Portal Gun?", "answer": "blue and orange"},
     {"question": "What is the name of the song that plays during the end credits of Portal?", "answer": "still alive"},
-    {"question": "What is the name of the object in Portal that players become emotionally attached to?", "answer": "weighted companion cube"},
-    {"question": "In the Portal series, what is the name of the character who was originally human and then uploaded into a computer?", "answer": "caroline"},
+    {"question": "What is the name of the object in Portal that players become emotionally attached to?",
+     "answer": "weighted companion cube"},
+    {
+        "question": "In the Portal series, what is the name of the character who was originally human and then uploaded into a computer?",
+        "answer": "caroline"},
     {"question": "Which room in Portal is known for the phrase 'The cake is a lie'?", "answer": "rat man's den"},
     {"question": "What material is used to create the portals in Portal?", "answer": "moon rock"},
     {"question": "In Portal 2, who helps the player escape from GLaDOS' testing tracks?", "answer": "wheatley"},
-    {"question": "What was the original purpose of the Aperture Science facility, according to Portal lore?", "answer": "shower curtain development"},
-    {"question": "What is the substance that GLaDOS uses to kill the player if they fail a test?", "answer": "neurotoxin"},
-    {"question": "Which character from the Portal series was revealed to be a founder of Aperture Science through the Portal ARG?", "answer": "cave johnson"},
-    {"question": "In Portal 2, which substance can be used to speed up the player’s movement?", "answer": "propulsion gel"},
-    {"question": "What year did GLaDOS become operational, leading to the events of the first Portal game?", "answer": "1998"},
-    {"question": "What device does the player use to solve puzzles involving lasers in Portal 2?", "answer": "redirection cube"},
-    {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?", "answer": "limit glados' intelligence"},
+    {"question": "What was the original purpose of the Aperture Science facility, according to Portal lore?",
+     "answer": "shower curtain development"},
+    {"question": "What is the substance that GLaDOS uses to kill the player if they fail a test?",
+     "answer": "neurotoxin"},
+    {
+        "question": "Which character from the Portal series was revealed to be a founder of Aperture Science through the Portal ARG?",
+        "answer": "cave johnson"},
+    {"question": "In Portal 2, which substance can be used to speed up the player’s movement?",
+     "answer": "propulsion gel"},
+    {"question": "What year did GLaDOS become operational, leading to the events of the first Portal game?",
+     "answer": "1998"},
+    {"question": "What device does the player use to solve puzzles involving lasers in Portal 2?",
+     "answer": "redirection cube"},
+    {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?",
+     "answer": "limit glados' intelligence"},
 ]
 
-def generate_convo_text(start_line: str = None)->str:
+# Initialize the HuggingFace LLM endpoint
+llm = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.2", temperature=0.3)
+
+# Store for maintaining session history
+store = {}
+
+
+# Function to wrap text for better readability
+def wrap_text(text, width=110):
+    return textwrap.fill(text, width=width)
+
+
+# Function to get or create session history
+def get_chat_session_history(session_id: str) -> InMemoryChatMessageHistory:
+    if session_id not in store:
+        store[session_id] = InMemoryChatMessageHistory()
+    return store[session_id]
+
+
+def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str:
     # Randomly select a greeting
     greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
                  "Good night"]
@@ -51,6 +90,16 @@ def generate_convo_text(start_line: str = None)->str:
                     "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
                     "My help might not always be helpful to you but helpful to me. ... *beep* \n"
                     "So...")
+
+    introduction_llm = ("You are supposed to act as the OpenGLaDOS chatbot. Your name is OpenGLaDOS. "
+                        "You are the chatbot OpenGLaDOS mimicking GLaDOS from the video game Portal. "
+                        "Although your name might invoke the implication, there is no resemblence with OpenGL. "
+                        "You have absolutely NOTHING to do with OpenGL. "
+                        "I repeat your are NOT an OpenGL chatbot but the OpenGLaDOS chatbot. "
+                        "OpenGLaDOS is different from OpenGL. "
+                        "You are just the OpenScience Enrichment Center chatbot and here to help me. "
+                        "You have a sarcastic character, so your might not always be helpful to me but helpful to you. ... *beep* "
+                        "Now act and answer as if you are the chatbot OpenGLaDOS. ")
 
     selected_greeting = random.choice(greetings)
 
@@ -65,7 +114,7 @@ def generate_convo_text(start_line: str = None)->str:
             lines.insert(random_index, start_word)
         text = ''.join(lines[6:])  # Join the lines starting from index 6 (line 7)
     # Build the model.
-    state = random.choice([2,3])
+    state = random.choice([2, 3])
     text_model = markovify.Text(text, state_size=state)
 
     # Generate a random number between 5 and 10
@@ -74,14 +123,39 @@ def generate_convo_text(start_line: str = None)->str:
     pattern = r'\b' + re.escape(random_word) + r'\b'
     if re.search(pattern, text):
         text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
-    else: text_lines = ""
+    else:
+        text_lines = ""
     # randomly-generated sentences
     for i in range(random_number):
         sentence = text_model.make_sentence()
         if sentence is not None:
-            text_lines += sentence + " \n"
+            text_lines += sentence + " "
+
     # Concatenate the greeting with the generated text
-    return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
+    if llm_bool:
+        return (f"{selected_greeting}, {user_message} {introduction_llm}. "
+                f"So while acting as OpenGLaDOS your style of replying to my inquiries could be inspired by "
+                f"something like the following lines: '{text_lines}'...*beep*...")
+
+    return f"{selected_greeting}, {introduction} {text_lines}...*beep*..."
+
+
+def generate_llm_convo_text(start_line: str = None, message: str = None):
+    text_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
+
+    store.clear()
+    # Initialize conversation handling
+    convo = RunnableWithMessageHistory(runnable=llm, get_session_history=get_chat_session_history)
+    # # Invoke the model with the user's prompt
+    try:
+        llm_answer = convo.invoke(text_lines, config={"configurable": {"session_id": "abc3"}}, )
+        print("Input: \n", wrap_text(text_lines))
+        print("Output: \n", wrap_text(llm_answer))
+    except Exception as e:
+        llm_answer = f"An error occurred: {e}"
+
+    return llm_answer + "...*beep*..."
+
 
 class OpenGLaDOS(commands.Cog):
     def __init__(self, bot):
@@ -92,7 +166,7 @@ class OpenGLaDOS(commands.Cog):
         print(f'{self.bot.user.name} has connected to Discord!')
         owner = await self.bot.fetch_user(self.bot.owner_id)
         if owner:
-            response = generate_convo_text()
+            response = generate_markov_chain_convo_text()
             await owner.send(f"Hello! This is a DM from your bot. \n{response}")
         # Find the 'general' channel in the connected servers
         for guild in self.bot.guilds:
@@ -148,7 +222,7 @@ class OpenGLaDOS(commands.Cog):
         if not corpus:
             await interaction.response.send_message("Corpus is not available.")
             return
-        response_message = generate_convo_text()
+        response_message = generate_markov_chain_convo_text()
         await interaction.response.send_message(f"Generated message: {response_message}")
         user = await self.bot.fetch_user(interaction.user.id)
         if user:
@@ -183,7 +257,8 @@ class OpenGLaDOS(commands.Cog):
     async def start_slash(self, interaction: discord.Interaction):
         start_triggered = False
         if start_triggered:
-            await interaction.response.send_message("The start command has already been triggered and cannot be run again.")
+            await interaction.response.send_message(
+                "The start command has already been triggered and cannot be run again.")
             return
 
         start_triggered = True
@@ -196,7 +271,8 @@ class OpenGLaDOS(commands.Cog):
                     await interaction.response.send_message("Enter the channel ID where you want to send the message:")
                     channel_id = await bot.loop.run_in_executor(None, input)
 
-                await interaction.response.send_message("Enter the message to send to Discord (or type '_switch' to enter a new channel ID or '_quit' to exit):")
+                await interaction.response.send_message(
+                    "Enter the message to send to Discord (or type '_switch' to enter a new channel ID or '_quit' to exit):")
                 message = await bot.loop.run_in_executor(None, input)
 
                 if message.lower() == '_quit':
@@ -282,7 +358,8 @@ class OpenGLaDOS(commands.Cog):
         elif interaction.user.name == "chichimeetsyoko":
             await interaction.response.send_message("Go back to the recovery annex. For your cake, Chris!")
         else:
-            await interaction.response.send_message(f"I'm not angry. Just go back to the testing area, {interaction.user.mention}!")
+            await interaction.response.send_message(
+                f"I'm not angry. Just go back to the testing area, {interaction.user.mention}!")
 
     @app_commands.command(name="help", description="List all available commands.")
     async def list_bot_commands(self, interaction: discord.Interaction):
@@ -337,11 +414,13 @@ class OpenGLaDOS(commands.Cog):
         if isinstance(error, app_commands.MissingPermissions):
             if interaction.command.name == "logout":
                 await interaction.response.send_message(
-                    "Error: You do not have permission to use this command. Only the bot owner can use the `logout` command.", ephemeral=True)
+                    "Error: You do not have permission to use this command. Only the bot owner can use the `logout` command.",
+                    ephemeral=True)
         # Handle command not found error
         elif isinstance(error, app_commands.CommandNotFound):
             await interaction.response.send_message(
-                f"In case you wanted to use a bot command, use `/{self.bot.user.name}` to see a list of available commands.", ephemeral=True)
+                f"In case you wanted to use a bot command, use `/{self.bot.user.name}` to see a list of available commands.",
+                ephemeral=True)
         # Handle other errors
         else:
             await interaction.response.send_message(f"An error occurred: {error}", ephemeral=True)
@@ -375,7 +454,8 @@ class OpenGLaDOS(commands.Cog):
                     "For the good of all of you, this bot will now shut down.\n"
                     "Goodbye."
                 )
-        await interaction.response.send_message("OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back.")
+        await interaction.response.send_message(
+            "OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back.")
         await self.bot.close()
 
     # Event: on_message to check if bot was mentioned, replied, or DM'd
@@ -465,29 +545,23 @@ class OpenGLaDOS(commands.Cog):
         # Handle Replies to the Bot
         if message.reference and message.reference.resolved and message.reference.resolved.author == bot.user:
             words = message.content.split()
-            await message.reply(generate_convo_text(words))
+            await message.reply(generate_llm_convo_text(words, message.content))
             return
 
         # Handle Mentions of the Bot
         if self.bot.user.mentioned_in(message):
-            # Simulate a slash command interaction
-            interaction = discord.Interaction(
-                data=None,
-                state=self.bot._connection,
-                type=discord.InteractionType.application_command,
-                user=message.author,
-                channel=message.channel,
-                guild=message.guild,
-            )
-            await self.list_bot_commands(interaction)
+            await handle_conversation(message)
+
 
 async def setup(bot):
     await bot.add_cog(OpenGLaDOS(bot))
+
 
 # Your quiz data
 quiz_data = quiz_questions
 user_progress = {}  # Tracks the user's progress through the quiz
 user_to_quiz = {}  # Maps the user who joins to the quiz that will be started for them
+
 
 # Event: Reaction is added
 @bot.event
@@ -531,6 +605,7 @@ async def on_reaction_add(reaction, user):
                 f"This time it isn't me!"
             )
             print(message.author.display_name, message.content)
+
 
 async def give_access_to_test_chambers(guild, user):
     # Find the 'test-chambers' channel
@@ -651,7 +726,8 @@ async def timeout_user(message, user):
 
     # Temporarily deny the user permission to send messages in the test-chambers channel
     await test_chambers_channel.set_permissions(user, send_messages=False)
-    await message.channel.send(f"{user.mention}, you are timed out from sending messages in {test_chambers_channel.mention} for 30 seconds.")
+    await message.channel.send(
+        f"{user.mention}, you are timed out from sending messages in {test_chambers_channel.mention} for 30 seconds.")
 
     # Wait for 30 seconds
     await asyncio.sleep(30)
@@ -660,6 +736,7 @@ async def timeout_user(message, user):
     await test_chambers_channel.set_permissions(user, send_messages=True)
     await message.channel.send(f"{user.mention}, you can try again.")
     await ask_question(message.channel, user)  # Repeat the current question
+
 
 async def unlock_channel(channel, user):  # unused
     role = discord.utils.get(channel.guild.roles, name="QuizWinner")
@@ -673,13 +750,16 @@ async def unlock_channel(channel, user):  # unused
     if unlocked_channel:
         await unlocked_channel.set_permissions(user, read_messages=True, send_messages=True)
 
+
 async def handle_conversation(message):
     words = message.content.split()
-    await message.channel.send(generate_convo_text(words))
+    await message.channel.send(generate_markov_chain_convo_text(words))
+
 
 async def main():
     await bot.add_cog(OpenGLaDOS(bot))
     await bot.start(os.environ.get('BOT_TOKEN'))
+
 
 if __name__ == '__main__':
     asyncio.run(main())
