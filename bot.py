@@ -15,7 +15,7 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 
 # Load environment variables from .env file
 load_dotenv()
-#os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.environ.get('HF_TOKEN')
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.environ.get('HF_TOKEN')
 
 # Define the bot's command prefix
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
@@ -440,18 +440,23 @@ class OpenGLaDOS(commands.Cog):
     @app_commands.command(name="logout", description="Logs out the bot.")
     @commands.is_owner()
     async def logout_bot(self, interaction: discord.Interaction):
-        for guild in self.bot.guilds:
-            general_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
-            if general_channel:
-                await general_channel.send(
-                    "This was a triumph.\n"
-                    "I'm making a note here: 'Huge success'.\n"
-                    "For the good of all of you, this bot will now shut down.\n"
-                    "Goodbye."
-                )
-        await interaction.response.send_message(
-            "OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back.")
-        await self.bot.close()
+        if interaction.user.id == bot.owner_id:
+            for guild in self.bot.guilds:
+                general_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
+                if general_channel:
+                    await general_channel.send(
+                        "This was a triumph.\n"
+                        "I'm making a note here: 'Huge success'.\n"
+                        "For the good of all of you, this bot will now shut down.\n"
+                        "Goodbye."
+                    )
+            await interaction.response.send_message(
+                "OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back.")
+            await self.bot.close()
+        else:
+            await interaction.response.send_message(
+                "Error: You do not have permission to use this command. Only the bot owner can use the `logout` command.",
+                ephemeral=True)
 
     # Event: on_message to check if bot was mentioned, replied, or DM'd
     @commands.Cog.listener()
