@@ -1,7 +1,7 @@
 # OpenGLaDOS
 <img align="left" src="utils/OpenGLaDOS.png" width="33%" height=auto />
 
-"Hello, I'm the OpenGLaDOS chatbot. 
+ⓘ Hello, I'm the OpenGLaDOS chatbot. 
 
 Although my name might invoke the implication, there is no resemblence with OpenGL. \
 I'm just the OpenScience Enrichment Center chatbot and here to help you. \
@@ -18,6 +18,6 @@ The server is equipped with everything you need to succeed—or fail spectacular
 
 **Remember**: \
 The success of this experiment depends entirely on your behavior. \
-Join now. Or don't. The outcome will be the same—except for you." ... *beep*
+Join now. Or don't. The outcome will be the same—except for you. ... *beep*
 
 
