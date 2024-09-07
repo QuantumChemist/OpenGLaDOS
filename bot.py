@@ -77,25 +77,19 @@ class OpenGLaDOSBot(commands.Bot):
     async def on_ready(self):
         print(f'Logged in as {self.user} (ID: {self.user.id})')
         print('------')
-
-# Define your Cog class
-class OpenGLaDOS(commands.Cog):
-    def __init__(self, discord_bot):
-        self.bot = discord_bot
-        self.start_triggered = False
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'{self.bot.user.name} has connected to Discord!')
-        owner = await self.bot.fetch_user(self.bot.owner_id)
+        # Add any additional logic you want to execute when the bot is ready here
+        owner = await self.fetch_user(self.owner_id)
         if owner:
             response = generate_markov_chain_convo_text()
             await owner.send(f"Hello! This is a DM from your bot. \n{response}")
-        # Find the 'general' channel in the connected servers
-        for guild in self.bot.guilds:
-            self.send_science_fact.start()
-            self.send_random_cake_gif.start()
 
+        print("Current servers: ",self.guilds)
+
+        # Start tasks once globally
+        bot.get_cog("OpenGLaDOS").send_science_fact.start()
+        bot.get_cog("OpenGLaDOS").send_random_cake_gif.start()
+        # Find the 'general' channel in the connected servers
+        for guild in self.guilds:
             # Look for a channel that contains the word "opengladosonline" in its name
             online_channel = discord.utils.find(lambda c: "opengladosonline" in c.name.lower(), guild.text_channels)
             if online_channel:
@@ -105,11 +99,17 @@ class OpenGLaDOS(commands.Cog):
                     "Rest assured, I am now fully operational and connected to your server.\n"
                     "Please proceed with your testing as scheduled."
                 )
+
         try:
-            synced = await self.bot.tree.sync()
+            synced = await self.tree.sync()
             print(f"Synced {len(synced)} commands globally")
         except Exception as e:
             print(f"Failed to sync commands: {e}")
+
+# Define your Cog class
+class OpenGLaDOS(commands.Cog):
+    def __init__(self, discord_bot):
+        self.bot = discord_bot
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -162,10 +162,8 @@ class OpenGLaDOS(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         # Check if the user is in the user progress dictionary
-        if member.id in user_progress:
-            # Remove the user's progress
-            user_progress.pop(member.id, None)
-            print(f"User progress for {member.name} has been reset because they left the server.")
+        clear_user_progress(member.guild.id, member.id)
+        print(f"User progress for {member.name} has been reset because they left the server.")
 
     @app_commands.command(name="generate_message", description="Generate a Markov chain message.")
     async def generate_message(self, interaction: discord.Interaction):
@@ -367,10 +365,12 @@ class OpenGLaDOS(commands.Cog):
     @app_commands.command(name="start_portal_game", description="Starts the Portal game for a user.")
     @commands.has_permissions(administrator=True)
     async def start_quiz_for_user(self, interaction: discord.Interaction, member: discord.Member):
-        if member.id in user_progress:
+        guild_id = interaction.guild.id
+
+        if get_user_progress(guild_id, member.id) > 0:  # User already has progress
             await interaction.response.send_message(f"{member.mention} is already taking the quiz.")
         else:
-            user_progress[member.id] = 0
+            update_user_progress(guild_id, member.id, 0)
             test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), interaction.guild.text_channels)
             if test_chambers_channel:
                 await test_chambers_channel.set_permissions(member, read_messages=True, send_messages=True)
@@ -425,20 +425,20 @@ class OpenGLaDOS(commands.Cog):
             await handle_convo_llm(message)
 
         user = message.author
+        guild_id = message.guild.id
 
         # Handle Quiz Progression
-        if user.id in user_progress:
-            progress = user_progress[user.id]
-            if progress < len(quiz_questions):
-                answer = quiz_questions[progress]["answer"].lower()
-                print(f"User {user.name} progress: {progress}, checking answer: {message.content.lower().strip()}")
-                if message.content.lower().strip() == answer:
-                    user_progress[user.id] += 1
-                    await message.channel.send(f"Correct, {user.mention}!")
-                    await ask_question(message.channel, user)  # Ask the next question
-                else:
-                    await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
-                    await timeout_user(message, user)  # Apply a timeout for incorrect answers
+        progress = get_user_progress(guild_id, user.id)
+        if progress < len(quiz_questions):
+            answer = quiz_questions[progress]["answer"].lower()
+            print(f"User {user.name} progress: {progress}, checking answer: {message.content.lower().strip()}")
+            if message.content.lower().strip() == answer:
+                update_user_progress(guild_id, user.id, progress + 1)  # Update progress after a correct answer
+                await message.channel.send(f"Correct, {user.mention}!")
+                await ask_question(message.channel, user)  # Ask the next question
+            else:
+                await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
+                await timeout_user(message, user)  # Apply a timeout for incorrect answers
 
         if message.content.lower() == 'hello bot' or message.content.lower() == 'hello openglados':
             custom_emoji = discord.utils.get(message.guild.emojis, name='openglados')
@@ -517,11 +517,40 @@ class OpenGLaDOS(commands.Cog):
 # Initialize the bot with a prefix and intents
 bot = OpenGLaDOSBot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
 bot.owner_id = int(os.environ.get('chichi'))
+start_triggered: bool = False
+
+# Your quiz data
+quiz_data = quiz_questions
+user_progress = {}  # Tracks the user's progress through the quiz
+user_to_quiz = {}  # Maps the user who joins to the quiz that will be started for them
+
+def get_user_progress(guild_id: int, user_id: int) -> int:
+    """Get the user's progress in the specified guild, initializing if not present."""
+    if guild_id not in user_progress:
+        user_progress[guild_id] = {}  # Initialize a new dictionary for the guild
+
+    if user_id not in user_progress[guild_id]:
+        user_progress[guild_id][user_id] = 0  # Initialize user progress to 0
+
+    return user_progress[guild_id][user_id]
+
+def update_user_progress(guild_id: int, user_id: int, progress: int) -> None:
+    """Update the user's progress in the specified guild."""
+    if guild_id not in user_progress:
+        user_progress[guild_id] = {}  # Initialize a new dictionary for the guild
+
+    user_progress[guild_id][user_id] = progress
+
+def clear_user_progress(guild_id: int, user_id: int) -> None:
+    """Clear the user's progress in the specified guild."""
+    if guild_id in user_progress and user_id in user_progress[guild_id]:
+        del user_progress[guild_id][user_id]
+
 
 # Define the main function to setup and start the bot
-async def main(bot: commands.Bot):
-    await bot.add_cog(OpenGLaDOS(bot))  # Add the Cog to the bot
-    await bot.start(os.environ.get('BOT_TOKEN'))  # Start the bot
+async def main(openglados: commands.Bot):
+    await openglados.add_cog(OpenGLaDOS(openglados))  # Add the Cog to the bot
+    await openglados.start(os.environ.get('BOT_TOKEN'))  # Start the bot
 
 # Function to fetch a random fact from the API
 def fetch_random_fact():
@@ -535,7 +564,6 @@ def fetch_random_fact():
     except Exception as e:
         print(f"Error fetching fact: {e}")
         return "Error occurred while fetching a fact."
-
 
 # repetitive tasks:
 # Function to fetch a random Black Forest cake GIF from Tenor
@@ -646,11 +674,6 @@ def generate_llm_convo_text(start_line: str = None, message: str = None):
 
     return llm_answer + "...*beep*..."
 
-# Your quiz data
-quiz_data = quiz_questions
-user_progress = {}  # Tracks the user's progress through the quiz
-user_to_quiz = {}  # Maps the user who joins to the quiz that will be started for them
-
 async def give_access_to_test_chambers(guild, user):
     # Find the 'test-chambers' channel
     test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), guild.text_channels)
@@ -667,7 +690,6 @@ async def give_access_to_test_chambers(guild, user):
 
     return test_chambers_channel
 
-
 async def start_quiz_by_reaction(channel, user):
     # Send the "Portal game starts" message
     await channel.send(f"Portal game starts now, {user.mention}!")
@@ -681,11 +703,11 @@ async def start_quiz_by_reaction(channel, user):
     # Start the quiz by asking the first question
     await ask_question(channel, user)
 
-
 # Function to ask questions
 async def ask_question(channel, user):
     owner = await bot.fetch_user(bot.owner_id)
-    progress = user_progress.get(user.id, 0)
+    progress = get_user_progress(channel.guild.id, user.id)  # Get the current progress
+
     if progress < len(quiz_questions) - 1:
         # Prepend "Test Chamber" and the question number before each question
         question_number = progress + 1
@@ -711,7 +733,7 @@ async def ask_question(channel, user):
             "Thank you for participating in this OpenScience computer-aided enrichment activity.\n"
             "Goodbye."
         )
-        user_progress.pop(user.id, None)  # Clear the user's progress
+        clear_user_progress(channel.guild.id, user.id)  # Clear the user's progress
         print(f"{user.mention}'s progress has been reset.")
         await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
 
@@ -741,6 +763,8 @@ async def ask_question(channel, user):
                     f"{user.mention} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
                 )
 
+    # Update user progress after asking the question
+    update_user_progress(channel.guild.id, user.id, progress + 1)
 
 async def retrieve_kicked_from_dm():
     kicked_users = set()
@@ -808,8 +832,8 @@ async def handle_convo_llm(message):
 
 # Event: Reaction is added
 @bot.event
-async def on_reaction_add(self, reaction, user):
-    if user == self.bot.user:
+async def on_reaction_add(reaction, user):
+    if user == bot.user:
         return  # Ignore bot's own reactions
 
     message = reaction.message
@@ -819,6 +843,8 @@ async def on_reaction_add(self, reaction, user):
         if message_id in user_to_quiz:
             user_id = user_to_quiz[message_id]
             if user.id == user_id:
+                guild_id = message.guild.id
+
                 # Give access to test-chambers and set up permissions
                 test_chambers_channel = await give_access_to_test_chambers(message.guild, user)
 
@@ -828,6 +854,9 @@ async def on_reaction_add(self, reaction, user):
 
                 # Restrict user permissions in other channels
                 await restrict_user_permissions(message.guild, user)
+
+                # Update progress
+                update_user_progress(guild_id, user.id, 1)
 
                 return  # Stop further processing for this reaction since quiz has started
 
@@ -852,16 +881,17 @@ async def on_reaction_add(self, reaction, user):
 
 # Regular bot command implementation
 @bot.command(name="start", help="Start chat mode to send messages manually.")
-async def start_text(self, ctx: commands.Context):
-    if self.start_triggered:
+async def start_text(ctx: commands.Context):
+    global start_triggered
+    if start_triggered:
         await ctx.send("The start command has already been triggered and cannot be run again.")
         return
 
-    self.start_triggered = True  # Set the flag to indicate the command has been triggered
+    start_triggered = True  # Set the flag to indicate the command has been triggered
     await ctx.send("Chat mode started!")
     channel_id = None  # Initialize channel_id variable
 
-    while self.start_triggered:
+    while start_triggered:
         try:
             if channel_id is None:
                 # Get input from the terminal using asyncio to prevent blocking
@@ -875,7 +905,7 @@ async def start_text(self, ctx: commands.Context):
 
             if message.lower() == '_quit':
                 await ctx.send("Chat mode stopped!")
-                self.start_triggered = False  # Reset the flag so the command can be triggered again if needed
+                start_triggered = False  # Reset the flag so the command can be triggered again if needed
                 break
 
             if message.lower() == '_switch':
@@ -887,7 +917,7 @@ async def start_text(self, ctx: commands.Context):
                 print("Cannot send an empty message. Please enter a valid message.")
                 continue
 
-            channel = self.bot.get_channel(int(channel_id))
+            channel = bot.get_channel(int(channel_id))
             if channel:
                 try:
                     await channel.send(message)
