@@ -279,7 +279,19 @@ class OpenGLaDOS(commands.Cog):
                 f" and ALWAYS provide a code snippet for: {message} {introduction_llm}.")
 
         try:
-            llm_answer = convo.invoke(text, config={"configurable": {"session_id": "1"}})
+            llm_answer = convo.invoke(
+                text,
+                config={
+                    "configurable": {
+                        "session_id": "1",
+                        "max_new_tokens": 512  # Adjust this value to limit output length
+                    }
+                },
+            )
+
+            # Ensure the output is limited to 1900 characters
+            if len(llm_answer) > 1900:
+                llm_answer = llm_answer[:1900]
             print("Input: \n", wrap_text(introduction_llm + message))
             print("Output: \n", wrap_text(llm_answer))
         except Exception as e:
@@ -613,7 +625,19 @@ def generate_llm_convo_text(start_line: str = None, message: str = None):
     store.clear()
     # # Invoke the model with the user's prompt
     try:
-        llm_answer = convo.invoke(text_lines, config={"configurable": {"session_id": "1"}},)
+        llm_answer = convo.invoke(
+            text_lines,
+            config={
+                "configurable": {
+                    "session_id": "1",
+                    "max_new_tokens": 512  # Adjust this value to limit output length
+                }
+            },
+        )
+
+        # Ensure the output is limited to 1900 characters
+        if len(llm_answer) > 1900:
+            llm_answer = llm_answer[:1900]
         print("Input: \n", wrap_text(text_lines))
         print("Output: \n", wrap_text(llm_answer))
     except Exception as e:
