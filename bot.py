@@ -143,27 +143,34 @@ class OpenGLaDOS(commands.Cog):
                         f"So now let's endure the tortu--- uuuhhh test again to check your resilience and endurance capabilities. "
                     )
 
-        # Welcome the new member and store their ID for the quiz
-        test_role = discord.utils.get(member.guild.roles, name="test subject")
-        if test_role:
-            await member.add_roles(test_role)
-        channel = discord.utils.find(lambda c: "welcome" in c.name.lower(), member.guild.text_channels)
-        if channel:
-            welcome_message = await channel.send(
-                f"Hello and, again, welcome {member.mention}, to {member.guild.name}! "
-                f"We hope your brief detention in the relaxation vault has been a pleasant one. "
-                f"Your specimen has been processed and we are now ready to begin the test proper. "
-                f"React with a knife emoji (`🔪`) to begin your Portal game. "
-                f"Cake will be served at the end of your journey."
-            )
-            user_to_quiz[welcome_message.id] = member.id
-            await welcome_message.add_reaction('🔪')  # Add knife emoji reaction to the welcome message
+        # Only send the welcome message and prompt if they are not in stopped_users
+        if member.id not in stopped_users:
+            # Welcome the new member and store their ID for the quiz
+            test_role = discord.utils.get(member.guild.roles, name="test subject")
+            if test_role:
+                await member.add_roles(test_role)
+            channel = discord.utils.find(lambda c: "welcome" in c.name.lower(), member.guild.text_channels)
+            if channel:
+                welcome_message = await channel.send(
+                    f"Hello and, again, welcome {member.mention}, to {member.guild.name}! "
+                    f"We hope your brief detention in the relaxation vault has been a pleasant one. "
+                    f"Your specimen has been processed and we are now ready to begin the test proper. "
+                    f"React with a knife emoji (`🔪`) to begin your Portal game. "
+                    f"Cake will be served at the end of your journey."
+                )
+                user_to_quiz[welcome_message.id] = member.id
+                await welcome_message.add_reaction('🔪')  # Add knife emoji reaction to the welcome message
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         # Check if the user is in the user progress dictionary
-        clear_user_progress(member.guild.id, member.id)
+        clear_user_progress(member.guild.id, member.id)  # Clear the user's progress
         print(f"User progress for {member.name} has been reset because they left the server.")
+
+        # Remove the user from the stopped_users set
+        if member.id in stopped_users:
+            stopped_users.remove(member.id)
+            print(f"User {member.name} has been removed from the stopped_users set because they left the server.")
 
     @app_commands.command(name="generate_message", description="Generate a Markov chain message.")
     async def generate_message(self, interaction: discord.Interaction):
@@ -367,11 +374,18 @@ class OpenGLaDOS(commands.Cog):
     async def start_quiz_for_user(self, interaction: discord.Interaction, member: discord.Member):
         guild_id = interaction.guild.id
 
+        # Check if the user has already stopped the quiz
+        if member.id in stopped_users:
+            await interaction.response.send_message(
+                f"{member.mention} has already stopped the quiz. Please ask them to restart.")
+            return
+
         if get_user_progress(guild_id, member.id) > 0:  # User already has progress
             await interaction.response.send_message(f"{member.mention} is already taking the quiz.")
         else:
             update_user_progress(guild_id, member.id, 0)
-            test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), interaction.guild.text_channels)
+            test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(),
+                                                       interaction.guild.text_channels)
             if test_chambers_channel:
                 await test_chambers_channel.set_permissions(member, read_messages=True, send_messages=True)
                 await test_chambers_channel.send(f"{member.mention}, your Portal game starts now!")
@@ -380,6 +394,29 @@ class OpenGLaDOS(commands.Cog):
                 await interaction.response.send_message(f"The quiz has been started for {member.mention}.")
             else:
                 await interaction.response.send_message("The test-chambers channel could not be found.")
+
+    @app_commands.command(name="stop_portal_game", description="Stops the Portal game for a user.")
+    @commands.has_permissions(administrator=True)
+    async def stop_quiz_for_user(self, interaction: discord.Interaction, member: discord.Member):
+        guild_id = interaction.guild.id
+
+        # Check if the user is already in the stopped users set
+        if member.id in stopped_users:
+            await interaction.response.send_message(f"{member.mention} has already stopped the quiz.")
+            return
+
+        # Clear the user's progress and add them to the stopped users set
+        clear_user_progress(guild_id, member.id)
+        stopped_users.add(member.id)
+        await interaction.response.send_message(
+            f"{member.mention}'s quiz has been stopped and their progress has been reset.")
+
+        # Optionally, send a message in the test chambers channel (if it exists) about the stopping of the quiz
+        test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(),
+                                                   interaction.guild.text_channels)
+        if test_chambers_channel:
+            await test_chambers_channel.send(
+                f"{member.mention}, your Portal game has been stopped by an administrator.")
 
     @app_commands.command(name="logout", description="Logs out the bot.")
     @commands.is_owner()
@@ -415,6 +452,10 @@ class OpenGLaDOS(commands.Cog):
             await self.bot.process_commands(message)
             return  # Stop further processing since it's a command
 
+        # Ensure this is a real message and not a system message like join notifications
+        if message.type != discord.MessageType.default:
+            return
+
         # Handle Replies to the Bot
         if message.reference and message.reference.resolved and message.reference.resolved.author == self.bot.user:
             await handle_convo_llm(message)
@@ -423,9 +464,24 @@ class OpenGLaDOS(commands.Cog):
         # Handle Mentions of the Bot
         if self.bot.user.mentioned_in(message):
             await handle_convo_llm(message)
+            return
 
         user = message.author
         guild_id = message.guild.id
+
+        # Check if the user wants to stop the quiz
+        if message.content.lower().strip() == "stop quiz":
+            clear_user_progress(guild_id, user.id)  # Clear the user's progress
+            stopped_users.add(user.id)  # Add the user to the stopped_users set
+            await message.channel.send(f"{user.mention}, your quiz has been stopped and your progress has been reset.")
+
+            # Unrestrict the user's permissions in all channels
+            await unrestrict_user_permissions(message.guild, user)
+            return
+
+        # Check if user has stopped the quiz
+        if user.id in stopped_users:
+            return  # Ignore further quiz processing for this user
 
         # Handle Quiz Progression
         progress = get_user_progress(guild_id, user.id)
@@ -433,12 +489,18 @@ class OpenGLaDOS(commands.Cog):
             answer = quiz_questions[progress]["answer"].lower()
             print(f"User {user.name} progress: {progress}, checking answer: {message.content.lower().strip()}")
             if message.content.lower().strip() == answer:
-                update_user_progress(guild_id, user.id, progress + 1)  # Update progress after a correct answer
+                # Correct answer: update progress
+                update_user_progress(guild_id, user.id, progress + 1)
                 await message.channel.send(f"Correct, {user.mention}!")
                 await ask_question(message.channel, user)  # Ask the next question
             else:
+                # Incorrect answer
                 await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
                 await timeout_user(message, user)  # Apply a timeout for incorrect answers
+        else:
+            # No more questions to ask
+            stopped_users.add(user.id)  # Add the user to the stopped_users set
+            await message.channel.send(f"{user.mention}, you have already completed the quiz!")
 
         if message.content.lower() == 'hello bot' or message.content.lower() == 'hello openglados':
             custom_emoji = discord.utils.get(message.guild.emojis, name='openglados')
@@ -518,6 +580,7 @@ class OpenGLaDOS(commands.Cog):
 bot = OpenGLaDOSBot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
 bot.owner_id = int(os.environ.get('chichi'))
 start_triggered: bool = False
+stopped_users = set()  # Tracks users who have stopped the quiz
 
 # Your quiz data
 quiz_data = quiz_questions
@@ -706,15 +769,11 @@ async def start_quiz_by_reaction(channel, user):
 # Function to ask questions
 async def ask_question(channel, user):
     owner = await bot.fetch_user(bot.owner_id)
-    progress = get_user_progress(channel.guild.id, user.id)  # Get the current progress
+    guild_id = channel.guild.id
+    progress = get_user_progress(guild_id, user.id)  # Get the current progress
 
-    if progress < len(quiz_questions) - 1:
-        # Prepend "Test Chamber" and the question number before each question
-        question_number = progress + 1
-        await channel.send(f"**Test Chamber {question_number}**")
-        question = quiz_questions[progress]["question"]
-        await channel.send(f"{user.mention}, {question}")
-    elif progress == len(quiz_questions) - 1:
+    # Check if the user has reached the last question
+    if progress == len(quiz_questions) - 1:
         # Send the final test message before the last question
         question_number = progress + 1
         await channel.send(f"**Test Chamber {question_number}**")
@@ -725,7 +784,17 @@ async def ask_question(channel, user):
         )
         question = quiz_questions[progress]["question"]
         await channel.send(f"{user.mention}, {question}")
+    elif progress < len(quiz_questions):
+        # Proceed with asking the next question if it's not the last one
+        question_number = progress + 1
+        await channel.send(f"**Test Chamber {question_number}**")
+        question = quiz_questions[progress]["question"]
+        await channel.send(f"{user.mention}, {question}")
+
+        # Update user progress after asking the question
+        update_user_progress(guild_id, user.id, progress)  # Keep the progress at the current question
     else:
+        # When all questions are complete
         await channel.send(
             f"Congratulations! The test is now over, {user.mention}.\n"
             "All OpenScience technologies remain safely operational up to 4000 degrees Kelvin.\n"
@@ -733,8 +802,10 @@ async def ask_question(channel, user):
             "Thank you for participating in this OpenScience computer-aided enrichment activity.\n"
             "Goodbye."
         )
-        clear_user_progress(channel.guild.id, user.id)  # Clear the user's progress
+        clear_user_progress(guild_id, user.id)  # Clear the user's progress
+        stopped_users.add(user.id)  # Mark the user as having completed the quiz
         print(f"{user.mention}'s progress has been reset.")
+
         await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
 
         # Check if the user has the "Survivor" role
@@ -763,9 +834,6 @@ async def ask_question(channel, user):
                     f"{user.mention} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
                 )
 
-    # Update user progress after asking the question
-    update_user_progress(channel.guild.id, user.id, progress + 1)
-
 async def retrieve_kicked_from_dm():
     kicked_users = set()
     # Fetch the bot owner (you)
@@ -789,6 +857,11 @@ async def restrict_user_permissions(guild, user):
         if channel != test_chambers_channel:
             await channel.set_permissions(user, send_messages=False)
 
+async def unrestrict_user_permissions(guild, user):
+    # Loop through all text channels in the guild
+    for channel in guild.text_channels:
+        # Remove any specific permissions set for the user
+        await channel.set_permissions(user, overwrite=None)
 
 async def timeout_user(message, user):
     test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), message.guild.text_channels)
@@ -845,18 +918,24 @@ async def on_reaction_add(reaction, user):
             if user.id == user_id:
                 guild_id = message.guild.id
 
+                # Remove the user from the stopped_users set if they are in it
+                if user.id in stopped_users:
+                    stopped_users.remove(user.id)  # Allow the user to restart the quiz
+
                 # Give access to test-chambers and set up permissions
                 test_chambers_channel = await give_access_to_test_chambers(message.guild, user)
 
                 # Start the quiz in test-chambers
                 if test_chambers_channel:
+                    # Initialize the user's progress
+                    update_user_progress(guild_id, user.id, 0)  # Set progress to 0 to restart
                     await start_quiz_by_reaction(test_chambers_channel, user)
 
                 # Restrict user permissions in other channels
                 await restrict_user_permissions(message.guild, user)
 
                 # Update progress
-                update_user_progress(guild_id, user.id, 1)
+                update_user_progress(guild_id, user.id, 0)
 
                 return  # Stop further processing for this reaction since quiz has started
 
@@ -878,6 +957,7 @@ async def on_reaction_add(reaction, user):
                 f"This time it isn't me!"
             )
             print(message.author.display_name, message.content)
+
 
 # Regular bot command implementation
 @bot.command(name="start", help="Start chat mode to send messages manually.")
