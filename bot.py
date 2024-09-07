@@ -299,10 +299,35 @@ class OpenGLaDOS(commands.Cog):
         if user:
             await user.send(f"Here is a generated message just for you: {response_message}")
 
+    import re
+    from discord import app_commands
+
     @app_commands.command(name="dm_owner", description="Send a DM to the bot owner.")
     @commands.is_owner()
     async def dm_owner(self, interaction: discord.Interaction, message: str = None):
+        # Fetch the bot owner user
         owner = await self.bot.fetch_user(self.bot.owner_id)
+
+        # Check if the command is invoked in a server context
+        if interaction.guild:
+            # Check if the bot owner is in the server
+            if not interaction.guild.get_member(self.bot.owner_id):
+                await interaction.response.send_message(
+                    "This command can only be used in servers where the bot owner is present.", ephemeral=True)
+                return
+
+        # Regular expression pattern to match common URL patterns
+        url_pattern = re.compile(
+            r'(https?://|www\.)'  # Matches http:// or https:// or www.
+            r'(\S+)'  # Matches one or more non-whitespace characters (URL body)
+        )
+
+        # Check if the message contains a link
+        if message and url_pattern.search(message):
+            await interaction.response.send_message("Links are not allowed in the message.", ephemeral=True)
+            return
+
+        # Proceed to send the DM if all checks pass
         if owner:
             if message:
                 await owner.send(message)
