@@ -490,7 +490,8 @@ class OpenGLaDOS(commands.Cog):
     # Event: on_message to check if bot was mentioned, replied, or DM'd
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author == self.bot.user:
+        # Ignore messages from any bot, including your own
+        if message.author.bot:
             return
 
         # Process commands first
@@ -528,7 +529,7 @@ class OpenGLaDOS(commands.Cog):
             print(f"{user.mention} has completed the quiz!")
 
         if message.content.lower() == 'hello bot' or message.content.lower() == 'hello openglados':
-            custom_emoji = discord.utils.get(message.guild.emojis, name='OpenGLaDOS')
+            custom_emoji = discord.utils.get(message.guild.emojis, name='openglados')
             if custom_emoji:
                 # React with a wave emoji
                 await message.add_reaction(custom_emoji)
