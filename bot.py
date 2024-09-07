@@ -158,6 +158,14 @@ class OpenGLaDOS(commands.Cog):
             user_to_quiz[welcome_message.id] = member.id
             await welcome_message.add_reaction('🔪')  # Add knife emoji reaction to the welcome message
 
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        # Check if the user is in the user progress dictionary
+        if member.id in user_progress:
+            # Remove the user's progress
+            user_progress.pop(member.id, None)
+            print(f"User progress for {member.name} has been reset because they left the server.")
+
     @app_commands.command(name="generate_message", description="Generate a Markov chain message.")
     async def generate_message(self, interaction: discord.Interaction):
         if not corpus:
@@ -649,6 +657,7 @@ async def start_quiz_by_reaction(channel, user):
     await ask_question(channel, user)
 
 
+# Function to ask questions
 async def ask_question(channel, user):
     owner = await bot.fetch_user(bot.owner_id)
     progress = user_progress.get(user.id, 0)
@@ -677,7 +686,7 @@ async def ask_question(channel, user):
             "Thank you for participating in this OpenScience computer-aided enrichment activity.\n"
             "Goodbye."
         )
-        user_progress.clear()
+        user_progress.pop(user.id, None)  # Clear the user's progress
         print(f"{user.mention}'s progress has been reset.")
         await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
 
