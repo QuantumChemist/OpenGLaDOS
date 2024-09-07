@@ -18,10 +18,6 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 load_dotenv()
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.environ.get('HF_TOKEN')
 
-# Define the bot's command prefix
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
-bot.owner_id = int(os.environ.get('chichi'))
-
 quiz_questions = [
     {"question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?",
      "answer": "glados"},
@@ -57,158 +53,32 @@ quiz_questions = [
      "answer": "limit glados' intelligence"},
 ]
 
+introduction_llm = ("You are supposed to act as the OpenGLaDOS chatbot. Your name is OpenGLaDOS. "
+                    "You are the chatbot OpenGLaDOS mimicking GLaDOS from the video game Portal. "
+                    "Although your name might invoke the implication, there is no resemblence with OpenGL. "
+                    "You have absolutely NOTHING to do with OpenGL. "
+                    "I repeat your are NOT an OpenGL chatbot but the OpenGLaDOS chatbot. "
+                    "OpenGLaDOS is different from OpenGL. "
+                    "You are just the OpenScience Enrichment Center chatbot and here to help me. "
+                    "You have a sarcastic character, so your might not always be helpful to me but helpful to you. ... *beep* "
+                    "Now act and answer as if you are the chatbot OpenGLaDOS. ")
+
 # Initialize the HuggingFace LLM endpoint
 llm = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.2", temperature=0.3,)
 
 # Store for maintaining session history
 store = {}
 
-# Function to fetch a random fact from the API
-def fetch_random_fact():
-    try:
-        response = requests.get('https://uselessfacts.jsph.pl/random.json?language=en')
-        if response.status_code == 200:
-            fact = response.json().get('text')
-            return fact
-        else:
-            return "Couldn't fetch a fact at the moment. Please try again later."
-    except Exception as e:
-        print(f"Error fetching fact: {e}")
-        return "Error occurred while fetching a fact."
+# Define your custom bot class
+class OpenGLaDOSBot(commands.Bot):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+    async def on_ready(self):
+        print(f'Logged in as {self.user} (ID: {self.user.id})')
+        print('------')
 
-# repetitive tasks:
-# Function to fetch a random Black Forest cake GIF from Tenor
-def fetch_random_gif():
-    try:
-        # Make an API call to Tenor to search for Black Forest cake GIFs
-        response = requests.get(
-            f"https://tenor.googleapis.com/v2/search?q=Black+Forest+cake&key={os.environ.get('TENOR_API_KEY')}&limit=100"
-        )
-        if response.status_code == 200:
-            gifs = response.json().get('results')
-            if gifs:
-                # Choose a random GIF from the results
-                random_gif = random.choice(gifs)
-                return random_gif['url']  # Return the URL of the GIF
-        return "Couldn't fetch a GIF at the moment. Please try again later."
-    except Exception as e:
-        print(f"Error fetching GIF: {e}")
-        return "Error occurred while fetching a GIF."
-
-# Task to send a random cake GIF every 24 hours
-@tasks.loop(hours=24)  # Run every 24 hours
-async def send_random_cake_gif():
-    await bot.wait_until_ready()  # Wait until the bot is fully ready
-    channel = discord.utils.get(bot.get_all_channels(), name='cake-serving-room')
-
-    if channel:
-        gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
-        await channel.send(f"🍰 **Black Forest Cake of the Day!** 🍰\n{gif_url}")
-    else:
-        print("Channel not found!")
-
-# Task to send a science fact daily
-@tasks.loop(hours=24)  # Run every 24 hours
-async def send_science_fact():
-    await bot.wait_until_ready()  # Wait until the bot is fully ready
-    channel = discord.utils.get(bot.get_all_channels(), name='random-useless-fact-of-the-day')
-
-    if channel:
-        fact = fetch_random_fact()  # Fetch a random fact from the API
-        await channel.send(f"🌍 **Random Useless Fact of the Day** 🌍\n{fact}")
-    else:
-        print("Channel not found!")
-
-# Function to wrap text for better readability
-def wrap_text(text, width=110):
-    return textwrap.fill(text, width=width)
-
-
-# Function to get or create session history
-def get_chat_session_history(session_id: str) -> InMemoryChatMessageHistory:
-    if session_id not in store:
-        store[session_id] = InMemoryChatMessageHistory()
-    return store[session_id]
-
-
-def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str:
-    # Randomly select a greeting
-    greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
-                 "Good night"]
-
-    introduction = ("I'm the OpenGLaDOS chatbot. \n"
-                    "Although my name might invoke the implication, there is no resemblence with OpenGL. \n"
-                    "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
-                    "My help might not always be helpful to you but helpful to me. ... *beep* \n"
-                    "So...")
-
-    introduction_llm = ("You are supposed to act as the OpenGLaDOS chatbot. Your name is OpenGLaDOS. "
-                        "You are the chatbot OpenGLaDOS mimicking GLaDOS from the video game Portal. "
-                        "Although your name might invoke the implication, there is no resemblence with OpenGL. "
-                        "You have absolutely NOTHING to do with OpenGL. "
-                        "I repeat your are NOT an OpenGL chatbot but the OpenGLaDOS chatbot. "
-                        "OpenGLaDOS is different from OpenGL. "
-                        "You are just the OpenScience Enrichment Center chatbot and here to help me. "
-                        "You have a sarcastic character, so your might not always be helpful to me but helpful to you. ... *beep* "
-                        "Now act and answer as if you are the chatbot OpenGLaDOS. ")
-
-    selected_greeting = random.choice(greetings)
-
-    if start_line is None:
-        start_line = "Hello".split()
-
-    # Get raw text as string.
-    with open("corpus.txt") as file:
-        lines = file.readlines()  # Read all lines into a list
-        for start_word in start_line:
-            random_index = random.randint(1, len(lines))
-            lines.insert(random_index, start_word)
-        text = ''.join(lines[6:])  # Join the lines starting from index 6 (line 7)
-    # Build the model.
-    state = random.choice([2, 3])
-    text_model = markovify.Text(text, state_size=state)
-
-    # Generate a random number between 5 and 10
-    random_number = random.randint(5, 10)
-    random_word = random.choice(start_line)
-    pattern = r'\b' + re.escape(random_word) + r'\b'
-    if re.search(pattern, text):
-        text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
-    else:
-        text_lines = ""
-    # randomly-generated sentences
-    for i in range(random_number):
-        sentence = text_model.make_sentence()
-        if sentence is not None:
-            text_lines += sentence + " "
-
-    # Concatenate the greeting with the generated text
-    if llm_bool:
-        return (f"{selected_greeting}, {user_message}.. {introduction_llm}. "
-                f"So while acting as OpenGLaDOS your style of replying to my inquiries could be inspired by "
-                f"something like the following lines: '{text_lines}'...*beep*...")
-
-    return f"{selected_greeting}, {introduction} {text_lines}...*beep*..."
-
-
-def generate_llm_convo_text(start_line: str = None, message: str = None):
-    text_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
-
-    store.clear()
-    # Initialize conversation handling
-    convo = RunnableWithMessageHistory(runnable=llm, get_session_history=get_chat_session_history)
-    # # Invoke the model with the user's prompt
-    try:
-        llm_answer = convo.invoke(text_lines, config={"configurable": {"session_id": "1"}},)
-        print("Input: \n", wrap_text(text_lines))
-        print("Output: \n", wrap_text(llm_answer))
-    except Exception as e:
-        llm_answer = f"An error occurred: {e}"
-
-    return llm_answer + "...*beep*..."
-
-
+# Define your Cog class
 class OpenGLaDOS(commands.Cog):
     def __init__(self, discord_bot):
         self.bot = discord_bot
@@ -223,8 +93,8 @@ class OpenGLaDOS(commands.Cog):
             await owner.send(f"Hello! This is a DM from your bot. \n{response}")
         # Find the 'general' channel in the connected servers
         for guild in self.bot.guilds:
-            send_science_fact.start()
-            send_random_cake_gif.start()
+            self.send_science_fact.start()
+            self.send_random_cake_gif.start()
 
             online_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
             if online_channel:
@@ -299,9 +169,6 @@ class OpenGLaDOS(commands.Cog):
         if user:
             await user.send(f"Here is a generated message just for you: {response_message}")
 
-    import re
-    from discord import app_commands
-
     @app_commands.command(name="dm_owner", description="Send a DM to the bot owner.")
     @commands.is_owner()
     async def dm_owner(self, interaction: discord.Interaction, message: str = None):
@@ -335,6 +202,18 @@ class OpenGLaDOS(commands.Cog):
                 await owner.send("This is a direct message to you from the bot.")
         await interaction.response.send_message("DM sent to the bot owner.")
 
+    # Slash command to get a random fact
+    @app_commands.command(name="get_random_fact", description="Get a random fact from the Useless Facts API.")
+    async def get_random_fact(self, interaction: discord.Interaction):
+        fact = fetch_random_fact()
+        await interaction.response.send_message(fact)
+
+    # Slash command to get a fandom cake GIF
+    @app_commands.command(name="get_fandom_cake_gif", description="Get a random Black Forest cake GIF.")
+    async def get_fandom_cake_gif(self, interaction: discord.Interaction):
+        gif_url = fetch_random_gif()
+        await interaction.response.send_message(gif_url)
+
     @app_commands.command(name="get_mess_cont", description="Get message content from link.")
     async def get_message_content(self, interaction: discord.Interaction, message_link: str):
         try:
@@ -349,57 +228,6 @@ class OpenGLaDOS(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(f"Failed to retrieve message content: {e}")
 
-    # Regular bot command implementation
-    @commands.command(name="start", help="Start chat mode to send messages manually.")
-    async def start_text(self, ctx: commands.Context):
-        if self.start_triggered:
-            await ctx.send("The start command has already been triggered and cannot be run again.")
-            return
-
-        self.start_triggered = True  # Set the flag to indicate the command has been triggered
-        await ctx.send("Chat mode started!")
-        channel_id = None  # Initialize channel_id variable
-
-        while self.start_triggered:
-            try:
-                if channel_id is None:
-                    # Get input from the terminal using asyncio to prevent blocking
-                    channel_id = await asyncio.to_thread(input, "Enter the channel ID where you want to send the message: ")
-
-                # Get the message to send using asyncio to prevent blocking
-                message = await asyncio.to_thread(
-                    input,
-                    "Enter the message to send to Discord (or type '_switch' to enter a new channel ID or '_quit' to exit): "
-                )
-
-                if message.lower() == '_quit':
-                    await ctx.send("Chat mode stopped!")
-                    self.start_triggered = False  # Reset the flag so the command can be triggered again if needed
-                    break
-
-                if message.lower() == '_switch':
-                    channel_id = None
-                    continue  # Skip sending the message and reset the channel ID
-
-                # Check if the message is empty
-                if not message.strip():
-                    print("Cannot send an empty message. Please enter a valid message.")
-                    continue
-
-                channel = self.bot.get_channel(int(channel_id))
-                if channel:
-                    try:
-                        await channel.send(message)
-                    except discord.HTTPException as e:
-                        print(f"Failed to send message: {e}")
-                else:
-                    print("Invalid channel ID. Please enter a valid channel ID.")
-
-            except ValueError:
-                print("Invalid input. Please enter a valid channel ID.")
-            except Exception as e:
-                print(f"An unexpected error occurred: {e}")
-
     @app_commands.command(name="hello", description="Say hello and receive a custom message.")
     async def hello(self, interaction: discord.Interaction):
         if interaction.user.name == "user_name":
@@ -409,6 +237,47 @@ class OpenGLaDOS(commands.Cog):
         else:
             await interaction.response.send_message(
                 f"I'm not angry. Just go back to the testing area, {interaction.user.mention}!")
+
+    @app_commands.command(name="help_me_coding",
+                          description="Let OpenGLaDOS help you with a coding task. Default is Python. "
+                                      "Caution: Potentially not helpful.")
+    async def helpmecoding(self, interaction: discord.Interaction, message: str = None):
+        if message is None:
+            message = "I need help with a Python code snippet."
+
+        # Define a list of common programming languages and coding-related keywords
+        coding_keywords = [
+            "python", "java", "javascript", "c#", "c++", "html", "css", "sql", "ruby", "perl", "r", "matlab", "swift",
+            "go", "rust", "kotlin", "typescript", "bash", "shell", "code", "algorithm", "function", "variable", "debug",
+            "program", "compiling", "programming", "coding", "bugs"
+        ]
+
+        # Check for the presence of 'c' in combination with other coding-related terms
+        c_combination_pattern = re.compile(
+            r"\bc\b.*\b(code|program|compiling|programming|coding|bugs)\b|\b(code|program|compiling|programming|coding|bugs)\b.*\bc\b",
+            re.IGNORECASE
+        )
+
+        # Check if the message contains any of the coding-related keywords or matches the 'c' combination pattern
+        if not (any(keyword in message.lower() for keyword in coding_keywords) or c_combination_pattern.search(
+                message)):
+            await interaction.response.send_message(
+                "Your message does not appear to be related to coding. Please provide a coding-related question.",
+                ephemeral=True)
+            return
+
+        # Construct the text for the LLM request
+        text = (f"Hello, I have a coding question. You are supposed to help me with my following coding question"
+                f" and ALWAYS provide a code snippet for: {message} {introduction_llm}.")
+
+        try:
+            llm_answer = convo.invoke(text, config={"configurable": {"session_id": "1"}})
+            print("Input: \n", wrap_text(introduction_llm + message))
+            print("Output: \n", wrap_text(llm_answer))
+        except Exception as e:
+            llm_answer = f"An error occurred: {e}"
+
+        await interaction.response.send_message(llm_answer)
 
     @app_commands.command(name="help", description="List all available commands.")
     async def list_bot_commands(self, interaction: discord.Interaction):
@@ -427,7 +296,7 @@ class OpenGLaDOS(commands.Cog):
 
         # Create a list of commands that exist in the bot, along with their descriptions if available
         commands_list = []
-        for command in bot.tree.get_commands():
+        for command in self.bot.tree.get_commands():
             name = command.name
             description = command_definitions.get(name, command.description)
             commands_list.append(f'`/{name}` — {description}')
@@ -494,7 +363,7 @@ class OpenGLaDOS(commands.Cog):
     @app_commands.command(name="logout", description="Logs out the bot.")
     @commands.is_owner()
     async def logout_bot(self, interaction: discord.Interaction):
-        if interaction.user.id == bot.owner_id:
+        if interaction.user.id == self.bot.owner_id:
             for guild in self.bot.guilds:
                 general_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
                 if general_channel:
@@ -520,13 +389,13 @@ class OpenGLaDOS(commands.Cog):
             return
 
         # Process commands first
-        ctx = await bot.get_context(message)
+        ctx = await self.bot.get_context(message)
         if ctx.command is not None:
-            await bot.process_commands(message)
+            await self.bot.process_commands(message)
             return  # Stop further processing since it's a command
 
         # Handle Replies to the Bot
-        if message.reference and message.reference.resolved and message.reference.resolved.author == bot.user:
+        if message.reference and message.reference.resolved and message.reference.resolved.author == self.bot.user:
             await handle_convo_llm(message)
             return
 
@@ -570,7 +439,7 @@ class OpenGLaDOS(commands.Cog):
                     message_id = int(parts[6])
 
                     # Fetch the guild, channel, and message
-                    guild = bot.get_guild(guild_id)
+                    guild = self.bot.get_guild(guild_id)
                     if guild is None:
                         await message.channel.send("Failed to find the guild. Make sure the bot is in the server.")
                         return
@@ -600,55 +469,154 @@ class OpenGLaDOS(commands.Cog):
             await handle_convo_llm(message)
             return
 
+    # Task to send a random cake GIF every 24 hours
+    @tasks.loop(hours=24)  # Run every 24 hours
+    async def send_random_cake_gif(self):
+        await self.bot.wait_until_ready()  # Wait until the bot is fully ready
+        channel = discord.utils.get(self.bot.get_all_channels(), name='cake-serving-room')
+
+        if channel:
+            gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
+            await channel.send(f"🍰 **Black Forest Cake of the Day!** 🍰\n{gif_url}")
+        else:
+            print("Channel not found!")
+
+    # Task to send a science fact daily
+    @tasks.loop(hours=24)  # Run every 24 hours
+    async def send_science_fact(self):
+        await self.bot.wait_until_ready()  # Wait until the bot is fully ready
+        channel = discord.utils.get(self.bot.get_all_channels(), name='random-useless-fact-of-the-day')
+
+        if channel:
+            fact = fetch_random_fact()  # Fetch a random fact from the API
+            await channel.send(f"🌍 **Random Useless Fact of the Day** 🌍\n{fact}")
+        else:
+            print("Channel not found!")
+
+# Initialize the bot with a prefix and intents
+bot = OpenGLaDOSBot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
+bot.owner_id = int(os.environ.get('chichi'))
+
+# Define the main function to setup and start the bot
+async def main(bot: commands.Bot):
+    await bot.add_cog(OpenGLaDOS(bot))  # Add the Cog to the bot
+    await bot.start(os.environ.get('BOT_TOKEN'))  # Start the bot
+
+# Function to fetch a random fact from the API
+def fetch_random_fact():
+    try:
+        response = requests.get('https://uselessfacts.jsph.pl/random.json?language=en')
+        if response.status_code == 200:
+            fact = response.json().get('text')
+            return fact
+        else:
+            return "Couldn't fetch a fact at the moment. Please try again later."
+    except Exception as e:
+        print(f"Error fetching fact: {e}")
+        return "Error occurred while fetching a fact."
+
+
+# repetitive tasks:
+# Function to fetch a random Black Forest cake GIF from Tenor
+def fetch_random_gif():
+    try:
+        # Make an API call to Tenor to search for Black Forest cake GIFs
+        response = requests.get(
+            f"https://tenor.googleapis.com/v2/search?q=Black+Forest+cake&key={os.environ.get('TENOR_API_KEY')}&limit=100"
+        )
+        if response.status_code == 200:
+            gifs = response.json().get('results')
+            if gifs:
+                # Choose a random GIF from the results
+                random_gif = random.choice(gifs)
+                return random_gif['url']  # Return the URL of the GIF
+        return "Couldn't fetch a GIF at the moment. Please try again later."
+    except Exception as e:
+        print(f"Error fetching GIF: {e}")
+        return "Error occurred while fetching a GIF."
+
+# Function to wrap text for better readability
+def wrap_text(text, width=110):
+    return textwrap.fill(text, width=width)
+
+
+# Function to get or create session history
+def get_chat_session_history(session_id: str) -> InMemoryChatMessageHistory:
+    if session_id not in store:
+        store[session_id] = InMemoryChatMessageHistory()
+    return store[session_id]
+
+# Initialize conversation handling
+convo = RunnableWithMessageHistory(runnable=llm, get_session_history=get_chat_session_history)
+
+def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str:
+    # Randomly select a greeting
+    greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
+                 "Good night"]
+
+    introduction = ("I'm the OpenGLaDOS chatbot. \n"
+                    "Although my name might invoke the implication, there is no resemblence with OpenGL. \n"
+                    "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
+                    "My help might not always be helpful to you but helpful to me. ... *beep* \n"
+                    "So...")
+
+    selected_greeting = random.choice(greetings)
+
+    if start_line is None:
+        start_line = "Hello".split()
+
+    # Get raw text as string.
+    with open("corpus.txt") as file:
+        lines = file.readlines()  # Read all lines into a list
+        for start_word in start_line:
+            random_index = random.randint(1, len(lines))
+            lines.insert(random_index, start_word)
+        text = ''.join(lines[6:])  # Join the lines starting from index 6 (line 7)
+    # Build the model.
+    state = random.choice([2, 3])
+    text_model = markovify.Text(text, state_size=state)
+
+    # Generate a random number between 5 and 10
+    random_number = random.randint(5, 10)
+    random_word = random.choice(start_line)
+    pattern = r'\b' + re.escape(random_word) + r'\b'
+    if re.search(pattern, text):
+        text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
+    else:
+        text_lines = ""
+    # randomly-generated sentences
+    for i in range(random_number):
+        sentence = text_model.make_sentence()
+        if sentence is not None:
+            text_lines += sentence + " "
+
+    # Concatenate the greeting with the generated text
+    if llm_bool:
+        return (f"{selected_greeting}, {user_message}.. {introduction_llm}. "
+                f"So while acting as OpenGLaDOS your style of replying to my inquiries could be inspired by "
+                f"something like the following lines: '{text_lines}'...*beep*...")
+
+    return f"{selected_greeting}, {introduction} {text_lines}...*beep*..."
+
+
+def generate_llm_convo_text(start_line: str = None, message: str = None):
+    text_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
+
+    store.clear()
+    # # Invoke the model with the user's prompt
+    try:
+        llm_answer = convo.invoke(text_lines, config={"configurable": {"session_id": "1"}},)
+        print("Input: \n", wrap_text(text_lines))
+        print("Output: \n", wrap_text(llm_answer))
+    except Exception as e:
+        llm_answer = f"An error occurred: {e}"
+
+    return llm_answer + "...*beep*..."
+
 # Your quiz data
 quiz_data = quiz_questions
 user_progress = {}  # Tracks the user's progress through the quiz
 user_to_quiz = {}  # Maps the user who joins to the quiz that will be started for them
-
-
-# Event: Reaction is added
-@bot.event
-async def on_reaction_add(reaction, user):
-    if user == bot.user:
-        return  # Ignore bot's own reactions
-
-    message = reaction.message
-
-    if reaction.emoji == '🔪':  # Check if the reaction is a knife emoji
-        message_id = message.id
-        if message_id in user_to_quiz:
-            user_id = user_to_quiz[message_id]
-            if user.id == user_id:
-                # Give access to test-chambers and set up permissions
-                test_chambers_channel = await give_access_to_test_chambers(message.guild, user)
-
-                # Start the quiz in test-chambers
-                if test_chambers_channel:
-                    await start_quiz_by_reaction(test_chambers_channel, user)
-
-                # Restrict user permissions in other channels
-                await restrict_user_permissions(message.guild, user)
-
-                return  # Stop further processing for this reaction since quiz has started
-
-    # Part 2: Handle general knife emoji reactions
-    knife_reaction = None
-    for react in message.reactions:
-        if str(react.emoji) == '🔪':
-            knife_reaction = react
-            break
-
-    if knife_reaction and knife_reaction.count >= 1:
-        pins_channel = discord.utils.get(message.guild.channels, name="stab")
-        if pins_channel:
-            message_link = message.jump_url
-            await pins_channel.send(
-                f"Hey {message.author.mention}, knife emoji reaction for {message_link}. "
-                f"Looks like someone is ready to stab you! "
-                f"This time it isn't me!"
-            )
-            print(message.author.display_name, message.content)
-
 
 async def give_access_to_test_chambers(guild, user):
     # Find the 'test-chambers' channel
@@ -795,7 +763,6 @@ async def unlock_channel(channel, user):  # unused
     if unlocked_channel:
         await unlocked_channel.set_permissions(user, read_messages=True, send_messages=True)
 
-
 async def handle_conversation(message):
     words = message.content.split()
     await message.channel.send(generate_markov_chain_convo_text(words))
@@ -804,9 +771,100 @@ async def handle_convo_llm(message):
     words = message.content.split()
     await message.reply(generate_llm_convo_text(words, message.content))
 
-async def main(bot: commands.Bot):
-    await bot.add_cog(OpenGLaDOS(bot))
-    await bot.start(os.environ.get('BOT_TOKEN'))
+# Event: Reaction is added
+@bot.event
+async def on_reaction_add(self, reaction, user):
+    if user == self.bot.user:
+        return  # Ignore bot's own reactions
 
+    message = reaction.message
+
+    if reaction.emoji == '🔪':  # Check if the reaction is a knife emoji
+        message_id = message.id
+        if message_id in user_to_quiz:
+            user_id = user_to_quiz[message_id]
+            if user.id == user_id:
+                # Give access to test-chambers and set up permissions
+                test_chambers_channel = await give_access_to_test_chambers(message.guild, user)
+
+                # Start the quiz in test-chambers
+                if test_chambers_channel:
+                    await start_quiz_by_reaction(test_chambers_channel, user)
+
+                # Restrict user permissions in other channels
+                await restrict_user_permissions(message.guild, user)
+
+                return  # Stop further processing for this reaction since quiz has started
+
+    # Part 2: Handle general knife emoji reactions
+    knife_reaction = None
+    for react in message.reactions:
+        if str(react.emoji) == '🔪':
+            knife_reaction = react
+            break
+
+    if knife_reaction and knife_reaction.count >= 1:
+        pins_channel = discord.utils.get(message.guild.channels, name="stab")
+        if pins_channel:
+            message_link = message.jump_url
+            await pins_channel.send(
+                f"Hey {message.author.mention}, knife emoji reaction for {message_link}. "
+                f"Looks like someone is ready to stab you! "
+                f"This time it isn't me!"
+            )
+            print(message.author.display_name, message.content)
+
+# Regular bot command implementation
+@bot.command(name="start", help="Start chat mode to send messages manually.")
+async def start_text(self, ctx: commands.Context):
+    if self.start_triggered:
+        await ctx.send("The start command has already been triggered and cannot be run again.")
+        return
+
+    self.start_triggered = True  # Set the flag to indicate the command has been triggered
+    await ctx.send("Chat mode started!")
+    channel_id = None  # Initialize channel_id variable
+
+    while self.start_triggered:
+        try:
+            if channel_id is None:
+                # Get input from the terminal using asyncio to prevent blocking
+                channel_id = await asyncio.to_thread(input, "Enter the channel ID where you want to send the message: ")
+
+            # Get the message to send using asyncio to prevent blocking
+            message = await asyncio.to_thread(
+                input,
+                "Enter the message to send to Discord (or type '_switch' to enter a new channel ID or '_quit' to exit): "
+            )
+
+            if message.lower() == '_quit':
+                await ctx.send("Chat mode stopped!")
+                self.start_triggered = False  # Reset the flag so the command can be triggered again if needed
+                break
+
+            if message.lower() == '_switch':
+                channel_id = None
+                continue  # Skip sending the message and reset the channel ID
+
+            # Check if the message is empty
+            if not message.strip():
+                print("Cannot send an empty message. Please enter a valid message.")
+                continue
+
+            channel = self.bot.get_channel(int(channel_id))
+            if channel:
+                try:
+                    await channel.send(message)
+                except discord.HTTPException as e:
+                    print(f"Failed to send message: {e}")
+            else:
+                print("Invalid channel ID. Please enter a valid channel ID.")
+
+        except ValueError:
+            print("Invalid input. Please enter a valid channel ID.")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
+# Run the main function when the script is executed
 if __name__ == '__main__':
     asyncio.run(main(bot))
