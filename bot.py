@@ -452,64 +452,6 @@ class OpenGLaDOS(commands.Cog):
             await self.bot.process_commands(message)
             return  # Stop further processing since it's a command
 
-        # Ensure this is a real message and not a system message like join notifications
-        if message.type != discord.MessageType.default:
-            return
-
-        # Handle Replies to the Bot
-        if message.reference and message.reference.resolved and message.reference.resolved.author == self.bot.user:
-            await handle_convo_llm(message)
-            return
-
-        # Handle Mentions of the Bot
-        if self.bot.user.mentioned_in(message):
-            await handle_convo_llm(message)
-            return
-
-        user = message.author
-        guild_id = message.guild.id
-
-        # Check if the user wants to stop the quiz
-        if message.content.lower().strip() == "stop quiz":
-            clear_user_progress(guild_id, user.id)  # Clear the user's progress
-            stopped_users.add(user.id)  # Add the user to the stopped_users set
-            await message.channel.send(f"{user.mention}, your quiz has been stopped and your progress has been reset.")
-
-            # Unrestrict the user's permissions in all channels
-            await unrestrict_user_permissions(message.guild, user)
-            return
-
-        # Check if user has stopped the quiz
-        if user.id in stopped_users:
-            return  # Ignore further quiz processing for this user
-
-        # Handle Quiz Progression
-        progress = get_user_progress(guild_id, user.id)
-        if progress < len(quiz_questions):
-            answer = quiz_questions[progress]["answer"].lower()
-            print(f"User {user.name} progress: {progress}, checking answer: {message.content.lower().strip()}")
-            if message.content.lower().strip() == answer:
-                # Correct answer: update progress
-                update_user_progress(guild_id, user.id, progress + 1)
-                await message.channel.send(f"Correct, {user.mention}!")
-                await ask_question(message.channel, user)  # Ask the next question
-            else:
-                # Incorrect answer
-                await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
-                await timeout_user(message, user)  # Apply a timeout for incorrect answers
-        else:
-            # No more questions to ask
-            stopped_users.add(user.id)  # Add the user to the stopped_users set
-            await message.channel.send(f"{user.mention}, you have already completed the quiz!")
-
-        if message.content.lower() == 'hello bot' or message.content.lower() == 'hello openglados':
-            custom_emoji = discord.utils.get(message.guild.emojis, name='openglados')
-            if custom_emoji:
-                # React with a wave emoji
-                await message.add_reaction(custom_emoji)
-            else:
-                await message.channel.send("Custom emoji not found.")
-
         # Handle Direct Messages
         if isinstance(message.channel, discord.DMChannel):
             # Check if the message content is a valid Discord message link
@@ -551,6 +493,57 @@ class OpenGLaDOS(commands.Cog):
                     await message.channel.send(f"Failed to react to the message. Error: {str(e)}")
             await handle_convo_llm(message)
             return
+
+        # Handle Replies to the Bot
+        if message.reference and message.reference.resolved and message.reference.resolved.author == self.bot.user:
+            await handle_convo_llm(message)
+            return
+
+        # Handle Mentions of the Bot
+        if self.bot.user.mentioned_in(message):
+            await handle_convo_llm(message)
+            return
+
+        if message.content.lower() == 'hello bot' or message.content.lower() == 'hello openglados':
+            custom_emoji = discord.utils.get(message.guild.emojis, name='openglados')
+            if custom_emoji:
+                # React with a wave emoji
+                await message.add_reaction(custom_emoji)
+            else:
+                await message.channel.send("Custom emoji not found.")
+
+        user = message.author
+        guild_id = message.guild.id
+
+        # Check if the user wants to stop the quiz
+        if message.content.lower().strip() == "stop quiz":
+            clear_user_progress(guild_id, user.id)  # Clear the user's progress
+            stopped_users.add(user.id)  # Add the user to the stopped_users set
+            await message.channel.send(f"{user.mention}, your quiz has been stopped and your progress has been reset.")
+
+            # Unrestrict the user's permissions in all channels
+            await unrestrict_user_permissions(message.guild, user)
+            return
+
+        if user.id not in stopped_users:
+            # Handle Quiz Progression
+            progress = get_user_progress(guild_id, user.id)
+            if progress < len(quiz_questions):
+                answer = quiz_questions[progress]["answer"].lower()
+                print(f"User {user.name} progress: {progress}, checking answer: {message.content.lower().strip()}")
+                if message.content.lower().strip() == answer:
+                    # Correct answer: update progress
+                    update_user_progress(guild_id, user.id, progress + 1)
+                    await message.channel.send(f"Correct, {user.mention}!")
+                    await ask_question(message.channel, user)  # Ask the next question
+                else:
+                    # Incorrect answer
+                    await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
+                    await timeout_user(message, user)  # Apply a timeout for incorrect answers
+            else:
+                # No more questions to ask
+                stopped_users.add(user.id)  # Add the user to the stopped_users set
+                await message.channel.send(f"{user.mention}, you have already completed the quiz!")
 
     # Task to send a random cake GIF every 24 hours
     @tasks.loop(hours=24)  # Run every 24 hours
@@ -693,7 +686,12 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     random_word = random.choice(start_line)
     pattern = r'\b' + re.escape(random_word) + r'\b'
     if re.search(pattern, text):
-        text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
+        try:
+            text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
+        except Exception as e:
+            print(f"The following exception '{e}' occured. Whatever the fuck.")
+            text_lines = (f"My user input somehow caused the follwoing problem: {e}. "
+                          f"Just ignore it for now and move on with the conversation. ")
     else:
         text_lines = ""
     # randomly-generated sentences
