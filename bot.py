@@ -549,8 +549,6 @@ class OpenGLaDOS(commands.Cog):
                 else:
                     await message.channel.send(f"Incorrect, {user.mention}. Please try again.")
                     await timeout_user(message, user)  # Apply a timeout for incorrect answers
-        else:
-            print(f"{user.mention} has completed the quiz!")
 
         if message.content.lower() == 'hello bot' or message.content.lower() == 'hello openglados':
             custom_emoji = discord.utils.get(message.guild.emojis, name='openglados')
