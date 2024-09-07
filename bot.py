@@ -502,13 +502,12 @@ class OpenGLaDOS(commands.Cog):
 
         # Handle Replies to the Bot
         if message.reference and message.reference.resolved and message.reference.resolved.author == bot.user:
-            words = message.content.split()
-            await message.reply(generate_llm_convo_text(words, message.content))
+            await handle_convo_llm(message)
             return
 
         # Handle Mentions of the Bot
         if self.bot.user.mentioned_in(message):
-            await handle_conversation(message)
+            await handle_convo_llm(message)
 
         user = message.author
 
@@ -575,13 +574,8 @@ class OpenGLaDOS(commands.Cog):
                         await message.channel.send("Custom emoji not found.")
                 except Exception as e:
                     await message.channel.send(f"Failed to react to the message. Error: {str(e)}")
-            await handle_conversation(message)
+            await handle_convo_llm(message)
             return
-
-
-async def setup(bot):
-    await bot.add_cog(OpenGLaDOS(bot))
-
 
 # Your quiz data
 quiz_data = quiz_questions
@@ -783,11 +777,13 @@ async def handle_conversation(message):
     words = message.content.split()
     await message.channel.send(generate_markov_chain_convo_text(words))
 
+async def handle_convo_llm(message):
+    words = message.content.split()
+    await message.reply(generate_llm_convo_text(words, message.content))
 
-async def main(openglados: commands.Bot):
-    await openglados.add_cog(OpenGLaDOS(openglados))
-    await openglados.start(os.environ.get('BOT_TOKEN'))
-
+async def main(bot: commands.Bot):
+    await bot.add_cog(OpenGLaDOS(bot))
+    await bot.start(os.environ.get('BOT_TOKEN'))
 
 if __name__ == '__main__':
     asyncio.run(main(bot))
