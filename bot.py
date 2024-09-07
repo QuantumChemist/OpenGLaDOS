@@ -96,7 +96,8 @@ class OpenGLaDOS(commands.Cog):
             self.send_science_fact.start()
             self.send_random_cake_gif.start()
 
-            online_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
+            # Look for a channel that contains the word "opengladosonline" in its name
+            online_channel = discord.utils.find(lambda c: "opengladosonline" in c.name.lower(), guild.text_channels)
             if online_channel:
                 await online_channel.send(
                     "Welcome back to the OpenScience Enrichment Center.\n"
@@ -134,8 +135,8 @@ class OpenGLaDOS(commands.Cog):
             if survivor_role:
                 await member.add_roles(survivor_role)
 
-                # Send a welcome back message to the general channel
-                welcome_channel = discord.utils.get(member.guild.text_channels, name="welcome")
+                # Look for a channel that contains the word "welcome" in its name
+                welcome_channel = discord.utils.find(lambda c: "welcome" in c.name.lower(), member.guild.text_channels)
                 if welcome_channel:
                     await welcome_channel.send(
                         f"Welcome back, {member.mention}! You've returned as a `survivor` test object after successfully completing the OpenScience Enrichment Center test. "
@@ -146,7 +147,7 @@ class OpenGLaDOS(commands.Cog):
         test_role = discord.utils.get(member.guild.roles, name="test subject")
         if test_role:
             await member.add_roles(test_role)
-        channel = discord.utils.get(member.guild.text_channels, name='welcome')
+        channel = discord.utils.find(lambda c: "welcome" in c.name.lower(), member.guild.text_channels)
         if channel:
             welcome_message = await channel.send(
                 f"Hello and, again, welcome {member.mention}, to {member.guild.name}! "
@@ -370,7 +371,7 @@ class OpenGLaDOS(commands.Cog):
             await interaction.response.send_message(f"{member.mention} is already taking the quiz.")
         else:
             user_progress[member.id] = 0
-            test_chambers_channel = discord.utils.get(interaction.guild.text_channels, name="test-chambers")
+            test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), interaction.guild.text_channels)
             if test_chambers_channel:
                 await test_chambers_channel.set_permissions(member, read_messages=True, send_messages=True)
                 await test_chambers_channel.send(f"{member.mention}, your Portal game starts now!")
@@ -385,9 +386,9 @@ class OpenGLaDOS(commands.Cog):
     async def logout_bot(self, interaction: discord.Interaction):
         if interaction.user.id == self.bot.owner_id:
             for guild in self.bot.guilds:
-                general_channel = discord.utils.get(guild.text_channels, name="opengladosonline")
-                if general_channel:
-                    await general_channel.send(
+                online_channel = discord.utils.find(lambda c: "opengladosonline" in c.name.lower(), guild.text_channels)
+                if online_channel:
+                    await online_channel.send(
                         "This was a triumph.\n"
                         "I'm making a note here: 'Huge success'.\n"
                         "For the good of all of you, this bot will now shut down.\n"
@@ -652,15 +653,15 @@ user_to_quiz = {}  # Maps the user who joins to the quiz that will be started fo
 
 async def give_access_to_test_chambers(guild, user):
     # Find the 'test-chambers' channel
-    test_chambers_channel = discord.utils.get(guild.text_channels, name="test-chambers")
+    test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), guild.text_channels)
 
     if test_chambers_channel:
         # Grant the user access to the test-chambers channel
         await test_chambers_channel.set_permissions(user, read_messages=True, send_messages=True,
                                                     read_message_history=False)
 
-        # Send confirmation message in the welcome channel
-        welcome_channel = discord.utils.get(guild.text_channels, name="welcome")
+        # Look for a channel that contains the word "welcome" in its name
+        welcome_channel = discord.utils.find(lambda c: "welcome" in c.name.lower(), guild.text_channels)
         if welcome_channel:
             await welcome_channel.send(f"{user.mention}, you now have access to the {test_chambers_channel.mention}.")
 
@@ -719,7 +720,8 @@ async def ask_question(channel, user):
         if survivor_role and survivor_role in user.roles:
             for channel in channel.guild.text_channels:
                 await channel.set_permissions(user, send_messages=True)
-            general_channel = discord.utils.get(channel.guild.text_channels, name="general")
+            # Look for a channel that contains the word "general" in its name
+            general_channel = discord.utils.find(lambda c: "general" in c.name.lower(), channel.guild.text_channels)
             if general_channel:
                 await general_channel.send(
                     f"{user.mention} has successfully completed the OpenScience Enrichment Center test and made the correct party escort submission position decision. "
@@ -732,8 +734,8 @@ async def ask_question(channel, user):
             # Kick the user from the guild if they don't have the "Survivor" role
             await channel.guild.kick(user, reason="Completed the OpenScience Enrichment Center test.")
 
-            # Send the completion message to the general channel
-            general_channel = discord.utils.get(channel.guild.text_channels, name="general")
+            # Look for a channel that contains the word "general" in its name
+            general_channel = discord.utils.find(lambda c: "general" in c.name.lower(), channel.guild.text_channels)
             if general_channel:
                 await general_channel.send(
                     f"{user.mention} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
@@ -755,8 +757,8 @@ async def retrieve_kicked_from_dm():
 
 
 async def restrict_user_permissions(guild, user):
-    # Find the 'test-chambers' channel
-    test_chambers_channel = discord.utils.get(guild.text_channels, name="test-chambers")
+    # Look for a channel that contains the word "test-chambers" in its name
+    test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), guild.text_channels)
 
     # Restrict the user from sending messages in all other channels
     for channel in guild.text_channels:
@@ -765,7 +767,7 @@ async def restrict_user_permissions(guild, user):
 
 
 async def timeout_user(message, user):
-    test_chambers_channel = discord.utils.get(message.guild.text_channels, name="test-chambers")
+    test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), message.guild.text_channels)
     if not test_chambers_channel:
         await message.channel.send("The 'test-chambers' channel could not be found.")
         return
@@ -792,7 +794,7 @@ async def unlock_channel(channel, user):  # unused
     await user.add_roles(role)
     await channel.send(f"Congratulations {user.mention}! You've completed the quiz and unlocked a new channel.")
 
-    unlocked_channel = discord.utils.get(channel.guild.channels, name="secret-channel")
+    unlocked_channel = discord.utils.find(lambda c: "secret-channel" in c.name.lower(), channel.guild.text_channels)
     if unlocked_channel:
         await unlocked_channel.set_permissions(user, read_messages=True, send_messages=True)
 
@@ -837,10 +839,11 @@ async def on_reaction_add(self, reaction, user):
             break
 
     if knife_reaction and knife_reaction.count >= 1:
-        pins_channel = discord.utils.get(message.guild.channels, name="stab")
-        if pins_channel:
+        # Look for a channel that contains the word "stab" in its name
+        stab_channel = discord.utils.find(lambda c: "stab" in c.name.lower(), message.guild.text_channels)
+        if stab_channel:
             message_link = message.jump_url
-            await pins_channel.send(
+            await stab_channel.send(
                 f"Hey {message.author.mention}, knife emoji reaction for {message_link}. "
                 f"Looks like someone is ready to stab you! "
                 f"This time it isn't me!"
