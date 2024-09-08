@@ -206,9 +206,8 @@ class OpenGLaDOS(commands.Cog):
 
             # Add fields for your server's community guidelines
             embed.add_field(
-                name="**Community Guidelines:**",
+                name="**Community Guidelines:**\n1. **Respect All Test Subjects**\n",
                 value=(
-                    "1. **Respect All Test Subjects**\n"
                     "Engage with fellow members in a constructive and respectful manner. Any form of harassment, discrimination, "
                     "or hate speech will be swiftly incinerated—along with your access to this server.\n"
                 ),
