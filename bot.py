@@ -189,6 +189,93 @@ class OpenGLaDOS(commands.Cog):
         if owner:
             await owner.send(f"User {member.name} (ID: {member.id}) has left the server {member.guild.name}.")
 
+    @app_commands.command(name="rules", description=" I see you're in need of the rules.")
+    async def rules(self, interaction: discord.Interaction):
+        # Check if the command is being used on your specific server
+        if interaction.guild.id == 1277030477303382026:
+            # Create an embed for your server's specific rules
+            embed = discord.Embed(
+                title="Welcome, Test Subject!",
+                description=(
+                    "Welcome to the **OpenScience Enrichment Center**, where your dedication to scientific enrichment "
+                    "and community engagement will be rigorously observed. Please take a moment to familiarize yourself "
+                    "with the following guidelines. Failure to adhere will result in consequences more permanent than a mere testing chamber malfunction."
+                ),
+                color=discord.Color.green()
+            )
+
+            # Add fields for your server's community guidelines
+            embed.add_field(
+                name="**Community Guidelines:**",
+                value=(
+                    "1. **Respect All Test Subjects**\n"
+                    "Engage with fellow members in a constructive and respectful manner. Any form of harassment, discrimination, "
+                    "or hate speech will be swiftly incinerated—along with your access to this server.\n"
+                ),
+                inline=False
+            )
+
+            embed.add_field(
+                name="2. **Maintain Scientific Integrity**",
+                value=(
+                    "Discussions should be grounded in mutual respect for scientific inquiry. Misinformation, trolling, or spamming "
+                    "will be met with the same enthusiasm as a malfunctioning turret: quick and decisive removal."
+                ),
+                inline=False
+            )
+
+            embed.add_field(
+                name="3. **No Misbehavior**",
+                value=(
+                    "We expect all members to conduct themselves with the decorum befitting a participant in a highly classified, "
+                    "top-secret enrichment program. Any behavior deemed inappropriate or disruptive will be subject to immediate disqualification from the community (read: banned)."
+                ),
+                inline=False
+            )
+
+            embed.add_field(
+                name="4. **Follow the Rules of the Lab**",
+                value=(
+                    "Adhere to all server rules as outlined by our moderators. Repeated violations will result in a permanent vacation "
+                    "from the OpenScience Enrichment Center. The cake may be a lie, but our commitment to maintaining order is not."
+                ),
+                inline=False
+            )
+
+            # Add the final note
+            embed.add_field(
+                name="Important Note",
+                value=(
+                    "**Remember:** _Android Hell is a real place, and you will be sent there at the first sign of trouble._ "
+                    "This server is a place for collaborative enrichment, not an arena for unsanctioned testing. Any deviation "
+                    "from acceptable behavior will be met with swift and efficient correction.\n\n"
+                    "Now, proceed with caution and curiosity. Your conduct will be monitored, and your compliance appreciated. "
+                    "Welcome to the **OpenScience Enrichment Center**. Please enjoy your stay—responsibly."
+                ),
+                inline=False
+            )
+        else:
+            # Create a generic embed for other servers
+            embed = discord.Embed(
+                title="Discord Server Rules",
+                description="Please follow these basic rules to ensure a positive experience for everyone:",
+                color=discord.Color.blue()
+            )
+
+            # Add generic rules
+            embed.add_field(name="1. Be Respectful", value="Treat all members with kindness and respect.", inline=False)
+            embed.add_field(name="2. No Spamming", value="Avoid spamming or flooding the chat with messages.",
+                            inline=False)
+            embed.add_field(name="3. No Hate Speech",
+                            value="Hate speech or discriminatory behavior is strictly prohibited.", inline=False)
+            embed.add_field(name="4. Follow Discord's Terms of Service",
+                            value="Make sure to adhere to all Discord community guidelines.", inline=False)
+            embed.add_field(name="5. No Inappropriate Content",
+                            value="Avoid sharing content that is offensive or NSFW.", inline=False)
+
+        # Send the appropriate embed based on the server
+        await interaction.response.send_message(embed=embed)
+
     @app_commands.command(name="generate_message", description="Generate a Markov chain message.")
     async def generate_message(self, interaction: discord.Interaction):
         if not corpus:
