@@ -83,7 +83,17 @@ class OpenGLaDOSBot(commands.Bot):
             response = generate_markov_chain_convo_text()
             await owner.send(f"Hello! This is a DM from your bot. \n{response}")
 
-        print("Current servers: ",self.guilds)
+        print("Current servers:")
+
+        for guild in self.guilds:
+            print(f"- Name: {guild.name}")
+            print(f"  ID: {guild.id}")
+            print(f"  Shard ID: {guild.shard_id}")
+            print(f"  Member Count: {guild.member_count}")
+            print(f"  Channels: ")
+            for channel in guild.channels:
+                print(f"    - {channel.name}")
+            print()
 
         # Start tasks once globally
         bot.get_cog("OpenGLaDOS").send_science_fact.start()
@@ -222,8 +232,8 @@ class OpenGLaDOS(commands.Cog):
         fact = fetch_random_fact()
         await interaction.response.send_message(fact)
 
-    # Slash command to get a fandom cake GIF
-    @app_commands.command(name="get_fandom_cake_gif", description="Get a random Black Forest cake GIF.")
+    # Slash command to get a random cake GIF
+    @app_commands.command(name="get_random_cake_gif", description="Get a random Black Forest cake GIF.")
     async def get_fandom_cake_gif(self, interaction: discord.Interaction):
         gif_url = fetch_random_gif()
         await interaction.response.send_message(gif_url)
@@ -574,6 +584,7 @@ class OpenGLaDOS(commands.Cog):
 # Initialize the bot with a prefix and intents
 bot = OpenGLaDOSBot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
 bot.owner_id = int(os.environ.get('chichi'))
+server_stats_triggered = False
 start_triggered: bool = False
 stopped_users = set()  # Tracks users who have stopped the quiz
 
@@ -581,6 +592,11 @@ stopped_users = set()  # Tracks users who have stopped the quiz
 quiz_data = quiz_questions
 user_progress = {}  # Tracks the user's progress through the quiz
 user_to_quiz = {}  # Maps the user who joins to the quiz that will be started for them
+
+# Define the main function to setup and start the bot
+async def main(openglados: commands.Bot):
+    await openglados.add_cog(OpenGLaDOS(openglados))  # Add the Cog to the bot
+    await openglados.start(os.environ.get('BOT_TOKEN'))  # Start the bot
 
 def get_user_progress(guild_id: int, user_id: int) -> int:
     """Get the user's progress in the specified guild, initializing if not present."""
@@ -603,12 +619,6 @@ def clear_user_progress(guild_id: int, user_id: int) -> None:
     """Clear the user's progress in the specified guild."""
     if guild_id in user_progress and user_id in user_progress[guild_id]:
         del user_progress[guild_id][user_id]
-
-
-# Define the main function to setup and start the bot
-async def main(openglados: commands.Bot):
-    await openglados.add_cog(OpenGLaDOS(openglados))  # Add the Cog to the bot
-    await openglados.start(os.environ.get('BOT_TOKEN'))  # Start the bot
 
 # Function to fetch a random fact from the API
 def fetch_random_fact():
@@ -1010,6 +1020,43 @@ async def start_text(ctx: commands.Context):
             print("Invalid input. Please enter a valid channel ID.")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
+
+@bot.command(name='server-stats', help="Shows server stats. Only available to the owner.")
+@commands.is_owner()
+async def server_stats(ctx):
+    global server_stats_triggered
+
+    if server_stats_triggered:
+        await ctx.send("")  # don't know why two bot instances are created.......
+        return
+
+    # Set the flag to True to indicate the command is being processed
+    server_stats_triggered = True
+
+    # Construct the message
+    response = "Current servers:\n"
+    for guild in bot.guilds:
+        response += (
+            f"- **Name:** {guild.name}\n\n"
+            f"  **ID:** {guild.id}\n\n"
+            f"  **Shard ID:** {guild.shard_id}\n\n"
+            f"  **Member Count:** {guild.member_count}\n\n"
+            f"  **Channels:**\n\n"
+        )
+        for channel in guild.channels:
+            response += f"    - {channel.name}\n"
+        response += "\n\n\n"
+
+    # Send the message as a DM to the command invoker
+    try:
+        await ctx.author.send(response)
+        if ctx.guild:  # Check if the command was invoked from a server channel
+            await ctx.send("Server statistics have been sent to you via DM.")
+    except discord.Forbidden:
+        await ctx.send("I couldn't send you a DM. Please check your DM settings.")
+    finally:
+        # Reset the flag after processing the command
+        server_stats_triggered = False
 
 # Run the main function when the script is executed
 if __name__ == '__main__':
