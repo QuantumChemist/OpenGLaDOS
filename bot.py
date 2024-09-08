@@ -253,16 +253,18 @@ class OpenGLaDOS(commands.Cog):
                 f"I'm not angry. Just go back to the testing area, {interaction.user.mention}!")
 
     @app_commands.command(name="help_me_coding",
-                          description="Let OpenGLaDOS help you with a coding task. Default is Python. "
-                                      "Caution: Potentially not helpful.")
+                          description="Let OpenGLaDOS help you with a coding task. Default is Python. Caution: Potentially not helpful.")
     async def helpmecoding(self, interaction: discord.Interaction, message: str = None):
+        # Defer the response to allow more processing time
+        await interaction.response.defer()
+
         if message is None:
             message = "I need help with a Python code snippet."
 
         # Define a list of common programming languages and coding-related keywords
         coding_keywords = [
             "python", "java", "javascript", "c#", "c++", "html", "css", "sql", "ruby", "perl", "r", "matlab", "swift",
-            "go", "rust", "kotlin", "typescript", "bash", "shell", "code", "algorithm", "function", "variable", "debug",
+            "rust", "kotlin", "typescript", "bash", "shell", "code", "algorithm", "function", "variable", "debug",
             "program", "compiling", "programming", "coding", "bugs"
         ]
 
@@ -275,7 +277,7 @@ class OpenGLaDOS(commands.Cog):
         # Check if the message contains any of the coding-related keywords or matches the 'c' combination pattern
         if not (any(keyword in message.lower() for keyword in coding_keywords) or c_combination_pattern.search(
                 message)):
-            await interaction.response.send_message(
+            await interaction.followup.send(
                 "Your message does not appear to be related to coding. Please provide a coding-related question.",
                 ephemeral=True)
             return
@@ -303,7 +305,7 @@ class OpenGLaDOS(commands.Cog):
         except Exception as e:
             llm_answer = f"An error occurred: {e}"
 
-        await interaction.response.send_message(llm_answer)
+        await interaction.followup.send(llm_answer)
 
     @app_commands.command(name="help", description="List all available commands.")
     async def list_bot_commands(self, interaction: discord.Interaction):
