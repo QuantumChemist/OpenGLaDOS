@@ -960,7 +960,6 @@ async def handle_convo_llm(message):
     words = message.content.split()
     await message.reply(generate_llm_convo_text(words, message.content))
 
-
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
     parts = llm_answer.split("```")
@@ -969,7 +968,7 @@ def ensure_code_blocks_closed(llm_answer):
 
     # If the number of backticks is odd, add a closing backtick
     if backtick_count % 2 != 0:
-        llm_answer += "\n```"
+        llm_answer += "\n```*power outage*...*message interrupted*"
 
     return llm_answer
 
