@@ -85,15 +85,17 @@ class OpenGLaDOSBot(commands.Bot):
 
         print("Current servers:")
 
+        # Start the table header
+        print("| Name | ID | Shard ID | Member Count | Channels |")
+        print("| --- | --- | --- | --- | --- |")
+
+        # Iterate through each guild and print its details
         for guild in self.guilds:
-            print(f"- Name: {guild.name}")
-            print(f"  ID: {guild.id}")
-            print(f"  Shard ID: {guild.shard_id}")
-            print(f"  Member Count: {guild.member_count}")
-            print(f"  Channels: ")
-            for channel in guild.channels:
-                print(f"    - {channel.name}")
-            print()
+            # Format channels as a comma-separated string
+            channels = ", ".join(channel.name for channel in guild.channels)
+
+            # Print each guild's details in a markdown table row format
+            print(f"| {guild.name} | {guild.id} | {guild.shard_id} | {guild.member_count} | {channels} |")
 
         # Start tasks once globally
         bot.get_cog("OpenGLaDOS").send_science_fact.start()
@@ -1075,17 +1077,19 @@ async def server_stats(ctx):
 
     # Construct the message
     response = "Current servers:\n"
+    response += "```"
+    # Start the table header
+    response += "| Name | ID | Shard ID | Member Count | Channels |\n"
+    response += "| --- | --- | --- | --- | --- |\n"
+
+    # Iterate through each guild and add its details to the response
     for guild in bot.guilds:
-        response += (
-            f"- **Name:** {guild.name}\n\n"
-            f"  **ID:** {guild.id}\n\n"
-            f"  **Shard ID:** {guild.shard_id}\n\n"
-            f"  **Member Count:** {guild.member_count}\n\n"
-            f"  **Channels:**\n\n"
-        )
-        for channel in guild.channels:
-            response += f"    - {channel.name}\n"
-        response += "\n\n\n"
+        # Format the channels with a line break between each
+        channels = ", ".join(channel.name for channel in guild.channels)
+
+        # Add each guild's details to the markdown table format
+        response += f"| {guild.name} | {guild.id} | {guild.shard_id} | {guild.member_count} | {channels} |\n"
+    response += "```"
 
     # Send the message as a DM to the command invoker
     try:
