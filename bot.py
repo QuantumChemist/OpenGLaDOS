@@ -419,7 +419,7 @@ class OpenGLaDOS(commands.Cog):
         except Exception as e:
             llm_answer = f"An error occurred: {e}"
 
-        await interaction.followup.send(llm_answer+"...*bzzzzzt...bzzzzzt*...")
+        await interaction.followup.send(llm_answer+"\n```...*bzzzzzt...bzzzzzt*...")
 
     @app_commands.command(name="help", description="List all available commands.")
     async def list_bot_commands(self, interaction: discord.Interaction):
