@@ -77,6 +77,8 @@ class OpenGLaDOSBot(commands.Bot):
     async def on_ready(self):
         print(f'Logged in as {self.user} (ID: {self.user.id})')
         print('------')
+        await self.change_presence(status=discord.Status.online,
+                                  activity=discord.Game(name='ⓘ Confusing people since 2024'))
         # Add any additional logic you want to execute when the bot is ready here
         owner = await self.fetch_user(self.owner_id)
         if owner:
@@ -419,8 +421,8 @@ class OpenGLaDOS(commands.Cog):
             print("Output: \n", wrap_text(llm_answer))
         except Exception as e:
             llm_answer = f"An error occurred: {e}"
-
-        await interaction.followup.send(llm_answer+"\n```...*bzzzzzt...bzzzzzt*...")
+        llm_answer = ensure_code_blocks_closed(llm_answer)
+        await interaction.followup.send(llm_answer+"...*bzzzzzt...bzzzzzt*...")
 
     @app_commands.command(name="help", description="List all available commands.")
     async def list_bot_commands(self, interaction: discord.Interaction):
@@ -936,7 +938,7 @@ def generate_llm_convo_text(start_line: str = None, message: str = None):
     except Exception as e:
         llm_answer = f"An error occurred: {e}"
 
-    return llm_answer + "...*beep*..."
+    return ensure_code_blocks_closed(llm_answer) + "...*beep*..."
 
 async def unlock_channel(channel, user):  # unused
     role = discord.utils.get(channel.guild.roles, name="QuizWinner")
@@ -957,6 +959,20 @@ async def handle_conversation(message):
 async def handle_convo_llm(message):
     words = message.content.split()
     await message.reply(generate_llm_convo_text(words, message.content))
+
+
+def ensure_code_blocks_closed(llm_answer):
+    # Split the text by triple backticks to find all code blocks
+    parts = llm_answer.split("```")
+    # Count the number of backticks
+    backtick_count = len(parts) - 1
+
+    # If the number of backticks is odd, add a closing backtick
+    if backtick_count % 2 != 0:
+        llm_answer += "\n```"
+
+    return llm_answer
+
 
 # Event: Reaction is added
 @bot.event
