@@ -998,11 +998,29 @@ async def on_reaction_add(reaction, user):
 async def start_text(ctx: commands.Context):
     global start_triggered
     if start_triggered:
-        await ctx.send("The start command has already been triggered and cannot be run again.")
+        embed = discord.Embed(
+            title="Error",
+            description="The start command has already been triggered and cannot be run again.",
+            color=discord.Color.red()
+        )
+        await ctx.send(embed=embed)
         return
 
     start_triggered = True  # Set the flag to indicate the command has been triggered
-    await ctx.send("Chat mode started!")
+    embed = discord.Embed(
+        title="Chat Mode",
+        description="Chat mode started! You can now manually send messages.",
+        color=discord.Color.green()
+    )
+    await ctx.send(embed=embed)
+
+    # Custom emojis stored as their IDs
+    custom_emoji_ids = [
+        1280259959338303660,  # portal_gunimation
+        1280259895119052993,  # portal_gun
+        1276977982027862018   # OpenGLaDOS
+    ]
+
     server_name = None  # Initialize server_name variable
     channel_name = None  # Initialize channel_name variable
 
@@ -1013,26 +1031,41 @@ async def start_text(ctx: commands.Context):
                 server_name = await asyncio.to_thread(input, "Enter the server (guild) name: ")
                 channel_name = await asyncio.to_thread(input, "Enter the channel name: ")
 
-            # Get the message to send using asyncio to prevent blocking
-            message = await asyncio.to_thread(
+            # Get the title to send using asyncio to prevent blocking
+            title = await asyncio.to_thread(
                 input,
-                "Enter the message to send to Discord (or type '_switch' to enter a new server/channel or '_quit' to exit): "
+                "Enter the title for the embed (or type '_switch' to enter a new server/channel or '_quit' to exit): "
             )
 
-            if message.lower() == '_quit':
-                await ctx.send("Chat mode stopped!")
+            if title.lower() == '_quit':
+                embed = discord.Embed(
+                    title="Chat Mode Stopped",
+                    description="Chat mode has been stopped!",
+                    color=discord.Color.orange()
+                )
+                await ctx.send(embed=embed)
                 start_triggered = False  # Reset the flag so the command can be triggered again if needed
                 break
 
-            if message.lower() == '_switch':
+            if title.lower() == '_switch':
                 server_name = None
                 channel_name = None
                 continue  # Skip sending the message and reset the server and channel name
+
+            # Get the message to send using asyncio to prevent blocking
+            message = await asyncio.to_thread(
+                input,
+                "Enter the message to send to Discord: "
+            )
 
             # Check if the message is empty
             if not message.strip():
                 print("Cannot send an empty message. Please enter a valid message.")
                 continue
+
+            # Randomly select one of the custom emojis
+            random_emoji_id = random.choice(custom_emoji_ids)
+            random_emoji = bot.get_emoji(random_emoji_id)
 
             # Find the server (guild) by name
             server = discord.utils.find(lambda g: g.name == server_name, bot.guilds)
@@ -1045,7 +1078,20 @@ async def start_text(ctx: commands.Context):
             channel = discord.utils.find(lambda c: c.name == channel_name, server.channels)
             if channel:
                 try:
-                    await channel.send(message)
+                    # Send the message with the custom title and emoji in an embed
+                    embed = discord.Embed(
+                        title=f"{title}",
+                        description=message,
+                        color=discord.Color.random()
+                    )
+                    await channel.send(embed=embed)
+
+                    embed_confirmation = discord.Embed(
+                        title="Message Sent",
+                        description=f"Message with title '{title} {random_emoji}' sent to {channel_name} in {server_name}.",
+                        color=discord.Color.green()
+                    )
+                    await ctx.send(embed=embed_confirmation)
                 except discord.HTTPException as e:
                     print(f"Failed to send message: {e}")
             else:
