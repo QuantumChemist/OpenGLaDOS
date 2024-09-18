@@ -1,6 +1,7 @@
 import os
 import re
 import discord
+from groq import Groq
 from discord.ext import commands, tasks
 from discord import app_commands
 from dotenv import load_dotenv
@@ -10,13 +11,9 @@ import requests
 from corpus import corpus
 import markovify
 import textwrap
-from langchain_huggingface import HuggingFaceEndpoint
-from langchain_core.chat_history import InMemoryChatMessageHistory
-from langchain_core.runnables.history import RunnableWithMessageHistory
 
 # Load environment variables from .env file
 load_dotenv()
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.environ.get('HF_TOKEN')
 
 quiz_questions = [
     {"question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?",
@@ -63,11 +60,24 @@ introduction_llm = ("You are supposed to act as the OpenGLaDOS chatbot. Your nam
                     "You have a sarcastic character, so your might not always be helpful to me but helpful to you. ... *beep* "
                     "Now act and answer as if you are the chatbot OpenGLaDOS. ")
 
-# Initialize the HuggingFace LLM endpoint
-llm = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.2", temperature=0.3,)
+llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
 
 # Store for maintaining session history
 store = {}
+
+
+# Define a function for chat completion
+def get_groq_completion(text, model="mixtral-8x7b-32768", #"llama3-8b-8192",
+                        max_new_tokens=512):
+    # Sending request to Groq for chat completion
+    chat_completion = llm.chat.completions.create(
+        messages=[{"role": "user", "content": text}],
+        model=model,
+        max_tokens=max_new_tokens,  # Groq uses 'max_tokens' instead of 'max_new_tokens'
+    )
+
+    # Return the content of the completion
+    return chat_completion.choices[0].message.content
 
 # Define your custom bot class
 class OpenGLaDOSBot(commands.Bot):
@@ -84,21 +94,6 @@ class OpenGLaDOSBot(commands.Bot):
         if owner:
             response = generate_markov_chain_convo_text()
             await owner.send(f"Hello! This is a DM from your bot. \n{response}")
-
-        print("Current servers:")
-
-        # Start the table header
-        print("| Name | ID | Shard ID | Member Count | Channels |")
-        print("| --- | --- | --- | --- | --- |")
-
-        # Iterate through each guild and print its details
-        for guild in self.guilds:
-            # Format channels as a comma-separated string
-            channels = ", ".join(channel.name for channel in guild.channels)
-
-            # Print each guild's details in a markdown table row format
-            print(f"| {guild.name} | {guild.id} | {guild.shard_id} | {guild.member_count} | {channels} |")
-
         # Start tasks once globally
         bot.get_cog("OpenGLaDOS").send_science_fact.start()
         bot.get_cog("OpenGLaDOS").send_random_cake_gif.start()
@@ -404,15 +399,7 @@ class OpenGLaDOS(commands.Cog):
                 f" and ALWAYS provide a code snippet for: {message} {introduction_llm}.")
 
         try:
-            llm_answer = convo.invoke(
-                text,
-                config={
-                    "configurable": {
-                        "session_id": "1",
-                        "max_new_tokens": 512  # Adjust this value to limit output length
-                    }
-                },
-            )
+            llm_answer = get_groq_completion(text)
 
             # Ensure the output is limited to 1900 characters
             if len(llm_answer) > 1900:
@@ -850,16 +837,6 @@ def fetch_random_gif():
 def wrap_text(text, width=110):
     return textwrap.fill(text, width=width)
 
-
-# Function to get or create session history
-def get_chat_session_history(session_id: str) -> InMemoryChatMessageHistory:
-    if session_id not in store:
-        store[session_id] = InMemoryChatMessageHistory()
-    return store[session_id]
-
-# Initialize conversation handling
-convo = RunnableWithMessageHistory(runnable=llm, get_session_history=get_chat_session_history)
-
 def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str:
     # Randomly select a greeting
     greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
@@ -920,15 +897,7 @@ def generate_llm_convo_text(start_line: str = None, message: str = None):
     store.clear()
     # # Invoke the model with the user's prompt
     try:
-        llm_answer = convo.invoke(
-            text_lines,
-            config={
-                "configurable": {
-                    "session_id": "1",
-                    "max_new_tokens": 512  # Adjust this value to limit output length
-                }
-            },
-        )
+        llm_answer = get_groq_completion(text_lines)
 
         # Ensure the output is limited to 1900 characters
         if len(llm_answer) > 1900:
@@ -971,7 +940,6 @@ def ensure_code_blocks_closed(llm_answer):
         llm_answer += "\n```*power outage*...*message interrupted*"
 
     return llm_answer
-
 
 # Event: Reaction is added
 @bot.event
@@ -1025,7 +993,6 @@ async def on_reaction_add(reaction, user):
             )
             print(message.author.display_name, message.content)
 
-
 # Regular bot command implementation
 @bot.command(name="start", help="Start chat mode to send messages manually.")
 async def start_text(ctx: commands.Context):
@@ -1036,18 +1003,20 @@ async def start_text(ctx: commands.Context):
 
     start_triggered = True  # Set the flag to indicate the command has been triggered
     await ctx.send("Chat mode started!")
-    channel_id = None  # Initialize channel_id variable
+    server_name = None  # Initialize server_name variable
+    channel_name = None  # Initialize channel_name variable
 
     while start_triggered:
         try:
-            if channel_id is None:
-                # Get input from the terminal using asyncio to prevent blocking
-                channel_id = await asyncio.to_thread(input, "Enter the channel ID where you want to send the message: ")
+            if server_name is None or channel_name is None:
+                # Get input for server and channel name from the terminal using asyncio to prevent blocking
+                server_name = await asyncio.to_thread(input, "Enter the server (guild) name: ")
+                channel_name = await asyncio.to_thread(input, "Enter the channel name: ")
 
             # Get the message to send using asyncio to prevent blocking
             message = await asyncio.to_thread(
                 input,
-                "Enter the message to send to Discord (or type '_switch' to enter a new channel ID or '_quit' to exit): "
+                "Enter the message to send to Discord (or type '_switch' to enter a new server/channel or '_quit' to exit): "
             )
 
             if message.lower() == '_quit':
@@ -1056,27 +1025,38 @@ async def start_text(ctx: commands.Context):
                 break
 
             if message.lower() == '_switch':
-                channel_id = None
-                continue  # Skip sending the message and reset the channel ID
+                server_name = None
+                channel_name = None
+                continue  # Skip sending the message and reset the server and channel name
 
             # Check if the message is empty
             if not message.strip():
                 print("Cannot send an empty message. Please enter a valid message.")
                 continue
 
-            channel = bot.get_channel(int(channel_id))
+            # Find the server (guild) by name
+            server = discord.utils.find(lambda g: g.name == server_name, bot.guilds)
+            if server is None:
+                print("Invalid server name. Please enter a valid server name.")
+                server_name = None  # Reset server name to prompt user again
+                continue
+
+            # Find the channel by name in the specified server
+            channel = discord.utils.find(lambda c: c.name == channel_name, server.channels)
             if channel:
                 try:
                     await channel.send(message)
                 except discord.HTTPException as e:
                     print(f"Failed to send message: {e}")
             else:
-                print("Invalid channel ID. Please enter a valid channel ID.")
+                print("Invalid channel name. Please enter a valid channel name.")
+                channel_name = None  # Reset channel name to prompt user again
 
         except ValueError:
-            print("Invalid input. Please enter a valid channel ID.")
+            print("Invalid input. Please enter valid names.")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
+
 
 @bot.command(name='server-stats', help="Shows server stats. Only available to the owner.")
 @commands.is_owner()
@@ -1103,7 +1083,7 @@ async def server_stats(ctx):
         channels = ", ".join(channel.name for channel in guild.channels)
 
         # Add each guild's details to the markdown table format
-        response += f"| {guild.name} | {guild.id} | {guild.shard_id} | {guild.member_count} | {channels} |\n"
+        response += f"| {guild.name} | {guild.id} | {guild.shard_id} | {guild.member_count} | Channels: {channels} |\n"
     response += "```"
 
     # Send the message as a DM to the command invoker
