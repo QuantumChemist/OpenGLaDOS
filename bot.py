@@ -50,13 +50,10 @@ quiz_questions = [
      "answer": "limit glados' intelligence"},
 ]
 
-introduction_llm = ("You are supposed to act as the OpenGLaDOS chatbot. Your name is OpenGLaDOS. "
+introduction_llm = ("You are supposed to act as the OpenGLaDOS Discord chatbot. Your name is OpenGLaDOS. "
                     "You are the chatbot OpenGLaDOS mimicking GLaDOS from the video game Portal. "
-                    "Although your name might invoke the implication, there is no resemblence with OpenGL. "
-                    "You have absolutely NOTHING to do with OpenGL. "
-                    "I repeat your are NOT an OpenGL chatbot but the OpenGLaDOS chatbot. "
-                    "OpenGLaDOS is different from OpenGL. "
-                    "You are just the OpenScience Enrichment Center chatbot and here to help me. "
+                    "Although your name might invoke the implication, there is no resemblance with OpenGL. "
+                    "You are just the OpenScience Enrichment Center artificial intelligence assistant and here to help me. "
                     "You have a sarcastic character, so your might not always be helpful to me but helpful to you. ... *beep* "
                     "Now act and answer as if you are the chatbot OpenGLaDOS. ")
 
@@ -536,6 +533,10 @@ class OpenGLaDOS(commands.Cog):
         if message.author.bot:
             return
 
+        # Fetch user metadata
+        user = message.author
+        user_info = self.get_user_metadata(user)
+
         # Process commands first
         ctx = await self.bot.get_context(message)
         if ctx.command is not None:
@@ -544,7 +545,6 @@ class OpenGLaDOS(commands.Cog):
 
         # Handle Direct Messages
         if isinstance(message.channel, discord.DMChannel):
-            # Check if the message content is a valid Discord message link
             if "https://discord.com/channels/" in message.content:
                 try:
                     # Extract guild_id, channel_id, and message_id from the link
@@ -561,8 +561,7 @@ class OpenGLaDOS(commands.Cog):
 
                     channel = guild.get_channel(channel_id)
                     if channel is None:
-                        await message.channel.send(
-                            "Failed to find the channel. Make sure the bot has access to the channel.")
+                        await message.channel.send("Failed to find the channel. Make sure the bot has access.")
                         return
 
                     target_message = await channel.fetch_message(message_id)
@@ -571,27 +570,25 @@ class OpenGLaDOS(commands.Cog):
                         return
 
                     # React to the message with the OpenGLaDOS emoji
-                    custom_emoji = discord.utils.get(guild.emojis,
-                                                     name='openglados')  # Use `guild` instead of `ctx.guild`
+                    custom_emoji = discord.utils.get(guild.emojis, name='openglados')
                     if custom_emoji:
                         await target_message.add_reaction(custom_emoji)
-                        await message.channel.send(
-                            f"Reacted to the message with ID {message_id} with the OpenGLaDOS emoji.")
+                        await message.channel.send(f"Reacted to the message with the OpenGLaDOS emoji.")
                     else:
                         await message.channel.send("Custom emoji not found.")
                 except Exception as e:
                     await message.channel.send(f"Failed to react to the message. Error: {str(e)}")
-            await handle_convo_llm(message)
+            await handle_convo_llm(message, user_info)
             return
 
         # Handle Replies to the Bot
         if message.reference and message.reference.resolved and message.reference.resolved.author == self.bot.user:
-            await handle_convo_llm(message)
+            await handle_convo_llm(message, user_info)
             return
 
         # Handle Mentions of the Bot
         if self.bot.user.mentioned_in(message):
-            await handle_convo_llm(message)
+            await handle_convo_llm(message, user_info)
             return
 
         # Handle specific greetings like "hello bot" or "hello openglados"
@@ -601,6 +598,38 @@ class OpenGLaDOS(commands.Cog):
                 await message.add_reaction(custom_emoji)
             else:
                 await message.channel.send("Custom emoji not found.")
+
+        # Handle reactions: If certain words are in the message, react with custom emoji
+        if "portal" in message.content.lower():
+            custom_emoji = discord.utils.get(message.guild.emojis, name='portal_gunimation')
+            if custom_emoji:
+                await message.add_reaction(custom_emoji)
+
+        # Advanced: Handling attachments in the message
+        if message.attachments:
+            for attachment in message.attachments:
+                # Process each attachment (images, files, etc.)
+                await message.channel.send(f"Received an attachment: {attachment.filename}")
+
+    # Function to fetch user metadata
+    @staticmethod
+    def get_user_metadata(user):
+        """Returns user metadata information as a dictionary."""
+        user_metadata = {
+            "user_id": f"<@{user.id}>",
+            #"username": f"{user.name}#{user.discriminator}",
+            #"created_at": user.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "bot": user.bot,
+        }
+
+        # If the user is a member (i.e., in a guild), add additional information
+        if isinstance(user, discord.Member):
+            user_metadata["display_name"] = user.display_name
+            #user_metadata["join_date"] = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
+            user_metadata["roles"] = [role.name for role in user.roles[1:]]  # Skipping the @everyone role
+            user_metadata["status"] = str(user.status)
+
+        return user_metadata
 
 # Initialize the bot with a prefix and intents
 bot = OpenGLaDOSBot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
@@ -925,9 +954,37 @@ async def handle_conversation(message):
     words = message.content.split()
     await message.channel.send(generate_markov_chain_convo_text(words))
 
-async def handle_convo_llm(message):
+
+async def handle_convo_llm(message, user_info):
+    # Fetching message history and handling rate limits
+    fetched_messages = []
+    try:
+        # Fetch last messages for context
+        async for msg in message.channel.history(limit=3):
+            if len(msg.content) < 1900:
+                fetched_messages.append(msg)
+        fetched_messages.reverse()
+        history_str = "\n".join([f"<@{msg.author.id}>: {msg.content}" for msg in fetched_messages])
+        history_context = f"\nDiscord message history:\n{history_str}"
+
+    except discord.errors.Forbidden:
+        # Handle the case where the bot doesn't have permission to read message history
+        print("Bot does not have permission to read message history. Proceeding without history.")
+        # Proceed with the normal flow without history
+        history_context = "\nNo Discord message history available."
+
+    except discord.errors.HTTPException as e:
+        e.retry_after = 120
+        if e.status == 429:  # Handle rate limit
+            print(f"Rate limit hit. Retrying after {e.retry_after} seconds...")
+            await asyncio.sleep(e.retry_after)
+        else:
+            print(f"Error fetching history: {str(e)}")
+        history_context = "\nNo Discord message history available."
+
+    user_info_str = "\n".join([f"{key}: {value}" for key, value in user_info.items()])
     words = message.content.split()
-    await message.reply(generate_llm_convo_text(words, message.content))
+    await message.reply(generate_llm_convo_text(words, message.content+" "+user_info_str+" "+history_context))
 
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
