@@ -952,12 +952,19 @@ def generate_llm_convo_text(start_line: str = None, message: str = None):
         if len(llm_answer) > 1900:
             llm_answer = llm_answer[:1900]
         # Check if mentions are balanced; if not, regenerate the response
-        if not check_mentions(llm_answer):
+        attempts = 0
+        max_attempts = 5
+        # Loop to check for unbalanced mentions
+        while not check_mentions(llm_answer) and attempts < max_attempts:
             print("Unbalanced mentions detected, regenerating response.")
             llm_answer = get_groq_completion(text_lines)
+
             # Apply character limit again after regeneration
             if len(llm_answer) > 1900:
                 llm_answer = llm_answer[:1900]
+            attempts += 1
+        if attempts >= max_attempts:
+            print("Max attempts reached. Using the latest answer.")
         print("Input: \n", wrap_text(text_lines))
         print("Output: \n", wrap_text(llm_answer))
     except Exception as e:
