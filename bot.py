@@ -392,7 +392,7 @@ class OpenGLaDOS(commands.Cog):
             return
 
         # Construct the text for the LLM request
-        text = (f"Hello, I have a coding question. You are supposed to help me with my following coding question"
+        text = (f"Hello OpenGLaDOS, I have a coding question. You are supposed to help me with my following coding question"
                 f" and ALWAYS provide a code snippet for: {message} {introduction_llm}.")
 
         try:
@@ -609,7 +609,20 @@ class OpenGLaDOS(commands.Cog):
         if message.attachments:
             for attachment in message.attachments:
                 # Process each attachment (images, files, etc.)
-                await message.channel.send(f"Received an attachment: {attachment.filename}")
+                text = (f"Hello OpenGLaDOS, you received an attachment: {str(attachment.filename)}. "
+                        f"and also this message: {str(message.content)}. Now make a sarcastic remark on "
+                        f"{str(attachment.filename)} and don't forget that: {introduction_llm}.")
+                try:
+                    llm_answer = get_groq_completion(text)
+                    # Ensure the output is limited to 1900 characters
+                    if len(llm_answer) > 1900:
+                        llm_answer = llm_answer[:1900]
+                    print("Input: \n", wrap_text(introduction_llm + str(message.content)))
+                    print("Output: \n", wrap_text(llm_answer))
+                except Exception as e:
+                    llm_answer = f"An error occurred: {e}"
+                llm_answer = ensure_code_blocks_closed(llm_answer)
+                await message.channel.send(llm_answer + "...*bzzzzzt...bzzzzzt*...")
 
     # Function to fetch user metadata
     @staticmethod
@@ -619,7 +632,7 @@ class OpenGLaDOS(commands.Cog):
             "user_id": f"<@{user.id}>",
             #"username": f"{user.name}#{user.discriminator}",
             #"created_at": user.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-            "bot": user.bot,
+            #"bot": user.bot,
         }
 
         # If the user is a member (i.e., in a guild), add additional information
@@ -627,7 +640,7 @@ class OpenGLaDOS(commands.Cog):
             user_metadata["display_name"] = user.display_name
             #user_metadata["join_date"] = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
             user_metadata["roles"] = [role.name for role in user.roles[1:]]  # Skipping the @everyone role
-            user_metadata["status"] = str(user.status)
+            #user_metadata["status"] = str(user.status)
 
         return user_metadata
 
@@ -920,6 +933,13 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
 
     return f"{selected_greeting}, {introduction} {text_lines}...*beep*..."
 
+def check_mentions(llm_answer):
+    # Check if there is an unclosed mention "<@"
+    open_mention_count = len(re.findall(r"<@", llm_answer))
+    close_mention_count = len(re.findall(r">", llm_answer))
+
+    return open_mention_count == close_mention_count
+
 def generate_llm_convo_text(start_line: str = None, message: str = None):
     text_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
 
@@ -931,6 +951,13 @@ def generate_llm_convo_text(start_line: str = None, message: str = None):
         # Ensure the output is limited to 1900 characters
         if len(llm_answer) > 1900:
             llm_answer = llm_answer[:1900]
+        # Check if mentions are balanced; if not, regenerate the response
+        if not check_mentions(llm_answer):
+            print("Unbalanced mentions detected, regenerating response.")
+            llm_answer = get_groq_completion(text_lines)
+            # Apply character limit again after regeneration
+            if len(llm_answer) > 1900:
+                llm_answer = llm_answer[:1900]
         print("Input: \n", wrap_text(text_lines))
         print("Output: \n", wrap_text(llm_answer))
     except Exception as e:
@@ -984,7 +1011,11 @@ async def handle_convo_llm(message, user_info):
 
     user_info_str = "\n".join([f"{key}: {value}" for key, value in user_info.items()])
     words = message.content.split()
-    await message.reply(generate_llm_convo_text(words, message.content+" "+user_info_str+" "+history_context))
+    await message.reply(generate_llm_convo_text(words, " the current message to you is: "+message.content+
+                                                " this is just so that you know who you are interacting with: "
+                                                +user_info_str+
+                                                " this is just, so that you know the context of our conversation: "
+                                                +history_context))
 
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
@@ -1160,42 +1191,45 @@ async def start_text(ctx: commands.Context):
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
-
 @bot.command(name='server-stats', help="Shows server stats. Only available to the owner.")
-@commands.is_owner()
+@commands.is_owner()  # Only the bot owner can use this command
 async def server_stats(ctx):
     global server_stats_triggered
 
     if server_stats_triggered:
-        await ctx.send("")  # don't know why two bot instances are created.......
+        await ctx.send("")
         return
 
     # Set the flag to True to indicate the command is being processed
     server_stats_triggered = True
 
-    # Construct the message
-    response = "Current servers:\n"
-    response += "```"
-    # Start the table header
-    response += "| Name | ID | Shard ID | Member Count | Channels |\n"
-    response += "| --- | --- | --- | --- | --- |\n"
-
-    # Iterate through each guild and add its details to the response
-    for guild in bot.guilds:
-        # Format the channels with a line break between each
-        channels = ", ".join(channel.name for channel in guild.channels)
-
-        # Add each guild's details to the markdown table format
-        response += f"| {guild.name} | {guild.id} | {guild.shard_id} | {guild.member_count} | Channels: {channels} |\n"
-    response += "```"
-
-    # Send the message as a DM to the command invoker
     try:
+        # Construct the message
+        response = "Current servers:\n"
+        response += "```"
+        response += "| Name                 | ID              | Shard ID | Member Count | Channels      |\n"
+        response += "|----------------------|-----------------|----------|--------------|---------------|\n"
+
+        # Iterate through each guild and add its details to the response
+        for guild in bot.guilds:
+            channels = ", ".join(channel.name for channel in guild.channels)
+
+            response += f"| {guild.name} | {guild.id} | {guild.shard_id or 'N/A':8} | {guild.member_count} | {channels} |\n"
+
+        response += "```"
+
+        # Send the message as a DM to the command invoker
         await ctx.author.send(response)
         if ctx.guild:  # Check if the command was invoked from a server channel
             await ctx.send("Server statistics have been sent to you via DM.")
+
     except discord.Forbidden:
         await ctx.send("I couldn't send you a DM. Please check your DM settings.")
+
+    except Exception as e:
+        # Handle any unexpected errors
+        await ctx.send(f"An error occurred while fetching server statistics: {str(e)}")
+
     finally:
         # Reset the flag after processing the command
         server_stats_triggered = False
