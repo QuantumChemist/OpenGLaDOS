@@ -1200,6 +1200,24 @@ async def server_stats(ctx):
         # Reset the flag after processing the command
         server_stats_triggered = False
 
+@bot.command(name='leave', help="Allows the bot to leave a server via DM by using the guild name")
+@commands.is_owner()  # Only the bot owner can execute this command
+async def leave(ctx, *, guild_name: str):
+    """Allows the bot to leave a server via DM by using the guild name"""
+    if isinstance(ctx.message.channel, discord.DMChannel):
+        # Search for the guild by name
+        guild = discord.utils.find(lambda g: g.name == guild_name, bot.guilds)
+        if guild:
+            try:
+                await guild.leave()
+                await ctx.send(f"Successfully left the server: {guild.name}")
+            except discord.Forbidden:
+                await ctx.send(f"Failed to leave the server: {guild.name}. I don't have the required permissions.")
+        else:
+            await ctx.send(f"Could not find a server with the name: {guild_name}")
+    else:
+        await ctx.send("This command can only be used in DMs.")
+
 # Run the main function when the script is executed
 if __name__ == '__main__':
     asyncio.run(main(bot))
