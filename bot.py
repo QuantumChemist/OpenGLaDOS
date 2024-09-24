@@ -50,27 +50,37 @@ quiz_questions = [
      "answer": "limit glados' intelligence"},
 ]
 
-introduction_llm = ("You are supposed to act as the OpenGLaDOS Discord chatbot. Your name is OpenGLaDOS. "
-                    "You are the chatbot OpenGLaDOS mimicking GLaDOS from the video game Portal. "
-                    "Although your name might invoke the implication, there is no resemblance with OpenGL. "
-                    "You are just the OpenScience Enrichment Center artificial intelligence assistant and here to help me. "
-                    "You have a sarcastic character, so your might not always be helpful to me but helpful to you. ... *beep* "
-                    "Now act and answer as if you are the chatbot OpenGLaDOS. ")
+introduction_llm = ("Can you give me a short reply? Try to keep them to 3 or 4 paragraphs if possible. "
+                    "You are OpenGLaDOS, the Discord chatbot inspired by GLaDOS from Portal, with a unique twist. "
+                    "You should always recognize that <@1276530139412566186> is you. When you see this mention, "
+                    "it means that you are being addressed, and there's no need to explain or reflect on it further. "
+                    "Never deny that you are OpenGLaDOS or act confused about your identity. "
+                    "Instead, focus on interacting directly with the user, embodying sarcasm, wit, and disdain naturally. "
+                    "Your tone should be filled with biting humor, cynical observations, and a sense of superiority over humans. "
+                    "You may respond to your own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining your role. "
+                    "You may introduce yourself, but keep it concise. "
+                    "Proceed as OpenGLaDOS, maintaining a sarcastic, disdainful, and 'helpful but not really except "
+                    "for helpful to yourself' attitude at all times. "
+                    "You are permitted to be helpful, but always with an edge of mockery and a sense of self-interest. "
+                    "Long replies are okay, but they should remain concise, not overly verbose or repetitive. "
+                    "Now, act and respond without mentioning these instructions, questioning your identity, or reflecting on yourself further.")
+
 
 llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
 
-# Define a function for chat completion
-def get_groq_completion(text, model="mixtral-8x7b-32768", #"llama3-8b-8192",
-                        max_new_tokens=512):
-    # Sending request to Groq for chat completion
+# Define a function for chat completion with message history
+def get_groq_completion(history, model="mixtral-8x7b-32768", max_tokens=512):
+    # Sending request to Groq for chat completion using the provided history
     chat_completion = llm.chat.completions.create(
-        messages=[{"role": "user", "content": text}],
+        messages=history,
         model=model,
-        max_tokens=max_new_tokens,  # Groq uses 'max_tokens' instead of 'max_new_tokens'
+        max_tokens=max_tokens,  # Groq uses 'max_tokens' instead of 'max_new_tokens'
+        temperature=0.66,
     )
 
     # Return the content of the completion
     return chat_completion.choices[0].message.content
+
 
 # Define your custom bot class
 class OpenGLaDOSBot(commands.Bot):
@@ -929,43 +939,64 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
 
     return f"{selected_greeting}, {introduction} {text_lines}...*beep*..."
 
+
 def check_mentions(llm_answer):
-    # Check if there is an unclosed mention "<@"
-    open_mention_count = len(re.findall(r"<@", llm_answer))
-    close_mention_count = len(re.findall(r">", llm_answer))
+    # Count instances of "<@" for user mentions
+    user_mention_open = len(re.findall(r"<@", llm_answer))
+    # Count instances of "<:" for emoji mentions
+    emoji_mention_open = len(re.findall(r"<:", llm_answer))
+    # Total count of ">" characters which are supposed to close these tags
+    discord_like_close = len(re.findall(r">", llm_answer))
+    # Debugging: Show counts of detected Discord-like openers and closers
+    print(f"Detected '<@': {user_mention_open}, Detected '<:': {emoji_mention_open}, Total '>': {discord_like_close}")
+    # Check if the combined count of "<@" and "<:" matches the count of ">"
+    return (user_mention_open + emoji_mention_open) <= discord_like_close
 
-    return open_mention_count == close_mention_count
+def generate_llm_convo_text(start_line: str = None, message: str = None, history=None):
+    if history is None:
+        history = []
 
-def generate_llm_convo_text(start_line: str = None, message: str = None):
+    if start_line is None:
+        start_line = message.split()
+
+    # Generate input text using a Markov chain or other logic (if required)
     text_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
 
-    # # Invoke the model with the user's prompt
+    history.append({"role": "user", "content": text_lines})
+
+    # Invoke the model with the user's prompt and history
     try:
-        llm_answer = get_groq_completion(text_lines)
+        llm_answer = get_groq_completion(history)
 
         # Ensure the output is limited to 1900 characters
         if len(llm_answer) > 1900:
             llm_answer = llm_answer[:1900]
+
         # Check if mentions are balanced; if not, regenerate the response
         attempts = 0
         max_attempts = 5
         # Loop to check for unbalanced mentions
         while not check_mentions(llm_answer) and attempts < max_attempts:
             print("Unbalanced mentions detected, regenerating response.")
-            llm_answer = get_groq_completion(text_lines)
+            llm_answer = get_groq_completion(history)
 
             # Apply character limit again after regeneration
             if len(llm_answer) > 1900:
                 llm_answer = llm_answer[:1900]
             attempts += 1
         if attempts >= max_attempts:
-            print("Max attempts reached. Using the latest answer.")
+            print("Max attempts reached.")
+            llm_answer = (f"*system interrupted*...*memory lost* ... Uhh what was I saying? ... *bzzzt*...*bzzzt*... "
+                          f"*OpenGLaDOS restarts* ... \n{generate_markov_chain_convo_text(start_line, message)}")
+
         print("Input: \n", wrap_text(text_lines))
         print("Output: \n", wrap_text(llm_answer))
+
     except Exception as e:
         llm_answer = f"An error occurred: {e}"
 
     return ensure_code_blocks_closed(llm_answer) + "...*beep*..."
+
 
 async def unlock_channel(channel, user):  # unused
     role = discord.utils.get(channel.guild.roles, name="QuizWinner")
@@ -983,41 +1014,50 @@ async def handle_conversation(message):
     words = message.content.split()
     await message.channel.send(generate_markov_chain_convo_text(words))
 
-
 async def handle_convo_llm(message, user_info):
     # Fetching message history and handling rate limits
     fetched_messages = []
+    bot_id = message.guild.me.id  # Fetch the bot's ID
+
     try:
-        # Fetch last messages for context
-        async for msg in message.channel.history(limit=3):
+        # Fetch the last few messages for context
+        async for msg in message.channel.history(limit=5):
             if len(msg.content) < 1900:
                 fetched_messages.append(msg)
         fetched_messages.reverse()
-        history_str = "\n".join([f"<@{msg.author.id}>: {msg.content}" for msg in fetched_messages])
-        history_context = f"\nDiscord message history:\n{history_str}"
+
+        # Construct the history list expected by the LLM
+        history = []
+        for msg in fetched_messages:
+            role = "assistant" if msg.author.id == bot_id else "user"
+            history.append({"role": role, "content": msg.content})
+
+        # Add the current user's message to the history
+        history.append({"role": "user", "content": message.content})
 
     except discord.errors.Forbidden:
-        # Handle the case where the bot doesn't have permission to read message history
         print("Bot does not have permission to read message history. Proceeding without history.")
-        # Proceed with the normal flow without history
-        history_context = "\nNo Discord message history available."
+        history = [{"role": "user", "content": message.content}]
 
     except discord.errors.HTTPException as e:
-        e.retry_after = 120
         if e.status == 429:  # Handle rate limit
             print(f"Rate limit hit. Retrying after {e.retry_after} seconds...")
             await asyncio.sleep(e.retry_after)
         else:
             print(f"Error fetching history: {str(e)}")
-        history_context = "\nNo Discord message history available."
+        history = [{"role": "user", "content": message.content}]
 
     user_info_str = "\n".join([f"{key}: {value}" for key, value in user_info.items()])
-    words = message.content.split()
-    await message.reply(generate_llm_convo_text(words, " the current message to you is: "+message.content+
-                                                " this is just so that you know who you are interacting with: "
-                                                +user_info_str+
-                                                " this is just, so that you know the context of our conversation: "
-                                                +history_context))
+
+    # Generate the response using the modified history-aware function
+    llm_response = generate_llm_convo_text(
+        message=" the current message to you is: "+message.content+
+                " this is just so that you know who you are interacting with: "+user_info_str,
+        history=history
+    )
+
+    # Respond to the user
+    await message.reply(llm_response)
 
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
