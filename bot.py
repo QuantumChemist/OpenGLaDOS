@@ -59,10 +59,6 @@ introduction_llm = ("You are supposed to act as the OpenGLaDOS Discord chatbot. 
 
 llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
 
-# Store for maintaining session history
-store = {}
-
-
 # Define a function for chat completion
 def get_groq_completion(text, model="mixtral-8x7b-32768", #"llama3-8b-8192",
                         max_new_tokens=512):
@@ -943,7 +939,6 @@ def check_mentions(llm_answer):
 def generate_llm_convo_text(start_line: str = None, message: str = None):
     text_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
 
-    store.clear()
     # # Invoke the model with the user's prompt
     try:
         llm_answer = get_groq_completion(text_lines)
