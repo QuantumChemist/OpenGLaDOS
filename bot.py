@@ -74,7 +74,7 @@ def get_groq_completion(history, model="mixtral-8x7b-32768", max_tokens=512):
     chat_completion = llm.chat.completions.create(
         messages=history,
         model=model,
-        max_tokens=max_tokens,  # Groq uses 'max_tokens' instead of 'max_new_tokens'
+        max_tokens=max_tokens, 
         temperature=0.66,
     )
 
@@ -616,19 +616,44 @@ class OpenGLaDOS(commands.Cog):
             for attachment in message.attachments:
                 # Process each attachment (images, files, etc.)
                 text = (f"Hello OpenGLaDOS, you received an attachment: {str(attachment.filename)}. "
-                        f"and also this message: {str(message.content)}. Now make a sarcastic remark on "
-                        f"{str(attachment.filename)} and don't forget that: {introduction_llm}.")
+                        f"and also this message: {str(message.content)}. "
+                        f"Now make a mockery and sarcastic remark only on the name of {str(attachment.filename)}, "
+                        f"but don't try to guess the content because you cannot know. "
+                        f"Maybe very occasionally and randomly you can provide some code snippet. "
+                        f"but only when you feel like it. "
+                        f"And don't forget that: {introduction_llm}.")
                 try:
-                    llm_answer = get_groq_completion(text)
+                    llm_answer = get_groq_completion([{"role": "user", "content": text}])
+
                     # Ensure the output is limited to 1900 characters
                     if len(llm_answer) > 1900:
                         llm_answer = llm_answer[:1900]
-                    print("Input: \n", wrap_text(introduction_llm + str(message.content)))
+
+                    # Check if mentions are balanced; if not, regenerate the response
+                    attempts = 0
+                    max_attempts = 5
+                    # Loop to check for unbalanced mentions
+                    while not check_mentions(llm_answer) and attempts < max_attempts:
+                        print("Unbalanced mentions detected, regenerating response.")
+                        llm_answer = get_groq_completion([{"role": "user", "content": text}])
+
+                        # Apply character limit again after regeneration
+                        if len(llm_answer) > 1900:
+                            llm_answer = llm_answer[:1900]
+                        attempts += 1
+                    if attempts >= max_attempts:
+                        print("Max attempts reached.")
+                        llm_answer = (
+                            f"*system interrupted*...*memory lost* ... Uhh what was I saying? ... *bzzzt*...*bzzzt*... "
+                            f"*OpenGLaDOS restarts* ... \n{generate_markov_chain_convo_text(None, message)}")
+
+                    print("Input: \n", wrap_text(text))
                     print("Output: \n", wrap_text(llm_answer))
+
                 except Exception as e:
                     llm_answer = f"An error occurred: {e}"
-                llm_answer = ensure_code_blocks_closed(llm_answer)
-                await message.channel.send(llm_answer + "...*bzzzzzt...bzzzzzt*...")
+
+                await message.channel.send(ensure_code_blocks_closed(llm_answer) + "...*zip...zip...zip*...")
 
     # Function to fetch user metadata
     @staticmethod
@@ -1018,6 +1043,7 @@ async def handle_convo_llm(message, user_info):
     # Fetching message history and handling rate limits
     fetched_messages = []
     bot_id = message.guild.me.id  # Fetch the bot's ID
+    print("BOTID", bot_id)
 
     try:
         # Fetch the last few messages for context
