@@ -426,7 +426,7 @@ class OpenGLaDOS(commands.Cog):
         llm_answer = ensure_code_blocks_closed(llm_answer)
         await interaction.followup.send(llm_answer+"...*bzzzzzt...bzzzzzt*...")
 
-    @app_commands.command(name="ascii_at",
+    @app_commands.command(name="ascii_art",
                           description="Let OpenGLaDOS provide you with some ASCII art. What a delight. Not.")
     async def asciiart(self, interaction: discord.Interaction, message: str = None):
         # Defer the response to allow more processing time
