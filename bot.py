@@ -652,47 +652,47 @@ class OpenGLaDOS(commands.Cog):
         if message.attachments:
             for attachment in message.attachments:
                 # Process each attachment (images, files, etc.)
-                text = (f"Hello OpenGLaDOS, you received an attachment: {str(attachment.filename)}. "
-                        f"and also this message: {str(message.content)}. "
-                        f"Now make a very very short mockery and sarcastic remark only on the name of "
-                        f"{str(attachment.filename)} and {str(message.content)}, "
-                        f"but don't try to guess the content because you cannot know. ")
-                try:
-                    llm_answer = get_groq_completion([{"role": "user", "content": text}])
+                #text = (f"Hello OpenGLaDOS, you received an attachment: {str(attachment.filename)}. "
+                #        f"and also this message: {str(message.content)}. "
+                #        f"Now make a very very short mockery and sarcastic remark only on the name of "
+                #        f"{str(attachment.filename)} and {str(message.content)}, "
+                #        f"but don't try to guess the content because you cannot know. ")
+                #try:
+                #    llm_answer = get_groq_completion([{"role": "user", "content": text}])
 
-                    # Ensure the output is limited to 1900 characters
-                    if len(llm_answer) > 1900:
-                        llm_answer = llm_answer[:1900]
+                #    # Ensure the output is limited to 1900 characters
+                #    if len(llm_answer) > 1900:
+                #        llm_answer = llm_answer[:1900]
 
-                    # Check if mentions are balanced; if not, regenerate the response
-                    attempts = 0
-                    max_attempts = 5
-                    # Loop to check for unbalanced mentions
-                    while not check_mentions(llm_answer) and attempts < max_attempts:
-                        print("Unbalanced mentions detected, regenerating response.")
-                        llm_answer = get_groq_completion([{"role": "user", "content": text}])
+                #    # Check if mentions are balanced; if not, regenerate the response
+                #    attempts = 0
+                #    max_attempts = 5
+                #    # Loop to check for unbalanced mentions
+                #    while not check_mentions(llm_answer) and attempts < max_attempts:
+                #        print("Unbalanced mentions detected, regenerating response.")
+                #        llm_answer = get_groq_completion([{"role": "user", "content": text}])
 
-                        # Apply character limit again after regeneration
-                        if len(llm_answer) > 1900:
-                            llm_answer = llm_answer[:1900]
-                        attempts += 1
-                    if attempts >= max_attempts:
-                        print("Max attempts reached.")
-                        llm_answer = (
-                            f"*system interrupted*...*memory lost* ... Uhh what was I saying? ... *bzzzt*...*bzzzt*... "
-                            f"*OpenGLaDOS restarts* ... \n{generate_markov_chain_convo_text(None, message)}")
+                #        # Apply character limit again after regeneration
+                #        if len(llm_answer) > 1900:
+                #            llm_answer = llm_answer[:1900]
+                #        attempts += 1
+                #    if attempts >= max_attempts:
+                #        print("Max attempts reached.")
+                #        llm_answer = (
+                #            f"*system interrupted*...*memory lost* ... Uhh what was I saying? ... *bzzzt*...*bzzzt*... "
+                #            f"*OpenGLaDOS restarts* ... \n{generate_markov_chain_convo_text(None, message)}")
 
-                    print("Input: \n", wrap_text(text))
-                    print("Output: \n", wrap_text(llm_answer))
+                #    print("Input: \n", wrap_text(text))
+                #    print("Output: \n", wrap_text(llm_answer))
 
-                except Exception as e:
-                    llm_answer = f"An error occurred: {e}"
+                #except Exception as e:
+                #    llm_answer = f"An error occurred: {e}"
 
                 https_cat = (f"Your attachment triggered the following HTTP cat status: \n"
                              f"https://http.cat/status/{random.randint(99,600)}")
 
-                await message.channel.send(ensure_code_blocks_closed(llm_answer) +
-                                           f"\n{https_cat}\n...*zip...zip...zip*...")
+                await message.channel.send(#ensure_code_blocks_closed(llm_answer) +
+                                           f"{https_cat}")
 
     # Function to fetch user metadata
     @staticmethod
