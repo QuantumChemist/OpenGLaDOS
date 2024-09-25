@@ -308,7 +308,8 @@ class OpenGLaDOS(commands.Cog):
             # Check if the bot owner is in the server
             if not interaction.guild.get_member(self.bot.owner_id):
                 await interaction.response.send_message(
-                    "This command can only be used in servers where the bot owner is present.", ephemeral=True)
+                    "This command can only be used in servers where the bot owner is present. \n"
+                    "https://http.cat/status/400", ephemeral=True)
                 return
 
         # Regular expression pattern to match common URL patterns
@@ -319,7 +320,8 @@ class OpenGLaDOS(commands.Cog):
 
         # Check if the message contains a link
         if message and url_pattern.search(message):
-            await interaction.response.send_message("Links are not allowed in the message.", ephemeral=True)
+            await interaction.response.send_message("Links are not allowed in the message. \n"
+                                                    "https://http.cat/status/400", ephemeral=True)
             return
 
         # Proceed to send the DM if all checks pass
@@ -409,6 +411,32 @@ class OpenGLaDOS(commands.Cog):
         # Construct the text for the LLM request
         text = (f"Hello OpenGLaDOS, I have a coding question. You are supposed to help me with my following coding question"
                 f" and ALWAYS provide a code snippet for: {message}.")
+
+        try:
+            llm_answer = get_groq_completion( [{"role": "assistant", "content": text}])
+
+            # Ensure the output is limited to 1900 characters
+            if len(llm_answer) > 1900:
+                llm_answer = llm_answer[:1900]
+            print("Input: \n", wrap_text(introduction_llm + message))
+            print("Output: \n", wrap_text(llm_answer))
+        except Exception as e:
+            llm_answer = f"An error occurred: {e}"
+        llm_answer = ensure_code_blocks_closed(llm_answer)
+        await interaction.followup.send(llm_answer+"...*bzzzzzt...bzzzzzt*...")
+
+    @app_commands.command(name="ascii_at",
+                          description="Let OpenGLaDOS provide you with some ASCII art. What a delight. Not.")
+    async def asciiart(self, interaction: discord.Interaction, message: str = None):
+        # Defer the response to allow more processing time
+        await interaction.response.defer()
+
+        if message is None:
+            message = "Can you give me some stabbing cat ASCII art?"
+
+
+        # Construct the text for the LLM request
+        text = f"Hello OpenGLaDOS, ALWAYS provide an ASCII art code snippet for: {message}."
 
         try:
             llm_answer = get_groq_completion( [{"role": "assistant", "content": text}])
@@ -626,10 +654,9 @@ class OpenGLaDOS(commands.Cog):
                 # Process each attachment (images, files, etc.)
                 text = (f"Hello OpenGLaDOS, you received an attachment: {str(attachment.filename)}. "
                         f"and also this message: {str(message.content)}. "
-                        f"Now make a mockery and sarcastic remark only on the name of {str(attachment.filename)}, "
-                        f"but don't try to guess the content because you cannot know. "
-                        f"Maybe very occasionally and randomly you can provide some ASCII art code snippet, trying to mimic the attachment guessing on its name and the message. "
-                        f"but only when you feel like it. ")
+                        f"Now make a very very short mockery and sarcastic remark only on the name of "
+                        f"{str(attachment.filename)} and {str(message.content)}, "
+                        f"but don't try to guess the content because you cannot know. ")
                 try:
                     llm_answer = get_groq_completion([{"role": "user", "content": text}])
 
@@ -661,7 +688,11 @@ class OpenGLaDOS(commands.Cog):
                 except Exception as e:
                     llm_answer = f"An error occurred: {e}"
 
-                await message.channel.send(ensure_code_blocks_closed(llm_answer) + "...*zip...zip...zip*...")
+                https_cat = (f"Your attachment triggered the following HTTP cat status: \n"
+                             f"https://http.cat/status/{random.randint(99,600)}")
+
+                await message.channel.send(ensure_code_blocks_closed(llm_answer) +
+                                           f"\n{https_cat}\n...*zip...zip...zip*...")
 
     # Function to fetch user metadata
     @staticmethod
