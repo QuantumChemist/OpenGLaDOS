@@ -1,4 +1,5 @@
 import os
+import io
 import re
 import discord
 from groq import Groq
@@ -1311,24 +1312,25 @@ async def server_stats(ctx):
     server_stats_triggered = True
 
     try:
-        # Construct the message
-        response = "Current servers:\n"
-        response += "```"
+        # Create a markdown string for the file content
+        response = "# Current Servers\n\n"
         response += "| Name                 | ID              | Shard ID | Member Count | Channels      |\n"
         response += "|----------------------|-----------------|----------|--------------|---------------|\n"
 
         # Iterate through each guild and add its details to the response
         for guild in bot.guilds:
             channels = ", ".join(channel.name for channel in guild.channels)
+            response += f"| {guild.name} | {guild.id} | {guild.shard_id or 'N/A'} | {guild.member_count} | {channels} |\n"
 
-            response += f"| {guild.name} | {guild.id} | {guild.shard_id or 'N/A':8} | {guild.member_count} | {channels} |\n"
+        # Create a markdown file in memory
+        markdown_file = io.BytesIO(response.encode('utf-8'))
+        markdown_file.name = "server_stats.md"
 
-        response += "```"
+        # Send the markdown file as an attachment to the command invoker
+        await ctx.author.send("Here are the server statistics:", file=discord.File(markdown_file))
 
-        # Send the message as a DM to the command invoker
-        await ctx.author.send(response)
         if ctx.guild:  # Check if the command was invoked from a server channel
-            await ctx.send("Server statistics have been sent to you via DM.")
+            await ctx.send("Server statistics have been sent to you via DM as a markdown file.")
 
     except discord.Forbidden:
         await ctx.send("I couldn't send you a DM. Please check your DM settings.")
