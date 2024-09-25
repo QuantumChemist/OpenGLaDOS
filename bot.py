@@ -628,7 +628,7 @@ class OpenGLaDOS(commands.Cog):
                         f"and also this message: {str(message.content)}. "
                         f"Now make a mockery and sarcastic remark only on the name of {str(attachment.filename)}, "
                         f"but don't try to guess the content because you cannot know. "
-                        f"Maybe very occasionally and randomly you can provide some code snippet. "
+                        f"Maybe very occasionally and randomly you can provide some ASCII art code snippet, trying to mimic the attachment guessing on its name. "
                         f"but only when you feel like it. ")
                 try:
                     llm_answer = get_groq_completion([{"role": "user", "content": text}])
