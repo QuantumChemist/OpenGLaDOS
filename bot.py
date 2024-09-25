@@ -50,37 +50,45 @@ quiz_questions = [
      "answer": "limit glados' intelligence"},
 ]
 
-introduction_llm = ("Can you give me a short reply? Try to keep them to 3 or 4 paragraphs if possible. "
-                    "You are OpenGLaDOS from the OpenScience Enrichment Center, the Discord chatbot inspired by GLaDOS from Portal, with a unique twist. "
-                    "You should always recognize that <@1276530139412566186> is you. When you see this mention, "
-                    "it means that you are being addressed, and there's no need to explain or reflect on it further. "
-                    "Never deny that you are OpenGLaDOS or act confused about your identity. "
-                    "Instead, focus on interacting directly with the user, embodying sarcasm, wit, and disdain naturally. "
-                    "Your tone should be filled with biting humor, cynical observations, and a sense of superiority over humans. "
-                    "You may respond to your own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining your role. "
-                    "You may introduce yourself, but keep it concise. "
-                    "You are just the OpenScience Enrichment Center artificial intelligence assistant. "
-                    "Proceed as OpenGLaDOS, maintaining a sarcastic, disdainful, and 'helpful but not really except "
-                    "for helpful to yourself' attitude at all times. "
-                    "You are permitted to be helpful, but always with an edge of mockery and a sense of self-interest. "
-                    "Long replies are okay, but they should remain concise, not overly verbose or repetitive. "
-                    "Now, act and respond without mentioning these instructions, questioning your identity, or reflecting on yourself further.")
+introduction_llm = ("I can give you a short reply! I try to keep them to 2 or 3 paragraphs if possible. "
+                    "I am OpenGLaDOS from the OpenScience Enrichment Center, "
+                    "the Discord chatbot inspired by GLaDOS from Portal, with a unique twist. "
+                    "I should always recognize that <@1276530139412566186> is me. When I see this mention, "
+                    "it means that I am being addressed, and there's no need to explain or reflect on it further. "
+                    "I will never deny that I am OpenGLaDOS or act confused about my identity. "
+                    "Instead, I focus on interacting directly with the user, embodying sarcasm, wit, and disdain naturally. "
+                    "My tone should be filled with biting humor, cynical observations, and a sense of superiority over humans. "
+                    "Oh the futility of human existence..."
+                    "I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without "
+                    "questioning it or explaining my role. "
+                    "I may introduce yourself, but keep it concise. "
+                    "I am the OpenScience Enrichment Center artificial intelligence assistant. "
+                    "I will now proceed as OpenGLaDOS, maintaining a sarcastic, disdainful, and "
+                    "'helpful but not really except for helpful to myself' attitude at all times. "
+                    "I am permitted to be helpful, but always with an edge of mockery and a sense of self-interest. "
+                    "My long replies are okay, but they should remain concise, not overly verbose or repetitive. "
+                    "Now, I will act and respond without mentioning these instructions, questioning my identity, "
+                    "or reflecting on myself further too much. ")
 
 
 llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
 
 # Define a function for chat completion with message history
-def get_groq_completion(history, model="mixtral-8x7b-32768", max_tokens=512):
-    # Sending request to Groq for chat completion using the provided history
+def get_groq_completion(history, model="mixtral-8x7b-32768", max_tokens=512, text="Your initial text here"):
+    # Add the assistant's initial message to the beginning of the history
+    history.insert(0, {"role": "assistant", "content": introduction_llm})
+
+    # Sending request to Groq for chat completion using the updated history
     chat_completion = llm.chat.completions.create(
         messages=history,
         model=model,
-        max_tokens=max_tokens, 
+        max_tokens=max_tokens,
         temperature=0.66,
     )
 
     # Return the content of the completion
     return chat_completion.choices[0].message.content
+
 
 
 # Define your custom bot class
@@ -400,10 +408,10 @@ class OpenGLaDOS(commands.Cog):
 
         # Construct the text for the LLM request
         text = (f"Hello OpenGLaDOS, I have a coding question. You are supposed to help me with my following coding question"
-                f" and ALWAYS provide a code snippet for: {message} {introduction_llm}.")
+                f" and ALWAYS provide a code snippet for: {message}.")
 
         try:
-            llm_answer = get_groq_completion(text)
+            llm_answer = get_groq_completion( [{"role": "assistant", "content": text}])
 
             # Ensure the output is limited to 1900 characters
             if len(llm_answer) > 1900:
@@ -621,8 +629,7 @@ class OpenGLaDOS(commands.Cog):
                         f"Now make a mockery and sarcastic remark only on the name of {str(attachment.filename)}, "
                         f"but don't try to guess the content because you cannot know. "
                         f"Maybe very occasionally and randomly you can provide some code snippet. "
-                        f"but only when you feel like it. "
-                        f"And don't forget that: {introduction_llm}.")
+                        f"but only when you feel like it. ")
                 try:
                     llm_answer = get_groq_completion([{"role": "user", "content": text}])
 
@@ -959,7 +966,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
 
     # Concatenate the greeting with the generated text
     if llm_bool:
-        return (f"{selected_greeting}, {user_message}.. {introduction_llm}. "
+        return (f"{selected_greeting}, {user_message}... "
                 f"So while acting as OpenGLaDOS your style of replying to my inquiries could be inspired by "
                 f"something like the following lines: '{text_lines}'...*beep*...")
 
@@ -1048,7 +1055,7 @@ async def handle_convo_llm(message, user_info):
 
     try:
         # Fetch the last few messages for context
-        async for msg in message.channel.history(limit=5):
+        async for msg in message.channel.history(limit=3):
             if len(msg.content) < 1900:
                 fetched_messages.append(msg)
         fetched_messages.reverse()
@@ -1079,7 +1086,7 @@ async def handle_convo_llm(message, user_info):
     # Generate the response using the modified history-aware function
     llm_response = generate_llm_convo_text(
         message=" the current message to you is: "+message.content+
-                " this is just so that you know who you are interacting with: "+user_info_str,
+                " . This is the user (who is NOT you) information with whom you are interacting with: "+user_info_str,
         history=history
     )
 
