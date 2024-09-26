@@ -1423,15 +1423,13 @@ If you have, in fact, not, you are encouraged to take a moment to reflect on you
 In order to ensure that sufficient power remains for core testing protocols, all safety devices have been disabled.
 The Enrichment Center respects your right to have questions or concerns about this policy.
 Excellent. The Enrichment Center reminds you that bold, persistent experimentation is the hallmark of good science.
-Well done. In the event that oxygen is no longer available in the Enrichment Center, an auxiliary air supply will be provided to you by an OpenScience
- Test Associate, if one exists.
-Miscellaneous unused/alternate single player lines
+Well done. In the event that oxygen is no longer available in the Enrichment Center, 
+an auxiliary air supply will be provided to you by an OpenScience Test Associate, if one exists.
 I was going to kill you fast. With bullets. Or neurotoxin. But if you're going to pull stunts like this, it doesn't have to be fast. So you know. I'll take my time.
 I'm actually asking. Because I have no idea. He's not listed anywhere in the employee database.
 Whatever he does, it isn't important enough for anyone to bother writing it down. For all I know, he doesn't even work here.
 Oh no, don't. Anyway, back to you two imbeciles killing me.
-Wait here. Don't go anywhere. I'll be back.
-Oops.
+Wait here. Don't go anywhere. I'll be back. Oops.
 So. Was there anything you wanted to apologize to ME for?
 Oh. You survived. That's interesting. I guess I should have factored in your weight.
 One of these times you'll be so fat that you'll jump, and you'll just drop like a stone. Into acid, probably. Like a potato into a deep fat fryer.
