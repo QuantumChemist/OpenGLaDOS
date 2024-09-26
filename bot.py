@@ -700,20 +700,33 @@ class OpenGLaDOS(commands.Cog):
     # Function to fetch user metadata
     @staticmethod
     def get_user_metadata(user):
-        """Returns user metadata information as a dictionary."""
+        """Returns user metadata information as a dictionary with descriptive notes."""
         user_metadata = {
             "user_id": f"<@{user.id}>",
-            #"username": f"{user.name}#{user.discriminator}",
-            #"created_at": user.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-            #"bot": user.bot,
+            # "username": f"{user.name}#{user.discriminator}",
+            # "created_at": user.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "bot": user.bot,
         }
 
         # If the user is a member (i.e., in a guild), add additional information
         if isinstance(user, discord.Member):
             user_metadata["display_name"] = user.display_name
-            #user_metadata["join_date"] = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
+            # user_metadata["join_date"] = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
             user_metadata["roles"] = [role.name for role in user.roles[1:]]  # Skipping the @everyone role
-            #user_metadata["status"] = str(user.status)
+            # user_metadata["status"] = str(user.status)
+
+            # Adding the guild (server) name with a note
+            user_metadata["guild_name"] = {
+                "note": "Note to myself: This is the current server",
+                "value": user.guild.name
+            }
+
+            # Adding a list of other users in the server with a note
+            other_users = [member.display_name for member in user.guild.members if member != user]
+            user_metadata["other_users"] = {
+                "note": "Note to myself: These are the other members",
+                "value": other_users
+            }
 
         return user_metadata
 
@@ -1085,7 +1098,7 @@ async def handle_convo_llm(message, user_info):
     # Fetching message history and handling rate limits
     fetched_messages = []
     bot_id = message.guild.me.id  # Fetch the bot's ID
-    print("BOTID", bot_id)
+    user_info_str = "\n".join([f"{key}: {value}" for key, value in user_info.items()])
 
     try:
         # Fetch the last few messages for context
@@ -1102,6 +1115,9 @@ async def handle_convo_llm(message, user_info):
 
         # Add the current user's message to the history
         history.append({"role": "user", "content": message.content})
+        history.append({"role": "assistant", "content": f"Note to myself: "
+                                                        f"This is the user (who is NOT me) information "
+                                                        f"with whom I am interacting with: {user_info_str}"})
 
     except discord.errors.Forbidden:
         print("Bot does not have permission to read message history. Proceeding without history.")
@@ -1115,12 +1131,9 @@ async def handle_convo_llm(message, user_info):
             print(f"Error fetching history: {str(e)}")
         history = [{"role": "user", "content": message.content}]
 
-    user_info_str = "\n".join([f"{key}: {value}" for key, value in user_info.items()])
-
     # Generate the response using the modified history-aware function
     llm_response = generate_llm_convo_text(
-        message=" the current message to you is: "+message.content+
-                " . This is the user (who is NOT you) information with whom you are interacting with: "+user_info_str,
+        message=f" the current message to you is: {message.content}",
         history=history
     )
 
