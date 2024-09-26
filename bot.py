@@ -8,12 +8,15 @@ from discord import app_commands
 from dotenv import load_dotenv
 import asyncio
 import random
-import requests
 from corpus import corpus
 import markovify
 import textwrap
 from html import escape
 from html2image import Html2Image
+import aiohttp
+from PIL import Image
+import requests
+from io import BytesIO
 
 # Directory to save screenshots
 SCREENSHOTS_DIR = "screenshots"
@@ -24,6 +27,7 @@ hti = Html2Image(
     output_path=SCREENSHOTS_DIR,
     custom_flags=["--disable-gpu", "--disable-software-rasterizer", "--no-sandbox"]
 )
+#hti.browser.executable = "/usr/bin/chromium-browser"
 
 # Set a constant file name for the screenshot
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
@@ -105,8 +109,6 @@ def get_groq_completion(history, model="mixtral-8x7b-32768", max_tokens=512, tex
 
     # Return the content of the completion
     return chat_completion.choices[0].message.content
-
-
 
 # Define your custom bot class
 class OpenGLaDOSBot(commands.Bot):
@@ -485,10 +487,10 @@ class OpenGLaDOS(commands.Cog):
             emoji = "😐"  # Mild dislike
         elif 33 < hate_value <= 66:
             statement = "There’s some genuine despise between you two. Things get interesting."
-            emoji = "👿"  # Despise
+            emoji = "😐"  # Despise
         elif 66 < hate_value < 100:
             statement = "You two are clearly enemies. oh, how delightful!"
-            emoji = "😡"  # Enemies
+            emoji = "👿"  # Enemies
         else:
             statement = "Arch-enemies. Perfect. Just perfect. I love it."
             emoji = "💀"  # Arch-enemy
@@ -503,13 +505,11 @@ class OpenGLaDOS(commands.Cog):
             description=f"{statement}\n\n**Hate Level:** {hate_value}% {emoji}",
             color=discord.Color.dark_gray()
         )
-
         # Add the profile pictures to the embed
-        embed.set_thumbnail(url=user1_avatar)
+        embed.set_thumbnail(url="https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png")
         embed.set_author(name=f"{user1.display_name} vs {user2.display_name}", icon_url=user1_avatar)
-        embed.add_field(name="User 1", value=f"{user1.mention}", inline=True)
-        embed.add_field(name="User 2", value=f"{user2.mention}", inline=True)
-        embed.set_image(url=user2_avatar)  # Display user2's avatar below user1's
+        embed.add_field(name="User 1", value=f"{user1.mention}\n[View Avatar]({user1.avatar.url})", inline=True)
+        embed.add_field(name="User 2", value=f"{user2.mention}\n[View Avatar]({user2.avatar.url})", inline=True)
 
         # Sending the result
         await interaction.response.send_message(embed=embed)
