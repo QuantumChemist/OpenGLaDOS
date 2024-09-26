@@ -12,6 +12,22 @@ import requests
 from corpus import corpus
 import markovify
 import textwrap
+from html import escape
+from html2image import Html2Image
+
+# Directory to save screenshots
+SCREENSHOTS_DIR = "screenshots"
+os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
+
+# Initialize the Html2Image object with the specified output path
+hti = Html2Image(
+    output_path=SCREENSHOTS_DIR,
+    custom_flags=["--disable-gpu", "--disable-software-rasterizer", "--no-sandbox"]
+)
+
+# Set a constant file name for the screenshot
+SCREENSHOT_FILE_NAME = "message_screenshot.png"
+SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -453,6 +469,50 @@ class OpenGLaDOS(commands.Cog):
             llm_answer = f"An error occurred: {e}"
         llm_answer = ensure_code_blocks_closed(llm_answer)
         await interaction.followup.send(llm_answer+"...*bzzzzzt...bzzzzzt*...")
+
+    @app_commands.command(name="hate_calc", description="Calculates the level of hatred between two users. How lovely.")
+    async def hate_calc(self, interaction: discord.Interaction, user1: discord.Member, user2: discord.Member):
+        # Extract the user IDs
+        user1_id = user1.id
+        user2_id = user2.id
+
+        # Calculate the hate percentage based on the sum of the user IDs
+        hate_value = (user1_id + user2_id) % 101  # Modulus to keep the result between 0 and 100
+
+        # Determine the relationship level
+        if hate_value <= 33:
+            statement = "You two merely tolerate each other. How quaint."
+            emoji = "😐"  # Mild dislike
+        elif 33 < hate_value <= 66:
+            statement = "There’s some genuine despise between you two. Things get interesting."
+            emoji = "👿"  # Despise
+        elif 66 < hate_value < 100:
+            statement = "You two are clearly enemies. oh, how delightful!"
+            emoji = "😡"  # Enemies
+        else:
+            statement = "Arch-enemies. Perfect. Just perfect. I love it."
+            emoji = "💀"  # Arch-enemy
+
+        # Fetch the profile pictures
+        user1_avatar = user1.display_avatar.url
+        user2_avatar = user2.display_avatar.url
+
+        # Create an embed message for the result in a GLaDOS style
+        embed = discord.Embed(
+            title="Hate Calculation",
+            description=f"{statement}\n\n**Hate Level:** {hate_value}% {emoji}",
+            color=discord.Color.dark_gray()
+        )
+
+        # Add the profile pictures to the embed
+        embed.set_thumbnail(url=user1_avatar)
+        embed.set_author(name=f"{user1.display_name} vs {user2.display_name}", icon_url=user1_avatar)
+        embed.add_field(name="User 1", value=f"{user1.mention}", inline=True)
+        embed.add_field(name="User 2", value=f"{user2.mention}", inline=True)
+        embed.set_image(url=user2_avatar)  # Display user2's avatar below user1's
+
+        # Sending the result
+        await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="help", description="List all available commands.")
     async def list_bot_commands(self, interaction: discord.Interaction):
@@ -1188,7 +1248,7 @@ async def on_reaction_add(reaction, user):
             # Unrestrict user permissions in other channels while the quiz is ongoing
             await unrestrict_user_permissions(guild, user)
 
-    # Part 2: Handle general knife emoji reactions
+    # Part 3: Handle general knife emoji reactions
     knife_reaction = None
     for react in message.reactions:
         if str(react.emoji) == '🔪':
@@ -1196,16 +1256,172 @@ async def on_reaction_add(reaction, user):
             break
 
     if knife_reaction and knife_reaction.count >= 1:
-        # Look for a channel that contains the word "stab" in its name
-        stab_channel = discord.utils.find(lambda c: "stab" in c.name.lower(), message.guild.text_channels)
-        if stab_channel:
-            message_link = message.jump_url
-            await stab_channel.send(
-                f"Hey {message.author.mention}, knife emoji reaction for {message_link}. "
-                f"Looks like someone is ready to stab you! "
-                f"This time it isn't me!"
-            )
-            print(message.author.display_name, message.content)
+        try:
+            # Process the message content
+            processed_content = message.content or ""
+
+            # Escape text content, but handle emoji separately
+            processed_content = escape(processed_content)  # Escape the entire message first
+
+            # Now process custom emojis and insert them back as HTML <img> tags with a fallback
+            if message.guild and message.guild.emojis:
+                for emoji in message.guild.emojis:  # Iterate through all custom emojis in the server
+                    # Replace custom emoji text with the corresponding <img> tag and add a fallback
+                    custom_emoji_code = f"&lt;:{emoji.name}:{emoji.id}&gt;"  # Use HTML escaped version to find the match
+                    emoji_url = f"https://cdn.discordapp.com/emojis/{emoji.id}.png"
+                    fallback_emoji = "🤔"  # You can change this to any other emoji you prefer as the fallback
+                    processed_content = processed_content.replace(
+                        custom_emoji_code,
+                        f'<img src="{emoji_url}" alt="emoji" height="20" onerror="this.onerror=null; this.src=\'https://twemoji.maxcdn.com/v/latest/72x72/1f914.png\';" />'
+                    )
+
+            # Process stickers if any are present
+            sticker_html = ""
+            if message.stickers:
+                for sticker in message.stickers:
+                    if sticker.url:  # Ensure sticker URL exists
+                        # Add a humorous fallback message or image if the sticker doesn't load
+                        sticker_html += f'<br><img src="{sticker.url}" alt="sticker" height="100" onerror="this.onerror=null; this.src=\'https://via.placeholder.com/150?text=Sticker+gone+missing\';" />'
+                        # Add a humorous caption below the sticker
+                        sticker_html += f'<div style="color: #b9bbbe; font-size: 12px; margin-top: 5px;">The sticker cannot escape...</div>'
+                    else:
+                        # If no URL is available, add a humorous message
+                        sticker_html += f'<div style="color: #b9bbbe; font-size: 12px;">Oops! The sticker ran away! 🏃💨</div>'
+
+            # Process attachments if any are present
+            attachments_html = ""
+            if message.attachments:
+                for attachment in message.attachments:
+                    # Check for image attachments
+                    if attachment.url.endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
+                        # Add the image with a fallback using onerror
+                        attachments_html += f'<br><img src="{attachment.url}" alt="image" height="200" onerror="this.onerror=null; this.src=\'https://via.placeholder.com/150?text=Image+gone+missing\';" />'
+                        # Add a humorous caption below the image
+                        attachments_html += f'<div style="color: #b9bbbe; font-size: 12px; margin-top: 5px;">Oops! The image took a break! 💤</div>'
+
+                    # For other attachments, add a downloadable link
+                    else:
+                        file_extension = attachment.url.split('.')[-1].upper()  # Get the file extension in uppercase
+                        attachments_html += f'<div style="color: #b9bbbe; font-size: 14px; margin-top: 10px;">'
+                        attachments_html += f'📎 Attached file: <a href="{attachment.url}" target="_blank" style="color: #00b0f4;">{attachment.filename}</a> ({file_extension})</div>'
+                        # Add a fun comment about the attachment type
+                        attachments_html += f'<div style="color: #b9bbbe; font-size: 12px;">This file is just hanging around... 🧳</div>'
+
+            # Construct the complete HTML content
+            content = f"""
+            <html>
+                <head>
+                    <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+                        body {{
+                            margin: 0;
+                            padding: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            min-height: 100vh;
+                            background-color: #36393f; /* Keep the Discord background color */
+                        }}
+                        .container {{
+                            border: 2px solid #202225; /* Slightly chunky border */
+                            padding: 20px;
+                            background: #2f3136;
+                            color: #dcddde;
+                            width: fit-content;
+                            max-width: 80%; 
+                            box-shadow: none; /* Remove shadow */
+                            border-radius: 0px; /* No rounded corners */
+                            font-family: 'Courier New', Courier, monospace; /* Retro font */
+                            box-sizing: border-box;
+                            white-space: nowrap;  /* Prevent wrapping */
+                            margin: 0;
+                            text-align: left;
+                        }}
+                        .message-header {{
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                            color: #7289da; /* Keep original Discord mention color */
+                            font-size: 14px; 
+                            margin: 0;
+                            border-bottom: 1px dashed #dcddde; /* Dashed separator line */
+                        }}
+                        .message-content {{
+                            font-size: 14px;
+                            line-height: 1.4;
+                            word-wrap: break-word;
+                            white-space: pre-wrap;
+                            color: #dcddde; 
+                            font-family: 'Courier New', Courier, monospace;
+                            padding: 5px; /* Add slight padding */
+                            margin: 0;
+                            display: inline-block;
+                            text-align: left;
+                            background: #36393f; /* Slightly darker shade for the content */
+                        }}
+                        .mention {{
+                            background-color: #5865f2; /* Keep Discord mention background color */
+                            color: white; 
+                            padding: 2px 4px;
+                            border-radius: 2px;
+                            margin: 0;
+                            font-weight: bold;
+                        }}
+                        .channel {{
+                            color: #7289da; /* Original channel color */
+                            text-decoration: none;
+                            margin: 0;
+                            border-bottom: 1px dotted #7289da; /* Dotted underline */
+                        }}
+                        a {{
+                            color: #00b0f4; /* Original link color */
+                            text-decoration: none;
+                            margin: 0;
+                        }}
+                        a:hover {{
+                            text-decoration: underline;
+                            color: #7289da; /* Hover effect matches Discord */
+                        }}
+                        img {{
+                            vertical-align: middle;
+                            display: inline-block; 
+                            margin: 0 2px;
+                            border: 1px solid #202225; /* Border around images */
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="message-header">
+                            Message by <span class="mention">@{message.author.display_name}</span>
+                        </div>
+                        <div class="message-content">
+                            {processed_content} {sticker_html} {attachments_html}
+                        </div>
+                    </div>
+                </body>
+            </html>
+            """
+
+            # Create the screenshot with dynamic size capturing only the necessary area
+            hti.screenshot(html_str=content, save_as=SCREENSHOT_FILE_NAME, size=(1300, 1000))
+
+            # Find a channel that contains "stab" in its name
+            stab_channel = discord.utils.find(lambda c: "stab" in c.name.lower(), message.guild.text_channels)
+
+            if stab_channel:
+                # Send the screenshot directly to the stab channel
+                await stab_channel.send(
+                    f"Hey {message.author.mention}, a knife emoji reaction has been added to your message: {message.jump_url}. "
+                    f"Looks like someone is ready to stab you! Here's a screenshot of the message:",
+                )
+                await stab_channel.send(file=discord.File(SCREENSHOT_FILE_PATH))
+            else:
+                print("No channel with 'stab' in the name was found.")
+
+        except Exception as e:
+            # Log the error message to the console
+            print(f"An error occurred while taking or sending the screenshot: {e}")
 
 # Regular bot command implementation
 @bot.command(name="start", help="Start chat mode to send messages manually.")
