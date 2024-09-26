@@ -716,7 +716,7 @@ class OpenGLaDOS(commands.Cog):
             # user_metadata["status"] = str(user.status)
 
             # Adding the guild (server) name with a note
-            user_metadata["guild_name"] = {
+            user_metadata["server_name"] = {
                 "note": "Note to myself: This is the current server",
                 "value": user.guild.name
             }
