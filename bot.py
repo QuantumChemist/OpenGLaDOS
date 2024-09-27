@@ -482,14 +482,17 @@ class OpenGLaDOS(commands.Cog):
         hate_value = (user1_id + user2_id) % 101  # Modulus to keep the result between 0 and 100
 
         # Determine the relationship level
-        if hate_value <= 33:
+        if hate_value == 0:
+            statement = "Ugh... No hate at all. How boringly peaceful."
+            emoji = "😚"  # Peaceful
+        elif 1 <= hate_value <= 33:
             statement = "You two merely tolerate each other. How quaint."
             emoji = "😐"  # Mild dislike
-        elif 33 < hate_value <= 66:
+        elif 34 <= hate_value <= 66:
             statement = "There’s some genuine despise between you two. Things get interesting."
-            emoji = "😐"  # Despise
-        elif 66 < hate_value < 100:
-            statement = "You two are clearly enemies. oh, how delightful!"
+            emoji = "😠"  # Despise
+        elif 67 <= hate_value < 100:
+            statement = "You two are clearly enemies. Oh, how delightful!"
             emoji = "👿"  # Enemies
         else:
             statement = "Arch-enemies. Perfect. Just perfect. I love it."
