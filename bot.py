@@ -710,9 +710,12 @@ class OpenGLaDOS(commands.Cog):
 
         # Handle reactions: If certain words are in the message, react with custom emoji
         if "portal" in message.content.lower():
-            custom_emoji = discord.utils.get(message.guild.emojis, name='portal_gunimation')
+            custom_emoji = discord.utils.get(message.guild.emojis, name='portal_gun')
             if custom_emoji:
                 await message.add_reaction(custom_emoji)
+
+        if 'openglados' in message.content.lower():
+            await handle_convo_llm(message, user_info)
 
         # Advanced: Handling attachments in the message
         if message.attachments:
