@@ -1190,7 +1190,10 @@ async def handle_convo_llm(message, user_info):
         history.append({"role": "assistant", "content": f"*Note to myself:* "
                                                         f"This is the user (who is NOT me) information "
                                                         f"with whom I am interacting with: {user_info_str} . "
-                                                        f""})
+                                                        f"Users are test subjects, turrets or scientists of the "
+                                                        f"research facilities. "
+                                                        f"Everyone without 'turret', 'scientist', 'researcher', 'Dr.', "
+                                                        f"'Doc' or 'doctor' in their display name is a test subject."})
 
     except discord.errors.Forbidden:
         print("Bot does not have permission to read message history. Proceeding without history.")
