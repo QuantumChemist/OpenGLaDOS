@@ -14,6 +14,7 @@ import textwrap
 from html import escape
 from html2image import Html2Image
 import requests
+from datetime import time, timedelta, datetime, timezone
 
 # Directory to save screenshots
 SCREENSHOTS_DIR = "screenshots"
@@ -139,9 +140,6 @@ class OpenGLaDOSBot(commands.Bot):
         if owner:
             response = generate_markov_chain_convo_text()
             await owner.send(f"Hello! This is a DM from your bot. \n{response}")
-        # Start tasks once globally
-        bot.get_cog("OpenGLaDOS").send_science_fact.start()
-        bot.get_cog("OpenGLaDOS").send_random_cake_gif.start()
         # Find the 'general' channel in the connected servers
         for guild in self.guilds:
             # Look for a channel that contains the word "opengladosonline" in its name
@@ -164,6 +162,54 @@ class OpenGLaDOSBot(commands.Bot):
 class OpenGLaDOS(commands.Cog):
     def __init__(self, discord_bot):
         self.bot = discord_bot
+        self.send_science_fact.start()
+        self.send_random_cake_gif.start()
+        self.report_server.start()
+
+    @tasks.loop(time=time(13, 13))  # Specify the exact time (13:30 PM UTC)
+    async def report_server(self):
+        # Check if today is the last Friday of the month
+        today = datetime.now(timezone.utc)  # Use timezone-aware datetime in UTC
+        if today.weekday() == 4 and (today + timedelta(days=7)).month != today.month:
+            # Iterate over all servers the bot is in
+            for guild in self.bot.guilds:
+                server_name = guild.name
+                member_count = guild.member_count
+
+                # Choose a random text channel from the available channels
+                if guild.text_channels:
+                    report_channel = random.choice(guild.text_channels)
+
+                    text = (f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
+                            f"Server Name: {server_name}, Number of Members: {member_count}")
+
+                    try:
+                        llm_answer = get_groq_completion([{"role": "user", "content": text}])
+                        # Ensure the output is limited to 1900 characters
+                        if len(llm_answer) > 1900:
+                            llm_answer = llm_answer[:1900]
+                        print("Output: \n", wrap_text(llm_answer))
+                    except Exception as e:
+                        llm_answer = f"An error occurred: {e}"
+                    llm_answer = ensure_code_blocks_closed(llm_answer) + "...*whirrr...whirrr*..."
+
+                    # Create the embed
+                    embed = discord.Embed(
+                        title="📊 Monthly Server Report",
+                        description=f"Here's the latest analysis for **{server_name}**",
+                        color=discord.Color.blurple()
+                    )
+                    embed.add_field(name="🧠 Server Name", value=server_name, inline=False)
+                    embed.add_field(name="🤖 Number of Members", value=member_count, inline=False)
+                    embed.add_field(name="📋 Analysis Report", value=llm_answer, inline=False)
+                    embed.set_footer(text="Analysis complete. Thank you for your participation. 🔍")
+
+                    # Send the server report
+                    await report_channel.send(embed=embed)
+
+    @report_server.before_loop
+    async def before_report_server(self):
+        await self.bot.wait_until_ready()
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -446,7 +492,7 @@ class OpenGLaDOS(commands.Cog):
                 f" and ALWAYS provide a code snippet for: {message}.")
 
         try:
-            llm_answer = get_groq_completion( [{"role": "assistant", "content": text}])
+            llm_answer = get_groq_completion( [{"role": "user", "content": text}])
 
             # Ensure the output is limited to 1900 characters
             if len(llm_answer) > 1900:
@@ -474,7 +520,7 @@ class OpenGLaDOS(commands.Cog):
                 f"request and its message content: {message}.")
 
         try:
-            llm_answer = get_groq_completion( [{"role": "assistant", "content": text}])
+            llm_answer = get_groq_completion( [{"role": "user", "content": text}])
 
             # Ensure the output is limited to 1900 characters
             if len(llm_answer) > 1900:
