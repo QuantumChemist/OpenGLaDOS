@@ -845,15 +845,16 @@ class OpenGLaDOS(commands.Cog):
                 "value": user.guild.name
             }
 
-            # Adding a list of other users in the server with display_name and user_id
-            other_users = [
-                {"display_name": member.display_name, "user_id": f"<@{member.id}>"}
-                for member in user.guild.members if member != user
-            ]
-            user_metadata["other_users"] = {
-                "note": "*Note to myself, looks at clipboard:* These are the other members",
-                "value": other_users
-            }
+            if user.guild.member_count < 50:
+                # Adding a list of other users in the server with display_name and user_id
+                other_users = [
+                    {"display_name": member.display_name, "user_id": f"<@{member.id}>"}
+                    for member in user.guild.members if member != user
+                ]
+                user_metadata["other_users"] = {
+                    "note": "*Note to myself, looks at clipboard:* These are the other members",
+                    "value": other_users
+                }
 
         return user_metadata
 
