@@ -1,0 +1,6 @@
+discord.py
+groq
+python-dotenv
+markovify
+html2image
+requests
