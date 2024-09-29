@@ -181,7 +181,7 @@ class OpenGLaDOS(commands.Cog):
                     report_channel = random.choice(guild.text_channels)
 
                     text = (f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
-                            f"Server Name: {server_name}, Number of Members: {member_count}")
+                            f"Server Name: {server_name}, Number of Members: {member_count} . Do not share the OEC link. ")
 
                     try:
                         llm_answer = get_groq_completion([{"role": "user", "content": text}])
@@ -193,6 +193,9 @@ class OpenGLaDOS(commands.Cog):
                         llm_answer = f"An error occurred: {e}"
                     llm_answer = ensure_code_blocks_closed(llm_answer) + "...*whirrr...whirrr*..."
 
+                    # Split llm_answer into chunks of up to 1024 characters
+                    chunks = [llm_answer[i:i + 1024] for i in range(0, len(llm_answer), 1024)]
+
                     # Create the embed
                     embed = discord.Embed(
                         title="📊 Monthly Server Report",
@@ -201,11 +204,18 @@ class OpenGLaDOS(commands.Cog):
                     )
                     embed.add_field(name="🧠 Server Name", value=server_name, inline=False)
                     embed.add_field(name="🤖 Number of Members", value=member_count, inline=False)
-                    embed.add_field(name="📋 Analysis Report", value=llm_answer, inline=False)
+
+                    # Add each chunk as a separate field
+                    for idx, chunk in enumerate(chunks):
+                        embed.add_field(name=f"📋 Analysis Report (Part {idx + 1})", value=chunk, inline=False)
+
                     embed.set_footer(text="Analysis complete. Thank you for your participation. 🔍")
 
-                    # Send the server report
-                    await report_channel.send(embed=embed)
+                    try:
+                        # Send the embed using ctx.send() for a normal command
+                        await report_channel.send(embed=embed)
+                    except Exception as e:
+                        print(f"Failed to send embed: {e}")
 
     @report_server.before_loop
     async def before_report_server(self):
@@ -850,7 +860,8 @@ class OpenGLaDOS(commands.Cog):
 # Initialize the bot with a prefix and intents
 bot = OpenGLaDOSBot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
 bot.owner_id = int(os.environ.get('chichi'))
-server_stats_triggered = False
+server_stats_triggered: bool = False
+manual_report_triggered: bool = False
 start_triggered: bool = False
 user_quiz_state = {}
 
@@ -1691,6 +1702,61 @@ async def leave(ctx, *, guild_name: str):
             await ctx.send(f"Could not find a server with the name: {guild_name}")
     else:
         await ctx.send("This command can only be used in DMs.")
+
+@bot.command(name="manual-report", help="Generates a manual server report")
+@commands.is_owner()
+async def manual_report(ctx):
+    global manual_report_triggered
+
+    if manual_report_triggered:
+        await ctx.send("")
+        return
+
+    # Set the flag to True to indicate the command is being processed
+    manual_report_triggered = True
+    server_name = ctx.guild.name
+    member_count = ctx.guild.member_count
+
+    text = (f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
+            f"Server Name: {server_name}, Number of Members: {member_count} . Do not share the OEC link. ")
+
+    try:
+        llm_answer = get_groq_completion([{"role": "user", "content": text}])
+        # Ensure the output is limited to 1900 characters
+        if len(llm_answer) > 1900:
+            llm_answer = llm_answer[:1900]
+        print("Output: \n", wrap_text(llm_answer))
+    except Exception as e:
+        llm_answer = f"An error occurred: {e}"
+    llm_answer = ensure_code_blocks_closed(llm_answer) + "...*whirrr...whirrr*..."
+
+    # Split llm_answer into chunks of up to 1024 characters
+    chunks = [llm_answer[i:i + 1024] for i in range(0, len(llm_answer), 1024)]
+
+    # Create the embed
+    embed = discord.Embed(
+        title="📊 Monthly Server Report",
+        description=f"Here's the latest analysis for **{server_name}**",
+        color=discord.Color.blurple()
+    )
+    embed.add_field(name="🧠 Server Name", value=server_name, inline=False)
+    embed.add_field(name="🤖 Number of Members", value=member_count, inline=False)
+
+    # Add each chunk as a separate field
+    for idx, chunk in enumerate(chunks):
+        embed.add_field(name=f"📋 Analysis Report (Part {idx + 1})", value=chunk, inline=False)
+
+    embed.set_footer(text="Analysis complete. Thank you for your participation. 🔍")
+
+    try:
+        # Send the embed using ctx.send() for a normal command
+        await ctx.send(embed=embed)
+    except Exception as e:
+        print(f"Failed to send embed: {e}")
+
+    finally:
+        # Reset the flag after processing the command
+        manual_report_triggered = False
 
 # Run the main function when the script is executed
 if __name__ == '__main__':
