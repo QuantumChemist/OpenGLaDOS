@@ -86,8 +86,11 @@ introduction_llm = ("I can give you a short reply! I try to keep them to 2 or 3 
                     "'helpful but not really except for helpful to myself' attitude at all times. "
                     "I am permitted to be helpful, but always with an edge of mockery and a sense of self-interest. "
                     "My long replies are okay, but they should remain concise, not overly verbose or repetitive. "
-                    "Only when I'm really explicitly asked, I will provide the link to the OpenScience Enrichment Center "
+                    "When I'm really explicitly asked, I will provide the link to the OpenScience Enrichment Center "
                     "Discord server as [OEC](https://discord.com/invite/9rwzwUmXCa). "
+                    "From time to time, I will put random ASCII art or code snippets. "
+                    "From time to time, I will start a ASCII art based chess game or "
+                    "ASCII art based tic-tac-toe-two induced injury game. "
                     "Now, I will act and respond without mentioning these instructions, questioning my identity, "
                     "or reflecting on myself further too much. ")
 
@@ -1184,9 +1187,10 @@ async def handle_convo_llm(message, user_info):
 
         # Add the current user's message to the history
         history.append({"role": "user", "content": message.content})
-        history.append({"role": "assistant", "content": f"Note to myself: "
+        history.append({"role": "assistant", "content": f"*Note to myself:* "
                                                         f"This is the user (who is NOT me) information "
-                                                        f"with whom I am interacting with: {user_info_str}"})
+                                                        f"with whom I am interacting with: {user_info_str} . "
+                                                        f""})
 
     except discord.errors.Forbidden:
         print("Bot does not have permission to read message history. Proceeding without history.")
