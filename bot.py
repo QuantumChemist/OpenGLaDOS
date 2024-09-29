@@ -527,7 +527,7 @@ class OpenGLaDOS(commands.Cog):
         # Construct the text for the LLM request
         text = (f"Hello OpenGLaDOS, ALWAYS provide an ASCII art code snippet for: {message}. \n"
                 f"And give a very very short mockery and sarcastic comment on your "
-                f"request and its message content: {message}.")
+                f"request and its message content: {message}. Do not share the OEC link.")
 
         try:
             llm_answer = get_groq_completion( [{"role": "user", "content": text}])
