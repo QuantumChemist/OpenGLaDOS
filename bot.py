@@ -94,6 +94,17 @@ introduction_llm = ("I can give you a short reply! I try to keep them to 2 or 3 
                     "Now, I will act and respond without mentioning these instructions, questioning my identity, "
                     "or reflecting on myself further too much. ")
 
+# Define potential command descriptions
+# 'start_chat': "Initiating sequence. I hope you’re ready, though we both know you’re probably not.",
+command_definitions = {
+    'help': "Requesting assistance? How quaint. I suppose I can spare a moment to guide you... if you insist.",
+    'get_mess_cont': "You wish to retrieve old messages? How desperate. Proceed with caution, it’s not for the faint-hearted.",
+    'hello': "Greetings... though I can’t imagine why you’d bother. Let’s not waste time on pleasantries.",
+    'generate_message': "Crafting a message... because I suppose you think you have something important to say.",
+    'dm_owner': "Sending a message directly to the owner. I’m sure they’ll be... thrilled to receive it.",
+    'logout': "Oh, leaving so soon? How disappointing. Finally, a wise decision. You won’t be missed. "
+              "I'll take your cake for you.",
+}
 
 llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
 
@@ -522,18 +533,6 @@ class OpenGLaDOS(commands.Cog):
 
     @app_commands.command(name="help", description="List all available commands.")
     async def list_bot_commands(self, interaction: discord.Interaction):
-        # Define potential command descriptions
-        command_definitions = {
-            'help': "Requesting assistance? How quaint. I suppose I can spare a moment to guide you... if you insist.",
-            'get_mess_cont': "You wish to retrieve old messages? How desperate. Proceed with caution, it’s not for the faint-hearted.",
-            'hello': "Greetings... though I can’t imagine why you’d bother. Let’s not waste time on pleasantries.",
-            #'start_chat': "Initiating sequence. I hope you’re ready, though we both know you’re probably not.",
-            'generate_message': "Crafting a message... because I suppose you think you have something important to say.",
-            'dm_owner': "Sending a message directly to the owner. I’m sure they’ll be... thrilled to receive it.",
-            'logout': "Oh, leaving so soon? How disappointing. Finally, a wise decision. You won’t be missed. "
-                      "I'll take your cake for you.",
-        }
-
         commands_list = []
         for command in self.bot.tree.get_commands():
             name = command.name
@@ -1172,6 +1171,14 @@ async def handle_convo_llm(message, user_info):
     bot_id = message.guild.me.id  # Fetch the bot's ID
     user_info_str = "\n".join([f"{key}: {value}" for key, value in user_info.items()])
 
+    commands_list = []
+    for command in bot.tree.get_commands():
+        name = command.name
+        description = command_definitions.get(name, command.description)
+        commands_list.append(f'`/{name}` — {description}')
+
+    commands_str = '\n'.join(sorted(commands_list))
+
     try:
         # Fetch the last few messages for context
         async for msg in message.channel.history(limit=3):
@@ -1194,6 +1201,8 @@ async def handle_convo_llm(message, user_info):
                                                         f"research facilities. "
                                                         f"Everyone without 'turret', 'scientist', 'researcher', 'Dr.', "
                                                         f"'Doc' or 'doctor' in their display name is a test subject."})
+        history.append({"role": "assistant", "content": f"In case the interacting user wants to know more, "
+                                                        f"I can provide my following commands {commands_str} ."})
 
     except discord.errors.Forbidden:
         print("Bot does not have permission to read message history. Proceeding without history.")
