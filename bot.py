@@ -1071,8 +1071,8 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
         try:
             text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
         except Exception as e:
-            print(f"The following exception '{e}' occured. Whatever the fuck.")
-            text_lines = (f"My user input somehow caused the follwoing problem: {e}. "
+            print(f"The following exception '{e}' occurred. Whatever the fuck.")
+            text_lines = (f"The user input somehow caused the following problem: {e}. "
                           f"Just ignore it for now and move on with the conversation. ")
     else:
         text_lines = ""
