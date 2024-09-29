@@ -207,7 +207,8 @@ class OpenGLaDOS(commands.Cog):
 
                     # Add each chunk as a separate field
                     for idx, chunk in enumerate(chunks):
-                        embed.add_field(name=f"📋 Analysis Report (Part {idx + 1})", value=chunk, inline=False)
+                        continuation = "continuation" if idx > 0 else ""
+                        embed.add_field(name=f"📋 Analysis Report (Part {continuation})", value=chunk, inline=False)
 
                     embed.set_footer(text="Analysis complete. Thank you for your participation. 🔍")
 
@@ -1745,7 +1746,8 @@ async def manual_report(ctx):
 
     # Add each chunk as a separate field
     for idx, chunk in enumerate(chunks):
-        embed.add_field(name=f"📋 Analysis Report (Part {idx + 1})", value=chunk, inline=False)
+        continuation = "continuation" if idx > 0 else ""
+        embed.add_field(name=f"📋 Analysis Report (Part {continuation})", value=chunk, inline=False)
 
     embed.set_footer(text="Analysis complete. Thank you for your participation. 🔍")
 
