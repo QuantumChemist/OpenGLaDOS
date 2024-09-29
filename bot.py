@@ -785,7 +785,7 @@ class OpenGLaDOS(commands.Cog):
 
             # Adding the guild (server) name with a note
             user_metadata["server_name"] = {
-                "note": "Note to myself: This is the current server",
+                "note": "*Note to myself:* This is the current server",
                 "value": user.guild.name
             }
 
@@ -795,7 +795,7 @@ class OpenGLaDOS(commands.Cog):
                 for member in user.guild.members if member != user
             ]
             user_metadata["other_users"] = {
-                "note": "Note to myself: These are the other members",
+                "note": "*Note to myself, looks at clipboard:* These are the other members",
                 "value": other_users
             }
 
