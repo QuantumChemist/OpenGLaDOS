@@ -881,6 +881,30 @@ async def main(openglados: commands.Bot):
     await openglados.add_cog(OpenGLaDOS(openglados))  # Add the Cog to the bot
     await openglados.start(os.environ.get('BOT_TOKEN'))  # Start the bot
 
+
+def preprocess_message(content, user_data_list, interacting_user_id):
+    # Check if " ping" (with a leading space) or "ping" at the start of the content is present
+    should_ping = " ping" in content.lower() or content.lower().startswith("ping")
+
+    # Iterate over each user in the list
+    for user_data in user_data_list:
+        mention_format = user_data['user_id']  # This is already in the format <@user_id>
+        escaped_format = f"@{user_data['display_name']}"  # Display-only format
+
+        # Skip replacing the currently interacting user's ID
+        if mention_format == interacting_user_id:
+            continue
+
+        # Replace any occurrence of <@user_id> with @display_name
+        content = content.replace(mention_format, escaped_format)
+
+        # If "ping" is in the message, convert the escaped format back to the actual mention format
+        if should_ping:
+            content = content.replace(escaped_format, mention_format)
+
+    return content
+
+
 async def give_access_to_test_chambers(guild, user):
     # Find the 'test-chambers' channel
     test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), guild.text_channels)
@@ -1266,7 +1290,7 @@ async def handle_convo_llm(message, user_info):
                                                         f"This is the user (who is NOT me) information "
                                                         f"with whom I am interacting with: {user_info_str} . "
                                                         f"Users are test subjects, turrets or scientists of the "
-                                                        f"research facilities. Do not list every member. Do not list every user. "
+                                                        f"research facilities. "
                                                         f"Everyone without 'turret', 'scientist', 'researcher', 'Dr.', "
                                                         f"'Doc' or 'doctor' in their display name is a test subject."})
         history.append({"role": "assistant", "content": f"In case the interacting user wants to know more, "
@@ -1290,8 +1314,19 @@ async def handle_convo_llm(message, user_info):
         history=history
     )
 
+    # Process the response to handle mentions
+    if "other_users" in user_info:
+        other_users_list = user_info["other_users"]["value"]
+        interacting_user_id = user_info["user_id"]
+
+        # Preprocess the LLM response to handle pings
+        final_response = preprocess_message(llm_response, other_users_list, interacting_user_id)
+    else:
+        # If there are no other users, the final response is simply the LLM response
+        final_response = llm_response
+
     # Respond to the user
-    await message.reply(llm_response)
+    await message.reply(final_response)
 
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
