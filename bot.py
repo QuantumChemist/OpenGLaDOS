@@ -850,10 +850,7 @@ class OpenGLaDOS(commands.Cog):
             # user_metadata["status"] = str(user.status)
 
             # Adding the guild (server) name with a note
-            user_metadata["server_name"] = {
-                "note": "*Note to myself:* This is the current server",
-                "value": user.guild.name
-            }
+            user_metadata["current_server_name"] = user.guild.name
 
             if user.guild.member_count < 50:
                 # Adding a list of other users in the server with display_name and user_id
@@ -861,10 +858,7 @@ class OpenGLaDOS(commands.Cog):
                     {"display_name": member.display_name, "user_id": f"<@{member.id}>"}
                     for member in user.guild.members if member != user
                 ]
-                user_metadata["other_users"] = {
-                    "note": "*Note to myself, looks at clipboard:* These are the other members",
-                    "value": other_users
-                }
+                user_metadata["other_users"] = other_users
 
         return user_metadata
 
@@ -1287,10 +1281,7 @@ async def handle_convo_llm(message, user_info):
         # Add the current user's message to the history
         history.append({"role": "user", "content": message.content})
         history.append({"role": "assistant", "content": f"*Note to myself:* "
-                                                        f"This is the user (who is NOT me) information "
-                                                        f"with whom I am interacting with: {user_info_str} . "
-                                                        f"Users are test subjects, turrets or scientists of the "
-                                                        f"research facilities. "
+                                                        f"This is the current user metadata: {user_info_str} . "
                                                         f"Everyone without 'turret', 'scientist', 'researcher', 'Dr.', "
                                                         f"'Doc' or 'doctor' in their display name is a test subject."})
         history.append({"role": "assistant", "content": f"In case the interacting user wants to know more, "
