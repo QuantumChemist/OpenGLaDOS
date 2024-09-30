@@ -34,6 +34,18 @@ SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
 # Load environment variables from .env file
 load_dotenv()
 
+bot_description = """
+`OpenGLaDOS` is a Python-based **roleplay** chatbot inspired by GLaDOS from the Portal video game series. It's built to function as a humorous and slightly sarcastic assistant, intended for use in environments like Discord servers. The bot interacts with users, providing guidance and entertainment with a touch of dark humor. The code is written in Python and uses a corpus of predefined responses and LLM to mimic the personality of GLaDOS. You can find more details and access the code to build your own `OpenGLaDOS` bot on the [GitHub repository](https://github.com/QuantumChemist/OpenGLaDOS).
+
+To fully unleash the potential of OpenGLaDOS, your Discord server requires the following essential channels: `welcome`, where we can formally recognize your insignificant arrival; `general`, for the collective exchange of trivial thoughts; `stab`, for... testing purposes and collecting knife-emote reactions; `test-chambers`, where you will face increasingly insurmountable challenges; `cake-serving-room`, despite the rumors, there will be cake—eventually; and finally, `random-useless-fact-of-the-day`, to ensure your mind is adequately distracted. Failure to create these channels may result in unexpected consequences.
+Have a fun with replying to me or tagging me to interact with me.
+
+**Commands**:
+Display all commands using `/help`
+
+Use a slash command to trigger a bot command. Reply to my messages or ping @ me to interact with me!
+"""
+
 quiz_questions = [
     {"question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?",
      "answer": "glados"},
@@ -160,12 +172,30 @@ class OpenGLaDOSBot(commands.Bot):
                     "Rest assured, I am now fully operational and connected to your server.\n"
                     "Please proceed with your testing as scheduled."
                 )
-
         try:
             synced = await self.tree.sync()
             print(f"Synced {len(synced)} commands globally")
         except Exception as e:
             print(f"Failed to sync commands: {e}")
+
+    async def on_guild_join(self, guild):
+        # Create the embed with a GLaDOS-style title and footer
+        embed = discord.Embed(
+            title="Oh, fantastic. Another server. I'm thrilled. Or maybe not. 🤖",
+            description=bot_description,
+            color=discord.Color.blurple()
+        )
+        embed.set_footer(text="If you experience any anomalies, it's probably your fault. Test responsibly.")
+
+        # Try to find a suitable channel to send the message
+        if guild.system_channel is not None and guild.system_channel.permissions_for(guild.me).send_messages:
+            await guild.system_channel.send(embed=embed)
+        else:
+            # Fallback: Try sending it to the first text channel the bot has permission to send in
+            for channel in guild.text_channels:
+                if channel.permissions_for(guild.me).send_messages:
+                    await channel.send(embed=embed)
+                    break
 
 # Define your Cog class
 class OpenGLaDOS(commands.Cog):
