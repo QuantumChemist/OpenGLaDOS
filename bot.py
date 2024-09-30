@@ -1711,13 +1711,19 @@ async def manual_report(ctx):
     global manual_report_triggered
 
     if manual_report_triggered:
-        await ctx.send("")
+        await ctx.send("The report is already being generated. Please wait.")
         return
 
     # Set the flag to True to indicate the command is being processed
     manual_report_triggered = True
-    server_name = ctx.guild.name
-    member_count = ctx.guild.member_count
+
+    # Check if the command is used in a server or DM
+    if ctx.guild:
+        server_name = ctx.guild.name
+        member_count = ctx.guild.member_count
+    else:
+        server_name = "Direct Message"
+        member_count = "the million different voices in my mind"
 
     text = (f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
             f"Server Name: {server_name}, Number of Members: {member_count} . Do not share the OEC link. ")
@@ -1760,6 +1766,7 @@ async def manual_report(ctx):
     finally:
         # Reset the flag after processing the command
         manual_report_triggered = False
+
 
 # Run the main function when the script is executed
 if __name__ == '__main__':
