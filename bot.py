@@ -1282,7 +1282,7 @@ async def handle_convo_llm(message, user_info):
     )
 
     # Respond to the user
-    await message.reply(llm_response)
+    await message.reply(content=llm_response, allowed_mentions=discord.AllowedMentions.none())
 
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
