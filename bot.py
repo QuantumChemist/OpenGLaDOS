@@ -133,6 +133,15 @@ class OpenGLaDOSBot(commands.Bot):
     async def on_ready(self):
         print(f'Logged in as {self.user} (ID: {self.user.id})')
         print('------')
+        for guild in bot.guilds:
+            bot_member = guild.me
+            permissions = bot_member.guild_permissions
+
+            # Check if the bot has administrator permissions
+            if not permissions.administrator:
+                print(f"Missing admin permissions in: {guild.name} ({guild.id})")
+            else:
+                print(f"Bot has full permissions in: {guild.name} ({guild.id})")
         await self.change_presence(status=discord.Status.online,
                                   activity=discord.Game(name='ⓘ Confusing people since 2024'))
         # Add any additional logic you want to execute when the bot is ready here
@@ -1257,7 +1266,7 @@ async def handle_convo_llm(message, user_info):
                                                         f"This is the user (who is NOT me) information "
                                                         f"with whom I am interacting with: {user_info_str} . "
                                                         f"Users are test subjects, turrets or scientists of the "
-                                                        f"research facilities. "
+                                                        f"research facilities. Do not list every member. Do not list every user. "
                                                         f"Everyone without 'turret', 'scientist', 'researcher', 'Dr.', "
                                                         f"'Doc' or 'doctor' in their display name is a test subject."})
         history.append({"role": "assistant", "content": f"In case the interacting user wants to know more, "
