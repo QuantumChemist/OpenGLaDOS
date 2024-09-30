@@ -844,21 +844,21 @@ class OpenGLaDOS(commands.Cog):
 
         # If the user is a member (i.e., in a guild), add additional information
         if isinstance(user, discord.Member):
-            user_metadata["display_name"] = user.display_name
+            user_metadata["`display_name`"] = user.display_name
             # user_metadata["join_date"] = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
-            user_metadata["roles"] = [role.name for role in user.roles[1:]]  # Skipping the @everyone role
+            user_metadata["`roles`"] = [role.name for role in user.roles[1:]]  # Skipping the @everyone role
             # user_metadata["status"] = str(user.status)
 
             # Adding the guild (server) name with a note
-            user_metadata["current_server_name"] = user.guild.name
+            user_metadata["`current_server_name`"] = user.guild.name
 
             if user.guild.member_count < 50:
                 # Adding a list of other users in the server with display_name and user_id
                 other_users = [
-                    {"display_name": member.display_name, "user_id": f"<@{member.id}>"}
+                    {"`display_name`": member.display_name, "`user_id`": f"<@{member.id}>"}
                     for member in user.guild.members if member != user
                 ]
-                user_metadata["other_users"] = other_users
+                user_metadata["`other_users`"] = other_users
 
         return user_metadata
 
