@@ -1,5 +1,6 @@
 import os
 import re
+import chess
 import discord
 from discord.ext import commands, tasks
 from discord import app_commands
@@ -113,6 +114,8 @@ class OpenGLaDOS(commands.Cog):
         self.send_science_fact.start()
         self.send_random_cake_gif.start()
         self.report_server.start()
+        self.ongoing_games = {}  # Store game data here
+        self.inactivity_check.start()  # Start the inactivity checker task
 
     @tasks.loop(time=time(13, 13))  # Specify the exact time (13:30 PM UTC)
     async def report_server(self):
@@ -964,48 +967,83 @@ class OpenGLaDOS(commands.Cog):
         # Advanced: Handling attachments in the message
         if message.attachments:
             for attachment in message.attachments:
-                # Process each attachment (images, files, etc.)
-                #text = (f"Hello OpenGLaDOS, you received an attachment: {str(attachment.filename)}. "
-                #        f"and also this message: {str(message.content)}. "
-                #        f"Now make a very very short mockery and sarcastic remark only on the name of "
-                #        f"{str(attachment.filename)} and {str(message.content)}, "
-                #        f"but don't try to guess the content because you cannot know. ")
-                #try:
-                #    llm_answer = get_groq_completion([{"role": "user", "content": text}])
-
-                #    # Ensure the output is limited to 1900 characters
-                #    if len(llm_answer) > 1900:
-                #        llm_answer = llm_answer[:1900]
-
-                #    # Check if mentions are balanced; if not, regenerate the response
-                #    attempts = 0
-                #    max_attempts = 5
-                #    # Loop to check for unbalanced mentions
-                #    while not check_mentions(llm_answer) and attempts < max_attempts:
-                #        print("Unbalanced mentions detected, regenerating response.")
-                #        llm_answer = get_groq_completion([{"role": "user", "content": text}])
-
-                #        # Apply character limit again after regeneration
-                #        if len(llm_answer) > 1900:
-                #            llm_answer = llm_answer[:1900]
-                #        attempts += 1
-                #    if attempts >= max_attempts:
-                #        print("Max attempts reached.")
-                #        llm_answer = (
-                #            f"*system interrupted*...*memory lost* ... Uhh what was I saying? ... *bzzzt*...*bzzzt*... "
-                #            f"*OpenGLaDOS restarts* ... \n{generate_markov_chain_convo_text(None, message)}")
-
-                #    print("Input: \n", wrap_text(text))
-                #    print("Output: \n", wrap_text(llm_answer))
-
-                #except Exception as e:
-                #    llm_answer = f"An error occurred: {e}"
-
-                https_cat = (f"Your attachment triggered the following HTTP cat status: \n"
+                https_cat = (f"Your attachment {str(attachment.filename)} triggered the following HTTP cat status: \n"
                              f"https://http.cat/status/{random.randint(99,600)}")
 
-                await message.channel.send(#ensure_code_blocks_closed(llm_answer) +
-                                           f"{https_cat}")
+                await message.channel.send(f"{https_cat}")
+
+        # playing chess
+        # Check if the message is in an ongoing game thread
+        thread_id = message.channel.id
+        if thread_id in self.ongoing_games:
+            board, _ = self.ongoing_games[thread_id]
+            user_input = message.content.strip()
+
+            # Update the last activity time
+            self.ongoing_games[thread_id] = (board, datetime.datetime.now())
+
+            # Check if the user wants to stop the game
+            if user_input.lower() == "stop_chess":
+                del self.ongoing_games[thread_id]
+                await message.channel.send("Game terminated upon request. Enjoy your newfound freedom. 💀")
+                return
+
+            # Extract potential algebraic notation move from within the text
+            potential_moves = re.findall(r'\b[a-h][1-8][a-h][1-8]\b', user_input)
+            if potential_moves:
+                move_text = potential_moves[0]
+                try:
+                    move = chess.Move.from_uci(move_text)
+                    if move in board.legal_moves:
+                        board.push(move)
+                        self.ongoing_games[thread_id] = (board, datetime.datetime.now())
+                        await message.channel.send(f"Move played: {move_text}")
+
+                        # Send the valid move to the LLM for a response
+                        user_llm_response = await self.send_to_llm(move_text, initiator="user")
+                        await message.channel.send(f"GLaDOS: {user_llm_response}")
+
+                        # Display the updated board
+                        board_display = self.generate_board_display(board)
+                        await message.channel.send(board_display)
+
+                        # Check if the game is over
+                        if board.is_game_over():
+                            result = "It's a draw." if board.is_stalemate() else "Checkmate."
+                            await message.channel.send(f"Game over. {result} Test terminated. 💀")
+                            del self.ongoing_games[thread_id]
+                            return
+
+                        # The bot makes a move if it's still the bot's turn
+                        if not board.is_game_over() and board.turn == chess.BLACK:
+                            bot_move = random.choice(list(board.legal_moves))
+                            board.push(bot_move)
+                            bot_move_text = board.san(bot_move)
+                            await message.channel.send(f"The bot plays: {bot_move_text}")
+
+                            # Send the bot's move to the LLM
+                            bot_llm_response = await self.send_to_llm(bot_move_text, initiator="bot")
+                            await message.channel.send(f"GLaDOS: {bot_llm_response}")
+
+                            # Display the updated board
+                            board_display = self.generate_board_display(board)
+                            await message.channel.send(board_display)
+
+                            # Check again if the game is over after the bot's move
+                            if board.is_game_over():
+                                result = "It's a draw." if board.is_stalemate() else "Checkmate."
+                                await message.channel.send(f"Game over. {result} Test terminated. 💀")
+                                del self.ongoing_games[thread_id]
+                        return
+                    else:
+                        await message.channel.send("That move is invalid. Typical human error. 💀")
+                except:
+                    await message.channel.send("Invalid input. Use moves in algebraic notation (e.g., 'e2e4'). 💀")
+                return
+
+            # If the message doesn't match any valid board or move, treat it as unrelated text
+            await message.channel.send(
+                "That input is not recognized. Please try again or type `stop_chess` to terminate the test. 💀")
 
     # Function to fetch user metadata
     @staticmethod
@@ -1037,3 +1075,118 @@ class OpenGLaDOS(commands.Cog):
                 user_metadata["`other_users`"] = other_users
 
         return user_metadata
+
+    @app_commands.command(name="start_chess", description="Start a chess game OpenGLaDOS. This will be deadly fun. Or maybe not, who cares! 💀")
+    async def start_chess(self, interaction: discord.Interaction):
+        # Defer the interaction
+        await interaction.response.defer(ephemeral=True)
+        print("Deferred the interaction")
+
+        # Attempt to create a private thread in the current channel
+        try:
+            thread = await interaction.channel.create_thread(
+                name="Chess Game",
+                auto_archive_duration=60,
+                type=discord.ChannelType.private_thread  # Specify the thread type as private
+            )
+            print(f"Private thread created successfully with ID: {thread.id} and name: {thread.name}")
+        except Exception as e:
+            print(f"Failed to create thread: {e}")
+            await interaction.followup.send("Failed to create the chess game thread. Please check my permissions.",
+                                            ephemeral=True)
+            return
+
+        # Check if the thread is accessible
+        if thread is None:
+            print("Thread is None after creation.")
+            await interaction.followup.send("Failed to access the newly created thread. Please check my permissions.",
+                                            ephemeral=True)
+            return
+
+        # Add the user to the thread
+        try:
+            await thread.add_user(interaction.user)
+            print(f"Added {interaction.user.display_name} to the thread successfully.")
+        except Exception as e:
+            print(f"Failed to add user to the thread: {e}")
+            await interaction.followup.send("An error occurred while adding you to the chess game thread.",
+                                            ephemeral=True)
+            return
+
+        # Display the initial board in GLaDOS style without the actual board logic for now
+        board_display = "This is where the chess board would be displayed."
+        embed = discord.Embed(title="Welcome to the OpenScience Enrichment Center Chess Game",
+                              description="Your test begins now. 💀", color=0x1e90ff)
+        embed.add_field(name="Game Instructions", value=(
+            "You may play by using algebraic notation (e.g., `e2e4`).\n"
+            "Alternatively, paste the updated chess board in the format shown.\n"
+            "To end your suffering prematurely, type `stop_chess`.\n"
+            "Note: Inactivity will result in the automatic termination of this test after 30 minutes. 💀\n"
+        ), inline=False)
+        embed.add_field(name="Initial Board", value=board_display, inline=False)
+
+        try:
+            await thread.send(embed=embed)
+            print("Embed sent to the thread successfully")
+        except discord.Forbidden:
+            print("Bot lacks permissions to send messages in the thread.")
+            await interaction.followup.send("I don't have permission to send messages in this thread.", ephemeral=True)
+            return
+        except Exception as e:
+            print(f"Failed to send embed to thread: {e}")
+            await interaction.followup.send("An error occurred while setting up the chess game.", ephemeral=True)
+            return
+
+        # Finally, send the follow-up message to complete the interaction
+        try:
+            await interaction.followup.send(
+                f"The chess game has been set up in a **PRIVATE THREAD** named 'Chess Game'. You have been added to the thread. You can access it using this link: {thread.jump_url}",
+                ephemeral=True
+            )
+            print("Follow-up message sent successfully")
+        except Exception as e:
+            print(f"Failed to send follow-up message: {e}")
+
+    @staticmethod
+    async def send_to_llm(move_text, initiator="user"):
+        # Replace this placeholder with your actual LLM API call
+        if initiator == "user":
+            text = f"Interesting move: {move_text}. Let's see how that plays out. 💀"  # Placeholder response for user move
+        else:
+            text = f"The bot has chosen {move_text}. It seems inevitable now, doesn't it? 💀"  # Placeholder response for bot move
+
+        try:
+            llm_answer = get_groq_completion( [{"role": "user", "content": text}])
+            # Ensure the output is limited to 1900 characters
+            if len(llm_answer) > 1900:
+                llm_answer = llm_answer[:1900]
+            print("Output: \n", wrap_text(llm_answer))
+        except Exception as e:
+            llm_answer = f"An error occurred: {e}"
+        llm_answer = ensure_code_blocks_closed(llm_answer)
+        return llm_answer+"...*click...click...clock*..."
+
+    @staticmethod
+    def generate_board_display(board):
+        rows = str(board).split("\n")
+        display = "```\n  A B C D E F G H\n"
+        for i, row in enumerate(rows[::-1], start=1):
+            display += f"{9 - i} {' '.join(row.split())} {9 - i}\n"
+        display += "  A B C D E F G H\n```"
+        return display
+
+    @tasks.loop(seconds=60)
+    async def inactivity_check(self):
+        now = datetime.datetime.now()
+        inactive_threads = [thread_id for thread_id, (_, last_activity) in self.ongoing_games.items() if
+                            (now - last_activity).total_seconds() > 1800]  # 30 minutes
+
+        for thread_id in inactive_threads:
+            del self.ongoing_games[thread_id]
+            channel = self.bot.get_channel(thread_id)
+            if channel:
+                await channel.send("Inactivity detected. Test concluded. It’s over. 💀")
+
+    @inactivity_check.before_loop
+    async def before_inactivity_check(self):
+        await self.bot.wait_until_ready()
