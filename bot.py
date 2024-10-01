@@ -1177,8 +1177,8 @@ class OpenGLaDOS(commands.Cog):
     def generate_board_display(board):
         # Mapping of chess pieces to their Unicode representations
         piece_to_unicode = {
-            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',  # Black pieces
-            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙',  # White pieces
+            'r': '♖', 'n': '♘', 'b': '♗', 'q': '♕', 'k': '♔', 'p': '♙',  # Black pieces
+            'R': '♜', 'N': '♞', 'B': '♝', 'Q': '♛', 'K': '♚', 'P': '♟',  # White pieces
             '.': '.'  # Empty squares
         }
 
