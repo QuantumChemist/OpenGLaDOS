@@ -1160,12 +1160,15 @@ class OpenGLaDOS(commands.Cog):
     async def send_to_llm(move_text, initiator="user"):
         # Replace this placeholder with your actual LLM API call
         if initiator == "user":
-            text = f"Interesting move: {move_text}. Let's see how that plays out. 💀"  # Placeholder response for user move
+            text = (f"Give an extremely short mockery comment and the `user`'s move: {move_text}. "
+                    f"Let's see how that plays out. 💀")  # Placeholder response for user move
         else:
-            text = f"The bot has chosen {move_text}. It seems inevitable now, doesn't it? 💀"  # Placeholder response for bot move
+            initiator = "assistant"
+            text = (f"I will extremely short and mockery comment on my choice: {move_text}. "
+                    f"It seems inevitable now, doesn't it? 💀")  # Placeholder response for bot move
 
         try:
-            llm_answer = get_groq_completion( [{"role": "user", "content": text}])
+            llm_answer = get_groq_completion( [{"role": initiator, "content": text}])
             # Ensure the output is limited to 1900 characters
             if len(llm_answer) > 1900:
                 llm_answer = llm_answer[:1900]
