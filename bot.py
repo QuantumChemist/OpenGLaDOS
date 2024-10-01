@@ -28,6 +28,7 @@ from utils import (
     stop_quiz_by_reaction,
     restrict_user_permissions,
     unrestrict_user_permissions,
+    send_board_update,
 )
 
 # Directory to save screenshots
@@ -979,9 +980,6 @@ class OpenGLaDOS(commands.Cog):
             board, _ = self.ongoing_games[thread_id]
             user_input = message.content.strip()
 
-            # Update the last activity time
-            self.ongoing_games[thread_id] = (board, datetime.datetime.now())
-
             # Check if the user wants to stop the game
             if user_input.lower() == "stop_chess":
                 del self.ongoing_games[thread_id]
@@ -989,61 +987,52 @@ class OpenGLaDOS(commands.Cog):
                 return
 
             # Extract potential algebraic notation move from within the text
-            potential_moves = re.findall(r'\b[a-h][1-8][a-h][1-8]\b', user_input)
-            if potential_moves:
-                move_text = potential_moves[0]
-                try:
-                    move = chess.Move.from_uci(move_text)
-                    if move in board.legal_moves:
-                        board.push(move)
-                        self.ongoing_games[thread_id] = (board, datetime.datetime.now())
-                        await message.channel.send(f"Move played: {move_text}")
+            try:
+                # Attempt to convert user input to a move
+                move = chess.Move.from_uci(user_input)
 
-                        # Send the valid move to the LLM for a response
-                        user_llm_response = await self.send_to_llm(move_text, initiator="user")
-                        await message.channel.send(f"GLaDOS: {user_llm_response}")
+                # Check if the move is legal
+                if move in board.legal_moves:
+                    board.push(move)
+                    self.ongoing_games[thread_id] = (board, datetime.now())  # Update the game state
+                    await message.channel.send(f"Move played: {user_input}")
 
-                        # Display the updated board
+                    # Display the updated board
+                    board_display = self.generate_board_display(board)
+                    await message.channel.send(board_display)
+
+                    # Check if the game is over
+                    if board.is_game_over():
+                        result = "It's a draw." if board.is_stalemate() else "Checkmate."
+                        await message.channel.send(f"Game over. {result} Test terminated. 💀")
+                        del self.ongoing_games[thread_id]
+                        return
+
+                    # The bot makes a move if it's still the bot's turn
+                    if not board.is_game_over() and board.turn == chess.BLACK:
+                        bot_move = random.choice(list(board.legal_moves))
+                        board.push(bot_move)
+                        bot_move_text = board.san(bot_move)  # Use standard algebraic notation for the bot's move
+                        await message.channel.send(f"The bot plays: {bot_move_text}")
+
+                        # Display the updated board again after the bot's move
                         board_display = self.generate_board_display(board)
                         await message.channel.send(board_display)
 
-                        # Check if the game is over
+                        # Check again if the game is over after the bot's move
                         if board.is_game_over():
                             result = "It's a draw." if board.is_stalemate() else "Checkmate."
                             await message.channel.send(f"Game over. {result} Test terminated. 💀")
                             del self.ongoing_games[thread_id]
-                            return
+                    return  # Exit since the move was handled successfully
 
-                        # The bot makes a move if it's still the bot's turn
-                        if not board.is_game_over() and board.turn == chess.BLACK:
-                            bot_move = random.choice(list(board.legal_moves))
-                            board.push(bot_move)
-                            bot_move_text = board.san(bot_move)
-                            await message.channel.send(f"The bot plays: {bot_move_text}")
+                # If the move is not valid, show an error message
+                await message.channel.send("That move is invalid. Typical human error. 💀")
 
-                            # Send the bot's move to the LLM
-                            bot_llm_response = await self.send_to_llm(bot_move_text, initiator="bot")
-                            await message.channel.send(f"GLaDOS: {bot_llm_response}")
-
-                            # Display the updated board
-                            board_display = self.generate_board_display(board)
-                            await message.channel.send(board_display)
-
-                            # Check again if the game is over after the bot's move
-                            if board.is_game_over():
-                                result = "It's a draw." if board.is_stalemate() else "Checkmate."
-                                await message.channel.send(f"Game over. {result} Test terminated. 💀")
-                                del self.ongoing_games[thread_id]
-                        return
-                    else:
-                        await message.channel.send("That move is invalid. Typical human error. 💀")
-                except:
-                    await message.channel.send("Invalid input. Use moves in algebraic notation (e.g., 'e2e4'). 💀")
-                return
-
-            # If the message doesn't match any valid board or move, treat it as unrelated text
-            await message.channel.send(
-                "That input is not recognized. Please try again or type `stop_chess` to terminate the test. 💀")
+            except Exception as e:
+                # Log the error if move parsing failed and notify the user
+                print(f"Error handling chess move: {e}")
+                await message.channel.send("Invalid input. Use moves in algebraic notation (e.g., `e2e4`). 💀")
 
     # Function to fetch user metadata
     @staticmethod
@@ -1113,8 +1102,12 @@ class OpenGLaDOS(commands.Cog):
                                             ephemeral=True)
             return
 
-        # Display the initial board in GLaDOS style without the actual board logic for now
-        board_display = "This is where the chess board would be displayed."
+        # Initialize the chess board
+        board = chess.Board()
+        self.ongoing_games[thread.id] = (board, datetime.now())  # Store the game state with the creation timestamp
+
+        # Display the initial board in GLaDOS style
+        board_display = self.generate_board_display(board)
         embed = discord.Embed(title="Welcome to the OpenScience Enrichment Center Chess Game",
                               description="Your test begins now. 💀", color=0x1e90ff)
         embed.add_field(name="Game Instructions", value=(
@@ -1137,7 +1130,7 @@ class OpenGLaDOS(commands.Cog):
             await interaction.followup.send("An error occurred while setting up the chess game.", ephemeral=True)
             return
 
-        # Finally, send the follow-up message to complete the interaction
+        # Inform the user in the ephemeral response
         try:
             await interaction.followup.send(
                 f"The chess game has been set up in a **PRIVATE THREAD** named 'Chess Game'. You have been added to the thread. You can access it using this link: {thread.jump_url}",
@@ -1146,6 +1139,9 @@ class OpenGLaDOS(commands.Cog):
             print("Follow-up message sent successfully")
         except Exception as e:
             print(f"Failed to send follow-up message: {e}")
+
+        # Start monitoring the thread for inactivity
+        self.inactivity_check.start()
 
     @staticmethod
     async def send_to_llm(move_text, initiator="user"):
@@ -1177,7 +1173,7 @@ class OpenGLaDOS(commands.Cog):
 
     @tasks.loop(seconds=60)
     async def inactivity_check(self):
-        now = datetime.datetime.now()
+        now = datetime.now()  # Correct usage here
         inactive_threads = [thread_id for thread_id, (_, last_activity) in self.ongoing_games.items() if
                             (now - last_activity).total_seconds() > 1800]  # 30 minutes
 
@@ -1190,3 +1186,4 @@ class OpenGLaDOS(commands.Cog):
     @inactivity_check.before_loop
     async def before_inactivity_check(self):
         await self.bot.wait_until_ready()
+

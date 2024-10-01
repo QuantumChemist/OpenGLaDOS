@@ -574,6 +574,11 @@ def fetch_random_gif():
 def wrap_text(text, width=110):
     return textwrap.fill(text, width=width)
 
+# chess
+async def send_board_update(self, channel, board):
+    board_display = self.generate_board_display(board)
+    await channel.send(board_display)
+
 # unused
 async def unlock_channel(channel, user):  # unused
     role = discord.utils.get(channel.guild.roles, name="QuizWinner")
