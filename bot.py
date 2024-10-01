@@ -1125,7 +1125,9 @@ class OpenGLaDOS(commands.Cog):
         embed.add_field(name="Game Instructions", value=(
             "You may play by using algebraic notation (e.g., `e2e4`).\n"
             "To end your suffering prematurely, type `stop_chess`.\n"
-            "Note: Inactivity will result in the automatic termination of this test after 30 minutes. 💀\n"
+            "I will be so infinitely indulgently generous to let you play the white set. ♛\n"  # aka random color choice doesn't work lol
+            "Note: Inactivity will result in the automatic termination of this test after 30 minutes. 💀\n\n"
+            "Now start and make your first move! I'm waiting! \n"
         ), inline=False)
         embed.add_field(name="Initial Board", value=board_display, inline=False)
 
