@@ -994,7 +994,7 @@ class OpenGLaDOS(commands.Cog):
                     # Move is valid, push it to the board
                     board.push(move)
                     self.ongoing_games[thread_id] = (board, datetime.now())  # Update the game state with the new board
-                    await message.channel.send(f"Move played: {user_input}")
+                    await message.channel.send(f"You played: {user_input}. Predictable...")
 
                     # Display the updated board
                     board_display = self.generate_board_display(board)
@@ -1003,7 +1003,7 @@ class OpenGLaDOS(commands.Cog):
                     # Check if the game is over
                     if board.is_game_over():
                         result = "It's a draw." if board.is_stalemate() else "Checkmate."
-                        await message.channel.send(f"Game over. {result} Test terminated. 💀")
+                        await message.channel.send(f"Game over. {result} Test ||subject|| terminated. 💀💀💀")
                         del self.ongoing_games[thread_id]
                         return
 
@@ -1018,7 +1018,7 @@ class OpenGLaDOS(commands.Cog):
                             bot_move_text = board.san(
                                 bot_move)  # Convert to SAN while the board is in the correct state
                             board.push(bot_move)  # Now push the move to the board
-                            await message.channel.send(f"The bot plays: {bot_move_text}")
+                            await message.channel.send(f"I will play: {bot_move_text}. Your end is inevitable.")
                         except Exception as san_error:
                             print(f"Error converting bot move to SAN: {san_error}")
                             await message.channel.send("An error occurred while processing the bot's move. 💀")
@@ -1031,7 +1031,7 @@ class OpenGLaDOS(commands.Cog):
                         # Check again if the game is over after the bot's move
                         if board.is_game_over():
                             result = "It's a draw." if board.is_stalemate() else "Checkmate."
-                            await message.channel.send(f"Game over. {result} Test terminated. 💀")
+                            await message.channel.send(f"Game over. {result} Test ||subject|| terminated. 💀💀💀")
                             del self.ongoing_games[thread_id]
                     return  # Exit the function since the move was successful
 
@@ -1155,28 +1155,6 @@ class OpenGLaDOS(commands.Cog):
 
         # Start monitoring the thread for inactivity
         self.inactivity_check.start()
-
-    @staticmethod
-    async def send_to_llm(move_text, initiator="user"):
-        # Replace this placeholder with your actual LLM API call
-        if initiator == "user":
-            text = (f"Give an extremely short mockery comment and the `user`'s move: {move_text}. "
-                    f"Let's see how that plays out. 💀")  # Placeholder response for user move
-        else:
-            initiator = "assistant"
-            text = (f"I will extremely short and mockery comment on my choice: {move_text}. "
-                    f"It seems inevitable now, doesn't it? 💀")  # Placeholder response for bot move
-
-        try:
-            llm_answer = get_groq_completion( [{"role": initiator, "content": text}])
-            # Ensure the output is limited to 1900 characters
-            if len(llm_answer) > 1900:
-                llm_answer = llm_answer[:1900]
-            print("Output: \n", wrap_text(llm_answer))
-        except Exception as e:
-            llm_answer = f"An error occurred: {e}"
-        llm_answer = ensure_code_blocks_closed(llm_answer)
-        return llm_answer+"...*click...click...clock*..."
 
     @staticmethod
     def generate_board_display(board):
