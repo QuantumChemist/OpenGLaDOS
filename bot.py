@@ -1128,7 +1128,7 @@ def fetch_random_gif():
 def wrap_text(text, width=110):
     return textwrap.fill(text, width=width)
 
-def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str:
+def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str | tuple[str, str]:
     # Randomly select a greeting
     greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
                  "Good night"]
@@ -1176,7 +1176,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
 
     # Concatenate the greeting with the generated text
     if llm_bool:
-        return (f"{selected_greeting}, {user_message}... "
+        return (f"{selected_greeting}, {user_message}... ",
                 f"The OpenGLaDOS style implies replying to inquiries like the following crazy, "
                 f"character-authentic and unpredictable muhahahaha: '{text_lines}'...*beep*...")
 
@@ -1203,9 +1203,10 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
         start_line = message.split()
 
     # Generate input text using a Markov chain or other logic (if required)
-    text_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
+    user_lines, assistant_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
 
-    history.append({"role": "assistant", "content": text_lines})
+    history.append({"role": "assistant", "content": assistant_lines})
+    history.append({"role": "user", "content": user_lines})
 
     # Invoke the model with the user's prompt and history
     try:
