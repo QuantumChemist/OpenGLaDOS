@@ -986,15 +986,14 @@ class OpenGLaDOS(commands.Cog):
                 await message.channel.send("Game terminated upon request. Enjoy your newfound freedom. 💀")
                 return
 
-            # Extract potential algebraic notation move from within the text
+            # Validate and handle the move
             try:
-                # Attempt to convert user input to a move
+                # Check if the move is a valid UCI move
                 move = chess.Move.from_uci(user_input)
-
-                # Check if the move is legal
                 if move in board.legal_moves:
+                    # Move is valid, push it to the board
                     board.push(move)
-                    self.ongoing_games[thread_id] = (board, datetime.now())  # Update the game state
+                    self.ongoing_games[thread_id] = (board, datetime.now())  # Update the game state with the new board
                     await message.channel.send(f"Move played: {user_input}")
 
                     # Display the updated board
@@ -1010,10 +1009,20 @@ class OpenGLaDOS(commands.Cog):
 
                     # The bot makes a move if it's still the bot's turn
                     if not board.is_game_over() and board.turn == chess.BLACK:
-                        bot_move = random.choice(list(board.legal_moves))
-                        board.push(bot_move)
-                        bot_move_text = board.san(bot_move)  # Use standard algebraic notation for the bot's move
-                        await message.channel.send(f"The bot plays: {bot_move_text}")
+                        # Select a legal move for the bot
+                        legal_moves = list(board.legal_moves)
+                        bot_move = random.choice(legal_moves)
+
+                        # Convert the move to Standard Algebraic Notation (SAN) before pushing
+                        try:
+                            bot_move_text = board.san(
+                                bot_move)  # Convert to SAN while the board is in the correct state
+                            board.push(bot_move)  # Now push the move to the board
+                            await message.channel.send(f"The bot plays: {bot_move_text}")
+                        except Exception as san_error:
+                            print(f"Error converting bot move to SAN: {san_error}")
+                            await message.channel.send("An error occurred while processing the bot's move. 💀")
+                            return
 
                         # Display the updated board again after the bot's move
                         board_display = self.generate_board_display(board)
@@ -1024,15 +1033,18 @@ class OpenGLaDOS(commands.Cog):
                             result = "It's a draw." if board.is_stalemate() else "Checkmate."
                             await message.channel.send(f"Game over. {result} Test terminated. 💀")
                             del self.ongoing_games[thread_id]
-                    return  # Exit since the move was handled successfully
+                    return  # Exit the function since the move was successful
 
-                # If the move is not valid, show an error message
+                # If the move is invalid, notify the user
                 await message.channel.send("That move is invalid. Typical human error. 💀")
 
-            except Exception as e:
-                # Log the error if move parsing failed and notify the user
-                print(f"Error handling chess move: {e}")
+            except ValueError:
+                # Invalid UCI input
                 await message.channel.send("Invalid input. Use moves in algebraic notation (e.g., `e2e4`). 💀")
+            except Exception as e:
+                # Log other exceptions and notify the user
+                print(f"Unexpected error handling chess move: {e}")
+                await message.channel.send("An error occurred while processing your move. 💀")
 
     # Function to fetch user metadata
     @staticmethod
@@ -1112,7 +1124,6 @@ class OpenGLaDOS(commands.Cog):
                               description="Your test begins now. 💀", color=0x1e90ff)
         embed.add_field(name="Game Instructions", value=(
             "You may play by using algebraic notation (e.g., `e2e4`).\n"
-            "Alternatively, paste the updated chess board in the format shown.\n"
             "To end your suffering prematurely, type `stop_chess`.\n"
             "Note: Inactivity will result in the automatic termination of this test after 30 minutes. 💀\n"
         ), inline=False)
@@ -1164,10 +1175,19 @@ class OpenGLaDOS(commands.Cog):
 
     @staticmethod
     def generate_board_display(board):
+        # Mapping of chess pieces to their Unicode representations
+        piece_to_unicode = {
+            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',  # Black pieces
+            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙',  # White pieces
+            '.': '.'  # Empty squares
+        }
+
         rows = str(board).split("\n")
         display = "```\n  A B C D E F G H\n"
-        for i, row in enumerate(rows[::-1], start=1):
-            display += f"{9 - i} {' '.join(row.split())} {9 - i}\n"
+        for rank, row in zip(range(8, 0, -1), rows):  # Iterate ranks from 8 to 1
+            # Replace each letter with its corresponding Unicode symbol
+            unicode_row = ' '.join(piece_to_unicode.get(piece, piece) for piece in row.split())
+            display += f"{rank} {unicode_row} {rank}\n"  # Correct rank on both sides
         display += "  A B C D E F G H\n```"
         return display
 
