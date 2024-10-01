@@ -1205,7 +1205,7 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
     # Generate input text using a Markov chain or other logic (if required)
     text_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
 
-    history.append({"role": "user", "content": text_lines})
+    history.append({"role": "assistant", "content": text_lines})
 
     # Invoke the model with the user's prompt and history
     try:
