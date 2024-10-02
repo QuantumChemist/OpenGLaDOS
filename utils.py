@@ -253,7 +253,7 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
     except Exception as e:
         llm_answer = f"An error occurred: {e}"
 
-    return ensure_code_blocks_closed(llm_answer) + "...*beep*..."
+    return ensure_code_blocks_closed(llm_answer) + " ...*beep*..."
 
 async def handle_conversation(message):
     words = message.content.split()
