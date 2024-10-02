@@ -288,7 +288,7 @@ async def handle_convo_llm(message, user_info, bot):
 
         # Add the current user's message to the history
         history.append({"role": "user", "content": message.content})
-        history.append({"role": "assistant", "content": f"*Notes to myself:* "
+        history.append({"role": "assistant", "content": f"*Notes to myself:* \n"
                                                         f"- This is the current `user_metadata`: {user_info_str} . \n"
                                                         f"- This is the current `user_logic` C++ code: \n{user_logic}"})
         history.append({"role": "assistant", "content": f"In case the interacting user wants to know more, "
