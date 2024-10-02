@@ -285,12 +285,12 @@ async def handle_convo_llm(message, user_info, bot):
             history.append({"role": role, "content": msg.content})
 
         # Add the current user's message to the history
-        history.append({"role": "user", "content": message.content})
         history.append({"role": "assistant", "content": f"*Notes to myself:* \n"
                                                         f"- This is the current `user_metadata` RoR code: \n{user_info_str} . \n"
                                                         f"- This is the current `user_logic` C++ code: \n{user_logic}"})
-        history.append({"role": "assistant", "content": f"In case the interacting user wants to know more, "
+        history.append({"role": "assistant", "content": f"In case the `$CURRENT_USER` wants to know more, "
                                                         f"I can provide my following commands {commands_str} ."})
+        history.append({"role": "user", "content": f"This is the current `user` inquiry: {message.content}"})
 
     except discord.errors.Forbidden:
         print("Bot does not have permission to read message history. Proceeding without history.")
