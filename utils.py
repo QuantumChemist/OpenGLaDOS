@@ -263,7 +263,7 @@ async def handle_convo_llm(message, user_info, bot):
     # Fetching message history and handling rate limits
     fetched_messages = []
     bot_id = message.guild.me.id  # Fetch the bot's ID
-    user_info_str = "\n".join([f"{key}: {value}" for key, value in user_info.items()])
+    user_info_str = format_to_ror(user_info)
 
     commands_list = []
     for command in bot.tree.get_commands():
@@ -289,7 +289,7 @@ async def handle_convo_llm(message, user_info, bot):
         # Add the current user's message to the history
         history.append({"role": "user", "content": message.content})
         history.append({"role": "assistant", "content": f"*Notes to myself:* \n"
-                                                        f"- This is the current `user_metadata`: {user_info_str} . \n"
+                                                        f"- This is the current `user_metadata` RoR code: \n{user_info_str} . \n"
                                                         f"- This is the current `user_logic` C++ code: \n{user_logic}"})
         history.append({"role": "assistant", "content": f"In case the interacting user wants to know more, "
                                                         f"I can provide my following commands {commands_str} ."})
@@ -349,6 +349,20 @@ def split_text_by_period(text, max_chunk_size=1024):
         chunks.append(current_chunk.strip())
 
     return chunks
+
+def format_to_ror(metadata):
+    """Formats the user metadata dictionary to Ruby on Rails (RoR) style."""
+    def format_value(value):
+        if isinstance(value, list):
+            return "[" + ", ".join(f"'{v}'" if isinstance(v, str) else str(v) for v in value) + "]"
+        elif isinstance(value, dict):
+            return "{ " + ", ".join(f"{format_value(k)} => {format_value(v)}" for k, v in value.items()) + " }"
+        elif isinstance(value, str):
+            return f"'{value}'"
+        return str(value)
+
+    return "```ruby\n{ " + ", ".join(f":{key} => {format_value(value)}" for key, value in metadata.items()) + " }\n```"
+
 
 # quiz
 async def give_access_to_test_chambers(guild, user):
