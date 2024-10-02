@@ -143,7 +143,7 @@ class OpenGLaDOS(commands.Cog):
                         print("Output: \n", wrap_text(llm_answer))
                     except Exception as e:
                         llm_answer = f"An error occurred: {e}"
-                    llm_answer = ensure_code_blocks_closed(llm_answer) + "...*whirrr...whirrr*..."
+                    llm_answer = ensure_code_blocks_closed(llm_answer) + " ...*whirrr...whirrr*..."
 
                     # Split llm_answer into chunks of up to 1024 characters
                     chunks = [llm_answer[i:i + 1024] for i in range(0, len(llm_answer), 1024)]
@@ -702,7 +702,7 @@ class OpenGLaDOS(commands.Cog):
         except Exception as e:
             llm_answer = f"An error occurred: {e}"
         llm_answer = ensure_code_blocks_closed(llm_answer)
-        await interaction.followup.send(llm_answer+"...*bzzzzzt...bzzzzzt*...")
+        await interaction.followup.send(llm_answer+" ...*bzzzzzt...bzzzzzt*...")
 
     @app_commands.command(name="ascii_art",
                           description="Let OpenGLaDOS provide you with some ASCII art. What a delight. Not.")
@@ -730,7 +730,7 @@ class OpenGLaDOS(commands.Cog):
         except Exception as e:
             llm_answer = f"An error occurred: {e}"
         llm_answer = ensure_code_blocks_closed(llm_answer)
-        await interaction.followup.send(llm_answer+"...*bzzzzzt...bzzzzzt*...")
+        await interaction.followup.send(llm_answer+" ...*bzzzzzt...bzzzzzt*...")
 
     @app_commands.command(name="hate_calc", description="Calculates the level of hatred between two users. How lovely.")
     async def hate_calc(self, interaction: discord.Interaction, user1: discord.Member, user2: discord.Member):
