@@ -133,7 +133,7 @@ class OpenGLaDOS(commands.Cog):
                     report_channel = random.choice(guild.text_channels)
 
                     text = (f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
-                            f"Server Name: {server_name}, Number of Members: {member_count} . Do not share the OEC link. ")
+                            f"Server Name: {server_name}, Number of Members: {member_count} . Do not share any link. ")
 
                     try:
                         llm_answer = get_groq_completion([{"role": "user", "content": text}])
@@ -717,7 +717,7 @@ class OpenGLaDOS(commands.Cog):
         # Construct the text for the LLM request
         text = (f"Hello OpenGLaDOS, ALWAYS provide an ASCII art code snippet for: {message}. \n"
                 f"And give a very very short mockery and sarcastic comment on your "
-                f"request and its message content: {message}. Do not share the OEC link.")
+                f"request and its message content: {message}. Do not share any link.")
 
         try:
             llm_answer = get_groq_completion( [{"role": "user", "content": text}])
