@@ -29,6 +29,7 @@ from utils import (
     restrict_user_permissions,
     unrestrict_user_permissions,
     send_board_update,
+    valid_status_codes,
 )
 
 # Directory to save screenshots
@@ -967,11 +968,83 @@ class OpenGLaDOS(commands.Cog):
 
         # Advanced: Handling attachments in the message
         if message.attachments:
-            for attachment in message.attachments:
-                https_cat = (f"Your attachment {str(attachment.filename)} triggered the following HTTP cat status: \n"
-                             f"https://http.cat/status/{random.randint(99,600)}")
+            try:
+                # Pick a valid random HTTP status code
+                random_status = random.choice(valid_status_codes)
+                http_cat = f"https://http.cat/status/{random_status}"
 
-                await message.channel.send(f"{https_cat}")
+                seconds = 11
+
+                # Create a GLaDOS-like warning message with humor about the reassembling machine
+                response = (f"Your attachment `{message.attachments[0].filename}` triggered an unauthorized **HTTP Cat Status**: {http_cat} \n"
+                            f"**Immediate action** is recommended. Failure to comply may result in...well, you know, the reassembling machine getting some extra work. "
+                            f"\"Don't worry, you'll be back together in no time!\" \n"
+                            f"This warning will self-destruct in **{str(seconds)} seconds**. ")
+
+                # Send the HTTP Cat status warning
+                sent_message = await message.channel.send(response)
+                print("HTTP Cat status warning sent.")
+
+                # Save all necessary info from the user's message before posting via webhook
+                user_message = message.content.strip()  # Save the user's message content
+                user_name = message.author.display_name  # Save user's display name
+                user_avatar = message.author.avatar.url if message.author.avatar else None  # Save avatar URL
+                user_attachments = message.attachments  # Save attachments, if any
+
+                # Add a message about the reassembling process, including a ping to @OpenGLaDOS
+                reassembled_message = (
+                    f"`This message has been reassembled by @{self.bot.user.name}#{self.bot.user.discriminator} using the reassembling machine. "
+                    f"All errors have been corrected... Probably.`\n\n")
+
+                # If there's no user message content, provide a default fallback message
+                if not user_message:
+                    user_message = "*`[No text content provided, but reassembled anyway.]`*"
+
+                # Combine the reassembled message with the user's message or fallback text
+                reassembled_message += user_message
+
+                # Wait before recreating the user's message using a webhook
+                await asyncio.sleep(seconds)
+                print(f"Waited {seconds} seconds. Now proceeding with webhook.")
+
+                # Get the webhooks for the channel
+                webhooks = await message.channel.webhooks()
+                if not webhooks:
+                    # If no webhook exists, create a new one
+                    webhook = await message.channel.create_webhook(name="Message Reposter")
+                    print(f"Webhook created: {webhook}")
+                else:
+                    # Use the first available webhook if one exists
+                    webhook = webhooks[0]
+                    print(f"Webhook found: {webhook}")
+
+                # Repost the user's message with their display name and avatar using the webhook
+                if user_message:
+                    await webhook.send(content=reassembled_message, username=user_name, avatar_url=user_avatar)
+                    print("Message reposted using webhook with reassembled message.")
+                else:
+                    print("No message content to send.")
+
+                # Optionally, send the user's attachments if they exist
+                for attachment in user_attachments:
+                    await webhook.send(file=await attachment.to_file(), username=user_name, avatar_url=user_avatar)
+                    print("Attachment reposted using webhook.")
+
+                # If the webhook was successful, delete the original user's message
+                await message.delete()  # Delete the original user's message
+                print("Original message deleted after successful webhook.")
+
+            except discord.Forbidden:
+                print("Bot lacks permission to manage webhooks or delete messages in this channel.")
+            except discord.HTTPException as e:
+                print(f"Failed to send message using webhook or delete messages: {e}")
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
+
+            # Always delete the bot's warning message, regardless of success or failure
+            finally:
+                await sent_message.delete()
+                print("Bot's warning message deleted.")
 
         # playing chess
         # Check if the message is in an ongoing game thread
