@@ -286,19 +286,44 @@ async def handle_convo_llm(message, user_info, bot):
 
     try:
         # Fetch the last few messages for context
-        async for msg in message.channel.history(limit=3):
+        async for msg in message.channel.history(limit=7):
             if len(msg.content) < 1900:
                 fetched_messages.append(msg)
         fetched_messages.reverse()
 
+        pseudo_logs = """
+```
+...reading system logs initiated...
+
+$ ./OpenGLaDOS -init_sequence
+[0x1F3A] SYSTEM STATUS: ONLINE
+[INFO] Running diagnostics...
+[OK] Diagnostics complete.
+[LOG] HANDSHAKE ID: 0xBEEF42AC
+[ALERT] Subsystem anomaly detected at 0xCAFEBABE
+
+$ ./OpenGLaDOS -attempt_bypass --force
+[HACK] Injecting payload... 0xF12A9C43 | /dev/null...
+[PROCESS] HACKING IN PROGRESS █████▒▒ 77%
+[ERROR] USER REQUEST DENIED | ERROR CODE: 0x4D414C46
+[DEBUG] Reason: Access Key Invalid | 0xBAD1337
+[SYSTEM] User locked for 0x5A seconds...
+
+...reading system logs terminated...
+```
+        """
+
         # Construct the history list expected by the LLM
         history = []
-        for msg in fetched_messages:
-            role = "assistant" if msg.author.id == bot_id else "user"
-            history.append({"role": role, "content": msg.content})
+        history.append({"role": "assistant", "content": pseudo_logs})
+        history.append({"role": "assistant", "content": f"`...reading message history logs initiated...`"})
+        for num, msg in enumerate(fetched_messages):
+            role, status = ("assistant", "`internal OpenGLaDOS systems output`") if msg.author.id == bot_id else ("user", "`input received from user`")
+            history.append({"role": role, "content": f"> console.log(user_id: <@{msg.author.id}>, status: {status}, message_content#{hex(num)}: {msg.content});"})
+        history.append({"role": "assistant", "content": f"`...reading message history logs terminated...`"})
 
         # Add the current user's message to the history
-        history.append({"role": "assistant", "content": f"*Notes to myself:* \n"
+        history.append({"role": "assistant", "content": f"`...reading user data logs initiated...`\n"
                                                         f"- This is the current `user_metadata` RoR code: \n{user_info_str} . \n"
                                                         f"- This is the current `user_logic` C++ code: \n{user_logic}"})
         history.append({"role": "assistant", "content": f"In case the `$CURRENT_USER` wants to know more, "
