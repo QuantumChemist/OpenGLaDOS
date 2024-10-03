@@ -1077,7 +1077,7 @@ class OpenGLaDOS(commands.Cog):
 
         return user_metadata
 
-    @app_commands.command(name="start_chess", description="Start a chess game OpenGLaDOS (using algebraic notation e.g., `e2e4`). This will be deadly fun. Or maybe not, who cares! 💀")
+    @app_commands.command(name="start_chess", description="Start a chess game OpenGLaDOS (algebraic notation like `e2e4`). Deadly fun. Or maybe not. 💀")
     async def start_chess(self, interaction: discord.Interaction):
         # Defer the interaction
         await interaction.response.defer(ephemeral=True)
