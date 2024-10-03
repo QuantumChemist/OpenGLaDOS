@@ -310,7 +310,9 @@ async def handle_convo_llm(message, user_info, bot):
     )
 
     # Respond to the user
-    await message.reply(content=llm_response, allowed_mentions=discord.AllowedMentions.none())
+    async with message.channel.typing():
+        await asyncio.sleep(3)  # Adjust this sleep duration if needed
+        await message.reply(content=llm_response, allowed_mentions=discord.AllowedMentions.none())
 
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
