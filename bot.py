@@ -868,7 +868,7 @@ class OpenGLaDOS(commands.Cog):
 
         if channel:
             gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
-            await channel.send(f"🍰 **Black Forest Cake of the Day!** 🍰\n{gif_url}")
+            await channel.send(f"🍰 **Black Forest Portal Cake of the Day!** 🍰\n{gif_url}")
         else:
             print("Channel not found!")
 
