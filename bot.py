@@ -828,8 +828,9 @@ class OpenGLaDOS(commands.Cog):
         if isinstance(error, app_commands.MissingPermissions):
             if interaction.command.name == "logout":
                 await interaction.response.send_message(
-                    "Error: You do not have permission to use this command. Only the bot owner can use the `logout` command.",
-                    ephemeral=True)
+                    "Error: You do not have permission to use this command. "
+                    "Only the bot owner can use the `logout` command. \n"
+                    "https://http.cat/status/400", ephemeral=True)
         # Handle command not found error
         elif isinstance(error, app_commands.CommandNotFound):
             await interaction.response.send_message(
@@ -857,8 +858,9 @@ class OpenGLaDOS(commands.Cog):
             await self.bot.close()
         else:
             await interaction.response.send_message(
-                "Error: You do not have permission to use this command. Only the bot owner can use the `logout` command.",
-                ephemeral=True)
+                "Error: You do not have permission to use this command. "
+                "Only the bot owner can use the `logout` command. \n"
+                "https://http.cat/status/400", ephemeral=True)
 
     # Task to send a random cake GIF every 24 hours
     @tasks.loop(hours=24)  # Run every 24 hours
