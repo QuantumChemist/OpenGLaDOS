@@ -1077,7 +1077,7 @@ class OpenGLaDOS(commands.Cog):
 
         return user_metadata
 
-    @app_commands.command(name="start_chess", description="Start a chess game OpenGLaDOS. This will be deadly fun. Or maybe not, who cares! 💀")
+    @app_commands.command(name="start_chess", description="Start a chess game OpenGLaDOS (using algebraic notation e.g., `e2e4`). This will be deadly fun. Or maybe not, who cares! 💀")
     async def start_chess(self, interaction: discord.Interaction):
         # Defer the interaction
         await interaction.response.defer(ephemeral=True)
@@ -1120,7 +1120,7 @@ class OpenGLaDOS(commands.Cog):
 
         # Display the initial board in GLaDOS style
         board_display = self.generate_board_display(board)
-        embed = discord.Embed(title="Welcome to the OpenScience Enrichment Center Chess Game",
+        embed = discord.Embed(title="Welcome to the OpenScience Enrichment Center Chess Game ♟️",
                               description="Your test begins now. 💀", color=0x1e90ff)
         embed.add_field(name="Game Instructions", value=(
             "You may play by using algebraic notation (e.g., `e2e4`).\n"
