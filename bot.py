@@ -629,8 +629,8 @@ class OpenGLaDOS(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     # Slash command to get a random cake GIF
-    @app_commands.command(name="get_random_cake_gif", description="Get a random Black Forest cake GIF.")
-    async def get_fandom_cake_gif(self, interaction: discord.Interaction):
+    @app_commands.command(name="get_random_gif", description="Get a random Black Forest cake or Portal GIF.")
+    async def get_random_gif(self, interaction: discord.Interaction):
         gif_url = fetch_random_gif()
         await interaction.response.send_message(gif_url)
 
@@ -868,7 +868,7 @@ class OpenGLaDOS(commands.Cog):
 
         if channel:
             gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
-            await channel.send(f"🍰 **Black Forest Portal Cake of the Day!** 🍰\n{gif_url}")
+            await channel.send(f"🍰 **Black Forest Cake or Portal GIF of the Day!** 🍰\n{gif_url}")
         else:
             print("Channel not found!")
 
