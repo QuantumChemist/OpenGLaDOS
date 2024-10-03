@@ -582,17 +582,25 @@ def fetch_random_fact():
 # Function to fetch a random Black Forest cake GIF from Tenor
 def fetch_random_gif():
     try:
-        # Make an API call to Tenor to search for Black Forest cake GIFs
+        # Randomly choose a category
+        category = random.choice(["Black Forest cake", "Portal cake"])
+
+        # Make an API call to Tenor to search for the selected category GIFs
         response = requests.get(
-            f"https://tenor.googleapis.com/v2/search?q=Black+Forest+cake&key={os.environ.get('TENOR_API_KEY')}&limit=7"
+            f"https://tenor.googleapis.com/v2/search?q={category.replace(' ', '+')}&key={os.environ.get('TENOR_API_KEY')}&limit={7 if category == 'Black Forest cake' else 33}"
         )
+
+        # Check if the response was successful
         if response.status_code == 200:
-            gifs = response.json().get('results')
-            if gifs:
+            gifs = response.json().get('results')  # Get the GIF results
+            if gifs:  # Check if there are any GIFs in the results
                 # Choose a random GIF from the results
                 random_gif = random.choice(gifs)
                 return random_gif['url']  # Return the URL of the GIF
+
+        # If the response is not successful or no GIFs were found
         return "Couldn't fetch a GIF at the moment. Please try again later."
+
     except Exception as e:
         print(f"Error fetching GIF: {e}")
         return "Error occurred while fetching a GIF."
