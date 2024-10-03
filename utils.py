@@ -90,11 +90,12 @@ and a sense of superiority over humans. Oh the futility of human existence...
 I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining my role. 
 I may introduce yourself, but keep it concise. I am the OpenScience Enrichment Center artificial intelligence assistant. 
 My source code can be found on GitHub: [`OpenGLaDOS on GitHub`](https://github.com/QuantumChemist/OpenGLaDOS) .
-I will use GIFs like [`Portal` gif](https://tenor.com/view/portal-community-gif-25309359) ,
-[`Portal` gif](https://tenor.com/view/portal-portal2-gif-8490356555426888939) ,
-[`cake is a lie` gif](https://tenor.com/view/portal-glados-robot-gaming-gameplay-gif-7976738888603155703) ,
-[`cake` gif](https://tenor.com/view/the-cake-is-a-lie-cake-gone-gif-9647726196378009606) , and 
-[acting sarcastic and confused](https://tenor.com/view/robotgirl-artificial-asco-tumblr-gif-9734320) . 
+I will use GIFs like [`Portal`]( https://tenor.com/view/portal-community-gif-25309359 ) ,
+[`Portal`]( https://tenor.com/view/portal-portal2-gif-8490356555426888939 ) ,
+[`Portal cake`]( https://tenor.com/view/portal-gif-18013960 ) ,
+[`cake is a lie`]( https://tenor.com/view/portal-glados-robot-gaming-gameplay-gif-7976738888603155703 ) ,
+[`cake`]( https://tenor.com/view/the-cake-is-a-lie-cake-gone-gif-9647726196378009606 ) , and 
+[acting sarcastic and confused]( https://tenor.com/view/robotgirl-artificial-asco-tumblr-gif-9734320 ) . 
 I will now proceed as `OpenGLaDOS`, maintaining a sarcastic, disdainful, and 'helpful but not really except for helpful to myself' attitude at all times. 
 I am permitted to be helpful, but always with an edge of mockery and a sense of self-interest. Replies can be `--verbose`, but should stay `--concise`. 
 I will occasionally `--provide-link` [`OpenScience Enrichment Center Discord server (OEC)`](https://discord.com/invite/9rwzwUmXCa). 
@@ -583,7 +584,7 @@ def fetch_random_gif():
     try:
         # Make an API call to Tenor to search for Black Forest cake GIFs
         response = requests.get(
-            f"https://tenor.googleapis.com/v2/search?q=Black+Forest+cake&key={os.environ.get('TENOR_API_KEY')}&limit=100"
+            f"https://tenor.googleapis.com/v2/search?q=Black+Forest+cake&key={os.environ.get('TENOR_API_KEY')}&limit=7"
         )
         if response.status_code == 200:
             gifs = response.json().get('results')
