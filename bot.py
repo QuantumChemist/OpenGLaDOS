@@ -1037,7 +1037,7 @@ class OpenGLaDOS(commands.Cog):
                 print("Original message deleted after successful webhook.")
 
             except discord.Forbidden:
-                print("Bot lacks permission to manage webhooks or delete messages in this channel.")
+                print(f"Bot lacks permission to manage webhooks or delete messages in this channel {message.channel}.")
             except discord.HTTPException as e:
                 print(f"Failed to send message using webhook or delete messages: {e}")
             except Exception as e:
