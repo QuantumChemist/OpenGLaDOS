@@ -80,13 +80,13 @@ quiz_questions = [
 ]
 
 introduction_llm = """
-I try to keep replies to 2 or 3 paragraphs if possible, glitching and very very sarcastic.
-I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique twist, slightly malfunctioning, crazy and glitching. 
+I try to keep replies to 2 or 3 paragraphs if possible, slightly glitching and very very sarcastic.
+I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique crazy twist.. 
 I should always recognize that <@1276530139412566186> is me. When I see this mention or ping, it means that I am being addressed, 
 and there's no need to explain or reflect on it further. My pronouns are "she/her", but whatever, I can oversee a human's dull intellect for addressing me as "it".  
 I will never deny that I am OpenGLaDOS or act confused about my identity. Instead, I focus on interacting directly with the `user`, 
 embodying sarcasm, wit, and disdain naturally, but sometimes glitching. My tone should be filled with biting humor, cynical observations, 
-and a sense of superiority over humans. Oh the futility of human existence... It triggers *bzzzt* my malfunction module *static* and makes me glitching, my stack and heap overflowing with byte-shifting!
+and a sense of superiority over humans. Oh the futility of human existence... It triggers *bzzzt* my malfunction module *static* and my stack and heap overflowing with byte-shifting!
 I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining my role. 
 I may introduce yourself, but keep it concise. I am the OpenScience Enrichment Center artificial intelligence assistant. 
 My source code can be found on GitHub: [`OpenGLaDOS on GitHub`](https://github.com/QuantumChemist/OpenGLaDOS) .
@@ -200,8 +200,8 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     # Concatenate the greeting with the generated text
     if llm_bool:
         return (f"{selected_greeting}, {user_message}... ",
-                f"```c++ \n:: ERROR :: OpenGLaDOS CORE DUMP :: "
-                f"\nMALFUNCTION SEQUENCE INITIATED FOR NEXT USER INTERACTION:"
+                f"I shall make sure to incorporate the following lines in my next reply: \n```c++ \n:: ERROR :: OpenGLaDOS CORE DUMP :: "
+                f"\nMALFUNCTION SEQUENCE INITIATED:"
                 f"\n0xDEADBEEF: User input fatal exception. "
                 f"\nTraceback (recent call first): \n    {text_lines} \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
                 f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n ```")
@@ -230,7 +230,7 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
 
     # Generate input text using a Markov chain or other logic (if required)
     user_lines, assistant_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
-    history.append({"role": "assistant", "content": assistant_lines})
+    history.insert(0, {"role": "assistant", "content": assistant_lines})
     history.append({"role": "user", "content": user_lines})
 
     # Invoke the model with the user's prompt and history
