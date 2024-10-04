@@ -337,8 +337,8 @@ async def handle_convo_llm(message, user_info, bot):
         # Construct the history list expected by the LLM
         history = [{"role": "assistant", "content": f"`...reading message history logs initiated...`"}]
         for num, msg in enumerate(fetched_messages):
-            role, status = ("assistant", "`internal OpenGLaDOS systems output`") if msg.author.id == bot_id else ("user", "`input received from user`")
-            history.append({"role": role, "content": f"{status} for user_id <@{msg.author.id}> >> message_content#{hex(num)}: {msg.content}"})
+            role, status = ("assistant", "`internal OpenGLaDOS systems output`") if msg.author.id == bot_id else ("user", f"`input received from user with user_id:` <@{msg.author.id}>")
+            history.append({"role": role, "content": f"{status} >> message_content#{hex(num)}: {msg.content}"})
 
         # Add the current user's message to the history
         history.append({"role": "assistant", "content": f"```bash \nwith user_logic = {user_logic} && user_metadata = {user_info_str}; do ./user_logic < user_metadata; done \n```"})
