@@ -205,9 +205,9 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
         return (f"{selected_greeting}, {user_message}... ",
                 f"This is the `user interaction log`: "
                 f"...reading system logs initiated..."
-                f"'{wrap_text(text_lines)}'"
+                f"*internal OpenGLaDOS thoughts* '{wrap_text(text_lines)}'"
                 f"\n```c++ \n:: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
-                f"\n0xDEADBEEF: Traceback (recent call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
+                f"\n0xDEADBEEF: Traceback (recent thought call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
                 f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
                 f"\n$./ OpenGLaDOS -attempt_bypass --force\n [HACK] Injecting payload...0xF12A9C43 | / dev / null..."
                 f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: 0x4D414C46\n"
