@@ -203,10 +203,9 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
                 f"\n```c++ \n:: ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
                 f"\n0xDEADBEEF: Traceback (recent call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
                 f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
-                f"...reading system logs initiated...\n$./ OpenGLaDOS -attempt_bypass --force\n"
-                f"[HACK] Injecting payload...0xF12A9C43 | / dev / null...\n[ERROR] USER REQUEST DENIED | ERROR CODE: 0x4D414C46\n"
-                f"[DEBUG] Reason: Access Key Invalid | 0xBAD1337\n[SYSTEM] User locked for 0x5A seconds...\n"
-                f"...reading system logs terminated...\n ```")
+                f"\n$./ OpenGLaDOS -attempt_bypass --force\n [HACK] Injecting payload...0xF12A9C43 | / dev / null..."
+                f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: 0x4D414C46\n"
+                f"[DEBUG] Reason: Access Key Invalid | 0xBAD1337\n[SYSTEM] User locked for 0x5A seconds...\n```")
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
 
@@ -231,8 +230,10 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
 
     # Generate input text using a Markov chain or other logic (if required)
     user_lines, assistant_lines, log_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
-    history.append({"role": "user", "content": f"OpenGLaDOS now replies {assistant_lines}...initiating response..."})
-    history.append({"role": "assistant", "content": f"This is the `interaction log`: {log_lines}"})
+    history.append({"role": "assistant", "content": f"...reading system logs initiated..."})
+    history.append({"role": "assistant", "content": f"This is the `user interaction log`: {log_lines}"})
+    history.append({"role": "assistant", "content": f"...reading system logs terminated..."})
+    history.append({"role": "user", "content": f"OpenGLaDOS replies {assistant_lines} and glitches"})
     history.append({"role": "user", "content": f"{user_lines}"})
 
     # Invoke the model with the user's prompt and history
@@ -310,8 +311,8 @@ async def handle_convo_llm(message, user_info, bot):
 
         # Add the current user's message to the history
         history.append({"role": "assistant", "content": f"`...reading user data logs initiated...`\n"
-                                                        f"- This is the confidential current `user_metadata` RoR code: \n{user_info_str} . \n"
-                                                        f"- This is the confidential current `user_logic` C++ code: \n{user_logic}"})
+                                                        f"current `user_metadata` RoR code: \n{user_info_str} . \n"
+                                                        f"current `user_logic` C++ code: \n{user_logic}"})
         history.append({"role": "assistant", "content": f"In case the `$CURRENT_USER` wants to know more, "
                                                         f"I can provide my following commands console.log({commands_str}); ."})
         history.append({"role": "assistant", "content": f"`...reading message history logs terminated...`"})
