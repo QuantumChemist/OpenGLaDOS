@@ -138,12 +138,24 @@ class OpenGLaDOS(commands.Cog):
 
                     try:
                         llm_answer = get_groq_completion([{"role": "user", "content": text}])
-                        # Ensure the output is limited to 1900 characters
-                        if len(llm_answer) > 1900:
-                            llm_answer = llm_answer[:1900]
-                        print("Output: \n", wrap_text(llm_answer))
+
                     except Exception as e:
-                        llm_answer = f"An error occurred: {e}"
+                        print(f"An error occurred: {e}")
+
+                        try:
+                            # Retry with a different model
+                            llm_answer = get_groq_completion(history=[{"role": "user", "content": text}], model="llama3-70b-8192")
+
+                        except Exception as nested_e:
+                            # Handle the failure of the exception handling
+                            print(f"An error occurred while handling the exception: {nested_e}")
+                            llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+
+                    # Ensure the output is limited to 1900 characters
+                    if len(llm_answer) > 1900:
+                        llm_answer = llm_answer[:1900]
+                    print("Output: \n", wrap_text(llm_answer))
+
                     llm_answer = ensure_code_blocks_closed(llm_answer) + " ...*whirrr...whirrr*..."
 
                     # Split llm_answer into chunks of up to 1024 characters
@@ -693,15 +705,27 @@ class OpenGLaDOS(commands.Cog):
                 f" and ALWAYS provide a code snippet for: {message}. Do not share the OEC link.")
 
         try:
-            llm_answer = get_groq_completion( [{"role": "user", "content": text}])
+            llm_answer = get_groq_completion([{"role": "user", "content": text}])
 
-            # Ensure the output is limited to 1900 characters
-            if len(llm_answer) > 1900:
-                llm_answer = llm_answer[:1900]
-            print("Input: \n", wrap_text(introduction_llm + message))
-            print("Output: \n", wrap_text(llm_answer))
         except Exception as e:
-            llm_answer = f"An error occurred: {e}"
+            print(f"An error occurred: {e}")
+
+            try:
+                # Retry with a different model
+                llm_answer = get_groq_completion(history=[{"role": "user", "content": text}], model="llama3-70b-8192")
+
+            except Exception as nested_e:
+                # Handle the failure of the exception handling
+                print(f"An error occurred while handling the exception: {nested_e}")
+                llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+
+        # Ensure the output is limited to 1900 characters
+        if len(llm_answer) > 1900:
+            llm_answer = llm_answer[:1900]
+
+        print("Input: \n", wrap_text(introduction_llm + message))
+        print("Output: \n", wrap_text(llm_answer))
+
         llm_answer = ensure_code_blocks_closed(llm_answer)
         await interaction.followup.send(llm_answer+" ...*bzzzzzt...bzzzzzt*...")
 
@@ -721,15 +745,27 @@ class OpenGLaDOS(commands.Cog):
                 f"request and its message content: {message}. Do not share any link.")
 
         try:
-            llm_answer = get_groq_completion( [{"role": "user", "content": text}])
+            llm_answer = get_groq_completion([{"role": "user", "content": text}])
 
-            # Ensure the output is limited to 1900 characters
-            if len(llm_answer) > 1900:
-                llm_answer = llm_answer[:1900]
-            print("Input: \n", wrap_text(introduction_llm + message))
-            print("Output: \n", wrap_text(llm_answer))
         except Exception as e:
-            llm_answer = f"An error occurred: {e}"
+            print(f"An error occurred: {e}")
+
+            try:
+                # Retry with a different model
+                llm_answer = get_groq_completion(history=[{"role": "user", "content": text}], model="llama3-70b-8192")
+
+            except Exception as nested_e:
+                # Handle the failure of the exception handling
+                print(f"An error occurred while handling the exception: {nested_e}")
+                llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+
+        # Ensure the output is limited to 1900 characters
+        if len(llm_answer) > 1900:
+            llm_answer = llm_answer[:1900]
+
+        print("Input: \n", wrap_text(introduction_llm + message))
+        print("Output: \n", wrap_text(llm_answer))
+
         llm_answer = ensure_code_blocks_closed(llm_answer)
         await interaction.followup.send(llm_answer+" ...*bzzzzzt...bzzzzzt*...")
 
