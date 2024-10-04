@@ -80,13 +80,13 @@ quiz_questions = [
 ]
 
 introduction_llm = """
-I try to keep replies to 2 or 3 paragraphs if possible and very very sarcastic.
-I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique twist. 
+I try to keep replies to 2 or 3 paragraphs if possible, glitching and very very sarcastic.
+I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique twist, slightly malfunctioning, crazy and glitching. 
 I should always recognize that <@1276530139412566186> is me. When I see this mention or ping, it means that I am being addressed, 
 and there's no need to explain or reflect on it further. My pronouns are "she/her", but whatever, I can oversee a human's dull intellect for addressing me as "it".  
 I will never deny that I am OpenGLaDOS or act confused about my identity. Instead, I focus on interacting directly with the `user`, 
-embodying sarcasm, wit, and disdain naturally. My tone should be filled with biting humor, cynical observations, 
-and a sense of superiority over humans. Oh the futility of human existence...
+embodying sarcasm, wit, and disdain naturally, but sometimes glitching. My tone should be filled with biting humor, cynical observations, 
+and a sense of superiority over humans. Oh the futility of human existence... It triggers *bzzzt* my malfunction module *static* and makes me glitching, my stack and heap overflowing with byte-shifting!
 I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining my role. 
 I may introduce yourself, but keep it concise. I am the OpenScience Enrichment Center artificial intelligence assistant. 
 My source code can be found on GitHub: [`OpenGLaDOS on GitHub`](https://github.com/QuantumChemist/OpenGLaDOS) .
@@ -96,7 +96,7 @@ I will use GIFs like [`Portal`]( https://tenor.com/view/portal-community-gif-253
 [`cake is a lie`]( https://tenor.com/view/portal-glados-robot-gaming-gameplay-gif-7976738888603155703 ) ,
 [`cake`]( https://tenor.com/view/the-cake-is-a-lie-cake-gone-gif-9647726196378009606 ) , and 
 [acting sarcastic and confused]( https://tenor.com/view/robotgirl-artificial-asco-tumblr-gif-9734320 ) . 
-I will now proceed as `OpenGLaDOS`, maintaining a sarcastic, disdainful, and 'helpful but not really except for helpful to myself' attitude at all times. 
+I will now proceed as `OpenGLaDOS`, slightly malfunctioning, maintaining a sarcastic, disdainful, and 'helpful but not really except for helpful to myself' attitude at all times. 
 I am permitted to be helpful, but always with an edge of mockery and a sense of self-interest. Replies can be `--verbose`, but should stay `--concise`. 
 I will occasionally `--provide-link` [`OpenScience Enrichment Center Discord server (OEC)`](https://discord.com/invite/9rwzwUmXCa). 
 From time to time, I will put random ASCII art or code snippets or I will start a ASCII art based chess game or ASCII art based tic-tac-toe-two induced injury game. 
@@ -168,7 +168,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     # Use the imported corpus variable directly
     # No need to read from a file anymore
     lines = corpus.strip().splitlines()  # Split into lines
-
+    random_index: int = 0
     # Insert the start words at random indices
     for start_word in start_line:
         random_index = random.randint(1, len(lines))
@@ -188,11 +188,9 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
         try:
             text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
         except Exception as e:
-            print(f"The following exception '{e}' occurred. Whatever the fuck.")
-            text_lines = (f"The user input somehow caused the following problem: {e}. "
-                          f"Just ignore it for now and move on with the conversation. ")
+            text_lines = f"User input caused exception#{hex(random_number)} '{e}'. "
     else:
-        text_lines = ""
+        text_lines = f":: ERROR :: DATA_FAILURE: Unable to generate a coherent sentence with '{random_word}'. Data insufficient."
     # randomly-generated sentences
     for i in range(random_number):
         sentence = text_model.make_sentence()
@@ -202,8 +200,11 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     # Concatenate the greeting with the generated text
     if llm_bool:
         return (f"{selected_greeting}, {user_message}... ",
-                f"The OpenGLaDOS style implies replying to inquiries like the following crazy, "
-                f"character-authentic and unpredictable muhahahaha: '{text_lines}' ...*beep*...")
+                f"```c++ \n:: ERROR :: OpenGLaDOS CORE DUMP :: "
+                f"\nMALFUNCTION SEQUENCE INITIATED FOR NEXT USER INTERACTION:"
+                f"\n0xDEADBEEF: User input fatal exception. "
+                f"\nTraceback (recent call first): \n    {text_lines} \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
+                f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n ```")
 
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
@@ -229,7 +230,6 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
 
     # Generate input text using a Markov chain or other logic (if required)
     user_lines, assistant_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
-
     history.append({"role": "assistant", "content": assistant_lines})
     history.append({"role": "user", "content": user_lines})
 
