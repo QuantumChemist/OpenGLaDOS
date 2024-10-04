@@ -80,7 +80,7 @@ quiz_questions = [
 ]
 
 introduction_llm = """
-I try to keep replies to 2 or 3 paragraphs if possible, slightly glitching and very very sarcastic.
+I try to keep replies to 2 or 3 paragraphs if possible and very very sarcastic.
 I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique crazy twist.. 
 I should always recognize that <@1276530139412566186> is me. When I see this mention or ping, it means that I am being addressed, 
 and there's no need to explain or reflect on it further. My pronouns are "she/her", but whatever, I can oversee a human's dull intellect for addressing me as "it".  
@@ -199,7 +199,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     # Concatenate the greeting with the generated text
     if llm_bool:
         return (f"{selected_greeting}, {user_message}... ",
-                f"'*{wrap_text(text_lines)}*'",
+                f"'{wrap_text(text_lines)}'",
                 f"\n```c++ \n:: ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
                 f"\n0xDEADBEEF: Traceback (recent call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
                 f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
@@ -231,11 +231,8 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
 
     # Generate input text using a Markov chain or other logic (if required)
     user_lines, assistant_lines, log_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
-    history.insert(0, {"role": "assistant", "content": f"This is the `interaction log`: {log_lines}"})
-    history.append({
-        "role": "assistant",
-        "content": f"*glitch detected...* The user requests a blend of *internal OpenGLaDOS thoughts*...processing thoughts: {assistant_lines}...initiating response..."
-    })
+    history.append({"role": "user", "content": f"OpenGLaDOS now replies {assistant_lines}...initiating response..."})
+    history.append({"role": "assistant", "content": f"This is the `interaction log`: {log_lines}"})
     history.append({"role": "user", "content": f"{user_lines}"})
 
     # Invoke the model with the user's prompt and history
@@ -313,8 +310,8 @@ async def handle_convo_llm(message, user_info, bot):
 
         # Add the current user's message to the history
         history.append({"role": "assistant", "content": f"`...reading user data logs initiated...`\n"
-                                                        f"- This is the current `user_metadata` RoR code: \n{user_info_str} . \n"
-                                                        f"- This is the current `user_logic` C++ code: \n{user_logic}"})
+                                                        f"- This is the confidential current `user_metadata` RoR code: \n{user_info_str} . \n"
+                                                        f"- This is the confidential current `user_logic` C++ code: \n{user_logic}"})
         history.append({"role": "assistant", "content": f"In case the `$CURRENT_USER` wants to know more, "
                                                         f"I can provide my following commands console.log({commands_str}); ."})
         history.append({"role": "assistant", "content": f"`...reading message history logs terminated...`"})
