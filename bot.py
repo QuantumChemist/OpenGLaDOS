@@ -723,7 +723,7 @@ class OpenGLaDOS(commands.Cog):
         if len(llm_answer) > 1900:
             llm_answer = llm_answer[:1900]
 
-        print("Input: \n", wrap_text(introduction_llm + message))
+        print("Input: \n", wrap_text(message))
         print("Output: \n", wrap_text(llm_answer))
 
         llm_answer = ensure_code_blocks_closed(llm_answer)
@@ -763,7 +763,7 @@ class OpenGLaDOS(commands.Cog):
         if len(llm_answer) > 1900:
             llm_answer = llm_answer[:1900]
 
-        print("Input: \n", wrap_text(introduction_llm + message))
+        print("Input: \n", wrap_text(message))
         print("Output: \n", wrap_text(llm_answer))
 
         llm_answer = ensure_code_blocks_closed(llm_answer)
