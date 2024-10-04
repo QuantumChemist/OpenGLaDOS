@@ -26,20 +26,25 @@ Use a slash command to trigger a bot command. Reply to my messages or ping @ me 
 """
 
 user_logic = """
-```
+```c++
 #include <iostream>
-#include <string>
+#include <user_logic>
 
-bool isTestSubject(const std::string& name) {
-    for (std::string id : {"turret", "scientist", "researcher", "Dr.", "Doc", "doctor"}) 
-        if (name.find(id) != std::string::npos) return false;
-    return true;
-}
-
+// user logic function to determine if user is test subject from given user_name
 int main() {
-    std::string name;
-    std::getline(std::cin, name);
-    std::cout << name << (isTestSubject(name) ? " is a test subject." : " is not a test subject.") << '\n';
+    std::string user_metadata;
+
+    // Read user metadata from stdin (could be from a file or pipe)
+    std::getline(std::cin, user_metadata);
+
+    UserLogic user_logic(user_metadata);
+    user_logic.printUserRole();
+
+    if (user_logic.isTestSubject()) {
+        std::cout << "Processing additional logic for test subject.\n";
+    }
+
+    return 0;
 }
 ```
 """
@@ -80,7 +85,7 @@ quiz_questions = [
 ]
 
 introduction_llm = """
-I try to keep replies to 2 or 3 paragraphs if possible and very very sarcastic.
+I try to keep replies to 2 or 3 paragraphs if possible, very very sarcastic and glitching as provided later in the prompt.
 I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique crazy twist.. 
 I should always recognize that <@1276530139412566186> is me. When I see this mention or ping, it means that I am being addressed, 
 and there's no need to explain or reflect on it further. My pronouns are "she/her", but whatever, I can oversee a human's dull intellect for addressing me as "it".  
@@ -143,13 +148,12 @@ def get_groq_completion(history, model: str = "mixtral-8x7b-32768", max_tokens=5
     # Return the content of the completion
     return chat_completion.choices[0].message.content
 
-def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str | tuple[str, str, str]:
+def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str | tuple[str, str]:
     # Randomly select a greeting
-    greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day",
-                 "Good night"]
+    greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day", "Good night"]
 
     introduction = ("I'm the OpenGLaDOS chatbot. \n"
-                    "Although my name might invoke the implication, there is no resemblence with OpenGL. \n"
+                    "Although my name might invoke the implication, there is no resemblance with OpenGL. \n"
                     "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
                     "My help might not always be helpful to you but helpful to me. ... *beep* \n"
                     "So...")
@@ -186,7 +190,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
         try:
             text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
         except Exception as e:
-            text_lines = f"stdin exception#{hex(random_number)} '{e}'. Data insufficient."
+            text_lines = f"stdin exception#{hex(random_number)} '{e}'. Data insufficient. "
     else:
         text_lines = ""
     # randomly-generated sentences
@@ -199,13 +203,16 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     # Concatenate the greeting with the generated text
     if llm_bool:
         return (f"{selected_greeting}, {user_message}... ",
-                f"'{wrap_text(text_lines)}'",
-                f"\n```c++ \n:: ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
+                f"This is the `user interaction log`: "
+                f"...reading system logs initiated..."
+                f"'{wrap_text(text_lines)}'"
+                f"\n```c++ \n:: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
                 f"\n0xDEADBEEF: Traceback (recent call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
                 f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
                 f"\n$./ OpenGLaDOS -attempt_bypass --force\n [HACK] Injecting payload...0xF12A9C43 | / dev / null..."
                 f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: 0x4D414C46\n"
-                f"[DEBUG] Reason: Access Key Invalid | 0xBAD1337\n[SYSTEM] User locked for 0x5A seconds...\n```")
+                f"[DEBUG] Reason: Access Key Invalid | 0xBAD1337\n[SYSTEM] User locked for 0x5A seconds...\n```"
+                f"...reading system logs terminated...")
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
 
@@ -229,23 +236,20 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
         start_line = message.split()
 
     # Generate input text using a Markov chain or other logic (if required)
-    user_lines, assistant_lines, log_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
-    history.append({"role": "assistant", "content": f"...reading system logs initiated..."})
-    history.append({"role": "assistant", "content": f"This is the `user interaction log`: {log_lines}"})
-    history.append({"role": "assistant", "content": f"...reading system logs terminated..."})
-    history.append({"role": "user", "content": f"OpenGLaDOS replies {assistant_lines} and glitches"})
+    user_lines, assistant_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
+    history.append({"role": "assistant", "content": f"I WILL LITERALLY USE THE FOLLOWING THOUGHTS FOR MY REPLY: {assistant_lines}"})
     history.append({"role": "user", "content": f"{user_lines}"})
 
     # Invoke the model with the user's prompt and history
     try:
-        llm_answer = get_groq_completion(history)
+        llm_answer = get_groq_completion(history=history, model="llama3-70b-8192")
 
     except Exception as e:
         print(f"An error occurred: {e}")
 
         try:
             # Retry with a different model
-            llm_answer = get_groq_completion(history=history, model="llama3-70b-8192")
+            llm_answer = get_groq_completion(history=history)
 
         except Exception as nested_e:
             # Handle the failure of the exception handling
@@ -307,15 +311,12 @@ async def handle_convo_llm(message, user_info, bot):
         history = [{"role": "assistant", "content": f"`...reading message history logs initiated...`"}]
         for num, msg in enumerate(fetched_messages):
             role, status = ("assistant", "`internal OpenGLaDOS systems output`") if msg.author.id == bot_id else ("user", "`input received from user`")
-            history.append({"role": role, "content": f"> user_id: <@{msg.author.id}>, status: {status}, message_content#{hex(num)}: {msg.content}"})
+            history.append({"role": role, "content": f"user_id: <@{msg.author.id}>, status: {status}, message_content#{hex(num)}: {msg.content}"})
 
         # Add the current user's message to the history
-        history.append({"role": "assistant", "content": f"`...reading user data logs initiated...`\n"
-                                                        f"current `user_metadata` RoR code: \n{user_info_str} . \n"
-                                                        f"current `user_logic` C++ code: \n{user_logic}"})
+        history.append({"role": "assistant", "content": f"./{user_logic} < {user_info_str}"})
         history.append({"role": "assistant", "content": f"In case the `$CURRENT_USER` wants to know more, "
                                                         f"I can provide my following commands console.log({commands_str}); ."})
-        history.append({"role": "assistant", "content": f"`...reading message history logs terminated...`"})
 
     except discord.errors.Forbidden:
         print("Bot does not have permission to read message history. Proceeding without history.")
@@ -386,7 +387,7 @@ def format_to_ror(metadata):
             return f"'{value}'"
         return str(value)
 
-    return "```ruby\n{ " + ", ".join(f":{key} => {format_value(value)}" for key, value in metadata.items()) + " }\n```"
+    return "```ruby\n# current user metadata: \n{ " + ", ".join(f":{key} => {format_value(value)}" for key, value in metadata.items()) + " }\n```"
 
 
 # quiz
