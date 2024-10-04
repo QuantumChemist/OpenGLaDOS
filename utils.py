@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import discord
 from groq import Groq
 from dotenv import load_dotenv
@@ -9,6 +10,13 @@ import markovify
 import textwrap
 import requests
 from corpus import corpus
+
+
+# Define the minimum time between requests (in seconds)
+REQUEST_INTERVAL = 5  # Example: 5 seconds between requests
+
+# Track the time of the last request
+last_request_time = 0
 
 # Load environment variables from .env file
 load_dotenv()
@@ -287,7 +295,22 @@ async def handle_conversation(message):
     words = message.content.split()
     await message.channel.send(generate_markov_chain_convo_text(words))
 
+async def throttle_requests():
+    global last_request_time
+    current_time = time.time()
+    time_since_last_request = current_time - last_request_time
+
+    # If we haven't waited long enough since the last request, wait for the remainder
+    if time_since_last_request < REQUEST_INTERVAL:
+        sleep_time = REQUEST_INTERVAL - time_since_last_request
+        print(f"Throttling requests, sleeping for {sleep_time:.2f} seconds.")
+        await asyncio.sleep(sleep_time)
+
+    # Update the last request time to the current time
+    last_request_time = time.time()
+
 async def handle_convo_llm(message, user_info, bot):
+    global last_request_time
     # Fetching message history and handling rate limits
     fetched_messages = []
     bot_id = message.guild.me.id  # Fetch the bot's ID
@@ -302,11 +325,15 @@ async def handle_convo_llm(message, user_info, bot):
     commands_str = '\n'.join(sorted(commands_list))
 
     try:
+        # Throttle before making any requests or actions
+        await throttle_requests()
+
         # Fetch the last few messages for context
         async for msg in message.channel.history(limit=7):
             if len(msg.content) < 1900:
                 fetched_messages.append(msg)
         fetched_messages.reverse()
+
         # Construct the history list expected by the LLM
         history = [{"role": "assistant", "content": f"`...reading message history logs initiated...`"}]
         for num, msg in enumerate(fetched_messages):
@@ -326,11 +353,13 @@ async def handle_convo_llm(message, user_info, bot):
         if e.status == 429:  # Handle rate limit
             print(f"Rate limit hit. Retrying after {e.retry_after} seconds...")
             await asyncio.sleep(e.retry_after)
+            await throttle_requests()  # Apply throttling after retry
         else:
             print(f"Error fetching history: {str(e)}")
         history = [{"role": "user", "content": message.content}]
 
     # Generate the response using the modified history-aware function
+    await throttle_requests()  # Throttle before generating the response
     llm_response = generate_llm_convo_text(
         message=f"This is the current `user` inquiry: {message.content}",
         history=history
