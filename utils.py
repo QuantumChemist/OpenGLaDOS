@@ -13,7 +13,7 @@ from corpus import corpus
 
 
 # Define the minimum time between requests (in seconds)
-REQUEST_INTERVAL = 5  # Example: 5 seconds between requests
+REQUEST_INTERVAL = 3  # Example: 3 seconds between requests
 
 # Track the time of the last request
 last_request_time = 0
@@ -338,10 +338,10 @@ async def handle_convo_llm(message, user_info, bot):
         history = [{"role": "assistant", "content": f"`...reading message history logs initiated...`"}]
         for num, msg in enumerate(fetched_messages):
             role, status = ("assistant", "`internal OpenGLaDOS systems output`") if msg.author.id == bot_id else ("user", "`input received from user`")
-            history.append({"role": role, "content": f"user_id: <@{msg.author.id}>, status: {status}, message_content#{hex(num)}: {msg.content}"})
+            history.append({"role": role, "content": f"{status} for user_id <@{msg.author.id}> >> message_content#{hex(num)}: {msg.content}"})
 
         # Add the current user's message to the history
-        history.append({"role": "assistant", "content": f"./{user_logic} < {user_info_str}"})
+        history.append({"role": "assistant", "content": f"```bash \nwith user_logic = {user_logic} && user_metadata = {user_info_str}; do ./user_logic < user_metadata; done \n```"})
         history.append({"role": "assistant", "content": f"In case the `$CURRENT_USER` wants to know more, "
                                                         f"I can provide my following commands console.log({commands_str}); ."})
 
@@ -367,7 +367,7 @@ async def handle_convo_llm(message, user_info, bot):
 
     # Respond to the user
     async with message.channel.typing():
-        await asyncio.sleep(3)  # Adjust this sleep duration if needed
+        await asyncio.sleep(7)  # Adjust this sleep duration if needed
         await message.reply(content=llm_response, allowed_mentions=discord.AllowedMentions.none())
 
 def ensure_code_blocks_closed(llm_answer):
