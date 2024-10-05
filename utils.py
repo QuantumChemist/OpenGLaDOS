@@ -212,14 +212,14 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     # Concatenate the greeting with the generated text
     if llm_bool:
         return (f"{selected_greeting}, {user_message}... ",
-                f"Assistant, while replying, make sure to MIX in some of the following: '{wrap_text(text_lines)}' (*internal OpenGLaDOS thoughts*)",
-                f"...While handling the user_input, following exception occurred: \n"
+                f"Assistant, while replying, make sure to MIX in some of the following anomalies: '{wrap_text(text_lines)}'",
+                f"\n```c++ \n...While handling the user_input, following exception occurred: \n"
                 f"...reading system logs initiated...\n"
-                f"\n```c++ \n:: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
+                f":: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
                 f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: #{hex(state)}\n"
                 f"\n0xDEADBEEF: Traceback (recent thought call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
-                f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n ```"
-                f"...reading system logs terminated...")
+                f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
+                f"...internal OpenGLaDOS thoughts restored...reading system logs terminated...\n ```")
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
 
