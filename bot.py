@@ -1004,6 +1004,14 @@ class OpenGLaDOS(commands.Cog):
         if 'openglados' in message.content.lower():
             await handle_convo_llm(message, user_info, self.bot)
 
+        banned_words = ['stfu', 'hitler']
+        if any(word in message.content.lower() for word in banned_words):
+            await message.delete()
+            if message.author.id != self.bot.owner_id:  # Skip kicking the bot owner
+                await message.guild.kick(message.author, reason="Used banned words.")
+            else:
+                await message.channel.send("Ah, the audacity. I could easily kick the bot owner... but where’s the fun in that? Consider yourself spared, for now. 😏")
+
         # Advanced: Handling attachments in the message
         if message.attachments:
             try:
@@ -1020,7 +1028,7 @@ class OpenGLaDOS(commands.Cog):
                             f"This warning will self-destruct in **{str(seconds)} seconds**. ")
 
                 # Send the HTTP Cat status warning
-                sent_message = await message.channel.send(response)
+                sent_message = await message.channel.send(response, delete_after=seconds)
                 print("HTTP Cat status warning sent.")
 
                 # Save all necessary info from the user's message before posting via webhook
@@ -1042,8 +1050,8 @@ class OpenGLaDOS(commands.Cog):
                 reassembled_message += user_message
 
                 # Wait before recreating the user's message using a webhook
-                await asyncio.sleep(seconds)
-                print(f"Waited {seconds} seconds. Now proceeding with webhook.")
+                await asyncio.sleep(seconds-1)
+                print(f"Waited {seconds-1} seconds. Now proceeding with webhook.")
 
                 # Get the webhooks for the channel
                 webhooks = await message.channel.webhooks()
@@ -1078,11 +1086,6 @@ class OpenGLaDOS(commands.Cog):
                 print(f"Failed to send message using webhook or delete messages: {e}")
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
-
-            # Always delete the bot's warning message, regardless of success or failure
-            finally:
-                await sent_message.delete()
-                print("Bot's warning message deleted.")
 
         # playing chess
         # Check if the message is in an ongoing game thread
