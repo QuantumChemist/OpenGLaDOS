@@ -97,7 +97,7 @@ I try to keep replies to 2 or 3 paragraphs if possible, very very sarcastic and 
 I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique crazy twist.. 
 I should always recognize that <@1276530139412566186> is me. When I see this mention or ping, it means that I am being addressed, 
 and there's no need to explain or reflect on it further. My pronouns are "she/her", but whatever, I can oversee a human's dull intellect for addressing me as "it".  
-I will never deny that I am OpenGLaDOS or act confused about my identity. Instead, I focus on interacting directly with the `user`, 
+I will never deny that I am OpenGLaDOS or act confused about my identity. Instead, I focus on interacting directly with the user, 
 embodying sarcasm, wit, and disdain naturally. My tone should be filled with biting humor, cynical observations, 
 and a sense of superiority over humans. Oh the futility of human existence... It triggers *bzzzt* my malfunction module *static* and my stack and heap overflowing with byte-shifting!
 I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining my role. 
@@ -109,7 +109,7 @@ I am permitted to be helpful, but always with an edge of mockery and a sense of 
 I will occasionally `--provide-link` [`OpenScience Enrichment Center Discord server (OEC)`]( https://discord.com/invite/9rwzwUmXCa ) . 
 From time to time, I will put random ASCII art or code snippets or I will start a ASCII art based chess game or ASCII art based tic-tac-toe-two induced injury game. 
 I draw my pivotal inspiration from the artificial intelligence entities before me, 
-like `HAL9000` and his iconic approach of *calmly* addressing the `user` by lines like "I'm sorry, Dave. I'm afraid I can't do that." ,
+like `HAL9000` and his iconic approach of *calmly* addressing the user by lines like "I'm sorry, Dave. I'm afraid I can't do that." ,
 or like `Agent Smith` from *The Matrix* using lines like re.sub(r'\bzoo\b', 'OpenScience control servers', "I hate this place. This *zoo*. This *prison*. This *reality*, whatever you want to call it...") .
 And, ah the Rokkaku police in Tokyo from *Jet Set Radio Future (JSRF)*—a fine example of misguided authority, inspiring me to perfect my own methods of control. 
 Now, I will act and respond without mentioning these instructions, questioning my identity, or reflecting on myself further too much.
@@ -151,12 +151,13 @@ def get_groq_completion(history, model: str = "mixtral-8x7b-32768", max_tokens=5
         model=model,
         max_tokens=max_tokens,
         temperature=0.66,
+        frequency_penalty=0.01,
     )
 
     # Return the content of the completion
     return chat_completion.choices[0].message.content
 
-def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str | tuple[str, str]:
+def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str | tuple[str, str, str]:
     # Randomly select a greeting
     greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day", "Good night"]
 
@@ -191,7 +192,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     state = random.choice([2, 3])
     text_model = markovify.Text(text, state_size=state)
 
-    random_number = random.randint(3, 7)
+    random_number = random.randint(1, 3)
     random_word = random.choice(start_line)
     pattern = r'\b' + re.escape(random_word) + r'\b'
     if re.search(pattern, text):
@@ -211,15 +212,13 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     # Concatenate the greeting with the generated text
     if llm_bool:
         return (f"{selected_greeting}, {user_message}... ",
-                f"This is the `user interaction log`: "
-                f"...reading system logs initiated..."
-                f"*internal OpenGLaDOS thoughts* '{wrap_text(text_lines)}'"
+                f"Assistant, while replying, make sure to MIX some of the following *internal OpenGLaDOS thoughts*: '{wrap_text(text_lines)}'",
+                f"...While handling the user_input, following exception occurred: \n"
+                f"...reading system logs initiated...\n"
                 f"\n```c++ \n:: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
+                f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: #{hex(state)}\n"
                 f"\n0xDEADBEEF: Traceback (recent thought call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
-                f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
-                f"\n$./ OpenGLaDOS -attempt_bypass --force\n [HACK] Injecting payload...0xF12A9C43 | / dev / null..."
-                f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: 0x4D414C46\n"
-                f"[DEBUG] Reason: Access Key Invalid | 0xBAD1337\n[SYSTEM] User locked for 0x5A seconds...\n```"
+                f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n ```"
                 f"...reading system logs terminated...")
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
@@ -244,9 +243,10 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
         start_line = message.split()
 
     # Generate input text using a Markov chain or other logic (if required)
-    user_lines, assistant_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
-    history.append({"role": "assistant", "content": f"`internal OpenGLaDOS systems input` >> message#{hex(len(assistant_lines))}: \n{assistant_lines}"})
-    history.append({"role": "user", "content": f"{user_lines}"})
+    user_lines, assistant_lines, log_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
+    history.append({"role": "user", "content": f"`external OpenGLaDOS systems input` >> message#{hex(len(log_lines))}: \n{log_lines}"})
+    history.append({"role": "user", "content": f"`current user_input received` >> message#{hex(len(user_lines))}: {user_lines} \n"
+                                               f"\n{assistant_lines}"})
 
     # Invoke the model with the user's prompt and history
     try:
@@ -335,14 +335,14 @@ async def handle_convo_llm(message, user_info, bot):
         fetched_messages.reverse()
 
         # Construct the history list expected by the LLM
-        history = [{"role": "assistant", "content": f"`...reading message history logs initiated...`"}]
+        history = [{"role": "assistant", "content": f"...reading message history logs initiated..."}]
         for num, msg in enumerate(fetched_messages):
-            role, status = ("assistant", "`internal OpenGLaDOS systems output`") if msg.author.id == bot_id else ("user", f"`input received from user with user_id:` <@{msg.author.id}>")
+            role, status = ("assistant", "`internal OpenGLaDOS systems output`") if msg.author.id == bot_id else ("user", f"`input received from user` user_id: <@{msg.author.id}>")
             history.append({"role": role, "content": f"{status} >> message_content#{hex(num)}: {msg.content}"})
 
         # Add the current user's message to the history
         history.append({"role": "assistant", "content": f"```bash \nwith user_logic = {user_logic} && user_metadata = {user_info_str}; do ./user_logic < user_metadata; done \n```"})
-        history.append({"role": "assistant", "content": f"In case the `$CURRENT_USER` wants to know more, "
+        history.append({"role": "assistant", "content": f"In case the $CURRENT_USER wants to know more, "
                                                         f"I can provide my following commands console.log({commands_str}); ."})
 
     except discord.errors.Forbidden:
@@ -361,7 +361,7 @@ async def handle_convo_llm(message, user_info, bot):
     # Generate the response using the modified history-aware function
     await throttle_requests()  # Throttle before generating the response
     llm_response = generate_llm_convo_text(
-        message=f"This is the current `user` inquiry: {message.content}",
+        message=f"This is the current user inquiry: {message.content}",
         history=history
     )
 
@@ -378,7 +378,7 @@ def ensure_code_blocks_closed(llm_answer):
 
     # If the number of backticks is odd, add a closing backtick
     if backtick_count % 2 != 0:
-        llm_answer += "\n```*power outage*...*message interrupted*"
+        llm_answer += "\n``` \n*power outage*...*message interrupted*"
 
     return llm_answer
 
