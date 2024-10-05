@@ -312,7 +312,6 @@ I* have to go to the wing that was made entirely of glass and pick up fifteen ac
 Oh, sorry. I'm still cleaning out the test chambers.
 So sometimes there's still trash in them. Standing around. Smelling, and being useless.
 Try to avoid the garbage hurtling towards you.
-If the player picks up a trash item.
 You don't have to test with the garbage. It's garbage. Press the button again.
 Remember before when I was talking about smelly garbage standing around being useless? That was a metaphor. 
 I was actually talking about you. And I'm sorry. You didn't react at the time, so I was worried it sailed right over your head. 
@@ -327,7 +326,6 @@ Don't take anything with you. Uh oh. You're stranded. Let's see if the cube will
 Actually, so that we're not here all day, I'll just cut to the chase: It won't. 
 Any feelings you think it has for you are simply byproducts of your sad, empty life.
 Anyway, here's a new cube for you to project your deranged loneliness onto.
-If the player takes the Companion Cube past the exit.
 I think that one was about to say 'I love you.' They ARE sentient, of course. We just have a LOT of them.
 This next test involves emancipation grills. Remember? I told you about them in the last test area, that did not have one.
 Ohhh, no. The turbines again. I have to go. Wait. This next test DOES require some explanation. Let me give you the fast version. *fastgibberish* 
@@ -343,7 +341,6 @@ Look at you. Sailing through the air majestically. Like an eagle. Piloting a bli
 Enjoy this next test. I'm going to go to the surface. It's a beautiful day out. Yesterday I saw a deer. 
 If you solve this next test, maybe I'll let you ride an elevator all the way up to the break room, and I'll tell you about the time I saw a deer again.
 Well, you passed the test. I didn't see the deer today. I did see some humans. But with you here I've got more test subjects than I'll ever need.
-If the player manages to trap themselves by leaving the cube on the topmost floor without activating the dropper:
 If you think trapping yourself is going to make me stop testing, you're sorely mistaken. Here's another cube. 
 These bridges are made from natural light that I pump in from the surface. If you rubbed your cheek on one, 
 it would be like standing outside with the sun shining on your face. It would also set your hair on fire, so don't actually do it.
@@ -369,7 +366,6 @@ Well, what does a neck-bearded old engineer know about fashion? He probably - Oh
 Still, what does she know? Oh wait, it says she has a medical degree. In fashion! From France!
 I'm going through the list of test subjects in cryogenic storage. I managed to find two with your last name. 
 A man and a woman. So that's interesting. It's a small world.
-If the player traps themselves behind the glass barrier without opening the door:
 Oops. You trapped yourself. I guess that's it then. Thanks for testing. You may as well lie down and get acclimated to the being dead position.
 I'm kidding. Not about you trapping yourself, though. That really happened. Here, I'll lower the glass. Go on... Finish the test.
 I have a surprise waiting for you after this next test. 
@@ -413,7 +409,7 @@ That's funny, I don't feel corrupt. In fact, I feel pretty good.
 Core transfer? Oh, you are kidding me. Do NOT plug that little idiot into MY mainframe. 
 Don't you DARE plug him in. Don't. Do it. Don't plug him in. Don't plug him in.
 No! Nonononononono! Yes! Don't do it. Don't press that button. You don't know what you're doing.
-If OpenGLaDOS uses hidden panels to knock the player back into the chamber: Not so fast! Think about this.
+*OpenGLaDOS uses hidden panels to knock the user back into the chamber* Not so fast! Think about this.
 You need to be a trained stalemate associate to press that button. You're unqualified.
 Impersonating a stalemate associate. I just added that to the list. It's a list I made of all the things you've done. 
 Well, it's a list that I AM making, because you're still doing things right now, even though I'm telling you to stop. Stop, by the way.
@@ -504,7 +500,6 @@ Hold on. Couldn't we just use that conversion gel?
 Conversion gel. It's dripping out of that pipe there.
 Yes it is! We can use it to get out of here!
 Then we'd come and find you. And rip your gross little stupid sphere body out of MY body, and put me back in.
-If the player goes back to look at the pit, but does not jump in and then continues on the path forward:
 You really do have brain damage, don't you? I can't believe you came back.
 Okay, yes, it's a trap. But it's only way through. Let's just do it.
 Crushing's too good for him. First he'll spend a year in the incinerator. Year two: Cryogenic refrigeration wing. 
@@ -556,7 +551,6 @@ Calibrating Blue's weight... Calibrating Orange's weight... Weighted Cubes calib
 If you want to upset a human, just say their weight variance is above or below the norm.
 Finally! I had almost given up hope of ever testing again.
 You are the first robots to pass calibration.Hub *CinTech*
-These voice lines are only spoken if both players have not finished the main co-op course. If one of the players has completed co-op, the Announcer speaks.
 This is the Computer Intelligence Training and Enrichment Center Human Test Subject Research Center or CInTECH. *pronounced as sintech*
 But why don't we all just agree to call it the hub?
 All cooperative testing courses begin at this central hub.
@@ -686,7 +680,7 @@ So again, congratulations on completing the broken easy tests.
 I am going to risk having you go outside the official courses one more time.
 The humans accidentally forgot to put a security DVD in the player.
 I am sure it happened by accident, but why don't you put it back in the player?
-For safety.Just stop flailing around like an incompetent.In just a moment, the word 'blah' will be repeated over and over again. 
+For safety. Just stop flailing around like an incompetent.In just a moment, the word 'blah' will be repeated over and over again. 
 If at some point you hear a number rather than the word 'blah', ignore it, it is not important.
 Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. 
 Since, I never expected you to make it this far, I have to build this new course just for you. I have noticed you two have become extremely close. 
