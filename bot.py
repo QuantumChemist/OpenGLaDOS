@@ -67,8 +67,7 @@ class OpenGLaDOSBot(commands.Bot):
                 print(f"Missing admin permissions in: {guild.name} ({guild.id})")
             else:
                 print(f"Bot has full permissions in: {guild.name} ({guild.id})")
-        await self.change_presence(status=discord.Status.online,
-                                  activity=discord.Game(name='ⓘ Confusing people since 2024'))
+        await self.change_presence(status=discord.Status.online, activity=discord.Streaming(name="ⓘ Confusing people since 2024", url="https://www.youtube.com/watch?v=c3IVTi6TlfE")
         # Add any additional logic you want to execute when the bot is ready here
         owner = await self.fetch_user(self.owner_id)
         if owner:
