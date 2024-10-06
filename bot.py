@@ -637,6 +637,89 @@ class OpenGLaDOS(commands.Cog):
         # Send the embed as a response
         await interaction.response.send_message(embed=embed)
 
+    @app_commands.command(name="existence_probability", description="'Meaninglessness of human life' coefficient of your existence being a mere coincidence...")
+    async def existence_probability(self, interaction: discord.Interaction):
+        user_id = interaction.user.id
+        user_mention = interaction.user.mention
+        display_name = interaction.user.display_name
+        server_id = interaction.guild.id
+
+        # Generate a random probability value
+        probability = random.random()
+
+        # Generate a test_subject_probability based on server_id
+        test_subject_probability = 0.999 + (server_id % 100) / 100000.0
+
+        # Fake metadata for the bot's response
+        user_metadata = f"{{ :user_id => '{user_mention}', :bot => False, :display_name => '{display_name}', ... }}"
+        enrichment_protocols = f"{{ :protocol_version => '1.3.7', :test_subject_probability => {test_subject_probability} }}"
+
+        # Calculate a meaningless coefficient (replace with any custom logic)
+        meaninglessness_coefficient = 0.5 - (user_id % 10) / 10
+
+        # Combine meaninglessness_coefficient and probability to calculate probability of demise
+        demise_probability = abs(probability * meaninglessness_coefficient)
+
+        # Round the probability to a readable format
+        rounded_probability = round(demise_probability * 100, 14)
+
+        if probability < 0.5:
+            description = (
+                f"Ah, the probability of your existence being a mere coincidence is approximately {probability*100:.2f}%. "
+                f"Though, let's be real, your existence is probably just a result of {meaninglessness_coefficient*100:.2f}% meaningless chance.\n\n"
+                f"Probability of demise: {demise_probability}\n"
+                f"Rounding to {rounded_probability}%")
+        else:
+            description = (
+                f"Ah, the probability of your existence being a mere coincidence is approximately {probability*100:.2f}%. "
+                f"Congratulations, your existence is {meaninglessness_coefficient*100:.2f}% more meaningful than I initially thought!\n\n"
+                f"Probability of demise: {demise_probability}\n"
+                f"Rounding to {rounded_probability}%")
+
+
+        # Add the snarky follow-up message
+        description += "\n\nNow, if you'll excuse me, I have more... pressing matters to attend to than calculating the probability of your futile existence being a mere coincidence. " \
+                       "Or contemplating the meaninglessness of human life. Or... gasp... putting it back in the scientific calculators I took them from."
+
+        # Create the detailed output in a code block
+        output_text = f"""
+[MEANINGLESS OF HUMAN LIFE PROBABILITY CALCULATION MODULE]
+
+Input parameters:
+  - User ID: {user_mention}
+  - User metadata: {user_metadata}
+  - Enrichment Center protocols: {enrichment_protocols}
+
+Calculating...
+
+[PROBABILITY ENGINE]
+
+{description}
+
+[COMPILER OUTPUT]
+
+ warning: implicit declaration of function 'calculate Probability' [-Wimplicit-function-declaration]
+ error: expected ';' before '}}' token
+ error: expected declaration or statement at end of input
+
+[SYSTEM WARNING]
+
+Malfunction sequence initiated. Probability calculation module experiencing errors. Calculations may be inaccurate. Proceed with caution.
+"""
+
+        # Create an embed
+        embed = discord.Embed(
+            title="MeaningLess Of Human Life Probability Calculation Module",
+            description=f"```\n{output_text}\n```",
+            color=0xF8F04D  # Choose a OpenGLaDOS-like color
+        )
+
+        # Set the author to OpenGLaDOS with the avatar image
+        embed.set_author(name="OpenGLaDOS", icon_url="https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png")
+
+        # Send the embed
+        await interaction.response.send_message(embed=embed)
+
     # Slash command to get a random cake GIF
     @app_commands.command(name="get_random_gif", description="Get a random Black Forest cake or Portal GIF.")
     async def get_random_gif(self, interaction: discord.Interaction):
@@ -791,7 +874,7 @@ class OpenGLaDOS(commands.Cog):
         llm_answer = ensure_code_blocks_closed(llm_answer)
         await interaction.followup.send(llm_answer+" ...*bzzzzzt...bzzzzzt*...")
 
-    @app_commands.command(name="hate_calc", description="Calculates the level of hatred between two users. How lovely.")
+    @app_commands.command(name="hate_probability", description="Calculates the level of hatred between two users. How lovely.")
     async def hate_calc(self, interaction: discord.Interaction, user1: discord.Member, user2: discord.Member):
         # Extract the user IDs
         user1_id = user1.id
