@@ -67,8 +67,8 @@ class OpenGLaDOSBot(commands.Bot):
                 print(f"Missing admin permissions in: {guild.name} ({guild.id})")
             else:
                 print(f"Bot has full permissions in: {guild.name} ({guild.id})")
-        activity = discord.Activity(
-            type=discord.ActivityType.streaming,
+        activity = discord.Streaming(
+            name="ⓘ Confusing people since 2024",
             url="https://www.youtube.com/watch?v=c3IVTi6TlfE",
         )
         await self.change_presence(status=discord.Status.online, activity=activity)
