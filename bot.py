@@ -658,10 +658,10 @@ class OpenGLaDOS(commands.Cog):
         meaninglessness_coefficient = 0.5 - (user_id % 10) / 10
 
         # Combine meaninglessness_coefficient and probability to calculate probability of demise
-        demise_probability = abs(probability * meaninglessness_coefficient)
+        demise_probability = 1 + probability * meaninglessness_coefficient
 
         # Round the probability to a readable format
-        rounded_probability = round(demise_probability * 100, 14)
+        rounded_probability = round(demise_probability * 100, 13)
 
         if probability < 0.5:
             description = (
