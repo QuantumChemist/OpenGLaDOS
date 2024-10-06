@@ -670,7 +670,7 @@ class OpenGLaDOS(commands.Cog):
             if message.author == self.bot.user:
                 mirrored_and_reversed_content = mirror_and_reverse_text(
                     message.content)  # Mirror and reverse the message content
-                await interaction.response.send_message(f"```vbnet\n{mirrored_and_reversed_content}\n```\n "
+                await interaction.response.send_message(f"```vbnet\n{mirrored_and_reversed_content}\n``` \n"
                                                         f"Message successfully retrieved... Now, if you'll excuse me, "
                                                         f"I have more important things to attend to.", ephemeral=True)
             else:
