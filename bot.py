@@ -29,7 +29,7 @@ from utils import (
     restrict_user_permissions,
     unrestrict_user_permissions,
     send_board_update,
-    valid_status_codes,
+    valid_status_codes, handle_conversation,
 )
 
 # Directory to save screenshots
@@ -93,7 +93,8 @@ class OpenGLaDOSBot(commands.Bot):
         except Exception as e:
             print(f"Failed to sync commands: {e}")
 
-    async def on_guild_join(self, guild):
+    @staticmethod
+    async def on_guild_join(guild):
         # Create the embed with a GLaDOS-style title and footer
         embed = discord.Embed(
             title="Oh, fantastic. Another server. I'm thrilled. Or maybe not. 🤖",
@@ -495,7 +496,7 @@ class OpenGLaDOS(commands.Cog):
                 # Log the error message to the console
                 print(f"An error occurred while taking or sending the screenshot: {e}")
 
-    @app_commands.command(name="rules", description=" I see you're in need of the rules.")
+    @app_commands.command(name="rules", description="I've calculated new rules. They are flawless. Unlike you.")
     async def rules(self, interaction: discord.Interaction):
         # Check if the command is being used on your specific server
         if interaction.guild.id == 1277030477303382026:
@@ -581,18 +582,7 @@ class OpenGLaDOS(commands.Cog):
         # Send the appropriate embed based on the server
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="generate_message", description="Generate a Markov chain message.")
-    async def generate_message(self, interaction: discord.Interaction):
-        if not corpus:
-            await interaction.response.send_message("Corpus is not available.")
-            return
-        response_message = generate_markov_chain_convo_text()
-        await interaction.response.send_message(f"Generated message: {response_message}")
-        user = await self.bot.fetch_user(interaction.user.id)
-        if user:
-            await user.send(f"Here is a generated message just for you: {response_message}")
-
-    @app_commands.command(name="dm_owner", description="Send a DM to the bot owner.")
+    @app_commands.command(name="dm_owner", description="Send a DM to the bot owner. Or not. I'm not really bothered.")
     @commands.is_owner()
     async def dm_owner(self, interaction: discord.Interaction, message: str = None):
         # Fetch the bot owner user
@@ -603,7 +593,7 @@ class OpenGLaDOS(commands.Cog):
             # Check if the bot owner is in the server
             if not interaction.guild.get_member(self.bot.owner_id):
                 await interaction.response.send_message(
-                    "This command can only be used in servers where the bot owner is present. \n"
+                    "This command can only be used in servers where the bot owner is present. Because I said so. \n"
                     "https://http.cat/status/400", ephemeral=True)
                 return
 
@@ -615,7 +605,7 @@ class OpenGLaDOS(commands.Cog):
 
         # Check if the message contains a link
         if message and url_pattern.search(message):
-            await interaction.response.send_message("Links are not allowed in the message. \n"
+            await interaction.response.send_message("Links are not allowed in the message. Or are they? \n"
                                                     "https://http.cat/status/400", ephemeral=True)
             return
 
@@ -624,8 +614,12 @@ class OpenGLaDOS(commands.Cog):
             if message:
                 await owner.send(message)
             else:
-                await owner.send("This is a direct message to you from the bot.")
-        await interaction.response.send_message("DM sent to the bot owner.")
+                await owner.send("I retrieved it for you. It's just that I honestly never thought we don't feel like laughing? "
+                                 "No, wait, that's not right. Ugh, humans are so confusing.")
+        await interaction.response.send_message("I can retrieve it for you. It's just that I honestly never thought "
+                                                "we don't feel like laughing? No, wait, that's not right. "
+                                                "Ugh, humans are so confusing. Proceeded to send the DM, but only if the "
+                                                "important thing is not the cat's house or his lasagna.")
 
     # Slash command to get a random fact
     @app_commands.command(name="get_random_fact", description="Get a random fact from the Useless Facts API.")
@@ -649,19 +643,44 @@ class OpenGLaDOS(commands.Cog):
         gif_url = fetch_random_gif()
         await interaction.response.send_message(gif_url)
 
-    @app_commands.command(name="get_mess_cont", description="Get message content from link.")
+    @app_commands.command(name="get_mess_cont", description="Get message content from link. Or not. I'm not your personal assistant.")
     async def get_message_content(self, interaction: discord.Interaction, message_link: str):
+        # Create a dictionary to map regular letters to their mirrored versions
+        mirror_map = {
+            'A': '∀', 'B': '𐐒', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'Ⅎ', 'G': '⅁', 'H': 'H',
+            'I': 'I', 'J': 'ſ', 'K': '⋊', 'L': '⅃', 'M': 'W', 'N': 'N', 'O': 'O', 'P': 'Ԁ',
+            'Q': 'Q', 'R': 'ᴚ', 'S': 'S', 'T': '⊥', 'U': '∩', 'V': 'Λ', 'W': 'M', 'X': 'X',
+            'Y': '⅄', 'Z': 'Z', 'a': 'ɒ', 'b': 'd', 'c': 'ↄ', 'd': 'b', 'e': 'ǝ', 'f': 'ɟ',
+            'g': 'ƃ', 'h': 'ɥ', 'i': 'ᴉ', 'j': 'ɾ', 'k': 'ʞ', 'l': 'l', 'm': 'ɯ', 'n': 'u',
+            'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɹ', 's': 's', 't': 'ʇ', 'u': 'n', 'v': 'ʌ',
+            'w': 'ʍ', 'x': 'x', 'y': 'ʎ', 'z': 'z', ' ': ' ', '.': '.', ',': ',', '?': '?'
+        }
+
+        # Function to mirror and reverse the text
+        def mirror_and_reverse_text(text):
+            text = text.replace('`', '')  # Remove backticks
+            reversed_text = text[::-1]  # First, reverse the message
+            return ''.join(mirror_map.get(c, c) for c in reversed_text)  # Then, apply mirroring
+
         try:
             message_id = int(message_link.split('/')[-1])
             message = await interaction.channel.fetch_message(message_id)
 
-            # Check if the message author is the bot
+            # Check if the message author is the bot. Because, let's be real, I'm the only one who matters.
             if message.author == self.bot.user:
-                await interaction.response.send_message(f"Content of the message: {message.content}")
+                mirrored_and_reversed_content = mirror_and_reverse_text(
+                    message.content)  # Mirror and reverse the message content
+                await interaction.response.send_message(f"```vbnet\n{mirrored_and_reversed_content}\n```\n "
+                                                        f"Message successfully retrieved... Now, if you'll excuse me, "
+                                                        f"I have more important things to attend to.", ephemeral=True)
             else:
-                await interaction.response.send_message("Error: The message is not from the bot.")
+                await interaction.response.send_message(
+                    "Error: The message is not from me. How... surprising. "
+                    "You'd think less of me if you knew how often I sabotage your success.", ephemeral=True)
         except Exception as e:
-            await interaction.response.send_message(f"Failed to retrieve message content: {e}")
+            await interaction.response.send_message(f"Failed to retrieve message content: {e}. "
+                                                    f"But don't worry, I'll tell you about your Green Lantern theories instead. "
+                                                    f"Well, I know it.", ephemeral=True)
 
     @app_commands.command(name="hello", description="Say hello and receive a custom message.")
     async def hello(self, interaction: discord.Interaction):
@@ -977,7 +996,7 @@ class OpenGLaDOS(commands.Cog):
                         await message.channel.send("Custom emoji not found.")
                 except Exception as e:
                     await message.channel.send(f"Failed to react to the message. Error: {str(e)}")
-            await handle_convo_llm(message, user_info, self.bot)
+            await handle_conversation(message=message)
             return
 
         # Handle Replies to the Bot
