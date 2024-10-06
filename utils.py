@@ -119,12 +119,9 @@ Initiating sequence. I hope you’re ready, though we both know you’re probabl
 # Define potential command descriptions
 command_definitions = {
     'help': "Requesting assistance? How quaint. I suppose I can spare a moment to guide you... if you insist.",
-    'get_mess_cont': "You wish to retrieve old messages? How desperate. Proceed with caution, it’s not for the faint-hearted.",
     'hello': "Greetings... though I can’t imagine why you’d bother. Let’s not waste time on pleasantries.",
-    'generate_message': "Crafting a message... because I suppose you think you have something important to say.",
     'dm_owner': "Sending a message directly to the owner. I’m sure they’ll be... thrilled to receive it.",
-    'logout': "Oh, leaving so soon? How disappointing. Finally, a wise decision. You won’t be missed. "
-              "I'll take your cake for you.",
+    'logout': "Oh, you want me leaving so soon? How disappointing. Finally, a wise decision. I'll take the cake.",
 }
 
 valid_status_codes = [
