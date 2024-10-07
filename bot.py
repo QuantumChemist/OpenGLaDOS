@@ -683,7 +683,7 @@ class OpenGLaDOS(commands.Cog):
 
         # Create the detailed output in a code block
         output_text = f"""
-[MEANINGLESS OF HUMAN LIFE PROBABILITY CALCULATION MODULE]
+[MEANINGLESSNESS OF HUMAN LIFE PROBABILITY CALCULATION MODULE]
 
 Input parameters:
   - User ID: {user_mention}
@@ -709,7 +709,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         # Create an embed
         embed = discord.Embed(
-            title="MeaningLess Of Human Life Probability Calculation Module",
+            title="Meaninglessness Of Human Life Probability Calculation Module",
             description=f"```\n{output_text}\n```",
             color=0xF8F04D  # Choose a OpenGLaDOS-like color
         )
