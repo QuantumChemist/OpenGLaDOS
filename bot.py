@@ -9,10 +9,8 @@ import asyncio
 import random
 from html import escape
 from html2image import Html2Image
-from corpus import corpus
 from datetime import time, timedelta, datetime, timezone
 from utils import (
-    generate_markov_chain_convo_text,
     bot_description,
     get_groq_completion,
     ensure_code_blocks_closed,
@@ -20,7 +18,6 @@ from utils import (
     retrieve_kicked_from_dm,
     fetch_random_gif,
     fetch_random_fact,
-    introduction_llm,
     command_definitions,
     handle_convo_llm,
     give_access_to_test_chambers,
@@ -30,6 +27,7 @@ from utils import (
     unrestrict_user_permissions,
     send_board_update,
     valid_status_codes, handle_conversation,
+    replace_mentions_with_display_names,
 )
 
 # Directory to save screenshots
@@ -354,31 +352,9 @@ class OpenGLaDOS(commands.Cog):
                 # Regex pattern to match <@user_id> or <@!user_id>
                 mention_pattern = re.compile(r'&lt;@!?(\d+)&gt;')
 
-                # Create a function to replace mentions with display names
-                async def replace_mentions_with_display_names(content, guild):
-                    # Find all user mentions
-                    tmp_user_ids = mention_pattern.findall(content)
-                    # If IDs are found, attempt to replace them with display names
-                    if tmp_user_ids:
-                        for user_id in tmp_user_ids:
-                            member = None
-                            try:
-                                # Fetch the member object directly from Discord
-                                member = await guild.fetch_member(int(user_id))
-                            except discord.errors.NotFound:
-                                continue
-
-                            if member:
-                                # Replace the HTML-escaped mention with the member's display name in the content
-                                content = content.replace(f"&lt;@{user_id}&gt;", f"@{member.display_name}")
-                                content = content.replace(f"&lt;@!{user_id}&gt;", f"@{member.display_name}")
-                    else:
-                        print("No user mentions found in the content.")
-                    return content
-
                 # Now, apply this to your message content
                 if message.guild:
-                    processed_content = await replace_mentions_with_display_names(processed_content, message.guild)
+                    processed_content = await replace_mentions_with_display_names(processed_content, message.guild, mention_pattern)
 
                 # Construct the complete HTML content
                 content = f"""
