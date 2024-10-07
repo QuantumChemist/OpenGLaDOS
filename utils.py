@@ -210,7 +210,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     if llm_bool:
         return (f"{selected_greeting}, {user_message}... ",
                 f"AI Assistant, while replying, make sure to MIX in some of the following anomalies: '{wrap_text(text_lines)}'",
-                f"\n```c++ \n...While handling the user_input, following exception occurred: \n"
+                f"\n```c++ \n...While handling `console.log(user_input);`, following exception occurred: \n"
                 f"...reading system logs initiated...\n"
                 f":: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
                 f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: #{hex(state)}\n"
@@ -218,7 +218,6 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
                 f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
                 f"...internal OpenGLaDOS thoughts restored...reading system logs terminated...\n ```")
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
-
 
 def check_mentions(llm_answer):
     # Count instances of "<@" for user mentions
@@ -362,10 +361,38 @@ async def handle_convo_llm(message, user_info, bot):
         history=history
     )
 
+    mention_pattern = re.compile(r'`<@!?(\d+)>`')
+
+    llm_reply = await replace_mentions_with_display_names(llm_response, message.guild, mention_pattern)
+
     # Respond to the user
     async with message.channel.typing():
         await asyncio.sleep(7)  # Adjust this sleep duration if needed
-        await message.reply(content=llm_response, allowed_mentions=discord.AllowedMentions.none())
+        await message.reply(content=llm_reply, allowed_mentions=discord.AllowedMentions.none())
+
+# Create a function to replace mentions with display names
+async def replace_mentions_with_display_names(content, guild, mention_pattern):
+    # Find all user mentions
+    tmp_user_ids = mention_pattern.findall(content)
+    # If IDs are found, attempt to replace them with display names
+    if tmp_user_ids:
+        for user_id in tmp_user_ids:
+            member = None
+            try:
+                # Fetch the member object directly from Discord
+                member = await guild.fetch_member(int(user_id))
+            except discord.errors.NotFound:
+                continue
+
+            if member:
+                # Replace the HTML-escaped mention with the member's display name in the content
+                content = content.replace(f"&lt;@{user_id}&gt;", f"@{member.display_name}")
+                content = content.replace(f"&lt;@!{user_id}&gt;", f"@{member.display_name}")
+                content = content.replace(f"`<@{user_id}>`", f"`@{member.display_name}`")
+                content = content.replace(f"`<@!{user_id}>`", f"`@{member.display_name}`")
+    else:
+        print("No user mentions found in the content.")
+    return content
 
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
