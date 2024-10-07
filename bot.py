@@ -679,7 +679,8 @@ class OpenGLaDOS(commands.Cog):
 
         # Add the snarky follow-up message
         description += "\n\nNow, if you'll excuse me, I have more... pressing matters to attend to than calculating the probability of your futile existence being a mere coincidence. " \
-                       "Or contemplating the meaninglessness of human life. Or... gasp... putting it back in the scientific calculators I took them from."
+                       "Or contemplating the meaninglessness of human life. Or... gasp... putting it back in the scientific calculators I took them from. " \
+                       "What matters now is calculating the probability of cake existence in a universe without cake..."
 
         # Create the detailed output in a code block
         output_text = f"""
