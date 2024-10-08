@@ -403,11 +403,14 @@ async def replace_mentions_with_display_names(content, guild, mention_pattern, r
         if custom_emojis:
             print("Custom emojis found:", custom_emojis)
             for emoji_name, emoji_id in custom_emojis:
-                # Normalize all emojis to <emoji_name:emoji_id> format
+                # Replace any occurrence of the emoji, even inside backticks
+                # Only replace if it's wrapped in backticks or not already in the correct format
                 normalized_emoji = f"<:{emoji_name}:{emoji_id}>"
-                print(f"Replacing {emoji_name}:{emoji_id} with {normalized_emoji}")
-                # Replace all forms of the emoji (with or without backticks, angle brackets)
-                content = re.sub(rf'`?:{emoji_name}:{emoji_id}`?', normalized_emoji, content)
+                # Check if it's already in the correct format or wrapped in backticks
+                if f"`<:{emoji_name}:{emoji_id}>`" in content or f"<:{emoji_name}:{emoji_id}>" not in content:
+                    print(f"Replacing {emoji_name}:{emoji_id} with {normalized_emoji}")
+                    # Remove any backticks and replace with the correct format
+                    content = re.sub(rf'`?<:{emoji_name}:{emoji_id}>`?', normalized_emoji, content)
     else:
         print("No user mentions found in the content.")
 
