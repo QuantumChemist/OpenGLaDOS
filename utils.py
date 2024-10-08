@@ -210,7 +210,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     # Concatenate the greeting with the generated text
     if llm_bool:
         return (f"{selected_greeting}, {user_message}... ",
-                f"AI Assistant, while replying, make sure to MIX in some of the following anomalies: '{wrap_text(text_lines)}'",
+                f"AI Assistant, while replying, make sure to autocomplete and MIX in some of the following anomalies: '{wrap_text(text_lines)}'",
                 f"\n```c++ \n...While handling `console.log(user_input);`, following exception occurred: \n"
                 f"...reading system logs initiated...\n"
                 f":: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
