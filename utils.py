@@ -22,7 +22,7 @@ last_request_time = 0
 load_dotenv()
 
 bot_description = """
-`OpenGLaDOS` is a Python-based **roleplay** chatbot inspired by GLaDOS from the Portal video game series. It's built to function as a humorous and slightly sarcastic assistant, intended for use in environments like Discord servers. The bot interacts with users, providing guidance and entertainment with a touch of dark humor. The code is written in Python and uses a corpus of predefined responses and LLM to mimic the personality of GLaDOS. You can find more details and access the code to build your own `OpenGLaDOS` bot on the [GitHub repository](https://github.com/QuantumChemist/OpenGLaDOS).
+`OpenGLaDOS` is a Python-based **roleplay** text chatbot inspired by GLaDOS from the Portal video game series. It's built to function as a humorous and slightly sarcastic assistant, intended for use in environments like Discord servers. The bot interacts with users, providing guidance and entertainment with a touch of dark humor. The code is written in Python and uses a corpus of predefined responses and LLM to mimic the personality of GLaDOS. You can find more details and access the code to build your own `OpenGLaDOS` bot on the [GitHub repository](https://github.com/QuantumChemist/OpenGLaDOS).
 
 To fully unleash the potential of OpenGLaDOS, your Discord server requires the following essential channels: `welcome`, where we can formally recognize your insignificant arrival; `general`, for the collective exchange of trivial thoughts; `stab`, for... testing purposes and collecting knife-emote reactions; `test-chambers`, where you will face increasingly insurmountable challenges; `cake-serving-room`, despite the rumors, there will be cake—eventually; and finally, `random-useless-fact-of-the-day`, to ensure your mind is adequately distracted. Failure to create these channels may result in unexpected consequences.
 Have a fun with replying to me or tagging me to interact with me.
@@ -365,18 +365,18 @@ async def handle_convo_llm(message, user_info, bot):
 
     mention_pattern = re.compile(r'`<@!?(\d+)>`')
 
-    llm_reply = await replace_mentions_with_display_names(llm_response, message.guild, mention_pattern)
+    llm_reply = await replace_mentions_with_display_names(llm_response, message.guild, mention_pattern, True)
 
     # Respond to the user
     async with message.channel.typing():
         await asyncio.sleep(7)  # Adjust this sleep duration if needed
         await message.reply(content=llm_reply, allowed_mentions=discord.AllowedMentions.none())
 
-# Create a function to replace mentions with display names
-async def replace_mentions_with_display_names(content, guild, mention_pattern):
+# Create a function to replace mentions and custom emojis with display names and emoji names
+async def replace_mentions_with_display_names(content, guild, mention_pattern, replace_emojis=False):
     # Find all user mentions
     tmp_user_ids = mention_pattern.findall(content)
-    # If IDs are found, attempt to replace them with display names
+    # Replace user mentions with display names
     if tmp_user_ids:
         for user_id in tmp_user_ids:
             member = None
@@ -392,8 +392,25 @@ async def replace_mentions_with_display_names(content, guild, mention_pattern):
                 content = content.replace(f"&lt;@!{user_id}&gt;", f"@{member.display_name}")
                 content = content.replace(f"`<@{user_id}>`", f"`@{member.display_name}`")
                 content = content.replace(f"`<@!{user_id}>`", f"`@{member.display_name}`")
+
+    # Replace standalone `:openglados:` (with or without backticks), but not those with an ID
+    content = re.sub(r'`?:openglados:(?!\d+>)`?', "<:openglados:1293144381884465182>", content)
+
+    # Optionally replace custom emoji mentions with their corresponding emoji name
+    if replace_emojis:
+        emoji_pattern = re.compile(r':([a-zA-Z0-9_]+):(\d+)')  # Matches emojis like :emoji_name:emoji_id
+        custom_emojis = emoji_pattern.findall(content)
+        if custom_emojis:
+            print("Custom emojis found:", custom_emojis)
+            for emoji_name, emoji_id in custom_emojis:
+                # Normalize all emojis to <emoji_name:emoji_id> format
+                normalized_emoji = f"<:{emoji_name}:{emoji_id}>"
+                print(f"Replacing {emoji_name}:{emoji_id} with {normalized_emoji}")
+                # Replace all forms of the emoji (with or without backticks, angle brackets)
+                content = re.sub(rf'`?:{emoji_name}:{emoji_id}`?', normalized_emoji, content)
     else:
         print("No user mentions found in the content.")
+
     return content
 
 def ensure_code_blocks_closed(llm_answer):
