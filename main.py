@@ -11,7 +11,7 @@ load_dotenv()
 
 # Initialize the bot with a prefix and intents
 bot = OpenGLaDOSBot(command_prefix=commands.when_mentioned_or('!'), intents=discord.Intents.all())
-bot.owner_id = int(os.environ.get('chichi'))
+bot.owner_id = int(os.environ.get('CHICHI'))
 
 # Define the main function to setup and start the bot
 async def main():
