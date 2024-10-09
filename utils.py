@@ -191,7 +191,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
     state = random.choice([2, 3])
     text_model = markovify.Text(text, state_size=state)
 
-    random_number = random.randint(1, 3)
+    random_number = random.randint(1, 2)
     random_word = random.choice(start_line)
     pattern = r'\b' + re.escape(random_word) + r'\b'
     if re.search(pattern, text):
