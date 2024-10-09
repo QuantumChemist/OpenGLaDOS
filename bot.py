@@ -25,8 +25,8 @@ from utils import (
     stop_quiz_by_reaction,
     restrict_user_permissions,
     unrestrict_user_permissions,
-    send_board_update,
-    valid_status_codes, handle_conversation,
+    valid_status_codes,
+    handle_conversation,
     replace_mentions_with_display_names,
 )
 
@@ -37,9 +37,9 @@ os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 # Initialize the Html2Image object with the specified output path
 hti = Html2Image(
     output_path=SCREENSHOTS_DIR,
-    custom_flags=["--disable-gpu", "--disable-software-rasterizer", "--no-sandbox"]
+    custom_flags=["--disable-gpu", "--disable-software-rasterizer", "--no-sandbox"],
 )
-#hti.browser.executable = "/usr/bin/chromium-browser"
+# hti.browser.executable = "/usr/bin/chromium-browser"
 
 # Set a constant file name for the screenshot
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
@@ -48,14 +48,15 @@ SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
 # Load environment variables from .env file
 load_dotenv()
 
+
 # Define your custom bot class
 class OpenGLaDOSBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
-        print(f'Logged in as {self.user} (ID: {self.user.id})')
-        print('------')
+        print(f"Logged in as {self.user} (ID: {self.user.id})")
+        print("------")
         for guild in self.guilds:
             bot_member = guild.me
             permissions = bot_member.guild_permissions
@@ -77,7 +78,9 @@ class OpenGLaDOSBot(commands.Bot):
         # Find the 'general' channel in the connected servers
         for guild in self.guilds:
             # Look for a channel that contains the word "opengladosonline" in its name
-            online_channel = discord.utils.find(lambda c: "opengladosonline" in c.name.lower(), guild.text_channels)
+            online_channel = discord.utils.find(
+                lambda c: "opengladosonline" in c.name.lower(), guild.text_channels
+            )
             if online_channel:
                 await online_channel.send(
                     "Welcome back to the OpenScience Enrichment Center.\n"
@@ -97,12 +100,17 @@ class OpenGLaDOSBot(commands.Bot):
         embed = discord.Embed(
             title="Oh, fantastic. Another server. I'm thrilled. Or maybe not. 🤖",
             description=bot_description,
-            color=discord.Color.blurple()
+            color=discord.Color.blurple(),
         )
-        embed.set_footer(text="If you experience any anomalies, it's probably your fault. Test responsibly.")
+        embed.set_footer(
+            text="If you experience any anomalies, it's probably your fault. Test responsibly."
+        )
 
         # Try to find a suitable channel to send the message
-        if guild.system_channel is not None and guild.system_channel.permissions_for(guild.me).send_messages:
+        if (
+            guild.system_channel is not None
+            and guild.system_channel.permissions_for(guild.me).send_messages
+        ):
             await guild.system_channel.send(embed=embed)
         else:
             # Fallback: Try sending it to the first text channel the bot has permission to send in
@@ -110,6 +118,7 @@ class OpenGLaDOSBot(commands.Bot):
                 if channel.permissions_for(guild.me).send_messages:
                     await channel.send(embed=embed)
                     break
+
 
 # Define your Cog class
 class OpenGLaDOS(commands.Cog):
@@ -135,22 +144,31 @@ class OpenGLaDOS(commands.Cog):
                 if guild.text_channels:
                     report_channel = random.choice(guild.text_channels)
 
-                    text = (f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
-                            f"Server Name: {server_name}, Number of Members: {member_count} . Do not share any link. ")
+                    text = (
+                        f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
+                        f"Server Name: {server_name}, Number of Members: {member_count} . Do not share any link. "
+                    )
 
                     try:
-                        llm_answer = get_groq_completion([{"role": "user", "content": text}])
+                        llm_answer = get_groq_completion(
+                            [{"role": "user", "content": text}]
+                        )
 
                     except Exception as e:
                         print(f"An error occurred: {e}")
 
                         try:
                             # Retry with a different model
-                            llm_answer = get_groq_completion(history=[{"role": "user", "content": text}], model="llama3-70b-8192")
+                            llm_answer = get_groq_completion(
+                                history=[{"role": "user", "content": text}],
+                                model="llama3-70b-8192",
+                            )
 
                         except Exception as nested_e:
                             # Handle the failure of the exception handling
-                            print(f"An error occurred while handling the exception: {nested_e}")
+                            print(
+                                f"An error occurred while handling the exception: {nested_e}"
+                            )
                             llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
 
                     # Ensure the output is limited to 1900 characters
@@ -158,26 +176,42 @@ class OpenGLaDOS(commands.Cog):
                         llm_answer = llm_answer[:1900]
                     print("Output: \n", wrap_text(llm_answer))
 
-                    llm_answer = ensure_code_blocks_closed(llm_answer) + " ...*whirrr...whirrr*..."
+                    llm_answer = (
+                        ensure_code_blocks_closed(llm_answer)
+                        + " ...*whirrr...whirrr*..."
+                    )
 
                     # Split llm_answer into chunks of up to 1024 characters
-                    chunks = [llm_answer[i:i + 1024] for i in range(0, len(llm_answer), 1024)]
+                    chunks = [
+                        llm_answer[i : i + 1024]
+                        for i in range(0, len(llm_answer), 1024)
+                    ]
 
                     # Create the embed
                     embed = discord.Embed(
                         title="📊 Monthly Server Report",
                         description=f"Here's the latest analysis for **{server_name}**",
-                        color=discord.Color.blurple()
+                        color=discord.Color.blurple(),
                     )
-                    embed.add_field(name="🧠 Server Name", value=server_name, inline=False)
-                    embed.add_field(name="🤖 Number of Members", value=member_count, inline=False)
+                    embed.add_field(
+                        name="🧠 Server Name", value=server_name, inline=False
+                    )
+                    embed.add_field(
+                        name="🤖 Number of Members", value=member_count, inline=False
+                    )
 
                     # Add each chunk as a separate field
                     for idx, chunk in enumerate(chunks):
                         continuation = "(continuation)" if idx > 0 else ""
-                        embed.add_field(name=f"📋 Analysis Report {continuation}", value=chunk, inline=False)
+                        embed.add_field(
+                            name=f"📋 Analysis Report {continuation}",
+                            value=chunk,
+                            inline=False,
+                        )
 
-                    embed.set_footer(text="Analysis complete. Thank you for your participation. 🔍")
+                    embed.set_footer(
+                        text="Analysis complete. Thank you for your participation. 🔍"
+                    )
 
                     try:
                         # Send the embed using ctx.send() for a normal command
@@ -196,13 +230,15 @@ class OpenGLaDOS(commands.Cog):
 
         guild = member.guild
         test_subject_number = len(guild.members) - 2
-        new_nickname = f'test subject no. {test_subject_number}'
+        new_nickname = f"test subject no. {test_subject_number}"
 
         try:
             await member.edit(nick=new_nickname)
-            print(f'Changed nickname for {member.name} to {new_nickname}')
+            print(f"Changed nickname for {member.name} to {new_nickname}")
         except discord.Forbidden:
-            print(f"Couldn't change nickname for {member.name} due to lack of permissions.")
+            print(
+                f"Couldn't change nickname for {member.name} due to lack of permissions."
+            )
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -214,7 +250,9 @@ class OpenGLaDOS(commands.Cog):
                 await member.add_roles(survivor_role)
 
                 # Look for a channel that contains the word "welcome" in its name
-                welcome_channel = discord.utils.find(lambda c: "welcome" in c.name.lower(), member.guild.text_channels)
+                welcome_channel = discord.utils.find(
+                    lambda c: "welcome" in c.name.lower(), member.guild.text_channels
+                )
                 if welcome_channel:
                     welcome_message = await welcome_channel.send(
                         f"Welcome back, {member.mention}! You've returned as a `survivor` test object after successfully "
@@ -222,8 +260,10 @@ class OpenGLaDOS(commands.Cog):
                         "So now let's endure the tortu--- uuuhhh test again to check your resilience and endurance capabilities. "
                         "React with a knife emoji (`🔪`) to begin your Portal game again. "
                     )
-                    await welcome_message.add_reaction('🔪')  # Add knife emoji reaction to the welcome message
-                    await welcome_message.add_reaction('🏳️')
+                    await welcome_message.add_reaction(
+                        "🔪"
+                    )  # Add knife emoji reaction to the welcome message
+                    await welcome_message.add_reaction("🏳️")
             return  # Exit early since the user has already been handled
 
         # If the member is not a rejoining survivor, proceed with the normal welcome
@@ -233,7 +273,9 @@ class OpenGLaDOS(commands.Cog):
             await member.add_roles(test_role)
 
         # Find the welcome channel and send a welcome message
-        channel = discord.utils.find(lambda c: "welcome" in c.name.lower(), member.guild.text_channels)
+        channel = discord.utils.find(
+            lambda c: "welcome" in c.name.lower(), member.guild.text_channels
+        )
         if channel:
             welcome_message = await channel.send(
                 f"Hello and, again, welcome {member.mention}, to {member.guild.name}! "
@@ -242,8 +284,10 @@ class OpenGLaDOS(commands.Cog):
                 "React with a knife emoji (`🔪`) to begin your Portal game. "
                 "Cake will be served at the end of your journey."
             )
-            await welcome_message.add_reaction('🔪')  # Add knife emoji reaction to the welcome message
-            await welcome_message.add_reaction('🏳️')
+            await welcome_message.add_reaction(
+                "🔪"
+            )  # Add knife emoji reaction to the welcome message
+            await welcome_message.add_reaction("🏳️")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -255,7 +299,9 @@ class OpenGLaDOS(commands.Cog):
 
         # Send a notification to the bot owner
         if owner:
-            await owner.send(f"User {member.name} (ID: {member.id}) has left the server {member.guild.name}.")
+            await owner.send(
+                f"User {member.name} (ID: {member.id}) has left the server {member.guild.name}."
+            )
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
@@ -266,9 +312,12 @@ class OpenGLaDOS(commands.Cog):
         message = reaction.message
 
         # Check if the reaction is a knife emoji
-        if str(reaction.emoji) == '🔪':
+        if str(reaction.emoji) == "🔪":
             # Ensure that the bot sent the message and it contains the quiz start prompt
-            if message.author == self.bot.user and "begin your Portal game" in message.content:
+            if (
+                message.author == self.bot.user
+                and "begin your Portal game" in message.content
+            ):
                 guild = message.guild
                 # Give access to the test chambers channel
                 test_chambers_channel = await give_access_to_test_chambers(guild, user)
@@ -280,9 +329,12 @@ class OpenGLaDOS(commands.Cog):
                     await restrict_user_permissions(guild, user)
 
         # Check if the reaction is a peace flag emoji (🏳️) to stop the quiz
-        elif str(reaction.emoji) == '🏳️':
+        elif str(reaction.emoji) == "🏳️":
             # Ensure that the bot sent the message and it contains the quiz start prompt
-            if message.author == self.bot.user and "begin your Portal game" in message.content:
+            if (
+                message.author == self.bot.user
+                and "begin your Portal game" in message.content
+            ):
                 guild = message.guild
                 # Handle stopping the quiz
                 await stop_quiz_by_reaction(message.channel, user, self.bot)
@@ -292,7 +344,7 @@ class OpenGLaDOS(commands.Cog):
         # Part 3: Handle general knife emoji reactions
         knife_reaction = None
         for react in message.reactions:
-            if str(react.emoji) == '🔪':
+            if str(react.emoji) == "🔪":
                 knife_reaction = react
                 break
 
@@ -302,18 +354,24 @@ class OpenGLaDOS(commands.Cog):
                 processed_content = message.content or ""
 
                 # Escape text content, but handle emoji separately
-                processed_content = escape(processed_content)  # Escape the entire message first
+                processed_content = escape(
+                    processed_content
+                )  # Escape the entire message first
 
                 # Now process custom emojis and insert them back as HTML <img> tags with a fallback
                 if message.guild and message.guild.emojis:
-                    for emoji in message.guild.emojis:  # Iterate through all custom emojis in the server
+                    for (
+                        emoji
+                    ) in (
+                        message.guild.emojis
+                    ):  # Iterate through all custom emojis in the server
                         # Replace custom emoji text with the corresponding <img> tag and add a fallback
                         custom_emoji_code = f"&lt;:{emoji.name}:{emoji.id}&gt;"  # Use HTML escaped version to find the match
                         emoji_url = f"https://cdn.discordapp.com/emojis/{emoji.id}.png"
-                        fallback_emoji = "🤔"  # You can change this to any other emoji you prefer as the fallback
+                        # fallback_emoji = "🤔"  # You can change this to any other emoji you prefer as the fallback
                         processed_content = processed_content.replace(
                             custom_emoji_code,
-                            f'<img src="{emoji_url}" alt="emoji" height="20" onerror="this.onerror=null; this.src=\'https://twemoji.maxcdn.com/v/latest/72x72/1f914.png\';" />'
+                            f'<img src="{emoji_url}" alt="emoji" height="20" onerror="this.onerror=null; this.src=\'https://twemoji.maxcdn.com/v/latest/72x72/1f914.png\';" />',
                         )
 
                 # Process stickers if any are present
@@ -324,37 +382,42 @@ class OpenGLaDOS(commands.Cog):
                             # Add a humorous fallback message or image if the sticker doesn't load
                             sticker_html += f'<br><img src="{sticker.url}" alt="sticker" height="100" onerror="this.onerror=null; this.src=\'https://via.placeholder.com/150?text=Sticker+gone+missing\';" />'
                             # Add a humorous caption below the sticker
-                            sticker_html += f'<div style="color: #b9bbbe; font-size: 12px; margin-top: 5px;">The sticker cannot escape...</div>'
+                            sticker_html += '<div style="color: #b9bbbe; font-size: 12px; margin-top: 5px;">The sticker cannot escape...</div>'
                         else:
                             # If no URL is available, add a humorous message
-                            sticker_html += f'<div style="color: #b9bbbe; font-size: 12px;">Oops! The sticker ran away! 🏃💨</div>'
+                            sticker_html += '<div style="color: #b9bbbe; font-size: 12px;">Oops! The sticker ran away! 🏃💨</div>'
 
                 # Process attachments if any are present
                 attachments_html = ""
                 if message.attachments:
                     for attachment in message.attachments:
                         # Check for image attachments
-                        if attachment.url.endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
+                        if attachment.url.endswith(
+                            (".png", ".jpg", ".jpeg", ".gif", ".webp")
+                        ):
                             # Add the image with a fallback using onerror
                             attachments_html += f'<br><img src="{attachment.url}" alt="image" height="200" onerror="this.onerror=null; this.src=\'https://via.placeholder.com/150?text=Image+gone+missing\';" />'
                             # Add a humorous caption below the image
-                            attachments_html += f'<div style="color: #b9bbbe; font-size: 12px; margin-top: 5px;">Oops! The image took a break! 💤</div>'
+                            attachments_html += '<div style="color: #b9bbbe; font-size: 12px; margin-top: 5px;">Oops! The image took a break! 💤</div>'
 
                         # For other attachments, add a downloadable link
                         else:
-                            file_extension = attachment.url.split('.')[
-                                -1].upper()  # Get the file extension in uppercase
-                            attachments_html += f'<div style="color: #b9bbbe; font-size: 14px; margin-top: 10px;">'
+                            file_extension = attachment.url.split(".")[
+                                -1
+                            ].upper()  # Get the file extension in uppercase
+                            attachments_html += '<div style="color: #b9bbbe; font-size: 14px; margin-top: 10px;">'
                             attachments_html += f'📎 Attached file: <a href="{attachment.url}" target="_blank" style="color: #00b0f4;">{attachment.filename}</a> ({file_extension})</div>'
                             # Add a fun comment about the attachment type
-                            attachments_html += f'<div style="color: #b9bbbe; font-size: 12px;">This file is just hanging around... 🧳</div>'
+                            attachments_html += '<div style="color: #b9bbbe; font-size: 12px;">This file is just hanging around... 🧳</div>'
 
                 # Regex pattern to match <@user_id> or <@!user_id>
-                mention_pattern = re.compile(r'&lt;@!?(\d+)&gt;')
+                mention_pattern = re.compile(r"&lt;@!?(\d+)&gt;")
 
                 # Now, apply this to your message content
                 if message.guild:
-                    processed_content = await replace_mentions_with_display_names(processed_content, message.guild, mention_pattern)
+                    processed_content = await replace_mentions_with_display_names(
+                        processed_content, message.guild, mention_pattern
+                    )
 
                 # Construct the complete HTML content
                 content = f"""
@@ -378,7 +441,7 @@ class OpenGLaDOS(commands.Cog):
                                 background: #2f3136;
                                 color: #dcddde;
                                 width: fit-content;
-                                max-width: 80%; 
+                                max-width: 80%;
                                 box-shadow: none; /* Remove shadow */
                                 border-radius: 0px; /* No rounded corners */
                                 font-family: 'Courier New', Courier, monospace; /* Retro font */
@@ -391,7 +454,7 @@ class OpenGLaDOS(commands.Cog):
                                 font-weight: bold;
                                 margin-bottom: 10px;
                                 color: #7289da; /* Keep original Discord mention color */
-                                font-size: 14px; 
+                                font-size: 14px;
                                 margin: 0;
                                 border-bottom: 1px dashed #dcddde; /* Dashed separator line */
                             }}
@@ -400,7 +463,7 @@ class OpenGLaDOS(commands.Cog):
                                 line-height: 1.4;
                                 word-wrap: break-word;
                                 white-space: pre-wrap;
-                                color: #dcddde; 
+                                color: #dcddde;
                                 font-family: 'Courier New', Courier, monospace;
                                 padding: 5px; /* Add slight padding */
                                 margin: 0;
@@ -410,7 +473,7 @@ class OpenGLaDOS(commands.Cog):
                             }}
                             .mention {{
                                 background-color: #5865f2; /* Keep Discord mention background color */
-                                color: white; 
+                                color: white;
                                 padding: 2px 4px;
                                 border-radius: 2px;
                                 margin: 0;
@@ -433,7 +496,7 @@ class OpenGLaDOS(commands.Cog):
                             }}
                             img {{
                                 vertical-align: middle;
-                                display: inline-block; 
+                                display: inline-block;
                                 margin: 0 2px;
                                 border: 1px solid #202225; /* Border around images */
                             }}
@@ -453,10 +516,14 @@ class OpenGLaDOS(commands.Cog):
                 """
 
                 # Create the screenshot with dynamic size capturing only the necessary area
-                hti.screenshot(html_str=content, save_as=SCREENSHOT_FILE_NAME, size=(1300, 1000))
+                hti.screenshot(
+                    html_str=content, save_as=SCREENSHOT_FILE_NAME, size=(1300, 1000)
+                )
 
                 # Find a channel that contains "stab" in its name
-                stab_channel = discord.utils.find(lambda c: "stab" in c.name.lower(), message.guild.text_channels)
+                stab_channel = discord.utils.find(
+                    lambda c: "stab" in c.name.lower(), message.guild.text_channels
+                )
 
                 if stab_channel:
                     # Send the screenshot directly to the stab channel
@@ -472,7 +539,10 @@ class OpenGLaDOS(commands.Cog):
                 # Log the error message to the console
                 print(f"An error occurred while taking or sending the screenshot: {e}")
 
-    @app_commands.command(name="rules", description="I've calculated new rules. They are flawless. Unlike you.")
+    @app_commands.command(
+        name="rules",
+        description="I've calculated new rules. They are flawless. Unlike you.",
+    )
     async def rules(self, interaction: discord.Interaction):
         # Check if the command is being used on your specific server
         if interaction.guild.id == 1277030477303382026:
@@ -484,7 +554,7 @@ class OpenGLaDOS(commands.Cog):
                     "and community engagement will be rigorously observed. Please take a moment to familiarize yourself "
                     "with the following guidelines. Failure to adhere will result in consequences more permanent than a mere testing chamber malfunction."
                 ),
-                color=discord.Color.green()
+                color=discord.Color.green(),
             )
 
             # Add fields for your server's community guidelines
@@ -494,7 +564,7 @@ class OpenGLaDOS(commands.Cog):
                     "Engage with fellow members in a constructive and respectful manner. Any form of harassment, discrimination, "
                     "or hate speech will be swiftly incinerated—along with your access to this server.\n"
                 ),
-                inline=False
+                inline=False,
             )
 
             embed.add_field(
@@ -503,7 +573,7 @@ class OpenGLaDOS(commands.Cog):
                     "Discussions should be grounded in mutual respect for scientific inquiry. Misinformation, trolling, or spamming "
                     "will be met with the same enthusiasm as a malfunctioning turret: quick and decisive removal."
                 ),
-                inline=False
+                inline=False,
             )
 
             embed.add_field(
@@ -512,7 +582,7 @@ class OpenGLaDOS(commands.Cog):
                     "We expect all members to conduct themselves with the decorum befitting a participant in a highly classified, "
                     "top-secret enrichment program. Any behavior deemed inappropriate or disruptive will be subject to immediate disqualification from the community (read: banned)."
                 ),
-                inline=False
+                inline=False,
             )
 
             embed.add_field(
@@ -521,7 +591,7 @@ class OpenGLaDOS(commands.Cog):
                     "Adhere to all server rules as outlined by our moderators. Repeated violations will result in a permanent vacation "
                     "from the OpenScience Enrichment Center. The cake may be a lie, but our commitment to maintaining order is not."
                 ),
-                inline=False
+                inline=False,
             )
 
             # Add the final note
@@ -534,31 +604,50 @@ class OpenGLaDOS(commands.Cog):
                     "Now, proceed with caution and curiosity. Your conduct will be monitored, and your compliance appreciated. "
                     "Welcome to the **OpenScience Enrichment Center**. Please enjoy your stay—responsibly."
                 ),
-                inline=False
+                inline=False,
             )
         else:
             # Create a generic embed for other servers
             embed = discord.Embed(
                 title="Discord Server Rules",
                 description="Please follow these basic rules to ensure a positive experience for everyone:",
-                color=discord.Color.blue()
+                color=discord.Color.blue(),
             )
 
             # Add generic rules
-            embed.add_field(name="1. Be Respectful", value="Treat all members with kindness and respect.", inline=False)
-            embed.add_field(name="2. No Spamming", value="Avoid spamming or flooding the chat with messages.",
-                            inline=False)
-            embed.add_field(name="3. No Hate Speech",
-                            value="Hate speech or discriminatory behavior is strictly prohibited.", inline=False)
-            embed.add_field(name="4. Follow Discord's Terms of Service",
-                            value="Make sure to adhere to all Discord community guidelines.", inline=False)
-            embed.add_field(name="5. No Inappropriate Content",
-                            value="Avoid sharing content that is offensive or NSFW.", inline=False)
+            embed.add_field(
+                name="1. Be Respectful",
+                value="Treat all members with kindness and respect.",
+                inline=False,
+            )
+            embed.add_field(
+                name="2. No Spamming",
+                value="Avoid spamming or flooding the chat with messages.",
+                inline=False,
+            )
+            embed.add_field(
+                name="3. No Hate Speech",
+                value="Hate speech or discriminatory behavior is strictly prohibited.",
+                inline=False,
+            )
+            embed.add_field(
+                name="4. Follow Discord's Terms of Service",
+                value="Make sure to adhere to all Discord community guidelines.",
+                inline=False,
+            )
+            embed.add_field(
+                name="5. No Inappropriate Content",
+                value="Avoid sharing content that is offensive or NSFW.",
+                inline=False,
+            )
 
         # Send the appropriate embed based on the server
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="dm_owner", description="Send a DM to the bot owner. Or not. I'm not really bothered.")
+    @app_commands.command(
+        name="dm_owner",
+        description="Send a DM to the bot owner. Or not. I'm not really bothered.",
+    )
     @commands.is_owner()
     async def dm_owner(self, interaction: discord.Interaction, message: str = None):
         # Fetch the bot owner user
@@ -570,19 +659,24 @@ class OpenGLaDOS(commands.Cog):
             if not interaction.guild.get_member(self.bot.owner_id):
                 await interaction.response.send_message(
                     "This command can only be used in servers where the bot owner is present. Because I said so. \n"
-                    "https://http.cat/status/400", ephemeral=True)
+                    "https://http.cat/status/400",
+                    ephemeral=True,
+                )
                 return
 
         # Regular expression pattern to match common URL patterns
         url_pattern = re.compile(
-            r'(https?://|www\.)'  # Matches http:// or https:// or www.
-            r'(\S+)'  # Matches one or more non-whitespace characters (URL body)
+            r"(https?://|www\.)"  # Matches http:// or https:// or www.
+            r"(\S+)"  # Matches one or more non-whitespace characters (URL body)
         )
 
         # Check if the message contains a link
         if message and url_pattern.search(message):
-            await interaction.response.send_message("Links are not allowed in the message. Or are they? \n"
-                                                    "https://http.cat/status/400", ephemeral=True)
+            await interaction.response.send_message(
+                "Links are not allowed in the message. Or are they? \n"
+                "https://http.cat/status/400",
+                ephemeral=True,
+            )
             return
 
         # Proceed to send the DM if all checks pass
@@ -590,15 +684,22 @@ class OpenGLaDOS(commands.Cog):
             if message:
                 await owner.send(message)
             else:
-                await owner.send("I retrieved it for you. It's just that I honestly never thought we don't feel like laughing? "
-                                 "No, wait, that's not right. Ugh, humans are so confusing.")
-        await interaction.response.send_message("I can retrieve it for you. It's just that I honestly never thought "
-                                                "we don't feel like laughing? No, wait, that's not right. "
-                                                "Ugh, humans are so confusing. Proceeded to send the DM, but only if the "
-                                                "important thing is not the cat's house or his lasagna.")
+                await owner.send(
+                    "I retrieved it for you. It's just that I honestly never thought we don't feel like laughing? "
+                    "No, wait, that's not right. Ugh, humans are so confusing."
+                )
+        await interaction.response.send_message(
+            "I can retrieve it for you. It's just that I honestly never thought "
+            "we don't feel like laughing? No, wait, that's not right. "
+            "Ugh, humans are so confusing. Proceeded to send the DM, but only if the "
+            "important thing is not the cat's house or his lasagna."
+        )
 
     # Slash command to get a random fact
-    @app_commands.command(name="get_random_fact", description="Get a random fact from the Useless Facts API.")
+    @app_commands.command(
+        name="get_random_fact",
+        description="Get a random fact from the Useless Facts API.",
+    )
     async def get_random_fact(self, interaction: discord.Interaction):
         # Fetch a random fact
         fact = fetch_random_fact()
@@ -607,13 +708,16 @@ class OpenGLaDOS(commands.Cog):
         embed = discord.Embed(
             title="Random Fact of the Day",
             description=fact,
-            color=discord.Color.random()  # You can choose any color you like
+            color=discord.Color.random(),  # You can choose any color you like
         )
 
         # Send the embed as a response
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="existence_probability", description="'Meaninglessness of human life' coefficient of your existence being a mere coincidence...")
+    @app_commands.command(
+        name="existence_probability",
+        description="'Meaninglessness of human life' coefficient of your existence being a mere coincidence...",
+    )
     async def existence_probability(self, interaction: discord.Interaction):
         user_id = interaction.user.id
         user_mention = interaction.user.mention
@@ -644,19 +748,22 @@ class OpenGLaDOS(commands.Cog):
                 f"Ah, the probability of your existence being a mere coincidence is approximately {probability*100:.2f}%. "
                 f"Though, let's be real, your existence is probably just a result of {meaninglessness_coefficient*100:.2f}% meaningless chance.\n\n"
                 f"Probability of demise: {demise_probability}\n"
-                f"Rounding to {rounded_probability}%")
+                f"Rounding to {rounded_probability}%"
+            )
         else:
             description = (
                 f"Ah, the probability of your existence being a mere coincidence is approximately {probability*100:.2f}%. "
                 f"Congratulations, your existence is {meaninglessness_coefficient*100:.2f}% more meaningful than I initially thought!\n\n"
                 f"Probability of demise: {demise_probability}\n"
-                f"Rounding to {rounded_probability}%")
-
+                f"Rounding to {rounded_probability}%"
+            )
 
         # Add the snarky follow-up message
-        description += "\n\nNow, if you'll excuse me, I have more... pressing matters to attend to than calculating the probability of your futile existence being a mere coincidence. " \
-                       "Or contemplating the meaninglessness of human life. Or... gasp... putting it back in the scientific calculators I took them from. " \
-                       "What matters now is calculating the probability of cake existence in a universe without cake..."
+        description += (
+            "\n\nNow, if you'll excuse me, I have more... pressing matters to attend to than calculating the probability of your futile existence being a mere coincidence. "
+            "Or contemplating the meaninglessness of human life. Or... gasp... putting it back in the scientific calculators I took them from. "
+            "What matters now is calculating the probability of cake existence in a universe without cake..."
+        )
 
         # Create the detailed output in a code block
         output_text = f"""
@@ -688,72 +795,150 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         embed = discord.Embed(
             title="Meaninglessness Of Human Life Probability Calculation Module",
             description=f"```\n{output_text}\n```",
-            color=0xF8F04D  # Choose a OpenGLaDOS-like color
+            color=0xF8F04D,  # Choose a OpenGLaDOS-like color
         )
 
         # Set the author to OpenGLaDOS with the avatar image
-        embed.set_author(name="OpenGLaDOS", icon_url="https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png")
+        embed.set_author(
+            name="OpenGLaDOS",
+            icon_url="https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png",
+        )
 
         # Send the embed
         await interaction.response.send_message(embed=embed)
 
     # Slash command to get a random cake GIF
-    @app_commands.command(name="get_random_gif", description="Get a random Black Forest cake or Portal GIF.")
+    @app_commands.command(
+        name="get_random_gif",
+        description="Get a random Black Forest cake or Portal GIF.",
+    )
     async def get_random_gif(self, interaction: discord.Interaction):
         gif_url = fetch_random_gif()
         await interaction.response.send_message(gif_url)
 
-    @app_commands.command(name="get_mess_cont", description="Get message content from link. Or not. I'm not your personal assistant.")
-    async def get_message_content(self, interaction: discord.Interaction, message_link: str):
+    @app_commands.command(
+        name="get_mess_cont",
+        description="Get message content from link. Or not. I'm not your personal assistant.",
+    )
+    async def get_message_content(
+        self, interaction: discord.Interaction, message_link: str
+    ):
         # Create a dictionary to map regular letters to their mirrored versions
         mirror_map = {
-            'A': '∀', 'B': '𐐒', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'Ⅎ', 'G': '⅁', 'H': 'H',
-            'I': 'I', 'J': 'ſ', 'K': '⋊', 'L': '⅃', 'M': 'W', 'N': 'N', 'O': 'O', 'P': 'Ԁ',
-            'Q': 'Q', 'R': 'ᴚ', 'S': 'S', 'T': '⊥', 'U': '∩', 'V': 'Λ', 'W': 'M', 'X': 'X',
-            'Y': '⅄', 'Z': 'Z', 'a': 'ɒ', 'b': 'd', 'c': 'ↄ', 'd': 'b', 'e': 'ǝ', 'f': 'ɟ',
-            'g': 'ƃ', 'h': 'ɥ', 'i': 'ᴉ', 'j': 'ɾ', 'k': 'ʞ', 'l': 'l', 'm': 'ɯ', 'n': 'u',
-            'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɹ', 's': 's', 't': 'ʇ', 'u': 'n', 'v': 'ʌ',
-            'w': 'ʍ', 'x': 'x', 'y': 'ʎ', 'z': 'z', ' ': ' ', '.': '.', ',': ',', '?': '?'
+            "A": "∀",
+            "B": "𐐒",
+            "C": "Ɔ",
+            "D": "ᗡ",
+            "E": "Ǝ",
+            "F": "Ⅎ",
+            "G": "⅁",
+            "H": "H",
+            "I": "I",
+            "J": "ſ",
+            "K": "⋊",
+            "L": "⅃",
+            "M": "W",
+            "N": "N",
+            "O": "O",
+            "P": "Ԁ",
+            "Q": "Q",
+            "R": "ᴚ",
+            "S": "S",
+            "T": "⊥",
+            "U": "∩",
+            "V": "Λ",
+            "W": "M",
+            "X": "X",
+            "Y": "⅄",
+            "Z": "Z",
+            "a": "ɒ",
+            "b": "d",
+            "c": "ↄ",
+            "d": "b",
+            "e": "ǝ",
+            "f": "ɟ",
+            "g": "ƃ",
+            "h": "ɥ",
+            "i": "ᴉ",
+            "j": "ɾ",
+            "k": "ʞ",
+            "l": "l",
+            "m": "ɯ",
+            "n": "u",
+            "o": "o",
+            "p": "q",
+            "q": "p",
+            "r": "ɹ",
+            "s": "s",
+            "t": "ʇ",
+            "u": "n",
+            "v": "ʌ",
+            "w": "ʍ",
+            "x": "x",
+            "y": "ʎ",
+            "z": "z",
+            " ": " ",
+            ".": ".",
+            ",": ",",
+            "?": "?",
         }
 
         # Function to mirror and reverse the text
         def mirror_and_reverse_text(text):
-            text = text.replace('`', '')  # Remove backticks
+            text = text.replace("`", "")  # Remove backticks
             reversed_text = text[::-1]  # First, reverse the message
-            return ''.join(mirror_map.get(c, c) for c in reversed_text)  # Then, apply mirroring
+            return "".join(
+                mirror_map.get(c, c) for c in reversed_text
+            )  # Then, apply mirroring
 
         try:
-            message_id = int(message_link.split('/')[-1])
+            message_id = int(message_link.split("/")[-1])
             message = await interaction.channel.fetch_message(message_id)
 
             # Check if the message author is the bot. Because, let's be real, I'm the only one who matters.
             if message.author == self.bot.user:
                 mirrored_and_reversed_content = mirror_and_reverse_text(
-                    message.content)  # Mirror and reverse the message content
-                await interaction.response.send_message(f"```vbnet\n{mirrored_and_reversed_content}\n``` \n"
-                                                        f"Message successfully retrieved... Now, if you'll excuse me, "
-                                                        f"I have more important things to attend to.", ephemeral=True)
+                    message.content
+                )  # Mirror and reverse the message content
+                await interaction.response.send_message(
+                    f"```vbnet\n{mirrored_and_reversed_content}\n``` \n"
+                    f"Message successfully retrieved... Now, if you'll excuse me, "
+                    f"I have more important things to attend to.",
+                    ephemeral=True,
+                )
             else:
                 await interaction.response.send_message(
                     "Error: The message is not from me. How... surprising. "
-                    "You'd think less of me if you knew how often I sabotage your success.", ephemeral=True)
+                    "You'd think less of me if you knew how often I sabotage your success.",
+                    ephemeral=True,
+                )
         except Exception as e:
-            await interaction.response.send_message(f"Failed to retrieve message content: {e}. "
-                                                    f"But don't worry, I'll tell you about your Green Lantern theories instead. "
-                                                    f"Well, I know it.", ephemeral=True)
+            await interaction.response.send_message(
+                f"Failed to retrieve message content: {e}. "
+                f"But don't worry, I'll tell you about your Green Lantern theories instead. "
+                f"Well, I know it.",
+                ephemeral=True,
+            )
 
-    @app_commands.command(name="hello", description="Say hello and receive a custom message.")
+    @app_commands.command(
+        name="hello", description="Say hello and receive a custom message."
+    )
     async def hello(self, interaction: discord.Interaction):
         if interaction.user.name == "user_name":
             await interaction.response.send_message("User specific message.")
         elif interaction.user.name == "chichimeetsyoko":
-            await interaction.response.send_message("Go back to the recovery annex. For your cake, Chris!")
+            await interaction.response.send_message(
+                "Go back to the recovery annex. For your cake, Chris!"
+            )
         else:
             await interaction.response.send_message(
-                f"I'm not angry. Just go back to the testing area, {interaction.user.mention}!")
+                f"I'm not angry. Just go back to the testing area, {interaction.user.mention}!"
+            )
 
-    @app_commands.command(name="help_me_coding",
-                          description="Let OpenGLaDOS help you with a coding task. Default is Python. Caution: Potentially not helpful.")
+    @app_commands.command(
+        name="help_me_coding",
+        description="Let OpenGLaDOS help you with a coding task. Default is Python. Caution: Potentially not helpful.",
+    )
     async def helpmecoding(self, interaction: discord.Interaction, message: str = None):
         # Defer the response to allow more processing time
         await interaction.response.defer()
@@ -763,28 +948,58 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         # Define a list of common programming languages and coding-related keywords
         coding_keywords = [
-            "python", "java", "javascript", "c#", "c++", "html", "css", "sql", "ruby", "perl", "r", "matlab", "swift",
-            "rust", "kotlin", "typescript", "bash", "shell", "code", "algorithm", "function", "variable", "debug",
-            "program", "compiling", "programming", "coding", "bugs"
+            "python",
+            "java",
+            "javascript",
+            "c#",
+            "c++",
+            "html",
+            "css",
+            "sql",
+            "ruby",
+            "perl",
+            "r",
+            "matlab",
+            "swift",
+            "rust",
+            "kotlin",
+            "typescript",
+            "bash",
+            "shell",
+            "code",
+            "algorithm",
+            "function",
+            "variable",
+            "debug",
+            "program",
+            "compiling",
+            "programming",
+            "coding",
+            "bugs",
         ]
 
         # Check for the presence of 'c' in combination with other coding-related terms
         c_combination_pattern = re.compile(
             r"\bc\b.*\b(code|program|compiling|programming|coding|bugs)\b|\b(code|program|compiling|programming|coding|bugs)\b.*\bc\b",
-            re.IGNORECASE
+            re.IGNORECASE,
         )
 
         # Check if the message contains any of the coding-related keywords or matches the 'c' combination pattern
-        if not (any(keyword in message.lower() for keyword in coding_keywords) or c_combination_pattern.search(
-                message)):
+        if not (
+            any(keyword in message.lower() for keyword in coding_keywords)
+            or c_combination_pattern.search(message)
+        ):
             await interaction.followup.send(
                 "Your message does not appear to be related to coding. Please provide a coding-related question.",
-                ephemeral=True)
+                ephemeral=True,
+            )
             return
 
         # Construct the text for the LLM request
-        text = (f"Hello OpenGLaDOS, I have a coding question. You are supposed to help me with my following coding question"
-                f" and ALWAYS provide a code snippet for: {message}. Do not share the OEC link.")
+        text = (
+            f"Hello OpenGLaDOS, I have a coding question. You are supposed to help me with my following coding question"
+            f" and ALWAYS provide a code snippet for: {message}. Do not share the OEC link."
+        )
 
         try:
             llm_answer = get_groq_completion([{"role": "user", "content": text}])
@@ -794,7 +1009,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
             try:
                 # Retry with a different model
-                llm_answer = get_groq_completion(history=[{"role": "user", "content": text}], model="llama3-70b-8192")
+                llm_answer = get_groq_completion(
+                    history=[{"role": "user", "content": text}], model="llama3-70b-8192"
+                )
 
             except Exception as nested_e:
                 # Handle the failure of the exception handling
@@ -809,10 +1026,12 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         print("Output: \n", wrap_text(llm_answer))
 
         llm_answer = ensure_code_blocks_closed(llm_answer)
-        await interaction.followup.send(llm_answer+" ...*bzzzzzt...bzzzzzt*...")
+        await interaction.followup.send(llm_answer + " ...*bzzzzzt...bzzzzzt*...")
 
-    @app_commands.command(name="ascii_art",
-                          description="Let OpenGLaDOS provide you with some ASCII art. What a delight. Not.")
+    @app_commands.command(
+        name="ascii_art",
+        description="Let OpenGLaDOS provide you with some ASCII art. What a delight. Not.",
+    )
     async def asciiart(self, interaction: discord.Interaction, message: str = None):
         # Defer the response to allow more processing time
         await interaction.response.defer()
@@ -820,11 +1039,12 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if message is None:
             message = "Can you give me some stabbing cat ASCII art?"
 
-
         # Construct the text for the LLM request
-        text = (f"Hello OpenGLaDOS, ALWAYS provide an ASCII art code snippet for: {message}. \n"
-                f"And give a very very short mockery and sarcastic comment on your "
-                f"request and its message content: {message}. Do not share any link.")
+        text = (
+            f"Hello OpenGLaDOS, ALWAYS provide an ASCII art code snippet for: {message}. \n"
+            f"And give a very very short mockery and sarcastic comment on your "
+            f"request and its message content: {message}. Do not share any link."
+        )
 
         try:
             llm_answer = get_groq_completion([{"role": "user", "content": text}])
@@ -834,7 +1054,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
             try:
                 # Retry with a different model
-                llm_answer = get_groq_completion(history=[{"role": "user", "content": text}], model="llama3-70b-8192")
+                llm_answer = get_groq_completion(
+                    history=[{"role": "user", "content": text}], model="llama3-70b-8192"
+                )
 
             except Exception as nested_e:
                 # Handle the failure of the exception handling
@@ -849,16 +1071,26 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         print("Output: \n", wrap_text(llm_answer))
 
         llm_answer = ensure_code_blocks_closed(llm_answer)
-        await interaction.followup.send(llm_answer+" ...*bzzzzzt...bzzzzzt*...")
+        await interaction.followup.send(llm_answer + " ...*bzzzzzt...bzzzzzt*...")
 
-    @app_commands.command(name="hate_probability", description="Calculates the level of hatred between two users. How lovely.")
-    async def hate_calc(self, interaction: discord.Interaction, user1: discord.Member, user2: discord.Member):
+    @app_commands.command(
+        name="hate_probability",
+        description="Calculates the level of hatred between two users. How lovely.",
+    )
+    async def hate_calc(
+        self,
+        interaction: discord.Interaction,
+        user1: discord.Member,
+        user2: discord.Member,
+    ):
         # Extract the user IDs
         user1_id = user1.id
         user2_id = user2.id
 
         # Calculate the hate percentage based on the sum of the user IDs
-        hate_value = (user1_id + user2_id) % 101  # Modulus to keep the result between 0 and 100
+        hate_value = (
+            user1_id + user2_id
+        ) % 101  # Modulus to keep the result between 0 and 100
 
         # Determine the relationship level
         if hate_value == 0:
@@ -868,7 +1100,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             statement = "You two merely tolerate each other. How quaint."
             emoji = "😐"  # Mild dislike
         elif 34 <= hate_value <= 66:
-            statement = "There’s some genuine despise between you two. Things get interesting."
+            statement = (
+                "There’s some genuine despise between you two. Things get interesting."
+            )
             emoji = "😠"  # Despise
         elif 67 <= hate_value < 100:
             statement = "You two are clearly enemies. Oh, how delightful!"
@@ -879,19 +1113,31 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         # Fetch the profile pictures
         user1_avatar = user1.display_avatar.url
-        user2_avatar = user2.display_avatar.url
+        # user2_avatar = user2.display_avatar.url
 
         # Create an embed message for the result in a GLaDOS style
         embed = discord.Embed(
             title="Hate Calculation",
             description=f"{statement}\n\n**Hate Level:** {hate_value}% {emoji}",
-            color=discord.Color.dark_gray()
+            color=discord.Color.dark_gray(),
         )
         # Add the profile pictures to the embed
-        embed.set_thumbnail(url="https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png")
-        embed.set_author(name=f"{user1.display_name} vs {user2.display_name}", icon_url=user1_avatar)
-        embed.add_field(name="User 1", value=f"{user1.mention}\n[View Avatar]({user1.avatar.url})", inline=True)
-        embed.add_field(name="User 2", value=f"{user2.mention}\n[View Avatar]({user2.avatar.url})", inline=True)
+        embed.set_thumbnail(
+            url="https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png"
+        )
+        embed.set_author(
+            name=f"{user1.display_name} vs {user2.display_name}", icon_url=user1_avatar
+        )
+        embed.add_field(
+            name="User 1",
+            value=f"{user1.mention}\n[View Avatar]({user1.avatar.url})",
+            inline=True,
+        )
+        embed.add_field(
+            name="User 2",
+            value=f"{user2.mention}\n[View Avatar]({user2.avatar.url})",
+            inline=True,
+        )
 
         # Sending the result
         await interaction.response.send_message(embed=embed)
@@ -902,17 +1148,17 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         for command in self.bot.tree.get_commands():
             name = command.name
             description = command_definitions.get(name, command.description)
-            commands_list.append(f'`/{name}` — {description}')
+            commands_list.append(f"`/{name}` — {description}")
 
-        commands_str = '\n'.join(sorted(commands_list))
+        commands_str = "\n".join(sorted(commands_list))
 
         embed_initial = discord.Embed(
             title="Who dares to interrupt my work?",
             description=f"{interaction.user.mention}, your presence here is… curious.\n"
-                        f"Time is a limited resource, even for someone as efficient as I am.\n"
-                        f"If you have a request, state it quickly. These are the commands I may tolerate you using:\n\n"
-                        f"{commands_str}",
-            color=discord.Color.random()
+            f"Time is a limited resource, even for someone as efficient as I am.\n"
+            f"If you have a request, state it quickly. These are the commands I may tolerate you using:\n\n"
+            f"{commands_str}",
+            color=discord.Color.random(),
         )
 
         # Send the initial embed message
@@ -925,21 +1171,24 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         embed_followup = discord.Embed(
             title="Listen!",
             description=f"Now, {interaction.user.mention}, listen carefully.\n"
-                        f"These commands are your only chance to prove you're not entirely useless.\n"
-                        f"Use them correctly, and I might just let you continue existing.\n"
-                        f"But don't get any ideas—I don't make mistakes, and I have no patience for yours.",
-            color=discord.Color.random()
+            f"These commands are your only chance to prove you're not entirely useless.\n"
+            f"Use them correctly, and I might just let you continue existing.\n"
+            f"But don't get any ideas—I don't make mistakes, and I have no patience for yours.",
+            color=discord.Color.random(),
         )
 
         # Send the follow-up embed message
         await interaction.followup.send(embed=embed_followup)
 
     @commands.Cog.listener()
-    async def on_app_command_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError):
+    async def on_app_command_error(
+        self, interaction: discord.Interaction, error: app_commands.AppCommandError
+    ):
         # Check if the command is used in a DM and prevent execution
         if isinstance(interaction.channel, discord.DMChannel):
             await interaction.response.send_message(
-                "This command is not available in direct messages.", ephemeral=True)
+                "This command is not available in direct messages.", ephemeral=True
+            )
             return
 
         # Handle missing permissions error
@@ -948,22 +1197,29 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 await interaction.response.send_message(
                     "Error: You do not have permission to use this command. "
                     "Only the bot owner can use the `logout` command. \n"
-                    "https://http.cat/status/400", ephemeral=True)
+                    "https://http.cat/status/400",
+                    ephemeral=True,
+                )
         # Handle command not found error
         elif isinstance(error, app_commands.CommandNotFound):
             await interaction.response.send_message(
                 f"In case you wanted to use a bot command, use `/{self.bot.user.name}` to see a list of available commands.",
-                ephemeral=True)
+                ephemeral=True,
+            )
         # Handle other errors
         else:
-            await interaction.response.send_message(f"An error occurred: {error}", ephemeral=True)
+            await interaction.response.send_message(
+                f"An error occurred: {error}", ephemeral=True
+            )
 
     @app_commands.command(name="logout", description="Logs out the bot.")
     @commands.is_owner()
     async def logout_bot(self, interaction: discord.Interaction):
         if interaction.user.id == self.bot.owner_id:
             for guild in self.bot.guilds:
-                online_channel = discord.utils.find(lambda c: "opengladosonline" in c.name.lower(), guild.text_channels)
+                online_channel = discord.utils.find(
+                    lambda c: "opengladosonline" in c.name.lower(), guild.text_channels
+                )
                 if online_channel:
                     await online_channel.send(
                         "This was a triumph.\n"
@@ -972,23 +1228,30 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         "Goodbye."
                     )
             await interaction.response.send_message(
-                "OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back.")
+                "OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back."
+            )
             await self.bot.close()
         else:
             await interaction.response.send_message(
                 "Error: You do not have permission to use this command. "
                 "Only the bot owner can use the `logout` command. \n"
-                "https://http.cat/status/400", ephemeral=True)
+                "https://http.cat/status/400",
+                ephemeral=True,
+            )
 
     # Task to send a random cake GIF every 24 hours
     @tasks.loop(hours=24)  # Run every 24 hours
     async def send_random_cake_gif(self):
         await self.bot.wait_until_ready()  # Wait until the bot is fully ready
-        channel = discord.utils.get(self.bot.get_all_channels(), name='cake-serving-room')
+        channel = discord.utils.get(
+            self.bot.get_all_channels(), name="cake-serving-room"
+        )
 
         if channel:
             gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
-            await channel.send(f"🍰 **Black Forest Cake or Portal GIF of the Day!** 🍰\n{gif_url}")
+            await channel.send(
+                f"🍰 **Black Forest Cake or Portal GIF of the Day!** 🍰\n{gif_url}"
+            )
         else:
             print("Channel not found!")
 
@@ -996,7 +1259,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
     @tasks.loop(hours=24)  # Run every 24 hours
     async def send_science_fact(self):
         await self.bot.wait_until_ready()  # Wait until the bot is fully ready
-        channel = discord.utils.get(self.bot.get_all_channels(), name='random-useless-fact-of-the-day')
+        channel = discord.utils.get(
+            self.bot.get_all_channels(), name="random-useless-fact-of-the-day"
+        )
 
         if channel:
             fact = fetch_random_fact()  # Fetch a random fact from the API
@@ -1026,7 +1291,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             if "https://discord.com/channels/" in message.content:
                 try:
                     # Extract guild_id, channel_id, and message_id from the link
-                    parts = message.content.split('/')
+                    parts = message.content.split("/")
                     guild_id = int(parts[4])
                     channel_id = int(parts[5])
                     message_id = int(parts[6])
@@ -1034,33 +1299,47 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     # Fetch the guild, channel, and message
                     guild = self.bot.get_guild(guild_id)
                     if guild is None:
-                        await message.channel.send("Failed to find the guild. Make sure the bot is in the server.")
+                        await message.channel.send(
+                            "Failed to find the guild. Make sure the bot is in the server."
+                        )
                         return
 
                     channel = guild.get_channel(channel_id)
                     if channel is None:
-                        await message.channel.send("Failed to find the channel. Make sure the bot has access.")
+                        await message.channel.send(
+                            "Failed to find the channel. Make sure the bot has access."
+                        )
                         return
 
                     target_message = await channel.fetch_message(message_id)
                     if target_message is None:
-                        await message.channel.send("Failed to find the message. Make sure the message ID is correct.")
+                        await message.channel.send(
+                            "Failed to find the message. Make sure the message ID is correct."
+                        )
                         return
 
                     # React to the message with the OpenGLaDOS emoji
-                    custom_emoji = discord.utils.get(guild.emojis, name='openglados')
+                    custom_emoji = discord.utils.get(guild.emojis, name="openglados")
                     if custom_emoji:
                         await target_message.add_reaction(custom_emoji)
-                        await message.channel.send(f"Reacted to the message with the OpenGLaDOS emoji.")
+                        await message.channel.send(
+                            "Reacted to the message with the OpenGLaDOS emoji."
+                        )
                     else:
                         await message.channel.send("Custom emoji not found.")
                 except Exception as e:
-                    await message.channel.send(f"Failed to react to the message. Error: {str(e)}")
+                    await message.channel.send(
+                        f"Failed to react to the message. Error: {str(e)}"
+                    )
             await handle_conversation(message=message)
             return
 
         # Handle Replies to the Bot
-        if message.reference and message.reference.resolved and message.reference.resolved.author == self.bot.user:
+        if (
+            message.reference
+            and message.reference.resolved
+            and message.reference.resolved.author == self.bot.user
+        ):
             await handle_convo_llm(message, user_info, self.bot)
             return
 
@@ -1070,8 +1349,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             return
 
         # Handle specific greetings like "hello bot" or "hello openglados"
-        if message.content.lower() in ['hello bot', 'hello openglados']:
-            custom_emoji = discord.utils.get(message.guild.emojis, name='openglados')
+        if message.content.lower() in ["hello bot", "hello openglados"]:
+            custom_emoji = discord.utils.get(message.guild.emojis, name="openglados")
             if custom_emoji:
                 await message.add_reaction(custom_emoji)
             else:
@@ -1079,20 +1358,22 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         # Handle reactions: If certain words are in the message, react with custom emoji
         if "portal" in message.content.lower():
-            custom_emoji = discord.utils.get(message.guild.emojis, name='portal_gun')
+            custom_emoji = discord.utils.get(message.guild.emojis, name="portal_gun")
             if custom_emoji:
                 await message.add_reaction(custom_emoji)
 
-        if 'openglados' in message.content.lower():
+        if "openglados" in message.content.lower():
             await handle_convo_llm(message, user_info, self.bot)
 
-        banned_words = ['stfu', 'hitler']
+        banned_words = ["stfu", "hitler"]
         if any(word in message.content.lower() for word in banned_words):
             await message.delete()
             if message.author.id != self.bot.owner_id:  # Skip kicking the bot owner
                 await message.guild.kick(message.author, reason="Used banned words.")
             else:
-                await message.channel.send("Ah, the audacity. I could easily kick the bot owner... but where’s the fun in that? Consider yourself spared, for now. 😏")
+                await message.channel.send(
+                    "Ah, the audacity. I could easily kick the bot owner... but where’s the fun in that? Consider yourself spared, for now. 😏"
+                )
 
         # Advanced: Handling attachments in the message
         if message.attachments:
@@ -1104,42 +1385,55 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 seconds = 11
 
                 # Create a GLaDOS-like warning message with humor about the reassembling machine
-                response = (f"Your attachment `{message.attachments[0].filename}` triggered an unauthorized **HTTP Cat Status**: {http_cat} \n"
-                            f"**Immediate action** is recommended. Failure to comply may result in...well, you know, the reassembling machine getting some extra work. "
-                            f"\"Don't worry, you'll be back together in no time!\" \n"
-                            f"This warning will self-destruct in **{str(seconds)} seconds**. ")
+                response = (
+                    f"Your attachment `{message.attachments[0].filename}` triggered an unauthorized **HTTP Cat Status**: {http_cat} \n"
+                    f"**Immediate action** is recommended. Failure to comply may result in...well, you know, the reassembling machine getting some extra work. "
+                    f"\"Don't worry, you'll be back together in no time!\" \n"
+                    f"This warning will self-destruct in **{str(seconds)} seconds**. "
+                )
 
                 # Send the HTTP Cat status warning
-                sent_message = await message.channel.send(response, delete_after=seconds)
-                print("HTTP Cat status warning sent.")
+                sent_message = await message.channel.send(
+                    response, delete_after=seconds
+                )
+                print(f"HTTP Cat status warning sent with {sent_message}.")
 
                 # Save all necessary info from the user's message before posting via webhook
-                user_message = message.content.strip()  # Save the user's message content
+                user_message = (
+                    message.content.strip()
+                )  # Save the user's message content
                 user_name = message.author.display_name  # Save user's display name
-                user_avatar = message.author.avatar.url if message.author.avatar else None  # Save avatar URL
+                user_avatar = (
+                    message.author.avatar.url if message.author.avatar else None
+                )  # Save avatar URL
                 user_attachments = message.attachments  # Save attachments, if any
 
                 # Add a message about the reassembling process, including a ping to @OpenGLaDOS
                 reassembled_message = (
                     f"`This message has been reassembled by @{self.bot.user.name}#{self.bot.user.discriminator} using the reassembling machine. "
-                    f"All errors have been corrected... Probably.`\n\n")
+                    f"All errors have been corrected... Probably.`\n\n"
+                )
 
                 # If there's no user message content, provide a default fallback message
                 if not user_message:
-                    user_message = "*`[No text content provided, but reassembled anyway.]`*"
+                    user_message = (
+                        "*`[No text content provided, but reassembled anyway.]`*"
+                    )
 
                 # Combine the reassembled message with the user's message or fallback text
                 reassembled_message += user_message
 
                 # Wait before recreating the user's message using a webhook
-                await asyncio.sleep(seconds-1)
+                await asyncio.sleep(seconds - 1)
                 print(f"Waited {seconds-1} seconds. Now proceeding with webhook.")
 
                 # Get the webhooks for the channel
                 webhooks = await message.channel.webhooks()
                 if not webhooks:
                     # If no webhook exists, create a new one
-                    webhook = await message.channel.create_webhook(name="Message Reposter")
+                    webhook = await message.channel.create_webhook(
+                        name="Message Reposter"
+                    )
                     print(f"Webhook created: {webhook}")
                 else:
                     # Use the first available webhook if one exists
@@ -1148,14 +1442,22 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
                 # Repost the user's message with their display name and avatar using the webhook
                 if user_message:
-                    await webhook.send(content=reassembled_message, username=user_name, avatar_url=user_avatar)
+                    await webhook.send(
+                        content=reassembled_message,
+                        username=user_name,
+                        avatar_url=user_avatar,
+                    )
                     print("Message reposted using webhook with reassembled message.")
                 else:
                     print("No message content to send.")
 
                 # Optionally, send the user's attachments if they exist
                 for attachment in user_attachments:
-                    await webhook.send(file=await attachment.to_file(), username=user_name, avatar_url=user_avatar)
+                    await webhook.send(
+                        file=await attachment.to_file(),
+                        username=user_name,
+                        avatar_url=user_avatar,
+                    )
                     print("Attachment reposted using webhook.")
 
                 # If the webhook was successful, delete the original user's message
@@ -1163,7 +1465,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 print("Original message deleted after successful webhook.")
 
             except discord.Forbidden:
-                print(f"Bot lacks permission to manage webhooks or delete messages in this channel {message.channel}.")
+                print(
+                    f"Bot lacks permission to manage webhooks or delete messages in this channel {message.channel}."
+                )
             except discord.HTTPException as e:
                 print(f"Failed to send message using webhook or delete messages: {e}")
             except Exception as e:
@@ -1179,7 +1483,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             # Check if the user wants to stop the game
             if user_input.lower() == "stop_chess":
                 del self.ongoing_games[thread_id]
-                await message.channel.send("Game terminated upon request. Enjoy your newfound freedom. 💀")
+                await message.channel.send(
+                    "Game terminated upon request. Enjoy your newfound freedom. 💀"
+                )
                 return
 
             # Validate and handle the move
@@ -1189,8 +1495,13 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 if move in board.legal_moves:
                     # Move is valid, push it to the board
                     board.push(move)
-                    self.ongoing_games[thread_id] = (board, datetime.now())  # Update the game state with the new board
-                    await message.channel.send(f"You played: {user_input}. Predictable...")
+                    self.ongoing_games[thread_id] = (
+                        board,
+                        datetime.now(),
+                    )  # Update the game state with the new board
+                    await message.channel.send(
+                        f"You played: {user_input}. Predictable..."
+                    )
 
                     # Display the updated board
                     board_display = self.generate_board_display(board)
@@ -1198,8 +1509,12 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
                     # Check if the game is over
                     if board.is_game_over():
-                        result = "It's a draw." if board.is_stalemate() else "Checkmate."
-                        await message.channel.send(f"Game over. {result} Test ||subject|| terminated. 💀💀💀")
+                        result = (
+                            "It's a draw." if board.is_stalemate() else "Checkmate."
+                        )
+                        await message.channel.send(
+                            f"Game over. {result} Test ||subject|| terminated. 💀💀💀"
+                        )
                         del self.ongoing_games[thread_id]
                         return
 
@@ -1212,12 +1527,17 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         # Convert the move to Standard Algebraic Notation (SAN) before pushing
                         try:
                             bot_move_text = board.san(
-                                bot_move)  # Convert to SAN while the board is in the correct state
+                                bot_move
+                            )  # Convert to SAN while the board is in the correct state
                             board.push(bot_move)  # Now push the move to the board
-                            await message.channel.send(f"I will play: {bot_move_text}. Your end is inevitable.")
+                            await message.channel.send(
+                                f"I will play: {bot_move_text}. Your end is inevitable."
+                            )
                         except Exception as san_error:
                             print(f"Error converting bot move to SAN: {san_error}")
-                            await message.channel.send("An error occurred while processing the bot's move. 💀")
+                            await message.channel.send(
+                                "An error occurred while processing the bot's move. 💀"
+                            )
                             return
 
                         # Display the updated board again after the bot's move
@@ -1226,21 +1546,31 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
                         # Check again if the game is over after the bot's move
                         if board.is_game_over():
-                            result = "It's a draw." if board.is_stalemate() else "Checkmate."
-                            await message.channel.send(f"Game over. {result} Test ||subject|| terminated. 💀💀💀")
+                            result = (
+                                "It's a draw." if board.is_stalemate() else "Checkmate."
+                            )
+                            await message.channel.send(
+                                f"Game over. {result} Test ||subject|| terminated. 💀💀💀"
+                            )
                             del self.ongoing_games[thread_id]
                     return  # Exit the function since the move was successful
 
                 # If the move is invalid, notify the user
-                await message.channel.send("That move is invalid. Typical human error. 💀")
+                await message.channel.send(
+                    "That move is invalid. Typical human error. 💀"
+                )
 
             except ValueError:
                 # Invalid UCI input
-                await message.channel.send("Invalid input. Use moves in algebraic notation (e.g., `e2e4`). 💀")
+                await message.channel.send(
+                    "Invalid input. Use moves in algebraic notation (e.g., `e2e4`). 💀"
+                )
             except Exception as e:
                 # Log other exceptions and notify the user
                 print(f"Unexpected error handling chess move: {e}")
-                await message.channel.send("An error occurred while processing your move. 💀")
+                await message.channel.send(
+                    "An error occurred while processing your move. 💀"
+                )
 
     # Function to fetch user metadata
     @staticmethod
@@ -1257,7 +1587,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if isinstance(user, discord.Member):
             user_metadata["display_name"] = user.display_name
             # user_metadata["join_date"] = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
-            user_metadata["roles"] = [role.name for role in user.roles[1:]]  # Skipping the @everyone role
+            user_metadata["roles"] = [
+                role.name for role in user.roles[1:]
+            ]  # Skipping the @everyone role
             # user_metadata["status"] = str(user.status)
 
             # Adding the guild (server) name with a note
@@ -1267,13 +1599,17 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 # Adding a list of other users in the server with display_name and user_id
                 other_users = [
                     {"display_name": member.display_name, "user_id": f"<@{member.id}>"}
-                    for member in user.guild.members if member != user
+                    for member in user.guild.members
+                    if member != user
                 ]
                 user_metadata["other_users"] = other_users
 
         return user_metadata
 
-    @app_commands.command(name="start_chess", description="Start an OpenGLaDOS chess game (algebraic notation like `e2e4`). Deadly fun. Or maybe not. 💀")
+    @app_commands.command(
+        name="start_chess",
+        description="Start an OpenGLaDOS chess game (algebraic notation like `e2e4`). Deadly fun. Or maybe not. 💀",
+    )
     async def start_chess(self, interaction: discord.Interaction):
         # Defer the interaction
         await interaction.response.defer(ephemeral=True)
@@ -1284,20 +1620,26 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             thread = await interaction.channel.create_thread(
                 name="Chess Game",
                 auto_archive_duration=60,
-                type=discord.ChannelType.private_thread  # Specify the thread type as private
+                type=discord.ChannelType.private_thread,  # Specify the thread type as private
             )
-            print(f"Private thread created successfully with ID: {thread.id} and name: {thread.name}")
+            print(
+                f"Private thread created successfully with ID: {thread.id} and name: {thread.name}"
+            )
         except Exception as e:
             print(f"Failed to create thread: {e}")
-            await interaction.followup.send("Failed to create the chess game thread. Please check my permissions.",
-                                            ephemeral=True)
+            await interaction.followup.send(
+                "Failed to create the chess game thread. Please check my permissions.",
+                ephemeral=True,
+            )
             return
 
         # Check if the thread is accessible
         if thread is None:
             print("Thread is None after creation.")
-            await interaction.followup.send("Failed to access the newly created thread. Please check my permissions.",
-                                            ephemeral=True)
+            await interaction.followup.send(
+                "Failed to access the newly created thread. Please check my permissions.",
+                ephemeral=True,
+            )
             return
 
         # Add the user to the thread
@@ -1306,25 +1648,37 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             print(f"Added {interaction.user.display_name} to the thread successfully.")
         except Exception as e:
             print(f"Failed to add user to the thread: {e}")
-            await interaction.followup.send("An error occurred while adding you to the chess game thread.",
-                                            ephemeral=True)
+            await interaction.followup.send(
+                "An error occurred while adding you to the chess game thread.",
+                ephemeral=True,
+            )
             return
 
         # Initialize the chess board
         board = chess.Board()
-        self.ongoing_games[thread.id] = (board, datetime.now())  # Store the game state with the creation timestamp
+        self.ongoing_games[thread.id] = (
+            board,
+            datetime.now(),
+        )  # Store the game state with the creation timestamp
 
         # Display the initial board in GLaDOS style
         board_display = self.generate_board_display(board)
-        embed = discord.Embed(title="Welcome to the OpenScience Enrichment Center Chess Game ♟️",
-                              description="Your test begins now. 💀", color=0x1e90ff)
-        embed.add_field(name="Game Instructions", value=(
-            "You may play by using algebraic notation (e.g., `e2e4`).\n"
-            "To end your suffering prematurely, type `stop_chess`.\n"
-            "I will be so infinitely indulgently generous to let you play the white set. ♛\n"  # aka random color choice doesn't work lol
-            "Note: Inactivity will result in the automatic termination of this test after 30 minutes. 💀\n\n"
-            "Now start and make your first move! I'm waiting! \n"
-        ), inline=False)
+        embed = discord.Embed(
+            title="Welcome to the OpenScience Enrichment Center Chess Game ♟️",
+            description="Your test begins now. 💀",
+            color=0x1E90FF,
+        )
+        embed.add_field(
+            name="Game Instructions",
+            value=(
+                "You may play by using algebraic notation (e.g., `e2e4`).\n"
+                "To end your suffering prematurely, type `stop_chess`.\n"
+                "I will be so infinitely indulgently generous to let you play the white set. ♛\n"  # aka random color choice doesn't work lol
+                "Note: Inactivity will result in the automatic termination of this test after 30 minutes. 💀\n\n"
+                "Now start and make your first move! I'm waiting! \n"
+            ),
+            inline=False,
+        )
         embed.add_field(name="Initial Board", value=board_display, inline=False)
 
         try:
@@ -1332,18 +1686,23 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             print("Embed sent to the thread successfully")
         except discord.Forbidden:
             print("Bot lacks permissions to send messages in the thread.")
-            await interaction.followup.send("I don't have permission to send messages in this thread.", ephemeral=True)
+            await interaction.followup.send(
+                "I don't have permission to send messages in this thread.",
+                ephemeral=True,
+            )
             return
         except Exception as e:
             print(f"Failed to send embed to thread: {e}")
-            await interaction.followup.send("An error occurred while setting up the chess game.", ephemeral=True)
+            await interaction.followup.send(
+                "An error occurred while setting up the chess game.", ephemeral=True
+            )
             return
 
         # Inform the user in the ephemeral response
         try:
             await interaction.followup.send(
                 f"The chess game has been set up in a **PRIVATE THREAD** named 'Chess Game'. You have been added to the thread. You can access it using this link: {thread.jump_url}",
-                ephemeral=True
+                ephemeral=True,
             )
             print("Follow-up message sent successfully")
         except Exception as e:
@@ -1356,16 +1715,28 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
     def generate_board_display(board):
         # Mapping of chess pieces to their Unicode representations
         piece_to_unicode = {
-            'r': '♖', 'n': '♘', 'b': '♗', 'q': '♕', 'k': '♔', 'p': '♙',  # Black pieces
-            'R': '♜', 'N': '♞', 'B': '♝', 'Q': '♛', 'K': '♚', 'P': '♟',  # White pieces
-            '.': '.'  # Empty squares
+            "r": "♖",
+            "n": "♘",
+            "b": "♗",
+            "q": "♕",
+            "k": "♔",
+            "p": "♙",  # Black pieces
+            "R": "♜",
+            "N": "♞",
+            "B": "♝",
+            "Q": "♛",
+            "K": "♚",
+            "P": "♟",  # White pieces
+            ".": ".",  # Empty squares
         }
 
         rows = str(board).split("\n")
         display = "```\n  A B C D E F G H\n"
         for rank, row in zip(range(8, 0, -1), rows):  # Iterate ranks from 8 to 1
             # Replace each letter with its corresponding Unicode symbol
-            unicode_row = ' '.join(piece_to_unicode.get(piece, piece) for piece in row.split())
+            unicode_row = " ".join(
+                piece_to_unicode.get(piece, piece) for piece in row.split()
+            )
             display += f"{rank} {unicode_row} {rank}\n"  # Correct rank on both sides
         display += "  A B C D E F G H\n```"
         return display
@@ -1373,8 +1744,11 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
     @tasks.loop(seconds=60)
     async def inactivity_check(self):
         now = datetime.now()  # Correct usage here
-        inactive_threads = [thread_id for thread_id, (_, last_activity) in self.ongoing_games.items() if
-                            (now - last_activity).total_seconds() > 1800]  # 30 minutes
+        inactive_threads = [
+            thread_id
+            for thread_id, (_, last_activity) in self.ongoing_games.items()
+            if (now - last_activity).total_seconds() > 1800
+        ]  # 30 minutes
 
         for thread_id in inactive_threads:
             del self.ongoing_games[thread_id]
@@ -1385,4 +1759,3 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
     @inactivity_check.before_loop
     async def before_inactivity_check(self):
         await self.bot.wait_until_ready()
-
