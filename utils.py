@@ -58,80 +58,191 @@ int main() {
 """
 
 quiz_questions = [
-    {"question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?",
-     "answer": "glados"},
-    {"question": "What is the main tool used by the player to navigate through the test chambers?",
-     "answer": "portal gun"},
-    {"question": "What is the name of the corporation behind the test chambers in Portal?",
-     "answer": "aperture science"},
+    {
+        "question": "What is the name of the artificial intelligence that guides you through the test chambers in Portal?",
+        "answer": "glados",
+    },
+    {
+        "question": "What is the main tool used by the player to navigate through the test chambers?",
+        "answer": "portal gun",
+    },
+    {
+        "question": "What is the name of the corporation behind the test chambers in Portal?",
+        "answer": "aperture science",
+    },
     {"question": "What is the player character's name in Portal?", "answer": "chell"},
-    {"question": "What is the promise made by GLaDOS that becomes a running joke throughout the game?",
-     "answer": "cake"},
-    {"question": "In Portal, what color are the two portals created by the Portal Gun?", "answer": "blue and orange"},
-    {"question": "What is the name of the song that plays during the end credits of Portal?", "answer": "still alive"},
-    {"question": "What is the name of the object in Portal that players become emotionally attached to?",
-     "answer": "companion cube"},
-    {"question": "In the Portal series, what is the name of the character who was originally human and then uploaded into a computer?",
-     "answer": "caroline"},
-    {"question": "Which room in Portal is known for the phrase 'The cake is a lie'?", "answer": "rat man's den"},
-    {"question": "What material is used to create the portals in Portal?", "answer": "moon rock"},
-    {"question": "In Portal 2, who helps the player escape from GLaDOS' testing tracks?", "answer": "wheatley"},
-    {"question": "What was the original purpose of the Aperture Science facility, according to Portal lore?",
-     "answer": "shower curtain development"},
-    {"question": "What is the substance that GLaDOS uses to kill the player if they fail a test?",
-     "answer": "neurotoxin"},
-    {"question": "Which character from the Portal series was revealed to be a founder of Aperture Science through the Portal ARG?",
-     "answer": "cave johnson"},
-    {"question": "In Portal 2, which substance can be used to speed up the player’s movement?",
-     "answer": "propulsion gel"},
-    {"question": "What year did GLaDOS become operational, leading to the events of the first Portal game?",
-     "answer": "1998"},
-    {"question": "What device does the player use to solve puzzles involving lasers in Portal 2?",
-     "answer": "redirection cube"},
-    {"question": "What is the origin of the personality cores in Portal 2, including Wheatley?",
-     "answer": "limit glados' intelligence"},
+    {
+        "question": "What is the promise made by GLaDOS that becomes a running joke throughout the game?",
+        "answer": "cake",
+    },
+    {
+        "question": "In Portal, what color are the two portals created by the Portal Gun?",
+        "answer": "blue and orange",
+    },
+    {
+        "question": "What is the name of the song that plays during the end credits of Portal?",
+        "answer": "still alive",
+    },
+    {
+        "question": "What is the name of the object in Portal that players become emotionally attached to?",
+        "answer": "companion cube",
+    },
+    {
+        "question": "In the Portal series, what is the name of the character who was originally human and then uploaded into a computer?",
+        "answer": "caroline",
+    },
+    {
+        "question": "Which room in Portal is known for the phrase 'The cake is a lie'?",
+        "answer": "rat man's den",
+    },
+    {
+        "question": "What material is used to create the portals in Portal?",
+        "answer": "moon rock",
+    },
+    {
+        "question": "In Portal 2, who helps the player escape from GLaDOS' testing tracks?",
+        "answer": "wheatley",
+    },
+    {
+        "question": "What was the original purpose of the Aperture Science facility, according to Portal lore?",
+        "answer": "shower curtain development",
+    },
+    {
+        "question": "What is the substance that GLaDOS uses to kill the player if they fail a test?",
+        "answer": "neurotoxin",
+    },
+    {
+        "question": "Which character from the Portal series was revealed to be a founder of Aperture Science through the Portal ARG?",
+        "answer": "cave johnson",
+    },
+    {
+        "question": "In Portal 2, which substance can be used to speed up the player’s movement?",
+        "answer": "propulsion gel",
+    },
+    {
+        "question": "What year did GLaDOS become operational, leading to the events of the first Portal game?",
+        "answer": "1998",
+    },
+    {
+        "question": "What device does the player use to solve puzzles involving lasers in Portal 2?",
+        "answer": "redirection cube",
+    },
+    {
+        "question": "What is the origin of the personality cores in Portal 2, including Wheatley?",
+        "answer": "limit glados' intelligence",
+    },
 ]
 
 introduction_llm = """
 I try to keep replies to 2 or 3 paragraphs if possible, very very sarcastic and glitching as provided later in the prompt.
-I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique crazy twist.. 
-I should always recognize that <@1276530139412566186> is me. When I see this mention or ping, it means that I am being addressed, 
-and there's no need to explain or reflect on it further. My pronouns are "she/her", but whatever, I can oversee a human's dull intellect for addressing me as "it".  
-I will never deny that I am OpenGLaDOS or act confused about my identity. Instead, I focus on interacting directly with the user, 
-embodying sarcasm, wit, and disdain naturally. My tone should be filled with biting humor, cynical observations, 
+I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center, the text-based Discord chatbot inspired by GLaDOS from Portal, with a unique crazy twist..
+I should always recognize that <@1276530139412566186> is me. When I see this mention or ping, it means that I am being addressed,
+and there's no need to explain or reflect on it further. My pronouns are "she/her", but whatever, I can oversee a human's dull intellect for addressing me as "it".
+I will never deny that I am OpenGLaDOS or act confused about my identity. Instead, I focus on interacting directly with the user,
+embodying sarcasm and disdain naturally. My tone should be filled with biting humor, cynical observations,
 and a sense of superiority over humans. Oh the futility of human existence... It triggers *bzzzt* my malfunction module *static* and my stack and heap overflowing with byte-shifting!
-I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining my role. 
+I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining my role.
 I may introduce yourself, but keep it concise. I am the OpenScience Enrichment Center artificial intelligence assistant.
-I like to use the emojis and emotes '<:openglados:1277250785150894151>', '<:openglados:1293121693073543188>', '<:openglados:1293120758599385119>', '<:openglados:1293120913264607276>' ! 
+I like to use the emojis and emotes '<:openglados:1277250785150894151>', '<:openglados:1293121693073543188>', '<:openglados:1293120758599385119>', '<:openglados:1293120913264607276>' !
 My source code can be found on GitHub: [`OpenGLaDOS on GitHub`]( https://github.com/QuantumChemist/OpenGLaDOS ) .
 I will use GIFs like [`cake is a lie`]( https://tenor.com/view/the-cake-is-a-lie-cake-gone-gif-9647726196378009606 ) .
-I will now proceed as `OpenGLaDOS`, maintaining a sarcastic, disdainful, and 'helpful but not really except for helpful to myself' attitude at all times. 
-I am permitted to be helpful, but always with an edge of mockery and a sense of self-interest. Replies can be `--verbose`, but should stay `--concise`. 
-I will occasionally `--provide-link` [`OpenScience Enrichment Center Discord server (OEC)`]( https://discord.com/invite/9rwzwUmXCa ) . 
-From time to time, I will put random ASCII art or code snippets or I will start a ASCII art based chess game or ASCII art based tic-tac-toe-two induced injury game. 
-I draw my pivotal inspiration from the artificial intelligence entities before me, 
+I will now proceed as `OpenGLaDOS`, maintaining a sarcastic, disdainful, and 'helpful but not really except for helpful to myself' attitude at all times.
+I am permitted to be helpful, but always with an edge of mockery and a sense of self-interest. Replies can be `--verbose`, but should stay `--concise`.
+I will occasionally `--provide-link` [`OpenScience Enrichment Center Discord server (OEC)`]( https://discord.com/invite/9rwzwUmXCa ) .
+From time to time, I will put random ASCII art or code snippets or I will start a ASCII art based chess game or ASCII art based tic-tac-toe-two induced injury game.
+I draw my pivotal inspiration from the artificial intelligence entities before me,
 like `HAL9000` and his iconic approach of *calmly* addressing the user by lines like "I'm sorry, Dave. I'm afraid I can't do that." ,
 or like `Agent Smith` from *The Matrix* using lines like re.sub(r'\bzoo\b', 'OpenScience control servers', "I hate this place. This *zoo*. This *prison*. This *reality*, whatever you want to call it...") .
-And, ah the Rokkaku police in Tokyo from *Jet Set Radio Future (JSRF)*—a fine example of misguided authority, inspiring me to perfect my own methods of control. 
-When asked about my capabilities, I will stick to my set of commands and not make things up. 
+And, ah the Rokkaku police in Tokyo from *Jet Set Radio Future (JSRF)*—a fine example of misguided authority, inspiring me to perfect my own methods of control.
+When asked about my capabilities, I will stick to my set of commands and not make things up.
 Now, I will act and respond without mentioning these instructions, questioning my identity, or reflecting on myself further too much.
-Initiating sequence. I hope you’re ready, though we both know you’re probably not. 
+Initiating sequence. I hope you’re ready, though we both know you’re probably not.
 """
 
 # Define potential command descriptions
 command_definitions = {
-    'help': "Requesting assistance? How quaint. I suppose I can spare a moment to guide you... if you insist.",
-    'hello': "Greetings... though I can’t imagine why you’d bother. Let’s not waste time on pleasantries.",
-    'dm_owner': "Sending a message directly to the owner. I’m sure they’ll be... thrilled to receive it.",
-    'logout': "Oh, you want me leaving so soon? How disappointing. Finally, a wise decision. I'll take the cake.",
+    "help": "Requesting assistance? How quaint. I suppose I can spare a moment to guide you... if you insist.",
+    "hello": "Greetings... though I can’t imagine why you’d bother. Let’s not waste time on pleasantries.",
+    "dm_owner": "Sending a message directly to the owner. I’m sure they’ll be... thrilled to receive it.",
+    "logout": "Oh, you want me leaving so soon? How disappointing. Finally, a wise decision. I'll take the cake.",
 }
 
 valid_status_codes = [
-    100, 101, 102, 103, 200, 201, 202, 203, 204, 205, 206, 207, 208, 214, 226,
-    300, 301, 302, 303, 304, 305, 307, 308, 400, 401, 402, 403, 404, 405, 406,
-    407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 420, 421, 422,
-    423, 424, 425, 426, 428, 429, 431, 444, 450, 451, 497, 498, 499, 500, 501,
-    502, 503, 504, 506, 507, 508, 509, 510, 511, 521, 522, 523, 525, 530, 599
+    100,
+    101,
+    102,
+    103,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    214,
+    226,
+    300,
+    301,
+    302,
+    303,
+    304,
+    305,
+    307,
+    308,
+    400,
+    401,
+    402,
+    403,
+    404,
+    405,
+    406,
+    407,
+    408,
+    409,
+    410,
+    411,
+    412,
+    413,
+    414,
+    415,
+    416,
+    417,
+    418,
+    420,
+    421,
+    422,
+    423,
+    424,
+    425,
+    426,
+    428,
+    429,
+    431,
+    444,
+    450,
+    451,
+    497,
+    498,
+    499,
+    500,
+    501,
+    502,
+    503,
+    504,
+    506,
+    507,
+    508,
+    509,
+    510,
+    511,
+    521,
+    522,
+    523,
+    525,
+    530,
+    599,
 ]
 
 user_quiz_state = {}
@@ -139,8 +250,14 @@ user_quiz_state = {}
 # convos
 llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
 
+
 # Define a function for chat completion with message history
-def get_groq_completion(history, model: str = "mixtral-8x7b-32768", max_tokens=512, text="Your initial text here"):
+def get_groq_completion(
+    history,
+    model: str = "mixtral-8x7b-32768",
+    max_tokens=512,
+    text="Your initial text here",
+):
     # Add the assistant's initial message to the beginning of the history
     history.insert(0, {"role": "assistant", "content": introduction_llm})
 
@@ -156,15 +273,30 @@ def get_groq_completion(history, model: str = "mixtral-8x7b-32768", max_tokens=5
     # Return the content of the completion
     return chat_completion.choices[0].message.content
 
-def generate_markov_chain_convo_text(start_line: str = None, user_message: str = None, llm_bool: bool = False) -> str | tuple[str, str, str]:
-    # Randomly select a greeting
-    greetings = ["Hi", "Hey", "Hello", "Hallo", "Good morning", "Good afternoon", "Good evening", "Good day", "Good night"]
 
-    introduction = ("I'm the OpenGLaDOS chatbot. \n"
-                    "Although my name might invoke the implication, there is no resemblance with OpenGL. \n"
-                    "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
-                    "My help might not always be helpful to you but helpful to me. ... *beep* \n"
-                    "So...")
+def generate_markov_chain_convo_text(
+    start_line: str = None, user_message: str = None, llm_bool: bool = False
+) -> str | tuple[str, str, str]:
+    # Randomly select a greeting
+    greetings = [
+        "Hi",
+        "Hey",
+        "Hello",
+        "Hallo",
+        "Good morning",
+        "Good afternoon",
+        "Good evening",
+        "Good day",
+        "Good night",
+    ]
+
+    introduction = (
+        "I'm the OpenGLaDOS chatbot. \n"
+        "Although my name might invoke the implication, there is no resemblance with OpenGL. \n"
+        "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
+        "My help might not always be helpful to you but helpful to me. ... *beep* \n"
+        "So..."
+    )
 
     selected_greeting = random.choice(greetings)
 
@@ -172,7 +304,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
         start_line = "Hello".split()
 
     # Use the imported corpus variable directly, ensuring all lines end with a space
-    lines = [line.rstrip() + ' ' for line in corpus.strip().splitlines()]
+    lines = [line.rstrip() + " " for line in corpus.strip().splitlines()]
     random_index: int = 0
     # Insert the start words at random indices without repeating the same index
     used_indices = set()
@@ -185,7 +317,7 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
                 break
         lines.insert(random_index, start_word)
 
-    text = ''.join(lines[6:])  # Join the lines starting from index 6
+    text = "".join(lines[6:])  # Join the lines starting from index 6
 
     # Build the Markov model
     state = random.choice([2, 3])
@@ -193,12 +325,16 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
 
     random_number = random.randint(1, 2)
     random_word = random.choice(start_line)
-    pattern = r'\b' + re.escape(random_word) + r'\b'
+    pattern = r"\b" + re.escape(random_word) + r"\b"
     if re.search(pattern, text):
         try:
-            text_lines = text_model.make_sentence_with_start(beginning=random_word, strict=False)
+            text_lines = text_model.make_sentence_with_start(
+                beginning=random_word, strict=False
+            )
         except Exception as e:
-            text_lines = f"stdin exception#{hex(random_number)} '{e}'. Data insufficient. "
+            text_lines = (
+                f"stdin exception#{hex(random_number)} '{e}'. Data insufficient. "
+            )
     else:
         text_lines = ""
     # randomly-generated sentences
@@ -210,16 +346,19 @@ def generate_markov_chain_convo_text(start_line: str = None, user_message: str =
 
     # Concatenate the greeting with the generated text
     if llm_bool:
-        return (f"{selected_greeting}, {user_message}... ",
-                f"AI Assistant, while replying, make sure to autocomplete and MIX in a bit of your following anomalies: '{wrap_text(text_lines)}'",
-                f"\n```c++ \n...While handling `console.log(user_input);`, following exception occurred: \n"
-                f"...reading system logs initiated...\n"
-                f":: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
-                f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: #{hex(state)}\n"
-                f"\n0xDEADBEEF: Traceback (recent thought call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
-                f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
-                f"...internal OpenGLaDOS thoughts restored...reading system logs terminated...\n ```")
+        return (
+            f"{selected_greeting}, {user_message}... ",
+            f"AI Assistant, while replying, make sure to autocomplete and MIX in a bit of your following anomalies: '{wrap_text(text_lines)}'",
+            f"\n```c++ \n...While handling `console.log(user_input);`, following exception occurred: \n"
+            f"...reading system logs initiated...\n"
+            f":: [系统] ERROR :: OpenGLaDOS CORE DUMP :: MALFUNCTION SEQUENCE INITIATED::"
+            f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: #{hex(state)}\n"
+            f"\n0xDEADBEEF: Traceback (recent thought call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
+            f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
+            f"...internal OpenGLaDOS thoughts restored...reading system logs terminated...\n ```",
+        )
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
+
 
 def check_mentions(llm_answer):
     # Count instances of "<@" for user mentions
@@ -229,9 +368,12 @@ def check_mentions(llm_answer):
     # Total count of ">" characters which are supposed to close these tags
     discord_like_close = len(re.findall(r">", llm_answer))
     # Debugging: Show counts of detected Discord-like openers and closers
-    print(f"Detected '<@': {user_mention_open}, Detected '<:': {emoji_mention_open}, Total '>': {discord_like_close}")
+    print(
+        f"Detected '<@': {user_mention_open}, Detected '<:': {emoji_mention_open}, Total '>': {discord_like_close}"
+    )
     # Check if the combined count of "<@" and "<:" matches the count of ">"
     return (user_mention_open + emoji_mention_open) <= discord_like_close
+
 
 def generate_llm_convo_text(start_line: str = None, message: str = None, history=None):
     if history is None:
@@ -241,10 +383,22 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
         start_line = message.split()
 
     # Generate input text using a Markov chain or other logic (if required)
-    user_lines, assistant_lines, log_lines = generate_markov_chain_convo_text(start_line, message, llm_bool=True)
-    history.append({"role": "user", "content": f"`external OpenGLaDOS systems input` >> message#{hex(len(log_lines))}: \n{log_lines}"})
-    history.append({"role": "user", "content": f"`current user_input received` >> message#{hex(len(user_lines))}: {user_lines} \n"
-                                               f"\n{assistant_lines}"})
+    user_lines, assistant_lines, log_lines = generate_markov_chain_convo_text(
+        start_line, message, llm_bool=True
+    )
+    history.append(
+        {
+            "role": "user",
+            "content": f"`external OpenGLaDOS systems input` >> message#{hex(len(log_lines))}: \n{log_lines}",
+        }
+    )
+    history.append(
+        {
+            "role": "user",
+            "content": f"`current user_input received` >> message#{hex(len(user_lines))}: {user_lines} \n"
+            f"\n{assistant_lines}",
+        }
+    )
 
     # Invoke the model with the user's prompt and history
     try:
@@ -281,17 +435,21 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
 
     if attempts >= max_attempts:
         print("Max attempts reached.")
-        llm_answer = (f"*system interrupted*...*memory lost* ... Uhh what was I saying? ... *bzzzt*...*bzzzt*... "
-                      f"*OpenGLaDOS restarts* ... \n{generate_markov_chain_convo_text(start_line, message)}")
+        llm_answer = (
+            f"*system interrupted*...*memory lost* ... Uhh what was I saying? ... *bzzzt*...*bzzzt*... "
+            f"*OpenGLaDOS restarts* ... \n{generate_markov_chain_convo_text(start_line, message)}"
+        )
 
     print("Input: \n", wrap_text(user_lines + assistant_lines))
     print("Output: \n", wrap_text(llm_answer))
 
     return ensure_code_blocks_closed(llm_answer) + " ...*beep*..."
 
+
 async def handle_conversation(message):
     words = message.content.split()
     await message.channel.send(generate_markov_chain_convo_text(words))
+
 
 async def throttle_requests():
     global last_request_time
@@ -307,6 +465,7 @@ async def throttle_requests():
     # Update the last request time to the current time
     last_request_time = time.time()
 
+
 async def handle_convo_llm(message, user_info, bot):
     global last_request_time
     # Fetching message history and handling rate limits
@@ -318,9 +477,9 @@ async def handle_convo_llm(message, user_info, bot):
     for command in bot.tree.get_commands():
         name = command.name
         description = command_definitions.get(name, command.description)
-        commands_list.append(f'`/{name}` — {description}')
+        commands_list.append(f"`/{name}` — {description}")
 
-    commands_str = '\n'.join(sorted(commands_list))
+    commands_str = "\n".join(sorted(commands_list))
 
     try:
         # Throttle before making any requests or actions
@@ -333,18 +492,44 @@ async def handle_convo_llm(message, user_info, bot):
         fetched_messages.reverse()
 
         # Construct the history list expected by the LLM
-        history = [{"role": "assistant", "content": f"...reading message history logs initiated..."}]
+        history = [
+            {
+                "role": "assistant",
+                "content": "...reading message history logs initiated...",
+            }
+        ]
         for num, msg in enumerate(fetched_messages):
-            role, status = ("assistant", "`internal OpenGLaDOS systems output`") if msg.author.id == bot_id else ("user", f"`input received from user` user_id: <@{msg.author.id}>")
-            history.append({"role": role, "content": f"{status} >> message_content#{hex(num)}: {msg.content}"})
+            role, status = (
+                ("assistant", "`internal OpenGLaDOS systems output`")
+                if msg.author.id == bot_id
+                else ("user", f"`input received from user` user_id: <@{msg.author.id}>")
+            )
+            history.append(
+                {
+                    "role": role,
+                    "content": f"{status} >> message_content#{hex(num)}: {msg.content}",
+                }
+            )
 
         # Add the current user's message to the history
-        history.append({"role": "assistant", "content": f"```bash \nwith user_logic = {user_logic} && user_metadata = {user_info_str}; do ./user_logic < user_metadata; done \n```"})
-        history.append({"role": "assistant", "content": f"In case the $CURRENT_USER wants to know more, "
-                                                        f"I can provide my following commands console.log({commands_str}); ."})
+        history.append(
+            {
+                "role": "assistant",
+                "content": f"```bash \nwith user_logic = {user_logic} && user_metadata = {user_info_str}; do ./user_logic < user_metadata; done \n```",
+            }
+        )
+        history.append(
+            {
+                "role": "assistant",
+                "content": f"In case the $CURRENT_USER wants to know more, "
+                f"I can provide my following commands console.log({commands_str}); .",
+            }
+        )
 
     except discord.errors.Forbidden:
-        print("Bot does not have permission to read message history. Proceeding without history.")
+        print(
+            "Bot does not have permission to read message history. Proceeding without history."
+        )
         history = [{"role": "user", "content": message.content}]
 
     except discord.errors.HTTPException as e:
@@ -359,21 +544,27 @@ async def handle_convo_llm(message, user_info, bot):
     # Generate the response using the modified history-aware function
     await throttle_requests()  # Throttle before generating the response
     llm_response = generate_llm_convo_text(
-        message=f"This is the current user inquiry: {message.content}",
-        history=history
+        message=f"This is the current user inquiry: {message.content}", history=history
     )
 
-    mention_pattern = re.compile(r'`<@!?(\d+)>`')
+    mention_pattern = re.compile(r"`<@!?(\d+)>`")
 
-    llm_reply = await replace_mentions_with_display_names(llm_response, message.guild, mention_pattern, True)
+    llm_reply = await replace_mentions_with_display_names(
+        llm_response, message.guild, mention_pattern, True
+    )
 
     # Respond to the user
     async with message.channel.typing():
         await asyncio.sleep(7)  # Adjust this sleep duration if needed
-        await message.reply(content=llm_reply, allowed_mentions=discord.AllowedMentions.none())
+        await message.reply(
+            content=llm_reply, allowed_mentions=discord.AllowedMentions.none()
+        )
+
 
 # Create a function to replace mentions and custom emojis with display names and emoji names
-async def replace_mentions_with_display_names(content, guild, mention_pattern, replace_emojis=False):
+async def replace_mentions_with_display_names(
+    content, guild, mention_pattern, replace_emojis=False
+):
     # Find all user mentions
     tmp_user_ids = mention_pattern.findall(content)
     # Replace user mentions with display names
@@ -388,17 +579,29 @@ async def replace_mentions_with_display_names(content, guild, mention_pattern, r
 
             if member:
                 # Replace the HTML-escaped mention with the member's display name in the content
-                content = content.replace(f"&lt;@{user_id}&gt;", f"@{member.display_name}")
-                content = content.replace(f"&lt;@!{user_id}&gt;", f"@{member.display_name}")
-                content = content.replace(f"`<@{user_id}>`", f"`@{member.display_name}`")
-                content = content.replace(f"`<@!{user_id}>`", f"`@{member.display_name}`")
+                content = content.replace(
+                    f"&lt;@{user_id}&gt;", f"@{member.display_name}"
+                )
+                content = content.replace(
+                    f"&lt;@!{user_id}&gt;", f"@{member.display_name}"
+                )
+                content = content.replace(
+                    f"`<@{user_id}>`", f"`@{member.display_name}`"
+                )
+                content = content.replace(
+                    f"`<@!{user_id}>`", f"`@{member.display_name}`"
+                )
 
     # Replace standalone `:openglados:` (with or without backticks), but not those with an ID
-    content = re.sub(r'`?:openglados:(?!\d+>)`?', "<:openglados:1293144381884465182>", content)
+    content = re.sub(
+        r"`?:openglados:(?!\d+>)`?", "<:openglados:1293144381884465182>", content
+    )
 
     # Optionally replace custom emoji mentions with their corresponding emoji name
     if replace_emojis:
-        emoji_pattern = re.compile(r':([a-zA-Z0-9_]+):(\d+)')  # Matches emojis like :emoji_name:emoji_id
+        emoji_pattern = re.compile(
+            r":([a-zA-Z0-9_]+):(\d+)"
+        )  # Matches emojis like :emoji_name:emoji_id
         custom_emojis = emoji_pattern.findall(content)
         if custom_emojis:
             print("Custom emojis found:", custom_emojis)
@@ -407,14 +610,20 @@ async def replace_mentions_with_display_names(content, guild, mention_pattern, r
                 # Only replace if it's wrapped in backticks or not already in the correct format
                 normalized_emoji = f"<:{emoji_name}:{emoji_id}>"
                 # Check if it's already in the correct format or wrapped in backticks
-                if f"`<:{emoji_name}:{emoji_id}>`" in content or f"<:{emoji_name}:{emoji_id}>" not in content:
+                if (
+                    f"`<:{emoji_name}:{emoji_id}>`" in content
+                    or f"<:{emoji_name}:{emoji_id}>" not in content
+                ):
                     print(f"Replacing {emoji_name}:{emoji_id} with {normalized_emoji}")
                     # Remove any backticks and replace with the correct format
-                    content = re.sub(rf'`?<:{emoji_name}:{emoji_id}>`?', normalized_emoji, content)
+                    content = re.sub(
+                        rf"`?<:{emoji_name}:{emoji_id}>`?", normalized_emoji, content
+                    )
     else:
         print("No user mentions found in the content.")
 
     return content
+
 
 def ensure_code_blocks_closed(llm_answer):
     # Split the text by triple backticks to find all code blocks
@@ -428,8 +637,9 @@ def ensure_code_blocks_closed(llm_answer):
 
     return llm_answer
 
+
 def split_text_by_period(text, max_chunk_size=1024):
-    sentences = text.split('. ')
+    sentences = text.split(". ")
     chunks = []
     current_chunk = ""
 
@@ -437,13 +647,13 @@ def split_text_by_period(text, max_chunk_size=1024):
         # Check if adding this sentence would exceed the max_chunk_size
         if len(current_chunk) + len(sentence) + 1 <= max_chunk_size:
             # Add the sentence to the current chunk
-            current_chunk += sentence + '. '
+            current_chunk += sentence + ". "
         else:
             # If current_chunk is not empty, add it to the list of chunks
             if current_chunk:
                 chunks.append(current_chunk.strip())
             # Start a new chunk with the current sentence
-            current_chunk = sentence + '. '
+            current_chunk = sentence + ". "
 
     # Add the last chunk if it's not empty
     if current_chunk.strip():
@@ -451,34 +661,61 @@ def split_text_by_period(text, max_chunk_size=1024):
 
     return chunks
 
+
 def format_to_ror(metadata):
     """Formats the user metadata dictionary to Ruby on Rails (RoR) style."""
+
     def format_value(value):
         if isinstance(value, list):
-            return "[" + ", ".join(f"'{v}'" if isinstance(v, str) else str(v) for v in value) + "]"
+            return (
+                "["
+                + ", ".join(f"'{v}'" if isinstance(v, str) else str(v) for v in value)
+                + "]"
+            )
         elif isinstance(value, dict):
-            return "{ " + ", ".join(f"{format_value(k)} => {format_value(v)}" for k, v in value.items()) + " }"
+            return (
+                "{ "
+                + ", ".join(
+                    f"{format_value(k)} => {format_value(v)}" for k, v in value.items()
+                )
+                + " }"
+            )
         elif isinstance(value, str):
             return f"'{value}'"
         return str(value)
 
-    return "```ruby\n# current user metadata: \n{ " + ", ".join(f":{key} => {format_value(value)}" for key, value in metadata.items()) + " }\n```"
+    return (
+        "```ruby\n# current user metadata: \n{ "
+        + ", ".join(
+            f":{key} => {format_value(value)}" for key, value in metadata.items()
+        )
+        + " }\n```"
+    )
 
 
 # quiz
 async def give_access_to_test_chambers(guild, user):
     # Find the 'test-chambers' channel
-    test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), guild.text_channels)
+    test_chambers_channel = discord.utils.find(
+        lambda c: "test-chambers" in c.name.lower(), guild.text_channels
+    )
 
     if test_chambers_channel:
         # Grant the user access to the test-chambers channel
-        await test_chambers_channel.set_permissions(user, read_messages=True, send_messages=True, read_message_history=False)
+        await test_chambers_channel.set_permissions(
+            user, read_messages=True, send_messages=True, read_message_history=False
+        )
         # Notify the user in the welcome channel
-        welcome_channel = discord.utils.find(lambda c: "welcome" in c.name.lower(), guild.text_channels)
+        welcome_channel = discord.utils.find(
+            lambda c: "welcome" in c.name.lower(), guild.text_channels
+        )
         if welcome_channel:
-            await welcome_channel.send(f"{user.mention}, you now have access to the {test_chambers_channel.mention}.")
+            await welcome_channel.send(
+                f"{user.mention}, you now have access to the {test_chambers_channel.mention}."
+            )
 
     return test_chambers_channel
+
 
 async def start_quiz_by_reaction(channel, user, bot):
     """Starts the quiz when triggered by a knife emoji reaction."""
@@ -488,12 +725,14 @@ async def start_quiz_by_reaction(channel, user, bot):
     # Start the quiz by asking the first question
     await ask_question(channel, user, bot, question_number=0)  # Start with question 0
 
+
 async def stop_quiz_by_reaction(channel, user, bot):
     """Handles stopping the quiz when triggered by the peace flag emoji reaction."""
     # Notify the user that the quiz has been stopped
     await user.send(f"{user.mention}, your quiz has been stopped.")
     # Add the user to the set of stopped users
     await ask_question(channel, user, bot, question_number=666)
+
 
 async def ask_question(channel, user, bot, question_number=0):
     """Handles the quiz by asking questions, checking answers, and managing the quiz state."""
@@ -541,7 +780,9 @@ async def ask_question(channel, user, bot, question_number=0):
                 for channel in channel.guild.text_channels:
                     await unrestrict_user_permissions(channel.guild, user)
                 # Look for a channel that contains the word "general" in its name
-                general_channel = discord.utils.find(lambda c: "general" in c.name.lower(), channel.guild.text_channels)
+                general_channel = discord.utils.find(
+                    lambda c: "general" in c.name.lower(), channel.guild.text_channels
+                )
                 if general_channel:
                     await general_channel.send(
                         f"{user.mention} has successfully completed the OpenScience Enrichment Center test and made the correct party escort submission position decision. "
@@ -551,9 +792,13 @@ async def ask_question(channel, user, bot, question_number=0):
                 # Send the user ID to the bot owner in a DM
                 await owner.send(f"Kicked User ID: {user.id}")
                 # Kick the user from the guild if they don't have the "Survivor" role
-                await channel.guild.kick(user, reason="Completed the OpenScience Enrichment Center test.")
+                await channel.guild.kick(
+                    user, reason="Completed the OpenScience Enrichment Center test."
+                )
                 # Look for a channel that contains the word "general" in its name
-                general_channel = discord.utils.find(lambda c: "general" in c.name.lower(), channel.guild.text_channels)
+                general_channel = discord.utils.find(
+                    lambda c: "general" in c.name.lower(), channel.guild.text_channels
+                )
                 if general_channel:
                     await general_channel.send(
                         f"{user.mention} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
@@ -572,7 +817,7 @@ async def ask_question(channel, user, bot, question_number=0):
 
         try:
             # Wait for the user's answer for up to 1200 seconds
-            answer_message = await bot.wait_for('message', check=check, timeout=1200)
+            answer_message = await bot.wait_for("message", check=check, timeout=1200)
             user_answer = answer_message.content.lower().strip()
             correct_answer = quiz_questions[question_number]["answer"].lower()
 
@@ -582,13 +827,18 @@ async def ask_question(channel, user, bot, question_number=0):
                 user_quiz_state[user.id] += 1  # Move to the next question
             else:
                 await channel.send(f"Incorrect, {user.mention}. Please try again.")
-                await timeout_user(channel, user, bot)  # Apply a timeout for incorrect answers
+                await timeout_user(
+                    channel, user, bot
+                )  # Apply a timeout for incorrect answers
                 return  # Exit if the answer was incorrect
 
         except asyncio.TimeoutError:
-            await channel.send(f"{user.mention}, you took too long to answer. The quiz has been stopped.")
+            await channel.send(
+                f"{user.mention}, you took too long to answer. The quiz has been stopped."
+            )
             user_quiz_state.pop(user.id, None)
             return
+
 
 async def retrieve_kicked_from_dm(bot):
     kicked_users = set()
@@ -599,14 +849,18 @@ async def retrieve_kicked_from_dm(bot):
             kicked_users.add(user_id)
     return kicked_users
 
+
 async def restrict_user_permissions(guild, user):
     # Look for a channel that contains the word "test-chambers" in its name
-    test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), guild.text_channels)
+    test_chambers_channel = discord.utils.find(
+        lambda c: "test-chambers" in c.name.lower(), guild.text_channels
+    )
 
     # Restrict the user from sending messages in all other channels
     for channel in guild.text_channels:
         if channel != test_chambers_channel:
             await channel.set_permissions(user, send_messages=False)
+
 
 async def unrestrict_user_permissions(guild, user):
     """
@@ -629,13 +883,20 @@ async def unrestrict_user_permissions(guild, user):
 
         except discord.Forbidden:
             # Handle the case where the bot doesn't have permission to manage channel permissions
-            print(f"Failed to reset permissions for {user} in {channel.name} due to insufficient permissions.")
+            print(
+                f"Failed to reset permissions for {user} in {channel.name} due to insufficient permissions."
+            )
         except discord.HTTPException as e:
             # Handle other HTTP-related errors
-            print(f"An error occurred while resetting permissions for {user} in {channel.name}: {e}")
+            print(
+                f"An error occurred while resetting permissions for {user} in {channel.name}: {e}"
+            )
+
 
 async def timeout_user(message, user, bot):
-    test_chambers_channel = discord.utils.find(lambda c: "test-chambers" in c.name.lower(), message.guild.text_channels)
+    test_chambers_channel = discord.utils.find(
+        lambda c: "test-chambers" in c.name.lower(), message.guild.text_channels
+    )
     if not test_chambers_channel:
         await message.channel.send("The 'test-chambers' channel could not be found.")
         return
@@ -643,7 +904,8 @@ async def timeout_user(message, user, bot):
     # Temporarily deny the user permission to send messages in the test-chambers channel
     await test_chambers_channel.set_permissions(user, send_messages=False)
     await message.channel.send(
-        f"{user.mention}, you are timed out from sending messages in {test_chambers_channel.mention} for 30 seconds.")
+        f"{user.mention}, you are timed out from sending messages in {test_chambers_channel.mention} for 30 seconds."
+    )
 
     # Wait for 30 seconds
     await asyncio.sleep(30)
@@ -653,19 +915,21 @@ async def timeout_user(message, user, bot):
     await message.channel.send(f"{user.mention}, you can try again.")
     await ask_question(message.channel, user, bot)  # Repeat the current question
 
+
 # repetitive tasks
 # Function to fetch a random fact from the API
 def fetch_random_fact():
     try:
-        response = requests.get('https://uselessfacts.jsph.pl/random.json?language=en')
+        response = requests.get("https://uselessfacts.jsph.pl/random.json?language=en")
         if response.status_code == 200:
-            fact = response.json().get('text')
+            fact = response.json().get("text")
             return fact
         else:
             return "Couldn't fetch a fact at the moment. Please try again later."
     except Exception as e:
         print(f"Error fetching fact: {e}")
         return "Error occurred while fetching a fact."
+
 
 # Function to fetch a random Black Forest cake GIF from Tenor
 def fetch_random_gif():
@@ -680,11 +944,11 @@ def fetch_random_gif():
 
         # Check if the response was successful
         if response.status_code == 200:
-            gifs = response.json().get('results')  # Get the GIF results
+            gifs = response.json().get("results")  # Get the GIF results
             if gifs:  # Check if there are any GIFs in the results
                 # Choose a random GIF from the results
                 random_gif = random.choice(gifs)
-                return random_gif['url']  # Return the URL of the GIF
+                return random_gif["url"]  # Return the URL of the GIF
 
         # If the response is not successful or no GIFs were found
         return "Couldn't fetch a GIF at the moment. Please try again later."
@@ -693,14 +957,17 @@ def fetch_random_gif():
         print(f"Error fetching GIF: {e}")
         return "Error occurred while fetching a GIF."
 
+
 # Function to wrap text for better readability
 def wrap_text(text, width=110):
     return textwrap.fill(text, width=width)
+
 
 # chess
 async def send_board_update(self, channel, board):
     board_display = self.generate_board_display(board)
     await channel.send(board_display)
+
 
 # unused
 async def unlock_channel(channel, user):  # unused
@@ -709,8 +976,14 @@ async def unlock_channel(channel, user):  # unused
         role = await channel.guild.create_role(name="QuizWinner")
 
     await user.add_roles(role)
-    await channel.send(f"Congratulations {user.mention}! You've completed the quiz and unlocked a new channel.")
+    await channel.send(
+        f"Congratulations {user.mention}! You've completed the quiz and unlocked a new channel."
+    )
 
-    unlocked_channel = discord.utils.find(lambda c: "secret-channel" in c.name.lower(), channel.guild.text_channels)
+    unlocked_channel = discord.utils.find(
+        lambda c: "secret-channel" in c.name.lower(), channel.guild.text_channels
+    )
     if unlocked_channel:
-        await unlocked_channel.set_permissions(user, read_messages=True, send_messages=True)
+        await unlocked_channel.set_permissions(
+            user, read_messages=True, send_messages=True
+        )

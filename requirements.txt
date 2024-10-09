@@ -5,4 +5,5 @@ python-dotenv
 markovify
 html2image
 requests
+types-requests
 python-chess
