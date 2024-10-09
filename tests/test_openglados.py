@@ -19,7 +19,8 @@ def mock_ctx() -> MagicMock:
 async def test_start_text(mock_ctx):
     bot_instance = bot_cmds.BotCommands(MagicMock())
     bot_instance.start_triggered = False
-    await bot_instance.start_text(mock_ctx)
+    # Use the command object to invoke the method
+    await bot_instance.start_text.__call__(mock_ctx)
     assert bot_instance.start_triggered
     mock_ctx.send.assert_awaited()
 
@@ -28,7 +29,8 @@ async def test_server_stats(mock_ctx):
     bot_instance = bot_cmds.BotCommands(MagicMock())
     bot_instance.server_stats_triggered = False
     bot_instance.bot.guilds = [MagicMock()]  # Mocked guilds
-    await bot_instance.server_stats(mock_ctx)
+    # Use the command object to invoke the method
+    await bot_instance.server_stats.__call__(mock_ctx)
     mock_ctx.author.send.assert_awaited()
 
 class TestOpenGLaDOSBot(unittest.IsolatedAsyncioTestCase):
