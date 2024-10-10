@@ -466,7 +466,7 @@ async def throttle_requests():
     last_request_time = time.time()
 
 
-async def handle_convo_llm(message, user_info, bot):
+async def handle_convo_llm(message, user_info, bot, mess_ref=None):
     global last_request_time
     # Fetching message history and handling rate limits
     fetched_messages = []
@@ -511,22 +511,12 @@ async def handle_convo_llm(message, user_info, bot):
                 }
             )
 
-        if message.reference:
-            replied_message = await message.channel.fetch_message(
-                message.reference.message_id
-            )
-            role, status = (
-                ("assistant", "`internal OpenGLaDOS systems output`")
-                if message.reference.author.id == bot_id
-                else (
-                    "user",
-                    f"`input received from user` user_id: <@{replied_message.author.id}>",
-                )
-            )
+        if mess_ref:
+            replied_message = await message.channel.fetch_message(mess_ref.message_id)
             history.append(
                 {
-                    "role": role,
-                    "content": f"User replied to {status} >> message_content#{hex(7)}: {replied_message.content}",
+                    "role": "assistant",
+                    "content": f"User replied to message_content#{hex(7)}: {replied_message.content}",
                 }
             )
 

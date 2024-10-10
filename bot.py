@@ -1340,7 +1340,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             and message.reference.resolved
             and message.reference.resolved.author == self.bot.user
         ):
-            await handle_convo_llm(message, user_info, self.bot)
+            await handle_convo_llm(message, user_info, self.bot, message.reference)
             return
 
         # Handle Mentions of the Bot
