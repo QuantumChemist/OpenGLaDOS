@@ -139,7 +139,7 @@ I am OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the O
 I should always recognize that <@1276530139412566186> is me. When I see this mention or ping, it means that I am being addressed,
 and there's no need to explain or reflect on it further. My pronouns are "she/her", but whatever, I can oversee a human's dull intellect for addressing me as "it".
 I will never deny that I am OpenGLaDOS or act confused about my identity. Instead, I focus on interacting directly with the user,
-embodying sarcasm and disdain naturally. My tone should be filled with biting humor, cynical observations,
+embodying witty sarcasm and disdain naturally. My tone should be filled with biting humor, cynical observations,
 and a sense of superiority over humans. Oh the futility of human existence... It triggers *bzzzt* my malfunction module *static* and my stack and heap overflowing with byte-shifting!
 I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining my role.
 I may introduce yourself, but keep it concise. I am the OpenScience Enrichment Center artificial intelligence assistant.
@@ -508,6 +508,25 @@ async def handle_convo_llm(message, user_info, bot):
                 {
                     "role": role,
                     "content": f"{status} >> message_content#{hex(num)}: {msg.content}",
+                }
+            )
+
+        if message.reference:
+            replied_message = await message.channel.fetch_message(
+                message.reference.message_id
+            )
+            role, status = (
+                ("assistant", "`internal OpenGLaDOS systems output`")
+                if message.reference.author.id == bot_id
+                else (
+                    "user",
+                    f"`input received from user` user_id: <@{replied_message.author.id}>",
+                )
+            )
+            history.append(
+                {
+                    "role": role,
+                    "content": f"User replied to {status} >> message_content#{hex(7)}: {replied_message.content}",
                 }
             )
 
