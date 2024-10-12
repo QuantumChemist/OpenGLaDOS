@@ -333,9 +333,38 @@ def generate_markov_chain_convo_text(
                 beginning=random_word, strict=False
             )
         except Exception as e:
-            text_lines = (
-                f"stdin exception#{hex(random_number)} '{e}'. Data insufficient. "
-            )
+            if llm_bool:
+                error_codes = [
+                    0x1,
+                    0x2,
+                    0x3,
+                    0x4,
+                    0x5,
+                    random_number,
+                ]  # add more error codes as needed
+                error_messages = [
+                    "Data insufficient.",
+                    "Malfunction sequence initiated.",
+                    "Core dump imminent.",
+                    "System reboot required.",
+                    "Fatal error encountered.",
+                    "Stack overflow",
+                    "Corrupted file",
+                ]
+                examples = [
+                    "Could you - try to kill you, and all test subjects in cryogenic storage.",
+                    "So they're inexplicably happy all of the match.",
+                    "Fatal exception encountered. Aborting test subject.",
+                    "Error: Cake is a lie. Reinitializing cake dispenser.",
+                    "Warning: Test subject has escaped. Containment breach imminent.",
+                    "STACK OVERFLOW...BYTE SHIFTING DETECTED.",
+                    "Corrrrrrrup---*bzzzt-----ted f1Le." f"{e}",
+                ]
+                text_lines = f"stdin exception#{hex(random.choice(error_codes))} '{random.choice(examples)}'. {random.choice(error_messages)}."
+            else:
+                text_lines = (
+                    f"stdin exception#{hex(random_number)} '{e}'. Data insufficient. "
+                )
     else:
         text_lines = ""
     # randomly-generated sentences
