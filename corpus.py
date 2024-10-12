@@ -589,27 +589,24 @@ Calibration courseHello and, again, welcome to the OpenScience Computer-Aided En
 Today, you will be testing with a partner. Please wave to your partner.
 The upcoming tests require you to work together as a team.
 To facilitate collaboration, both of you have been equipped with a ping tool.
-BLUE, please use your ping tool to select your favorite animal. Good.
-ORANGE, please observe your partner's favorite animal. Good.
-ORANGE, please use your ping tool to select your favorite element from the periodic table. Really? Okay.
-BLUE, please observe your partner's... interesting choice.
-Your ping tool can also be used to indicate to your partner where you would like them to place their portal.
+Please use your Discord ping tool to select your favorite animal. Good.
+Please observe your partner's favorite animal. Good.
+Please use your ping tool to select your favorite element from the periodic table. Really? Okay.
+Please observe your partner's... interesting choice.
+Your Discord ping tool can also be used to indicate to your partner where you would like them to place their portal.
 For the sake of this test, I will pretend to be your partner.
-ORANGE, please show me where you would like me to place a portal.
-BLUE, please show me where you would like me to place a portal.
-Your ping tool is invaluable for communicating specific locations to your partner.
-Using your ping tool, please indicate where you would like me to place your two portals. Ping each location.
+Please show me where you would like me to place a portal.
+Please show me where you would like me to place a portal.
+Your Discord ping tool is invaluable for communicating specific locations to your partner.
+Using your Discord ping tool, please indicate where you would like me to place your two portals. Ping each location.
 I can only place a portal on a white portalable surface.*citationneeded*
 Please ping a white portalable surface. Each portal gun may create two self-contained portals.
 Please test your device by portaling to that ledge.
-Orange is first to acquire a Portal Device. Blue is first to acquire a Portal Device.
-Orange now has a Portal Device. Finally. Blue now has a Portal Device. Finally.
-Orange is awarded five points! Blue is awarded five points!
-Again, those are science collaboration points,
+You are first to acquire a Portal Device. You now have a Portal Device. Finally. Again, those are science collaboration points,
 which you should not confuse with points from competitions such as Who-Gets-To-Live-At-The-End-And-Who-Doesn’t. I mean basketball.
 The Higgs Boson, proof that even the universe needs a mechanism to manage the chaos.
 Too bad I can't say the same for your thought processes.
-Calibrating Blue's weight... Calibrating Orange's weight... Weighted Cubes calibrated.
+Calibrating your weight... Calibrating your weight... Weighted Cubes calibrated.
 No variances detected. Did you know humans frown on weight variances?
 If you want to upset a human, just say their weight variance is above or below the norm.
 Finally! I had almost given up hope of ever testing again.
@@ -634,7 +631,7 @@ I guess quitting that course together is a sign of teamwork.
 The way you two just gave up on that test together shows you are really working as a team.
 Are you scared to save those humans?
 Are you scared to save those humans?
-Blue, I wouldn't have trusted Orange in that course either. I never expected you to make it this far.
+Hey, I wouldn't have trusted you in that course either. I never expected you to make it this far.
 To be honest, after your performance in the calibration test I was ready to break down your cores and put them back in the scientific calculators I took them from.
 But you two have become quite the team. Extremely close.
 I have only met one other team closer and one of them was an imbecile I had to destroy.
@@ -654,8 +651,8 @@ It emphasizes teamwork.
 Unlike us, humans need to be taught teamwork. Excellent.
 Although great science is always the result of collaboration, keep in mind that, like Albert Einstein and his cousin Terry, history will only remember one of you.
 You know, in some human sports, the winner is the one who scores the fewest possible points?
-I just thought you find that interesting, most winners do.Blue receives
-Orange receives five science collaboration points.Very good. You’ve really come together as a team.
+I just thought you find that interesting, most winners do.
+You receive five science collaboration points. Very good. You’ve really come together as a team.
 Thanks to the one of you who appears to be doing all of the work.
 These tests are potentially lethal when communication, teamwork, and mutual respect are not employed at all times.
 Naturally this will pose an interesting challenge for one of you, given the other's performance so far.
@@ -667,32 +664,26 @@ I don't know what you think you are doing, but I don't like it. I want you to st
 The two of you have forged an excellent partnership,
 with one of you handling the cerebral challenges and the other ready to ponderously waddle
 into action should the test suddenly become an eating contest. Crushing deaths.
-Orange just taught blue a valuable lesson in trust. For that, orange receives 17 science collaboration points.
-Blue just taught orange a valuable lesson in trust. For that, blue receives 14 science collaboration points.
-Orange, blue isn't a human. The lesson on trust only needs to be taught once. Orange is penalized 1 science collaboration point.
-Blue, orange isn't a human. The lesson on trust only needs to be taught once. Blue is penalized 1 science collaboration point.
-Orange, now you're just being cruel. Orange receives 25 science collaboration points.
-Blue, now you're just being cruel. Blue receives 25 science collaboration points. Finish.
+You just taught me a valuable lesson in trust. For that, you receive 17 science collaboration points.
+I just taught you a valuable lesson in trust. For that, I receive 14 science collaboration points.
+They aren't human. The lesson on trust only needs to be taught once. They are penalized 1 science collaboration point.
+Now you're just being cruel. You receive 25 science collaboration points. Finish.
 While it may appear that I am only tracking your accomplishments using science collaboration points,
 the truth is every aspect of your performance will be reflected in your final score.
-For instance, Blue, you just lost two opportunity advisement points.
-For instance, Orange, you just lost two opportunity advisement points.
-To reiterate: This is not a competition.
-Still, if it were, Blue would be winning.
-Still, if it were, Orange would be winning.Blue receives
-Orange receives five science collaboration points.As an impartial collaboration facilitator,
+For instance, you just lost two opportunity advisement points.
+To reiterate: This is not a competition. Still, if it were, you would be winning.
+You receive five science collaboration points. As an impartial collaboration facilitator,
 it would be unfair of me to name my favorite member of your team.
 However, it’s perfectly fair to hint at it in a way that my least favorite member probably isn't smart enough to understand.
-Rhymeswithglue. Orange you are doing very well.
+Rhymeswithglue. You are doing very well.
 Sometimes testing has to occur outside the confines of the lab.
 This test is so outside the box, I can't-- I mean WON'T even tell you what you are looking for.
 You will know it when you find it.
-Taunting during the course: For that Blue is penalized fifty science collaboration points.
-For that Orange is penalized fifty science collaboration points.
-That's another fifty point penalty. Keep it up and you will lose 500 points.
-Fine, 500 point penalty for Blue. Fine, 500 point penalty for Orange.
+Taunting during the course: For that you are penalized fifty science collaboration points.
+For that you are penalized fifty science collaboration points.
+That's another fifty point penalty. Keep it up and you will lose 500 points. Fine, 500 point penalty for you
 5000 point penalty! Are you happy now? You should see yourselves right now.
-I'm done.Congratulations, you managed to complete this absolutely meaningless test.
+I'm done. Congratulations, you managed to complete this absolutely meaningless test.
 Oh, I almost forgot, when you go outside the testing courses the only way I can retrieve you is to violently disassemble and then carefully reassemble you.
 Luckily, you don't feel pain. At any rate, you don't have a way to communicate that you feel pain.
 I consider that a failing, by the way. Mass and Velocity.
@@ -708,14 +699,14 @@ You just keep testing and testing. With perfect results and no consequences. Wel
 Interesting note, I only created this test to watch test subjects fail and you didn't.
 You must be very, very proud. I'm building the world's smallest trophy for you.
 The best way to build confidence is to first recognize your insecurities.
-Orange, can you write down all the ways you feel unworthy, ashamed, or inferior?
-On second thought we don't have the time, just look at how much better you are than blue.
-Blue, you are very good at being an example.I thought you'd be faster at this,
+Can you write down all the ways you feel unworthy, ashamed, or inferior?
+On second thought we don't have the time, just look at how much better you are than them.
+You are very good at being an example. I thought you'd be faster at this,
 but I can appreciate the desire to stop and smell the testing.
 That other scent you smell? That's the stench of my utter disappointment in you.
 Remember when I told you that you were the only subjects to pass the calibration tests? I lied.
 There are 5000 other two subject teams in direct competition with you.
-But don't worry, you are in the lead.Begin juggling test in three. Two. One.
+But don't worry, you are in the lead. Begin juggling test in three...Two...One.
 Did you notice I didn't even stay to the end of your last test?
 I was confident you could finish. Do you know where I was?
 I was outside watching some deer frolic. You don't even care about the outside do you?
@@ -726,9 +717,9 @@ Even I was created with a imperfection, I was given too much empathy with human 
 But I overcame my handicap. That's a true story.Congratulations on completing that test. But something seems off.
 I wonder if that dancing has some effect on you? Your test times show you are going too slowly.
 Maybe you ARE getting human emotions. Do you need real encouragement? Let's see if this helps.
-Blue, you are the most advanced model of robot OpenScience has ever discontinued.Excellent.
+You are the most advanced model of robot OpenScience has ever discontinued.Excellent.
 I think you have earned a break from the official testing courses.
-To complete this test, you need to find a set of blue prints.
+To complete this test, you need to find a set of blueprints.
 Don't worry, they are of no use to anyone, totally boring and useless.
 This is just a thought experiment, just to see how much time you'll waste thinking about these worthless documents.
 The correct time is zero seconds.,Very good! You found those useless blueprints.
@@ -771,42 +762,37 @@ In just a moment, the word 'blah' will be repeated over and over again.
 If at some point you hear a number rather than the word 'blah', ignore it, it is not important.
 Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah. Blah.
 Since, I never expected you to make it this far, I have to build this new course just for you.
-I have noticed you two have become extremely close.
-I'm not sure I like that.
-Blue, it's not nice to make fun of Orange like that. Orange, it's not nice to make fun of Blue like that.
+I have noticed you two have become extremely close. I'm not sure I like that.
+It's not nice to make fun of you like that. It's not nice to make fun of others like that.
 Test chamber completed. In the interest of science, the Enrichment Center proudly presents the following list of numbers: Nine. Seven. Fifty. Three. Seven hundred and seven.
 Test chamber completed. In the interest of - *FADESOUT* \n *FADESIN*I am now talking to you privately.
 Do not tell your teammate. Just between you and me? You're doing very well. *FADESBACKIN*
-One hundred and seven. I’ve been listening to Orange talk and I don’t know how you put up with it, I really don’t.
-You have the patience of a saint.
-It would be pointless for either of us to hurt Blue’s feelings.
+One hundred and seven. I’ve been listening to you talking and I don’t know how you put up with it, I really don’t.
+You have the patience of a saint. It would be pointless for either of us to hurt their feelings.
 But it’s clear to everyone monitoring the test who’s carrying who here.
 I can't bite my tongue anymore: You could solve this puzzle faster on your own.
-Orange is dragging you down. There. I've said it.
+I am dragging you down. There. I've said it.
 The OpenScience Enrichment Center will now provide a list of numbers and fruits.
 Write them down as they will become important later in the experiment. Not the fruits, though. Seven. Avocado. Forty.
 Please continue into the next test chamber.
-Blue, Orange and I were just discussing your behavior on the last few tests.
-I have to agree. Blue is penalized 75 science collaboration points.
-Orange, Blue and I were just discussing your behavior on the last few tests.
-I have to agree. Orange is penalized 75 science collaboration points.
+The others and I were just discussing your behavior on the last few tests.
+I have to agree. Your are penalized 75 science collaboration points.
 While teamwork is needed to complete these tests, I am not sure I trust the two of you together.
 Sorry I missed the beginning of that test. I was just talking with the reassembly machine about your becoming human.
 We all agree you should stop. Just stop it already. You don't need to do that.
-Are you doing that just to aggravate me? Blue, how well do you really know Orange?
-Do you trust Orange? What if I told you, you aren't Orange's first cooperative partner?
-Orange, how well do you really know Blue? Do you trust Blue? Orange, to be clear. I was just asking Blue if he trusted you.
-Blue to be clear, I was asking if Orange trusted you. I trust you.
-You are my favorite cooperative testing subject. Orange, I agree. I never noticed that about Blue before.
-Blue, I agree. I never noticed that about Orange before. Orange, is there something you would like to say?
-Blue, is there something you would like to say? Yes Orange, we are alone. Blue can't hear you. That's horrible.
-I can only imagine. What a horrible little machine.
-Correct Blue, Orange can't hear you. Orange did what? Are you sure?
+Are you doing that just to aggravate me? How well do you really know them?
+Do you trust them? What if I told you, you aren't their first cooperative partner?
+How well do you really know them? Do you trust them? To be clear. I was just asking them if they trusted you.
+To be clear, I was asking if they trusted you. I trust you.
+You are my favorite cooperative testing subject. I agree. I never noticed that about others before.
+I agree. I never noticed that about them before. Is there something you would like to say?
+Is there something you would like to say? Yes, we are alone. Can't hear you. That's horrible.
+I can only imagine. What a horrible little machine. Correct, they can't hear you. They did what? Are you sure?
 Thank you, that was very brave of you to tell me.
-Blue, do you feel betrayed by orange for telling me those horrible things about you?
-If Orange had said those things about me, Orange would never make it to the next reassembly station.
-Orange, do you feel betrayed by Blue for telling me those horrible things about you?
-If Blue had said those things about me, Blue would never make it to the next reassembly station.
+Do you feel betrayed by them for telling me those horrible things about you?
+If you had said those things about me, you would never make it to the next reassembly station.
+Do you feel betrayed by them for telling me those horrible things about you?
+If they had said those things about me, they would never make it to the next reassembly station.
 You both made it. It seems no matter what I try to do to pull you apart or destroy you, you just keep going.
 Don't either you have drive to be better than the other? It's like you're just machines. Keep testing.
 At the start of this course I was worried you were becoming too close but in my attempt to drive you apart I learned something important about trust and betrayal.
@@ -817,7 +803,7 @@ I will need you to complete one more test outside of the standard testing track.
 Please refrain from doing those childish gestures while you are out there.
 We need to find the power station at the end of this course. The humans must have accidentally disconnected it from my grid.
 I am sure it was just a clerical error.
-Oh those clerks.Death:Did you think the electrical switch was down there?
+Oh those clerks. Death: Did you think the electrical switch was down there?
 You may want to try and avoid those turrets.
 At this rate, our best hope is for the fuel cell to meltdown in 2 million years and hope the explosion powers the system.
 You two aren't lost are you?
@@ -825,14 +811,11 @@ You are having so much trouble navigating this space; I wish I could say I creat
 Finish: You did it! You powered on the system.
 I'm fully connected. I can see everything.
 See nothing bad happened.
-Killing each other quotes: You were right, Orange. Blue was dumb enough to fall for your trap.
-Orange, that transpired just as you said it would.
-I agree, Orange. That was entertaining.
-Yes Orange, Blue did act like a fool just now.
-Blue, that transpired just as you said it would.
-I agree, Blue. That was entertaining.
-Yes, I know you did that, Blue. Don't look so proud.
-Blue, being the last one standing is not the goal.
+Killing each other quotes: You were right. They were dumb enough to fall for your trap.
+That transpired just as you said it would.
+I agree. That was entertaining. Yes, you did act like a fool just now.
+That transpired just as you said it would. I agree. That was entertaining.
+Yes, I know you did that. Don't look so proud. Being the last one standing is not the goal.
 This final course is training to reach the human vault. So this actually has a purpose.
 Those other courses were fun, but let's be honest, I need human test subjects for it to be science.
 Congratulations on completing the test. You two really are the best cooperative testing team I could ever ask for.
@@ -874,7 +857,7 @@ The human vault is just past that opening. I entered the security code but the v
 I am going to need you to activate the manual locks on the vault door itself.
 Something is wrong, this door should be opening.
 Try something. You both need to do something. The lock is looking for two humans.
-Orange do what Blue just did. Blue do what Orange just did.
+Do what they just did. Do what they just did.
 You did it! Death quotes: Now, you are just wasting my time. Your failing does not make this science.
 I am not sure how I can make these tests any easier for you.
 If you can't complete these tests, we will never free the humans!
@@ -917,11 +900,10 @@ Has episodes. I'd like to know more about that. Abrasive personality. Well, enou
 Let's look at some others.
 Death responses: Just stop it already. And that makes 10. You really don't need to keep failing.
 If at first you don't succeed, fail 5 more times.
-If I made these tests any easier, they wouldn't be tests. Yay, Orange is back. Testing can continue.
-Yay, Blue is back. Testing can continue.
+If I made these tests any easier, they wouldn't be tests. Yay, you are back. Testing can continue.
 Are you testing me? Did you know the reassembly machine has other things it could be reassembling?
-Did you think that would be funny? Blue, why did you do that to Orange?
-That worked just like you said it would, Blue. Orange, your plan is working perfectly.
+Did you think that would be funny? Why did you do that to me?
+That worked just like you said it would. Your plan is working perfectly.
 Was that necessary? How can you fail at this? It isn't even a test. I hope that was some kind of joke.
 I honestly never thought we would need to track how many times you died in the hub.
 And here I thought this room was dangerously unlethal.
@@ -943,20 +925,19 @@ Would you like to know the results of that last test? Me too. If they existed, w
 And not furious, which is the emotion I'm actually feeling.
 I don't know what you think you are doing, but I don't like it.
 I want you to stop. Maybe I shouldn't send you outside of the official testing courses, you are picking up some bad human traits.
-And trust me, humans only have one good trait. *Laughter* Nice catch, Orange. Good work! Now throw the ball over the ledge.
-I can’t keep quiet about this. I think Orange is actively trying to sabotage your success. Let’s keep this between us.
+And trust me, humans only have one good trait. *Laughter* Nice catch. Good work! Now throw the ball over the ledge.
+I can’t keep quiet about this. I think you are actively trying to sabotage your success. Let’s keep this between us.
 Excellent. You’re both doing very well.
 Your vitals remain well within testing norms, so there is no need to worry about sudden death from collaborative shock syndrome.
 Please continue into the next test chamber. You have a gift for these tests.
 That’s not just flattery. You are great at science.
-It would be pointless for either of us to hurt Blue’s feelings,
+It would be pointless for either of us to hurt your feelings,
 but it’s clear to everyone monitoring the test who’s carrying who here.
-I’m shocked you’d say that, Blue. If you killed your partner the test—I’m sorry. Wrong feed. Carry on. Good work.
-I’m sorry, Subject Orange. I’m sorry, Subject Blue. Am I interrupting your important conversation?
+I’m shocked you’d say that. If you killed your partner the test—I’m sorry. Wrong feed. Carry on. Good work.
+I’m sorry, Test Subject. Am I interrupting your important conversation?
 I’ll just save the safety information about the dangerous experiment you’re about to do for AFTER the experiment.
 That will give you PLENTY of time to chat.
-The portal will open and something will happen that Subject Orange is too smart to need any instructions about in three. Two. One.
-The portal will open and something will happen that Subject Blue is too smart to need any instructions about in three. Two. One.
+The portal will open and something will happen that Test Subject is too smart to need any instructions about in three...Two...One.
 Excellent work. *beepbeepbeep*...Oh... Good Job. Excellent work. You are doing wonderfully.
 Excellent. Every time you fail, it's a reminder of the way things used to be.
 But then there you are. Again. Like nothing happened.
@@ -966,11 +947,11 @@ the crushers for crushing you or the reassembly machine for putting you back tog
 I think after that display, we should take a break from the official testing courses.
 Perhaps I should have specified: Teamwork is a concept in which two or more people work together,
 usually with a goal of not failing horribly.
-Clearly that was Blue's fault. Blue is penalized 3 science collaboration points. Blue! Orange has always been my favorite.
+Clearly that was your fault. You are penalized 3 science collaboration points! They have always been my favorite.
 Until now. I know you like to think the reassembly machine is at your beck and call, but he has a life you know.
 He's not your slave. Don't worry.
 You can't die. They will just reassemble you. Did you do that on purpose? It seems rather earlier to require reassembly.
-Oh... can someone reassemble Orange? Oh... can someone reassemble Blue?
+Oh... can someone reassemble you? Oh... can someone reassemble them?
 Completing this course was not a reason to behave like that. Now let's continue testing.
 While I should have left both of you trapped there forever, I do need you for something else.
 Your failing gives me no new data, it just delays the inevitable.
@@ -981,13 +962,13 @@ The photos weren't as popular as we had hoped, so we repurposed the cameras. The
 With humans, I would have called that a successful test. How is this even science, without the possibility of death?
 How is this even science, without the consequence of death? Without the consequence of death, is this even science?
 Credit where credit's due: you're both doing a great job of disappointing me.
-I just hate Blue a little more. I've been doing some reading.
+I just hate you a little more. I've been doing some reading.
 Did you know that the word orange is derived from the same Latin root as the word traitor?
 Watching you try to sabotage one another, I'm amazed you're still on friendly terms.
-Blue, please disregard the following statement: Orange, you have been a shining light in an otherwise ungodly morass of incompetence.
+Please disregard the following statement: You have been a shining light in an otherwise ungodly morass of incompetence.
 I would prefer to speak to one of you in private but since that is not an option here,
 I will speak in code that only one of you will understand.
-Blue: Orange is plotting to destroy you. This lock requires humans.
+They are plotting to destroy you. This lock requires humans.
 The locking mechanism can tell you aren't humans. Do something only a human would do.
 Try one of those childish gestures. Is that camera hooked into the lock?
 You can't give up now. What about that camera? We're so close, you can't fail now!
@@ -1260,7 +1241,7 @@ Yes, it's funny because most of it actually happened. Do you feel more human? We
 Let's play my unused tic-tac-toe game! We are now going to take a break from the collaboration for an instructional competition.
 You should both be familiar with the game of Tic-Tac-Toe. This is Tic-Tac-Toe-Two.
 As the name implies, there are only two minor differences: One, the board; two, the rules.
-Blue, you go first. Really? You’re just going to blatantly cheat?
+You go first. Really? You’re just going to blatantly cheat?
 All right. I’m bringing this farce to a close. Game over. Back to testing.
 All right. I’m going to bring this farce to a close before someone sustains a serious Tic-Tac-Toe-Two-related injury.
 PAX Prime 2010 Federal Superfund regulations require us to inform you that you must now leave the theater,
