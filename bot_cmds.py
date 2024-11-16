@@ -277,6 +277,32 @@ class BotCommands(commands.Cog):
             # Reset the flag after processing the command
             self.manual_report_triggered = False
 
+    @commands.command(
+        name="ani2gif", help="Converts an animated emote to a GIF URL and posts it."
+    )
+    async def emote_to_gif(self, ctx, emote: str):
+        try:
+            # Check if the emote is a valid animated Discord emote
+            if not emote.startswith("<a:") or not emote.endswith(">"):
+                await ctx.send(
+                    "Please provide a valid animated Discord emote in the format `<a:name:id>`."
+                )
+                return
+
+            # Extract the emote ID
+            emote_id = emote.split(":")[-1][
+                :-1
+            ]  # Get the ID part and strip the closing '>'
+
+            # Construct the GIF URL
+            gif_url = f"https://cdn.discordapp.com/emojis/{emote_id}.gif"
+
+            # Send the GIF URL as a text message
+            await ctx.send(gif_url)
+
+        except Exception as e:
+            await ctx.send(f"An error occurred: {str(e)}")
+
 
 async def setup(bot):
     await bot.add_cog(BotCommands(bot))
