@@ -1288,7 +1288,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         if "make an announce" in message.content.lower():
             announce_channel = discord.utils.find(
-                lambda c: "announce" in c.name.lower(), message.guild.text_channels
+                lambda c: "announc" in c.name.lower(), message.guild.text_channels
             )
 
             text = (
