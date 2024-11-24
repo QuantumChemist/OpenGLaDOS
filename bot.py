@@ -1286,7 +1286,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await self.bot.process_commands(message)
             return  # Stop further processing since it's a command
 
-        if "make an announcement" in message.content.lower():
+        if "make an announce" in message.content.lower():
             text = f"Can you give me a mockery **Announcement** comment on the following request: {message.content}"
 
             try:
