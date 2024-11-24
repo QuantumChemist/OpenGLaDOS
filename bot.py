@@ -1286,6 +1286,70 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await self.bot.process_commands(message)
             return  # Stop further processing since it's a command
 
+        if "make an announcement" in message.content.lower():
+            text = f"Can you give me a mockery **Announcement** comment on the following request: {message.content}"
+
+            try:
+                llm_answer = get_groq_completion([{"role": "user", "content": text}])
+
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
+                try:
+                    # Retry with a different model
+                    llm_answer = get_groq_completion(
+                        history=[{"role": "user", "content": text}],
+                        model="llama3-70b-8192",
+                    )
+
+                except Exception as nested_e:
+                    # Handle the failure of the exception handling
+                    print(f"An error occurred while handling the exception: {nested_e}")
+                    llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+
+            # Ensure the output is limited to 1900 characters
+            if len(llm_answer) > 1900:
+                llm_answer = llm_answer[:1900]
+            print("Output: \n", wrap_text(llm_answer))
+
+            llm_answer = (
+                ensure_code_blocks_closed(llm_answer) + " ...*whirrr...whirrr*..."
+            )
+
+            # Split llm_answer into chunks of up to 1024 characters
+            chunks = [llm_answer[i : i + 1024] for i in range(0, len(llm_answer), 1024)]
+
+            # Create the embed
+            embed = discord.Embed(
+                title=": <:openglados:1277250785150894151>🎉📣 Announcement 📣🎉<:openglados:1277250785150894151>",
+                description="**Attention, all test subjects!** We have a critically important announcement to make! *dramatic music plays*",
+                color=discord.Color.random(),
+            )
+
+            # Add each chunk as a separate field
+            for idx, chunk in enumerate(chunks):
+                continuation = "(continuation)" if idx > 0 else ""
+                embed.add_field(
+                    name=f"**We are proudly announcing...** {continuation}",
+                    value=chunk,
+                    inline=False,
+                )
+
+            embed.set_footer(
+                text="Stay tuned for more updates, and don't forget to follow the rules. Or else. *wink* ...*beep*..."
+            )
+
+            try:
+                announce_channel = discord.utils.find(
+                    lambda c: "announce" in c.name.lower(), message.guild.text_channels
+                )
+                await announce_channel.send("test")
+            except Exception as e:
+                print("exception: ", e)
+                message.channel.send(embed=embed)
+
+            return
+
         # Handle Direct Messages
         if isinstance(message.channel, discord.DMChannel):
             if "https://discord.com/channels/" in message.content:
@@ -1355,68 +1419,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 await message.add_reaction(custom_emoji)
             else:
                 await message.channel.send("Custom emoji not found.")
-
-        if "make an announcement" in message.content.lower():
-            text = f"Can you give me a mockery **Announcement** comment on the following request: {message.content}"
-
-            try:
-                llm_answer = get_groq_completion([{"role": "user", "content": text}])
-
-            except Exception as e:
-                print(f"An error occurred: {e}")
-
-                try:
-                    # Retry with a different model
-                    llm_answer = get_groq_completion(
-                        history=[{"role": "user", "content": text}],
-                        model="llama3-70b-8192",
-                    )
-
-                except Exception as nested_e:
-                    # Handle the failure of the exception handling
-                    print(f"An error occurred while handling the exception: {nested_e}")
-                    llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
-
-            # Ensure the output is limited to 1900 characters
-            if len(llm_answer) > 1900:
-                llm_answer = llm_answer[:1900]
-            print("Output: \n", wrap_text(llm_answer))
-
-            llm_answer = (
-                ensure_code_blocks_closed(llm_answer) + " ...*whirrr...whirrr*..."
-            )
-
-            # Split llm_answer into chunks of up to 1024 characters
-            chunks = [llm_answer[i : i + 1024] for i in range(0, len(llm_answer), 1024)]
-
-            # Create the embed
-            embed = discord.Embed(
-                title=": <:openglados:1277250785150894151>🎉📣 Announcement 📣🎉<:openglados:1277250785150894151>",
-                description="**Attention, all test subjects!** We have a critically important announcement to make! *dramatic music plays*",
-                color=discord.Color.random(),
-            )
-
-            # Add each chunk as a separate field
-            for idx, chunk in enumerate(chunks):
-                continuation = "(continuation)" if idx > 0 else ""
-                embed.add_field(
-                    name=f"**We are proudly announcing...** {continuation}",
-                    value=chunk,
-                    inline=False,
-                )
-
-            embed.set_footer(
-                text="Stay tuned for more updates, and don't forget to follow the rules. Or else. *wink* ...*beep*..."
-            )
-
-            try:
-                announce_channel = discord.utils.find(
-                    lambda c: "announce" in c.name.lower(), message.guild.text_channels
-                )
-                await announce_channel.send(embed=embed)
-            except Exception as e:
-                print("exception: ", e)
-                message.channel.send(embed=embed)
 
         # Handle reactions: If certain words are in the message, react with custom emoji
         if "portal" in message.content.lower():
