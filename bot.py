@@ -1351,7 +1351,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             except Exception as e:
                 print("exception: ", e)
                 await message.channel.send(embed=embed)
-
+            await message.delete(delay=7)
             return
 
         # Handle Direct Messages
