@@ -1291,7 +1291,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 lambda c: "announce" in c.name.lower(), message.guild.text_channels
             )
 
-            text = f"Can you give me a mockery **Announcement** comment on the following request: {message.content}"
+            text = f"Can you give me a mockery **Announcement** comment on the following request: {message.content}. Don't share any links."
 
             try:
                 llm_answer = get_groq_completion([{"role": "user", "content": text}])
