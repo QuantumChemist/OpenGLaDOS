@@ -1347,7 +1347,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 await announce_channel.send(embed=embed)
             except Exception as e:
                 print("exception: ", e)
-                message.channel.send(embed=embed)
+                await message.channel.send(embed=embed)
 
             return
 
