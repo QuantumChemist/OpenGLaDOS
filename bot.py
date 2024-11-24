@@ -1287,6 +1287,10 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             return  # Stop further processing since it's a command
 
         if "make an announce" in message.content.lower():
+            announce_channel = discord.utils.find(
+                lambda c: "announce" in c.name.lower(), message.guild.text_channels
+            )
+
             text = f"Can you give me a mockery **Announcement** comment on the following request: {message.content}"
 
             try:
@@ -1340,10 +1344,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             )
 
             try:
-                announce_channel = discord.utils.find(
-                    lambda c: "announce" in c.name.lower(), message.guild.text_channels
-                )
-                await announce_channel.send("test")
+                await announce_channel.send(embed=embed)
             except Exception as e:
                 print("exception: ", e)
                 message.channel.send(embed=embed)
