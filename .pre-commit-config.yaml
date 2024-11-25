@@ -2,7 +2,7 @@ exclude: ^(docs|tests|tutorials|.github)
 
 ci:
   autoupdate_schedule: monthly
-  skip: [mypy]
+  skip: []
   autofix_commit_msg: pre-commit auto-fixes
   autoupdate_commit_msg: pre-commit autoupdate
 
