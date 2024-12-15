@@ -1287,6 +1287,13 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await self.bot.process_commands(message)
             return  # Stop further processing since it's a command
 
+        if "chris" in message.content.lower():
+            owner = await self.bot.fetch_user(self.bot.owner_id)
+            if owner:
+                await owner.send(
+                    f"Your name has been mentioned in https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
+                )
+
         if "make an announce" in message.content.lower():
             announce_channel = discord.utils.find(
                 lambda c: "announc" in c.name.lower(), message.guild.text_channels
@@ -1417,7 +1424,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await handle_convo_llm(message, user_info, self.bot)
             return
 
-        if message.guild not in WHITELIST_GUILDS_ID:
+        if message.guild.id not in WHITELIST_GUILDS_ID:
             # Handle specific greetings like "hello bot" or "hello openglados"
             if message.content.lower() in ["hello bot", "hello openglados"]:
                 custom_emoji = discord.utils.get(
@@ -1437,7 +1444,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if "openglados" in message.content.lower():
             await handle_convo_llm(message, user_info, self.bot)
 
-        if message.guild not in WHITELIST_GUILDS_ID:
+        if message.guild.id not in WHITELIST_GUILDS_ID:
             banned_words = ["stfu", "hitler"]
             if any(word in message.content.lower() for word in banned_words):
                 await message.delete()
@@ -1450,7 +1457,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         "Ah, the audacity. I could easily kick the bot owner... but where’s the fun in that? Consider yourself spared, for now. 😏"
                     )
 
-        if message.guild not in WHITELIST_GUILDS_ID:
+        if message.guild.id not in WHITELIST_GUILDS_ID:
             # Advanced: Handling attachments in the message
             if message.attachments:
                 try:
