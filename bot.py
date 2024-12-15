@@ -44,6 +44,7 @@ hti = Html2Image(
 # Set a constant file name for the screenshot
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
 SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
+WHITELIST_GUILDS = [901576410374758420]
 
 # Load environment variables from .env file
 load_dotenv()
