@@ -44,7 +44,7 @@ hti = Html2Image(
 # Set a constant file name for the screenshot
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
 SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
-WHITELIST_GUILDS = [901576410374758420]
+WHITELIST_GUILDS_ID = [901576410374758420]
 
 # Load environment variables from .env file
 load_dotenv()
@@ -1417,7 +1417,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await handle_convo_llm(message, user_info, self.bot)
             return
 
-        if message.guild not in WHITELIST_GUILDS:
+        if message.guild not in WHITELIST_GUILDS_ID:
             # Handle specific greetings like "hello bot" or "hello openglados"
             if message.content.lower() in ["hello bot", "hello openglados"]:
                 custom_emoji = discord.utils.get(
@@ -1437,7 +1437,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if "openglados" in message.content.lower():
             await handle_convo_llm(message, user_info, self.bot)
 
-        if message.guild not in WHITELIST_GUILDS:
+        if message.guild not in WHITELIST_GUILDS_ID:
             banned_words = ["stfu", "hitler"]
             if any(word in message.content.lower() for word in banned_words):
                 await message.delete()
@@ -1450,7 +1450,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         "Ah, the audacity. I could easily kick the bot owner... but where’s the fun in that? Consider yourself spared, for now. 😏"
                     )
 
-        if message.guild not in WHITELIST_GUILDS:
+        if message.guild not in WHITELIST_GUILDS_ID:
             # Advanced: Handling attachments in the message
             if message.attachments:
                 try:
