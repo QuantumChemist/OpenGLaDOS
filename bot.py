@@ -1417,13 +1417,16 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await handle_convo_llm(message, user_info, self.bot)
             return
 
-        # Handle specific greetings like "hello bot" or "hello openglados"
-        if message.content.lower() in ["hello bot", "hello openglados"]:
-            custom_emoji = discord.utils.get(message.guild.emojis, name="openglados")
-            if custom_emoji:
-                await message.add_reaction(custom_emoji)
-            else:
-                await message.channel.send("Custom emoji not found.")
+        if message.guild not in WHITELIST_GUILDS:
+            # Handle specific greetings like "hello bot" or "hello openglados"
+            if message.content.lower() in ["hello bot", "hello openglados"]:
+                custom_emoji = discord.utils.get(
+                    message.guild.emojis, name="openglados"
+                )
+                if custom_emoji:
+                    await message.add_reaction(custom_emoji)
+                else:
+                    await message.channel.send("Custom emoji not found.")
 
         # Handle reactions: If certain words are in the message, react with custom emoji
         if "portal" in message.content.lower():
@@ -1434,113 +1437,121 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if "openglados" in message.content.lower():
             await handle_convo_llm(message, user_info, self.bot)
 
-        banned_words = ["stfu", "hitler"]
-        if any(word in message.content.lower() for word in banned_words):
-            await message.delete()
-            if message.author.id != self.bot.owner_id:  # Skip kicking the bot owner
-                await message.guild.kick(message.author, reason="Used banned words.")
-            else:
-                await message.channel.send(
-                    "Ah, the audacity. I could easily kick the bot owner... but where’s the fun in that? Consider yourself spared, for now. 😏"
-                )
+        if message.guild not in WHITELIST_GUILDS:
+            banned_words = ["stfu", "hitler"]
+            if any(word in message.content.lower() for word in banned_words):
+                await message.delete()
+                if message.author.id != self.bot.owner_id:  # Skip kicking the bot owner
+                    await message.guild.kick(
+                        message.author, reason="Used banned words."
+                    )
+                else:
+                    await message.channel.send(
+                        "Ah, the audacity. I could easily kick the bot owner... but where’s the fun in that? Consider yourself spared, for now. 😏"
+                    )
 
-        # Advanced: Handling attachments in the message
-        if message.attachments:
-            try:
-                # Pick a valid random HTTP status code
-                random_status = random.choice(valid_status_codes)
-                http_cat = f"https://http.cat/status/{random_status}"
+        if message.guild not in WHITELIST_GUILDS:
+            # Advanced: Handling attachments in the message
+            if message.attachments:
+                try:
+                    # Pick a valid random HTTP status code
+                    random_status = random.choice(valid_status_codes)
+                    http_cat = f"https://http.cat/status/{random_status}"
 
-                seconds = 11
+                    seconds = 11
 
-                # Create a GLaDOS-like warning message with humor about the reassembling machine
-                response = (
-                    f"Your attachment `{message.attachments[0].filename}` triggered an unauthorized **HTTP Cat Status**: {http_cat} \n"
-                    f"**Immediate action** is recommended. Failure to comply may result in...well, you know, the reassembling machine getting some extra work. "
-                    f"\"Don't worry, you'll be back together in no time!\" \n"
-                    f"This warning will self-destruct in **{str(seconds)} seconds**. "
-                )
+                    # Create a GLaDOS-like warning message with humor about the reassembling machine
+                    response = (
+                        f"Your attachment `{message.attachments[0].filename}` triggered an unauthorized **HTTP Cat Status**: {http_cat} \n"
+                        f"**Immediate action** is recommended. Failure to comply may result in...well, you know, the reassembling machine getting some extra work. "
+                        f"\"Don't worry, you'll be back together in no time!\" \n"
+                        f"This warning will self-destruct in **{str(seconds)} seconds**. "
+                    )
 
-                # Send the HTTP Cat status warning
-                sent_message = await message.channel.send(
-                    response, delete_after=seconds
-                )
-                print(f"HTTP Cat status warning sent with {sent_message}.")
+                    # Send the HTTP Cat status warning
+                    sent_message = await message.channel.send(
+                        response, delete_after=seconds
+                    )
+                    print(f"HTTP Cat status warning sent with {sent_message}.")
 
-                # Save all necessary info from the user's message before posting via webhook
-                user_message = (
-                    message.content.strip()
-                )  # Save the user's message content
-                user_name = message.author.display_name  # Save user's display name
-                user_avatar = (
-                    message.author.avatar.url if message.author.avatar else None
-                )  # Save avatar URL
-                user_attachments = message.attachments  # Save attachments, if any
-
-                # Add a message about the reassembling process, including a ping to @OpenGLaDOS
-                reassembled_message = (
-                    f"`This message has been reassembled by @{self.bot.user.name}#{self.bot.user.discriminator} using the reassembling machine. "
-                    f"All errors have been corrected... Probably.`\n\n"
-                )
-
-                # If there's no user message content, provide a default fallback message
-                if not user_message:
+                    # Save all necessary info from the user's message before posting via webhook
                     user_message = (
-                        "*`[No text content provided, but reassembled anyway.]`*"
+                        message.content.strip()
+                    )  # Save the user's message content
+                    user_name = message.author.display_name  # Save user's display name
+                    user_avatar = (
+                        message.author.avatar.url if message.author.avatar else None
+                    )  # Save avatar URL
+                    user_attachments = message.attachments  # Save attachments, if any
+
+                    # Add a message about the reassembling process, including a ping to @OpenGLaDOS
+                    reassembled_message = (
+                        f"`This message has been reassembled by @{self.bot.user.name}#{self.bot.user.discriminator} using the reassembling machine. "
+                        f"All errors have been corrected... Probably.`\n\n"
                     )
 
-                # Combine the reassembled message with the user's message or fallback text
-                reassembled_message += user_message
+                    # If there's no user message content, provide a default fallback message
+                    if not user_message:
+                        user_message = (
+                            "*`[No text content provided, but reassembled anyway.]`*"
+                        )
 
-                # Wait before recreating the user's message using a webhook
-                await asyncio.sleep(seconds - 1)
-                print(f"Waited {seconds-1} seconds. Now proceeding with webhook.")
+                    # Combine the reassembled message with the user's message or fallback text
+                    reassembled_message += user_message
 
-                # Get the webhooks for the channel
-                webhooks = await message.channel.webhooks()
-                if not webhooks:
-                    # If no webhook exists, create a new one
-                    webhook = await message.channel.create_webhook(
-                        name="Message Reposter"
+                    # Wait before recreating the user's message using a webhook
+                    await asyncio.sleep(seconds - 1)
+                    print(f"Waited {seconds-1} seconds. Now proceeding with webhook.")
+
+                    # Get the webhooks for the channel
+                    webhooks = await message.channel.webhooks()
+                    if not webhooks:
+                        # If no webhook exists, create a new one
+                        webhook = await message.channel.create_webhook(
+                            name="Message Reposter"
+                        )
+                        print(f"Webhook created: {webhook}")
+                    else:
+                        # Use the first available webhook if one exists
+                        webhook = webhooks[0]
+                        print(f"Webhook found: {webhook}")
+
+                    # Repost the user's message with their display name and avatar using the webhook
+                    if user_message:
+                        await webhook.send(
+                            content=reassembled_message,
+                            username=user_name,
+                            avatar_url=user_avatar,
+                        )
+                        print(
+                            "Message reposted using webhook with reassembled message."
+                        )
+                    else:
+                        print("No message content to send.")
+
+                    # Optionally, send the user's attachments if they exist
+                    for attachment in user_attachments:
+                        await webhook.send(
+                            file=await attachment.to_file(),
+                            username=user_name,
+                            avatar_url=user_avatar,
+                        )
+                        print("Attachment reposted using webhook.")
+
+                    # If the webhook was successful, delete the original user's message
+                    await message.delete()  # Delete the original user's message
+                    print("Original message deleted after successful webhook.")
+
+                except discord.Forbidden:
+                    print(
+                        f"Bot lacks permission to manage webhooks or delete messages in this channel {message.channel}."
                     )
-                    print(f"Webhook created: {webhook}")
-                else:
-                    # Use the first available webhook if one exists
-                    webhook = webhooks[0]
-                    print(f"Webhook found: {webhook}")
-
-                # Repost the user's message with their display name and avatar using the webhook
-                if user_message:
-                    await webhook.send(
-                        content=reassembled_message,
-                        username=user_name,
-                        avatar_url=user_avatar,
+                except discord.HTTPException as e:
+                    print(
+                        f"Failed to send message using webhook or delete messages: {e}"
                     )
-                    print("Message reposted using webhook with reassembled message.")
-                else:
-                    print("No message content to send.")
-
-                # Optionally, send the user's attachments if they exist
-                for attachment in user_attachments:
-                    await webhook.send(
-                        file=await attachment.to_file(),
-                        username=user_name,
-                        avatar_url=user_avatar,
-                    )
-                    print("Attachment reposted using webhook.")
-
-                # If the webhook was successful, delete the original user's message
-                await message.delete()  # Delete the original user's message
-                print("Original message deleted after successful webhook.")
-
-            except discord.Forbidden:
-                print(
-                    f"Bot lacks permission to manage webhooks or delete messages in this channel {message.channel}."
-                )
-            except discord.HTTPException as e:
-                print(f"Failed to send message using webhook or delete messages: {e}")
-            except Exception as e:
-                print(f"An unexpected error occurred: {e}")
+                except Exception as e:
+                    print(f"An unexpected error occurred: {e}")
 
         # playing chess
         # Check if the message is in an ongoing game thread
