@@ -280,19 +280,24 @@ class BotCommands(commands.Cog):
     @commands.command(
         name="ani2gif", help="Converts an animated emote to a GIF URL and posts it."
     )
-    async def emote_to_gif(self, ctx, emote: str):
+    async def emote_to_gif(self, ctx, emote: str = None):
         try:
-            # Check if the emote is a valid animated Discord emote
-            if not emote.startswith("<a:") or not emote.endswith(">"):
+            # If the command is used in a reply, check the replied-to message
+            if ctx.message.reference:
+                # Fetch the replied-to message
+                replied_message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+                # Extract the content of the replied-to message
+                emote = replied_message.content.strip()
+
+            # Ensure the emote is provided and valid
+            if not emote or not emote.startswith("<a:") or not emote.endswith(">"):
                 await ctx.send(
                     "Please provide a valid animated Discord emote in the format `<a:name:id>`."
                 )
                 return
 
             # Extract the emote ID
-            emote_id = emote.split(":")[-1][
-                :-1
-            ]  # Get the ID part and strip the closing '>'
+            emote_id = emote.split(":")[-1][:-1]  # Get the ID part and strip the closing '>'
 
             # Construct the GIF URL
             gif_url = f"https://cdn.discordapp.com/emojis/{emote_id}.gif"
