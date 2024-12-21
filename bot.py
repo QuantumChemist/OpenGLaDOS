@@ -1296,32 +1296,36 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if urls:
             for url in urls:
                 try:
-                    # Fetch metadata from the URL
+                    # Fetch and parse metadata
                     response = requests.get(url, timeout=10)
                     response.raise_for_status()
                     soup = BeautifulSoup(response.text, 'html.parser')
 
-                    title = soup.find("meta", property="og:title") or soup.title
-                    description = soup.find("meta", property="og:description")
-                    image = soup.find("meta", property="og:image")
+                    title_tag = soup.find("meta", property="og:title")
+                    title = title_tag["content"] if title_tag and "content" in title_tag.attrs else soup.title.string if soup.title else "No Title Found"
 
-                    # Create an embed
+                    description_tag = soup.find("meta", property="og:description")
+                    description = description_tag["content"] if description_tag and "content" in description_tag.attrs else "No Description Found"
+
+                    image_tag = soup.find("meta", property="og:image")
+                    image_url = image_tag["content"] if image_tag and "content" in image_tag.attrs else None
+
+                    # Construct the embed
                     embed = discord.Embed(
-                        title=title["content"] if title else "No Title Found",
-                        description=description["content"] if description else "No Description Found",
+                        title=title[:256],  # Ensure title is within character limit
+                        description=description[:2048],  # Ensure description is within character limit
                         color=discord.Color.blue(),
                     )
-                    if image:
-                        embed.set_thumbnail(url=image["content"])
-                    embed.set_footer(text=f"Metadata from {url}")
+                    if image_url:
+                        embed.set_thumbnail(url=image_url)
 
-                    # Send the embed
+                    embed.set_footer(text=f"Metadata from {url}")
                     await message.channel.send(embed=embed)
 
                 except requests.exceptions.RequestException as e:
-                    await message.channel.send(f"Failed to fetch metadata from {url}. Error: {str(e)}")
+                    await message.channel.send(f"Failed to fetch metadata: {e}")
                 except Exception as e:
-                    await message.channel.send(f"An unexpected error occurred while processing the URL: {str(e)}")
+                    await message.channel.send(f"Unexpected error occurred: {e}")
             return
 
         if "chris" in message.content.lower():
