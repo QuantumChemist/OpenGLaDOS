@@ -1310,14 +1310,58 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     image_tag = soup.find("meta", property="og:image")
                     image_url = image_tag["content"] if image_tag and "content" in image_tag.attrs else None
 
+                    text = (
+                        f"Can you give me a mockery **Announcement** comment on the following request: {title} and {description}? "
+                        f"Don't share any links or mention this request explicitly."
+                    )
+
+                    try:
+                        llm_answer = get_groq_completion([{"role": "user", "content": text}])
+
+                    except Exception as e:
+                        print(f"An error occurred: {e}")
+
+                        try:
+                            # Retry with a different model
+                            llm_answer = get_groq_completion(
+                                history=[{"role": "user", "content": text}],
+                                model="llama3-70b-8192",
+                            )
+
+                        except Exception as nested_e:
+                            # Handle the failure of the exception handling
+                            print(f"An error occurred while handling the exception: {nested_e}")
+                            llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+
+                    # Ensure the output is limited to 1900 characters
+                    if len(llm_answer) > 1900:
+                        llm_answer = llm_answer[:1900]
+                    print("Output: \n", wrap_text(llm_answer))
+
+                    llm_answer = (
+                        ensure_code_blocks_closed(llm_answer) + " ...*whirrr...whirrr*..."
+                    )
+
+                    # Split llm_answer into chunks of up to 1024 characters
+                    chunks = [llm_answer[i : i + 1024] for i in range(0, len(llm_answer), 1024)]
+
                     # Construct the embed
                     embed = discord.Embed(
                         title=title[:256],  # Ensure title is within character limit
                         description=description[:2048],  # Ensure description is within character limit
-                        color=discord.Color.blue(),
+                        color=discord.Color.random(),
                     )
                     if image_url:
                         embed.set_thumbnail(url=image_url)
+
+                    # Add each chunk as a separate field
+                    for idx, chunk in enumerate(chunks):
+                        continuation = "(continuation)" if idx > 0 else ""
+                        embed.add_field(
+                            name=f"**We are proudly announcing...** {continuation}",
+                            value=chunk,
+                            inline=False,
+                        )
 
                     embed.set_footer(text=f"Metadata from {url}")
                     await message.channel.send(embed=embed)
@@ -1341,7 +1385,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             )
 
             text = (
-                f"Can you give me a mockery **Announcement** comment on the following request: {message.content}. "
+                f"Can you give me a mockery **Announcement** comment on the following request: {message.content}? "
                 f"Don't share any links or mention this request explicitly."
             )
 
