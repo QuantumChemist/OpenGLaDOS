@@ -285,7 +285,9 @@ class BotCommands(commands.Cog):
             # If the command is used in a reply, check the replied-to message
             if ctx.message.reference:
                 # Fetch the replied-to message
-                replied_message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+                replied_message = await ctx.channel.fetch_message(
+                    ctx.message.reference.message_id
+                )
                 # Extract the content of the replied-to message
                 emote = replied_message.content.strip()
 
@@ -297,7 +299,9 @@ class BotCommands(commands.Cog):
                 return
 
             # Extract the emote ID
-            emote_id = emote.split(":")[-1][:-1]  # Get the ID part and strip the closing '>'
+            emote_id = emote.split(":")[-1][
+                :-1
+            ]  # Get the ID part and strip the closing '>'
 
             # Construct the GIF URL
             gif_url = f"https://cdn.discordapp.com/emojis/{emote_id}.gif"
