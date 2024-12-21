@@ -1358,7 +1358,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     for idx, chunk in enumerate(chunks):
                         continuation = "(continuation)" if idx > 0 else ""
                         embed.add_field(
-                            name=f"**We are proudly announcing...** {continuation}",
+                            name=f"**About that embed metadata...** {continuation}",
                             value=chunk,
                             inline=False,
                         )
