@@ -1299,15 +1299,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     # Fetch and parse metadata
                     response = requests.get(url, timeout=10)
                     response.raise_for_status()
-                    soup = BeautifulSoup(response.text, 'lxml')  # Use 'lxml' parser for better results
+                    soup = BeautifulSoup(response.text, 'html.parser')
 
-                    # Debug: Print all meta tags
-                    meta_tags = soup.find_all("meta")
-                    print("Meta tags found:")
-                    for tag in meta_tags:
-                        print(tag)
-
-                    # Find metadata
                     title_tag = soup.find("meta", property="og:title")
                     title = title_tag["content"] if title_tag and "content" in title_tag.attrs else soup.title.string if soup.title else "No Title Found"
 
@@ -1317,10 +1310,10 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     image_tag = soup.find("meta", property="og:image")
                     image_url = image_tag["content"] if image_tag and "content" in image_tag.attrs else None
 
-                    # Create the embed
+                    # Construct the embed
                     embed = discord.Embed(
-                        title=title[:256],  # Limit to 256 characters
-                        description=description[:2048],  # Limit to 2048 characters
+                        title=title[:256],  # Ensure title is within character limit
+                        description=description[:2048],  # Ensure description is within character limit
                         color=discord.Color.blue(),
                     )
                     if image_url:
