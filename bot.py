@@ -2,6 +2,8 @@ import os
 import re
 import chess
 import discord
+import requests
+from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
 from discord import app_commands
 from dotenv import load_dotenv
@@ -1286,6 +1288,41 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if ctx.command is not None:
             await self.bot.process_commands(message)
             return  # Stop further processing since it's a command
+        
+        # Embed Debugger for URLs
+        url_regex = r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+        urls = re.findall(url_regex, message.content)
+
+        if urls:
+            for url in urls:
+                try:
+                    # Fetch metadata from the URL
+                    response = requests.get(url, timeout=10)
+                    response.raise_for_status()
+                    soup = BeautifulSoup(response.text, 'html.parser')
+
+                    title = soup.find("meta", property="og:title") or soup.title
+                    description = soup.find("meta", property="og:description")
+                    image = soup.find("meta", property="og:image")
+
+                    # Create an embed
+                    embed = discord.Embed(
+                        title=title["content"] if title else "No Title Found",
+                        description=description["content"] if description else "No Description Found",
+                        color=discord.Color.blue(),
+                    )
+                    if image:
+                        embed.set_thumbnail(url=image["content"])
+                    embed.set_footer(text=f"Metadata from {url}")
+
+                    # Send the embed
+                    await message.channel.send(embed=embed)
+
+                except requests.exceptions.RequestException as e:
+                    await message.channel.send(f"Failed to fetch metadata from {url}. Error: {str(e)}")
+                except Exception as e:
+                    await message.channel.send(f"An unexpected error occurred while processing the URL: {str(e)}")
+            return
 
         if "chris" in message.content.lower():
             owner = await self.bot.fetch_user(self.bot.owner_id)
