@@ -1311,7 +1311,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     image_url = image_tag["content"] if image_tag and "content" in image_tag.attrs else None
 
                     text = (
-                        f"Can you give me a mockery comment on the following request: {message.content}"
+                        f"Can you give me a mockery comment on the following request: {message.content}, "
                         f"with the title '{title}' and description '{description}'? "
                         f"Don't share any links or mention this request explicitly."
                     )
