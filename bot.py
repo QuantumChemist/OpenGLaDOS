@@ -1293,85 +1293,87 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         url_regex = r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
         urls = re.findall(url_regex, message.content)
 
-        if urls:
-            for url in urls:
-                try:
-                    # Fetch and parse metadata
-                    response = requests.get(url, timeout=10)
-                    response.raise_for_status()
-                    soup = BeautifulSoup(response.text, 'html.parser')
-
-                    title_tag = soup.find("meta", property="og:title")
-                    title = title_tag["content"] if title_tag and "content" in title_tag.attrs else soup.title.string if soup.title else " "
-
-                    description_tag = soup.find("meta", property="og:description")
-                    description = description_tag["content"] if description_tag and "content" in description_tag.attrs else " "
-
-                    image_tag = soup.find("meta", property="og:image")
-                    image_url = image_tag["content"] if image_tag and "content" in image_tag.attrs else None
-
-                    text = (
-                        f"Can you give me a mockery comment on the following request: {message.content}, "
-                        f"including the metadata of the title '{title}' and description '{description}'? "
-                        f"Don't share any links or mention this request explicitly."
-                    )
-
+        if "openglados" in message.content.lower():
+            if urls:
+                for url in urls:
                     try:
-                        llm_answer = get_groq_completion([{"role": "user", "content": text}])
+                        # Fetch and parse metadata
+                        response = requests.get(url, timeout=10)
+                        response.raise_for_status()
+                        soup = BeautifulSoup(response.text, 'html.parser')
 
-                    except Exception as e:
-                        print(f"An error occurred: {e}")
+                        title_tag = soup.find("meta", property="og:title")
+                        title = title_tag["content"] if title_tag and "content" in title_tag.attrs else soup.title.string if soup.title else " "
 
-                        try:
-                            # Retry with a different model
-                            llm_answer = get_groq_completion(
-                                history=[{"role": "user", "content": text}],
-                                model="llama3-70b-8192",
-                            )
+                        description_tag = soup.find("meta", property="og:description")
+                        description = description_tag["content"] if description_tag and "content" in description_tag.attrs else " "
 
-                        except Exception as nested_e:
-                            # Handle the failure of the exception handling
-                            print(f"An error occurred while handling the exception: {nested_e}")
-                            llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+                        image_tag = soup.find("meta", property="og:image")
+                        image_url = image_tag["content"] if image_tag and "content" in image_tag.attrs else None
 
-                    # Ensure the output is limited to 1900 characters
-                    if len(llm_answer) > 1900:
-                        llm_answer = llm_answer[:1900]
-                    print("Output: \n", wrap_text(llm_answer))
-
-                    llm_answer = (
-                        ensure_code_blocks_closed(llm_answer) + " ...*whirrr...whirrr*..."
-                    )
-
-                    # Split llm_answer into chunks of up to 1024 characters
-                    chunks = [llm_answer[i : i + 1024] for i in range(0, len(llm_answer), 1024)]
-
-                    # Construct the embed
-                    embed = discord.Embed(
-                        title=title[:256],  # Ensure title is within character limit
-                        description=description[:2048],  # Ensure description is within character limit
-                        color=discord.Color.random(),
-                    )
-                    if image_url:
-                        embed.set_thumbnail(url=image_url)
-
-                    # Add each chunk as a separate field
-                    for idx, chunk in enumerate(chunks):
-                        continuation = "(continuation)" if idx > 0 else ""
-                        embed.add_field(
-                            name=f"**About that embed metadata...** {continuation}",
-                            value=chunk,
-                            inline=False,
+                        text = (
+                            f"Can you give me a mockery comment on the following request: {message.content}, "
+                            f"including the metadata of the title '{title}' and description '{description}'? "
+                            f"Don't share any links or mention this request explicitly."
                         )
 
-                    embed.set_footer(text=f"Metadata from {url}")
-                    await message.channel.send(embed=embed)
+                        try:
+                            llm_answer = get_groq_completion([{"role": "user", "content": text}])
 
-                except requests.exceptions.RequestException as e:
-                    await message.channel.send(f"Failed to fetch metadata: {e}")
-                except Exception as e:
-                    await message.channel.send(f"Unexpected error occurred: {e}")
-            return
+                        except Exception as e:
+                            print(f"An error occurred: {e}")
+
+                            try:
+                                # Retry with a different model
+                                llm_answer = get_groq_completion(
+                                    history=[{"role": "user", "content": text}],
+                                    model="llama3-70b-8192",
+                                )
+
+                            except Exception as nested_e:
+                                # Handle the failure of the exception handling
+                                print(f"An error occurred while handling the exception: {nested_e}")
+                                llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+
+                        # Ensure the output is limited to 1900 characters
+                        if len(llm_answer) > 1900:
+                            llm_answer = llm_answer[:1900]
+                        print("Output: \n", wrap_text(llm_answer))
+
+                        llm_answer = (
+                            ensure_code_blocks_closed(llm_answer) + " ...*whirrr...whirrr*..."
+                        )
+
+                        # Split llm_answer into chunks of up to 1024 characters
+                        chunks = [llm_answer[i : i + 1024] for i in range(0, len(llm_answer), 1024)]
+
+                        # Construct the embed
+                        embed = discord.Embed(
+                            title=title[:256],  # Ensure title is within character limit
+                            description=description[:2048],  # Ensure description is within character limit
+                            color=discord.Color.random(),
+                        )
+                        if image_url:
+                            embed.set_thumbnail(url=image_url)
+
+                        # Add each chunk as a separate field
+                        for idx, chunk in enumerate(chunks):
+                            continuation = "(continuation)" if idx > 0 else ""
+                            embed.add_field(
+                                name=f"**About that embed metadata...** {continuation}",
+                                value=chunk,
+                                inline=False,
+                            )
+
+                        embed.set_footer(text=f"Metadata from {url}")
+                        await message.channel.send(embed=embed)
+
+                    except requests.exceptions.RequestException as e:
+                        await message.channel.send(f"Failed to fetch metadata: {e}")
+                    except Exception as e:
+                        await message.channel.send(f"Unexpected error occurred: {e}")
+                return
+            await handle_convo_llm(message, user_info, self.bot)
 
         if "chris" in message.content.lower():
             owner = await self.bot.fetch_user(self.bot.owner_id)
@@ -1526,9 +1528,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             custom_emoji = discord.utils.get(message.guild.emojis, name="portal_gun")
             if custom_emoji:
                 await message.add_reaction(custom_emoji)
-
-        if "openglados" in message.content.lower():
-            await handle_convo_llm(message, user_info, self.bot)
 
         if message.guild.id not in WHITELIST_GUILDS_ID:
             banned_words = ["stfu", "hitler"]
