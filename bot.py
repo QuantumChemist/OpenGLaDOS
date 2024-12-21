@@ -1855,7 +1855,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         try:
             await thread.send(embed=embed)
-            print("Embed sent to the thread successfully")
+            print("Embed sent to the thread successfully ")
         except discord.Forbidden:
             print("Bot lacks permissions to send messages in the thread.")
             await interaction.followup.send(
