@@ -1296,49 +1296,24 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if urls:
             for url in urls:
                 try:
-                    # Add headers to mimic a browser
-                    headers = {
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-                    }
-                    response = requests.get(url, headers=headers, timeout=10)
+                    # Fetch and parse metadata
+                    response = requests.get(url, timeout=10)
                     response.raise_for_status()
-                    soup = BeautifulSoup(response.text, 'html.parser')  # Switch back to html.parser
+                    soup = BeautifulSoup(response.text, 'html.parser')
 
-                    # Debug: Save response text to check HTML
-                    with open("debug_response.html", "w", encoding="utf-8") as debug_file:
-                        debug_file.write(response.text)
-
-                    # Extract metadata
                     title_tag = soup.find("meta", property="og:title")
-                    title = (
-                        title_tag["content"].strip()
-                        if title_tag and "content" in title_tag.attrs
-                        else soup.title.string.strip() if soup.title else "No Title Found"
-                    )
+                    title = title_tag["content"] if title_tag and "content" in title_tag.attrs else soup.title.string if soup.title else " "
 
                     description_tag = soup.find("meta", property="og:description")
-                    description = (
-                        description_tag["content"].strip()
-                        if description_tag and "content" in description_tag.attrs
-                        else "No Description Found"
-                    )
+                    description = description_tag["content"] if description_tag and "content" in description_tag.attrs else " "
 
                     image_tag = soup.find("meta", property="og:image")
-                    image_url = (
-                        image_tag["content"].strip()
-                        if image_tag and "content" in image_tag.attrs
-                        else None
-                    )
-
-                    # Debug: Print metadata to console
-                    print(f"Title: {title}")
-                    print(f"Description: {description}")
-                    print(f"Image URL: {image_url}")
+                    image_url = image_tag["content"] if image_tag and "content" in image_tag.attrs else None
 
                     # Construct the embed
                     embed = discord.Embed(
-                        title=title[:256],  # Ensure title fits within Discord's limits
-                        description=description[:2048],  # Ensure description fits within limits
+                        title=title[:256],  # Ensure title is within character limit
+                        description=description[:2048],  # Ensure description is within character limit
                         color=discord.Color.blue(),
                     )
                     if image_url:
@@ -1348,10 +1323,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     await message.channel.send(embed=embed)
 
                 except requests.exceptions.RequestException as e:
-                    print(f"Failed to fetch metadata from {url}: {e}")
                     await message.channel.send(f"Failed to fetch metadata: {e}")
                 except Exception as e:
-                    print(f"Unexpected error processing {url}: {e}")
                     await message.channel.send(f"Unexpected error occurred: {e}")
             return
 
