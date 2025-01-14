@@ -1907,6 +1907,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
     @staticmethod
     def generate_board_display(board):
+        full_width_letters = ["Ａ", "Ｂ", "Ｃ", "Ｄ", "Ｅ", "Ｆ", "Ｇ", "Ｈ"]
         # Mapping of chess pieces to their Unicode representations
         piece_to_unicode = {
             "r": "♖",
@@ -1921,18 +1922,19 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             "Q": "♛",
             "K": "♚",
             "P": "♟",  # White pieces
-            ".": ".",  # Empty squares
+            ".": "﹘",  # Empty squares
         }
-
+        invisible_space = "\u2800"  # Braille blank space for even spacing
         rows = str(board).split("\n")
-        display = "```\n  A B C D E F G H\n"
-        for rank, row in zip(range(8, 0, -1), rows):  # Iterate ranks from 8 to 1
-            # Replace each letter with its corresponding Unicode symbol
-            unicode_row = " ".join(
+
+        # Add zero-width space to force monospace rendering in Discord
+        display = f"```\n  {' '.join(full_width_letters)}\n"
+        for rank, row in zip(range(8, 0, -1), rows):
+            unicode_row = invisible_space.join(
                 piece_to_unicode.get(piece, piece) for piece in row.split()
             )
-            display += f"{rank} {unicode_row} {rank}\n"  # Correct rank on both sides
-        display += "  A B C D E F G H\n```"
+            display += f"{rank} {unicode_row} {rank}\n"
+        display += f"  {' '.join(full_width_letters)}\n```"
         return display
 
     @tasks.loop(seconds=60)
