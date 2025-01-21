@@ -9,6 +9,7 @@ import random
 import markovify
 import textwrap
 import requests
+from google.cloud import translate_v2 as translate
 from corpus import corpus
 
 
@@ -968,6 +969,21 @@ def fetch_random_fact():
     except Exception as e:
         print(f"Error fetching fact: {e}")
         return "Error occurred while fetching a fact."
+    
+def fetch_french_fact():
+    try:
+        response = requests.get("https://uselessfacts.jsph.pl/random.json?language=en")
+        if response.status_code == 200:
+            fact = response.json().get("text")
+
+            translate_client = translate.Client.from_service_account_json("/home/chichi/git/OpenGLaDOS/google_api_auth.json")
+            translation = translate_client.translate(fact, target_language="fr")
+            return translation["translatedText"]
+        else:
+            return "Impossible de récupérer un fait pour le moment. Veuillez réessayer plus tard."
+    except Exception as e:
+        print(f"Error fetching or translating fact: {e}")
+        return "Une erreur s'est produite lors de la récupération ou de la traduction d'un fait."
 
 
 # Function to fetch a random Black Forest cake GIF from Tenor
