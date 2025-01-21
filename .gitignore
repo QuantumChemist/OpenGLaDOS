@@ -11,6 +11,8 @@ guilds.txt
 screenshots
 .idea
 
+google_api_auth.json
+
 # Distribution / packaging
 .Python
 build/
