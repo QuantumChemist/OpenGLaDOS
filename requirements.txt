@@ -8,3 +8,4 @@ requests
 types-requests
 python-chess
 bs4
+google-cloud-translate
