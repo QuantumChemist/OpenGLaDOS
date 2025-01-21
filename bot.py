@@ -20,6 +20,7 @@ from utils import (
     retrieve_kicked_from_dm,
     fetch_random_gif,
     fetch_random_fact,
+    fetch_french_fact,
     command_definitions,
     handle_convo_llm,
     give_access_to_test_chambers,
@@ -1271,6 +1272,14 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await channel.send(f"🌍 **Random Useless Fact of the Day** 🌍\n{fact}")
         else:
             print("Channel not found!")
+
+        channel_fox = self.bot.get_channel(1263120140514492477)
+        if channel_fox:
+            french_fact = fetch_french_fact()  # Fetch a random fact from the API
+            await channel_fox.send(f"🌍 **Fait inutile aléatoire du jour** 🌍\n{french_fact}")
+        else:
+            print("Channel not found!")
+
 
     # Event: on_message to check if bot was mentioned, replied, or DM'd
     @commands.Cog.listener()
