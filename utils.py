@@ -969,14 +969,17 @@ def fetch_random_fact():
     except Exception as e:
         print(f"Error fetching fact: {e}")
         return "Error occurred while fetching a fact."
-    
+
+
 def fetch_french_fact():
     try:
         response = requests.get("https://uselessfacts.jsph.pl/random.json?language=en")
         if response.status_code == 200:
             fact = response.json().get("text")
 
-            translate_client = translate.Client.from_service_account_json("/home/chichi/git/OpenGLaDOS/google_api_auth.json")
+            translate_client = translate.Client.from_service_account_json(
+                "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
+            )
             translation = translate_client.translate(fact, target_language="fr")
             return translation["translatedText"]
         else:
