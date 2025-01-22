@@ -1276,10 +1276,11 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         channel_fox = self.bot.get_channel(1263120140514492477)
         if channel_fox:
             french_fact = fetch_french_fact()  # Fetch a random fact from the API
-            await channel_fox.send(f"🌍 **Fait inutile aléatoire du jour** 🌍\n{french_fact}")
+            await channel_fox.send(
+                f"🌍 **Fait inutile aléatoire du jour** 🌍\n{french_fact}"
+            )
         else:
             print("Channel not found!")
-
 
     # Event: on_message to check if bot was mentioned, replied, or DM'd
     @commands.Cog.listener()
