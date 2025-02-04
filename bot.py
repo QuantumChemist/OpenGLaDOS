@@ -12,6 +12,7 @@ import random
 from html import escape
 from html2image import Html2Image
 from datetime import time, timedelta, datetime, timezone
+from pymatgen.core import Element
 from utils import (
     bot_description,
     get_groq_completion,
@@ -1273,7 +1274,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         else:
             print("Channel not found!")
 
-        channel_fox = self.bot.get_channel(1263120140514492477)
+        #channel_fox = self.bot.get_channel(1263120140514492477)
         if channel_fox:
             french_fact = fetch_french_fact()  # Fetch a random fact from the API
             await channel_fox.send(
@@ -1529,6 +1530,77 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     )
             await handle_conversation(message=message)
             return
+        
+        if "chemcounting" in message.channel.name:
+            chem_elem: list = [(element.symbol).lower() for element in Element]
+            previous_msg = "og"
+            async for msg in message.channel.history(limit=2):
+                if msg.content.lower() == message.content.lower():
+                    continue
+                if len(msg.content) < 3:
+                    previous_msg = msg.content.lower()
+                else:
+                    previous_msg = "og"
+            
+            print(f"Previous element: {previous_msg}, Current element: {message.content.lower()}")
+
+            if message.content.lower() in chem_elem:
+                previous_index = chem_elem.index(previous_msg)
+                current_index = chem_elem.index(message.content.lower())
+
+            if message.content.lower() not in chem_elem or (previous_index + 1) % len(chem_elem) != current_index:
+                # Save all necessary info from the user's message before posting via webhook
+                user_message = (
+                    message.content.strip()
+                )  # Save the user's message content
+                user_name = message.author.display_name  # Save user's display name
+                user_avatar = (
+                    message.author.avatar.url if message.author.avatar else None
+                )  # Save avatar URL
+                user_attachments = message.attachments  # Save attachments, if any
+
+                # Add a message about the reassembling process, including a ping to @OpenGLaDOS
+                reassembled_message = (
+                    f"`Chemcounting violation detected by @{self.bot.user.name}#{self.bot.user.discriminator}...`\n`Game starts from the beginning. Type 'H' to start.` \n "
+                )
+
+                # If there's no user message content, provide a default fallback message
+                # unused but can stay for future
+                if not user_message:
+                    user_message = (
+                        "*`I can only count to four https://www.youtube.com/watch?v=u8ccGjar4Es`*"
+                    )
+
+                # Get the webhooks for the channel
+                webhooks = await message.channel.webhooks()
+                if not webhooks:
+                    # If no webhook exists, create a new one
+                    webhook = await message.channel.create_webhook(
+                        name="Message Reposter"
+                    )
+                    print(f"Webhook created: {webhook}")
+                else:
+                    # Use the first available webhook if one exists
+                    webhook = webhooks[0]
+                    print(f"Webhook found: {webhook}")
+
+                # Repost the user's message with their display name and avatar using the webhook
+                if user_message:
+                    await webhook.send(
+                        content=reassembled_message,
+                        username=user_name,
+                        avatar_url=user_avatar,
+                    )
+                    print(
+                        "Message reposted using webhook with reassembled message."
+                    )
+                else:
+                    print("No message content to send.")
+
+                # If the webhook was successful, delete the original user's message
+                await message.delete()  # Delete the original user's message
+                print("Original message deleted after successful webhook.")
+                return
 
         # Handle Replies to the Bot
         if (
