@@ -1410,7 +1410,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     except Exception as e:
                         await message.channel.send(f"Unexpected error occurred: {e}")
                 return
-            await handle_convo_llm(message, user_info, self.bot)
                                            
             if "plot" in message.content.lower():
                 print(f"Received message: {message.content}")
