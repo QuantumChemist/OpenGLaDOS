@@ -3,6 +3,8 @@ import re
 import chess
 import discord
 import requests
+from plotly.io import to_image
+from sympy import SympifyError 
 from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
 from discord import app_commands
@@ -32,6 +34,8 @@ from utils import (
     valid_status_codes,
     handle_conversation,
     replace_mentions_with_display_names,
+    generate_plot,
+    detect_plot_request,
 )
 
 # Directory to save screenshots
@@ -1274,7 +1278,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         else:
             print("Channel not found!")
 
-        channel_fox = self.bot.get_channel(1263120140514492477)
+        #channel_fox = self.bot.get_channel(1263120140514492477)
         if channel_fox:
             french_fact = fetch_french_fact()  # Fetch a random fact from the API
             await channel_fox.send(
@@ -1407,6 +1411,20 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         await message.channel.send(f"Unexpected error occurred: {e}")
                 return
             await handle_convo_llm(message, user_info, self.bot)
+                                           
+            if "plot" in message.content.lower():
+                expr = detect_plot_request(message.content)
+                if expr:
+                    fig = generate_plot(expr)
+                    buffer = io.BytesIO()
+                    to_image(fig, format='png').save(buffer)
+                    buffer.seek(0)
+                    await message.channel.send(file=discord.File(fp=buffer, filename='plot.png'))
+                else:
+                    await handle_convo_llm(message, user_info, self.bot)
+
+        if "cake" in message.content.lower():
+            await message.add_reaction("🍰")
 
         if "chris" in message.content.lower():
             owner = await self.bot.fetch_user(self.bot.owner_id)
