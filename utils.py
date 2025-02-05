@@ -12,8 +12,8 @@ import requests
 from google.cloud import translate_v2 as translate
 from corpus import corpus
 from sympy import sympify, Symbol
-from sympy.parsing.sympy_parser import parse_expr
 import plotly.graph_objs as go
+from sympy import Symbol, parse_expr
 
 
 # Define the minimum time between requests (in seconds)
@@ -393,8 +393,9 @@ def generate_markov_chain_convo_text(
         )
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
-def generate_plot(expr):
+def generate_plot(expression):
     x = Symbol('x')
+    expr = parse_expr(expression)
     x_vals = [i for i in range(-10, 11)]
     y_vals = [expr.subs(x, val) for val in x_vals]
 
