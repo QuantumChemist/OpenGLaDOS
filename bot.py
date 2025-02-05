@@ -1421,7 +1421,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     buffer.seek(0)
                     await message.channel.send(file=discord.File(fp=buffer, filename='plot.png'))
                 else:
-                    await handle_convo_llm(message, user_info, self.bot)
+                    await handle_convo_llm(message, user_info, self.bot) 
 
         if "cake" in message.content.lower():
             await message.add_reaction("🍰")
