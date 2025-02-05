@@ -1413,18 +1413,29 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await handle_convo_llm(message, user_info, self.bot)
                                            
             if "plot" in message.content.lower():
+                print(f"Received message: {message.content}")
+                
                 stripped_message = message.content.lower().replace("openglados plot ", "", 1)
+                print(f"Stripped message: {stripped_message}")
+                
                 if stripped_message:
                     try:
+                        print(f"Attempting to generate plot for: {stripped_message}")
                         fig = generate_plot(stripped_message)
+                        
                         buffer = io.BytesIO()
                         to_image(fig, format='png').save(buffer)
                         buffer.seek(0)
+                        
+                        print("Plot generated successfully, sending plot...")
                         await message.channel.send(file=discord.File(fp=buffer, filename='plot.png'))
                     except Exception as e:
+                        print(f"Error generating plot: {e}")
                         await handle_convo_llm(message, user_info, self.bot)
                 else:
-                    await handle_convo_llm(message, user_info, self.bot) 
+                    print("Stripped message is empty, calling handle_convo_llm")
+                    await handle_convo_llm(message, user_info, self.bot)
+
 
         if "cake" in message.content.lower():
             await message.add_reaction("🍰")
