@@ -1434,6 +1434,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 else:
                     print("Stripped message is empty, calling handle_convo_llm")
                     await handle_convo_llm(message, user_info, self)
+                return
+            await handle_convo_llm(message, user_info, self.bot)
 
 
         if "cake" in message.content.lower():
