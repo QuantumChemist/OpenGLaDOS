@@ -401,7 +401,7 @@ def generate_plot(expression):
 
     fig = go.Figure(data=go.Scatter(x=x_vals, y=y_vals, mode='lines'))
     fig.update_layout(title=f'Plot of {expr}')
-    return 
+    return fig
 
 def check_mentions(llm_answer):
     # Count instances of "<@" for user mentions
