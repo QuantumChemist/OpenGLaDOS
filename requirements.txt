@@ -9,3 +9,6 @@ types-requests
 python-chess
 bs4
 google-cloud-translate
+kaleido==0.1.0.*
+plotly
+sympy
