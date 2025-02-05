@@ -11,6 +11,9 @@ import textwrap
 import requests
 from google.cloud import translate_v2 as translate
 from corpus import corpus
+from sympy import sympify, Symbol
+from sympy.parsing.sympy_parser import parse_expr
+import plotly.graph_objs as go
 
 
 # Define the minimum time between requests (in seconds)
@@ -390,6 +393,26 @@ def generate_markov_chain_convo_text(
         )
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
+def detect_plot_request(message):
+    match = re.search(r"plot\s+(.+)", message, re.IGNORECASE)
+    if match:
+        expression = match.group(1)
+        try:
+            # Attempt to convert the expression to a sympy expression
+            expr = parse_expr(expression)
+            return expr
+        except Exception:
+            return None
+    return None
+
+def generate_plot(expr):
+    x = Symbol('x')
+    x_vals = [i for i in range(-10, 11)]
+    y_vals = [expr.subs(x, val) for val in x_vals]
+
+    fig = go.Figure(data=go.Scatter(x=x_vals, y=y_vals, mode='lines'))
+    fig.update_layout(title=f'Plot of {expr}')
+    return fig
 
 def check_mentions(llm_answer):
     # Count instances of "<@" for user mentions
