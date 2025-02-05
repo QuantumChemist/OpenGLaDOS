@@ -8,6 +8,7 @@ requests
 types-requests
 python-chess
 bs4
+pymatgen
 google-cloud-translate
 kaleido==0.1.0.*
 plotly
