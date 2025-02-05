@@ -397,11 +397,11 @@ def generate_plot(expression):
     x = Symbol('x')
     expr = parse_expr(expression)
     x_vals = [i for i in range(-10, 11)]
-    y_vals = [expr.subs(x, val) for val in x_vals]
+    y_vals = [float(expr.subs(x, val)) for val in x_vals]  # Serialize to float
 
     fig = go.Figure(data=go.Scatter(x=x_vals, y=y_vals, mode='lines'))
     fig.update_layout(title=f'Plot of {expr}')
-    return fig
+    return 
 
 def check_mentions(llm_answer):
     # Count instances of "<@" for user mentions

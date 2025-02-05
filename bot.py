@@ -1424,7 +1424,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         fig = generate_plot(stripped_message)
                         
                         buffer = io.BytesIO()
-                        to_image(fig, format='png').save(buffer)
+                        fig.write_image(buffer, format='png')  # Save as image
                         buffer.seek(0)
                         
                         print("Plot generated successfully, sending plot...")
@@ -1434,7 +1434,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         await handle_convo_llm(message, user_info, self.bot)
                 else:
                     print("Stripped message is empty, calling handle_convo_llm")
-                    await handle_convo_llm(message, user_info, self.bot)
+                    await handle_convo_llm(message, user_info, self
 
 
         if "cake" in message.content.lower():
