@@ -393,18 +393,6 @@ def generate_markov_chain_convo_text(
         )
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
-def detect_plot_request(message):
-    match = re.search(r"plot\s+(.+)", message, re.IGNORECASE)
-    if match:
-        expression = match.group(1)
-        try:
-            # Attempt to convert the expression to a sympy expression
-            expr = parse_expr(expression)
-            return expr
-        except Exception:
-            return None
-    return None
-
 def generate_plot(expr):
     x = Symbol('x')
     x_vals = [i for i in range(-10, 11)]

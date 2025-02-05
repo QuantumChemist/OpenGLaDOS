@@ -1,4 +1,5 @@
 import os
+import io
 import re
 import chess
 import discord
@@ -35,7 +36,6 @@ from utils import (
     handle_conversation,
     replace_mentions_with_display_names,
     generate_plot,
-    detect_plot_request,
 )
 
 # Directory to save screenshots
@@ -1413,13 +1413,16 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await handle_convo_llm(message, user_info, self.bot)
                                            
             if "plot" in message.content.lower():
-                expr = detect_plot_request(message.content)
-                if expr:
-                    fig = generate_plot(expr)
-                    buffer = io.BytesIO()
-                    to_image(fig, format='png').save(buffer)
-                    buffer.seek(0)
-                    await message.channel.send(file=discord.File(fp=buffer, filename='plot.png'))
+                stripped_message = message.content.lower().replace("openglados plot ", "", 1)
+                if stripped_message:
+                    try:
+                        fig = generate_plot(stripped_message)
+                        buffer = io.BytesIO()
+                        to_image(fig, format='png').save(buffer)
+                        buffer.seek(0)
+                        await message.channel.send(file=discord.File(fp=buffer, filename='plot.png'))
+                    except Exception as e:
+                        await handle_convo_llm(message, user_info, self.bot)
                 else:
                     await handle_convo_llm(message, user_info, self.bot) 
 
