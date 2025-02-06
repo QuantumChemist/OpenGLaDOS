@@ -4,8 +4,6 @@ import re
 import chess
 import discord
 import requests
-from plotly.io import to_image
-from sympy import SympifyError 
 from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
 from discord import app_commands
@@ -1410,24 +1408,28 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     except Exception as e:
                         await message.channel.send(f"Unexpected error occurred: {e}")
                 return
-                                           
+
             if "plot" in message.content.lower():
                 print(f"Received message: {message.content}")
-                
-                stripped_message = message.content.lower().replace("openglados plot ", "", 1)
+
+                stripped_message = message.content.lower().replace(
+                    "openglados plot ", "", 1
+                )
                 print(f"Stripped message: {stripped_message}")
-                
+
                 if stripped_message:
                     try:
                         print(f"Attempting to generate plot for: {stripped_message}")
                         fig = generate_plot(stripped_message)
-                        
+
                         buffer = io.BytesIO()
-                        fig.write_image(buffer, format='png')  # Save as image
+                        fig.write_image(buffer, format="png")  # Save as image
                         buffer.seek(0)
-                        
+
                         print("Plot generated successfully, sending plot...")
-                        await message.channel.send(file=discord.File(fp=buffer, filename='plot.png'))
+                        await message.channel.send(
+                            file=discord.File(fp=buffer, filename="plot.png")
+                        )
                     except Exception as e:
                         print(f"Error generating plot: {e}")
                         await handle_convo_llm(message, user_info, self.bot)
@@ -1436,7 +1438,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     await handle_convo_llm(message, user_info, self)
                 return
             await handle_convo_llm(message, user_info, self.bot)
-
 
         if "cake" in message.content.lower():
             await message.add_reaction("🍰")
@@ -1563,7 +1564,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     )
             await handle_conversation(message=message)
             return
-        
+
         if "chemcounting" in message.channel.name:
             chem_elem: list = [(element.symbol).lower() for element in Element]
             previous_msg = "og"
@@ -1574,14 +1575,19 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     previous_msg = msg.content.lower()
                 else:
                     previous_msg = "og"
-            
-            print(f"Previous element: {previous_msg}, Current element: {message.content.lower()}")
+
+            print(
+                f"Previous element: {previous_msg}, Current element: {message.content.lower()}"
+            )
 
             if message.content.lower() in chem_elem:
                 previous_index = chem_elem.index(previous_msg)
                 current_index = chem_elem.index(message.content.lower())
 
-            if message.content.lower() not in chem_elem or (previous_index + 1) % len(chem_elem) != current_index:
+            if (
+                message.content.lower() not in chem_elem
+                or (previous_index + 1) % len(chem_elem) != current_index
+            ):
                 # Save all necessary info from the user's message before posting via webhook
                 user_message = (
                     message.content.strip()
@@ -1593,16 +1599,12 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 user_attachments = message.attachments  # Save attachments, if any
 
                 # Add a message about the reassembling process, including a ping to @OpenGLaDOS
-                reassembled_message = (
-                    f"`Chemcounting violation detected by @{self.bot.user.name}#{self.bot.user.discriminator}...`\n`Game starts from the beginning. Type 'H' to start.` \n "
-                )
+                reassembled_message = f"`Chemcounting violation detected by @{self.bot.user.name}#{self.bot.user.discriminator}...`\n`Game starts from the beginning. Type 'H' to start.` \n "
 
                 # If there's no user message content, provide a default fallback message
                 # unused but can stay for future
                 if not user_message:
-                    user_message = (
-                        "*`I can only count to four https://www.youtube.com/watch?v=u8ccGjar4Es`*"
-                    )
+                    user_message = "*`I can only count to four https://www.youtube.com/watch?v=u8ccGjar4Es`*"
 
                 # Get the webhooks for the channel
                 webhooks = await message.channel.webhooks()
@@ -1624,9 +1626,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         username=user_name,
                         avatar_url=user_avatar,
                     )
-                    print(
-                        "Message reposted using webhook with reassembled message."
-                    )
+                    print("Message reposted using webhook with reassembled message.")
                 else:
                     print("No message content to send.")
 
