@@ -14,6 +14,7 @@ from corpus import corpus
 from sympy import Symbol
 import plotly.graph_objs as go
 from sympy import parse_expr
+import pytz
 
 
 # Define the minimum time between requests (in seconds)
@@ -345,8 +346,11 @@ def generate_markov_chain_convo_text(
     start_line: str = None,
     user_message: str = None,
     llm_bool: bool = False,
-    user_time: int = 7,
+    user_time=7,
 ) -> str | tuple[str, str, str]:
+
+    # Japan Standard Time (JST) timezone
+    japan_tz = pytz.timezone("Asia/Tokyo")
 
     introduction = (
         "I'm the OpenGLaDOS chatbot. \n"
@@ -355,7 +359,9 @@ def generate_markov_chain_convo_text(
         "My help might not always be helpful to you but helpful to me. ... *beep* \n"
         "So..."
     )
-    selected_greeting = get_greeting(user_time)
+
+    local_time = user_time.astimezone(japan_tz)
+    selected_greeting = get_greeting(local_time)
 
     if start_line is None:
         start_line = "Hello".split()
@@ -441,7 +447,8 @@ def generate_markov_chain_convo_text(
             f"\n[ERROR] USER REQUEST DENIED | ERROR CODE: #{hex(state)}\n"
             f"\n0xDEADBEEF: Traceback (recent thought call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
             f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
-            f"...internal OpenGLaDOS thoughts restored...reading system logs terminated...\n ```",
+            f"...internal OpenGLaDOS thoughts restored...reading system logs terminated...\n ```"
+            f"Also your local time is UTC+9, which is {local_time} ...*beep*...\n",
         )
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
