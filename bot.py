@@ -35,6 +35,7 @@ from utils import (
     replace_mentions_with_display_names,
     generate_plot,
 )
+from variables import WHITELIST_GUILDS_ID, BLACKLIST_USERS_ID
 
 # Directory to save screenshots
 SCREENSHOTS_DIR = "screenshots"
@@ -50,8 +51,6 @@ hti = Html2Image(
 # Set a constant file name for the screenshot
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
 SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
-WHITELIST_GUILDS_ID = [901576410374758420]
-BLACKLIST_USERS_ID = [1141909667790979082]
 
 # Load environment variables from .env file
 load_dotenv()

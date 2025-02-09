@@ -10,6 +10,7 @@ bots
 guilds.txt
 screenshots
 .idea
+variables.py
 
 google_api_auth.json
 
