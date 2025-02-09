@@ -282,7 +282,7 @@ def get_groq_completion(
 
 
 def get_greeting(user_time):
-    if 5 <= user_time.hour < 12:
+    if 0 <= user_time.hour < 12:
         return random.choice(
             [
                 "Good morning",
@@ -300,7 +300,7 @@ def get_greeting(user_time):
                 "Ohayou gozaimasu",
             ]
         )
-    elif 12 <= user_time.hour < 17:
+    elif 12 <= user_time.hour < 18:
         return random.choice(
             [
                 "Good day",
@@ -318,7 +318,7 @@ def get_greeting(user_time):
                 "Konnichiwa",
             ]
         )
-    elif 17 <= user_time.hour < 22:
+    elif 18 <= user_time.hour < 23:
         return random.choice(
             [
                 "Good night",
