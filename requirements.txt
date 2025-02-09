@@ -13,3 +13,4 @@ google-cloud-translate
 kaleido==0.1.0.*
 plotly
 sympy
+pytz
