@@ -44,5 +44,6 @@ jobs:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         CHICHI: ${{ secrets.CHICHI }}
         TENOR_API_KEY: ${{ secrets.TENOR_API_KEY }}
+        PYTEST_RUNNING: "1"
       run: |
         pytest
