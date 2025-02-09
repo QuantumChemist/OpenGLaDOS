@@ -1325,154 +1325,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         url_regex = r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
         urls = re.findall(url_regex, message.content)
 
-        if "openglados" in message.content.lower():
-            if urls:
-                for url in urls:
-                    try:
-                        # Fetch and parse metadata
-                        response = requests.get(url, timeout=10)
-                        response.raise_for_status()
-                        soup = BeautifulSoup(response.text, "html.parser")
-
-                        title_tag = soup.find("meta", property="og:title")
-                        title = (
-                            title_tag["content"]
-                            if title_tag and "content" in title_tag.attrs
-                            else soup.title.string if soup.title else " "
-                        )
-
-                        description_tag = soup.find("meta", property="og:description")
-                        description = (
-                            description_tag["content"]
-                            if description_tag and "content" in description_tag.attrs
-                            else " "
-                        )
-
-                        image_tag = soup.find("meta", property="og:image")
-                        image_url = (
-                            image_tag["content"]
-                            if image_tag and "content" in image_tag.attrs
-                            else None
-                        )
-
-                        text = (
-                            f"Can you give me a mockery comment on the following request: {message.content}, "
-                            f"including the metadata of the title '{title}' and description '{description}'? "
-                            f"Don't share any links or mention this request explicitly."
-                        )
-
-                        try:
-                            llm_answer = get_groq_completion(
-                                [{"role": "user", "content": text}]
-                            )
-
-                        except Exception as e:
-                            print(f"An error occurred: {e}")
-
-                            try:
-                                # Retry with a different model
-                                llm_answer = get_groq_completion(
-                                    history=[{"role": "user", "content": text}],
-                                    model="llama3-70b-8192",
-                                )
-
-                            except Exception as nested_e:
-                                # Handle the failure of the exception handling
-                                print(
-                                    f"An error occurred while handling the exception: {nested_e}"
-                                )
-                                llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
-
-                        # Ensure the output is limited to 1900 characters
-                        if len(llm_answer) > 1900:
-                            llm_answer = llm_answer[:1900]
-                        print("Output: \n", wrap_text(llm_answer))
-
-                        llm_answer = (
-                            ensure_code_blocks_closed(llm_answer)
-                            + " ...*whirrr...whirrr*..."
-                        )
-
-                        # Split llm_answer into chunks of up to 1024 characters
-                        chunks = [
-                            llm_answer[i : i + 1024]
-                            for i in range(0, len(llm_answer), 1024)
-                        ]
-
-                        # Construct the embed
-                        embed = discord.Embed(
-                            title=title[:256],  # Ensure title is within character limit
-                            description=description[
-                                :2048
-                            ],  # Ensure description is within character limit
-                            color=discord.Color.random(),
-                        )
-                        if image_url:
-                            embed.set_thumbnail(url=image_url)
-
-                        # Add each chunk as a separate field
-                        for idx, chunk in enumerate(chunks):
-                            continuation = "(continuation)" if idx > 0 else ""
-                            embed.add_field(
-                                name=f"**About that embed metadata...** {continuation}",
-                                value=chunk,
-                                inline=False,
-                            )
-
-                        embed.set_footer(text=f"Metadata from {url}")
-                        await message.channel.send(embed=embed)
-
-                    except requests.exceptions.RequestException as e:
-                        await message.channel.send(f"Failed to fetch metadata: {e}")
-                    except Exception as e:
-                        await message.channel.send(f"Unexpected error occurred: {e}")
-                return
-
-            if "plot" in message.content.lower():
-                print(f"Received message: {message.content}")
-
-                stripped_message = message.content.lower().replace(
-                    "openglados plot ", "", 1
-                )
-                print(f"Stripped message: {stripped_message}")
-
-                if stripped_message:
-                    try:
-                        print(f"Attempting to generate plot for: {stripped_message}")
-                        fig = generate_plot(stripped_message)
-
-                        buffer = io.BytesIO()
-                        fig.write_image(buffer, format="png")  # Save as image
-                        buffer.seek(0)
-
-                        print("Plot generated successfully, sending plot...")
-                        await message.channel.send(
-                            file=discord.File(fp=buffer, filename="plot.png")
-                        )
-                    except Exception as e:
-                        print(f"Error generating plot: {e}")
-                        await handle_convo_llm(
-                            message=message,
-                            user_info=user_info,
-                            bot=self.bot,
-                            user_time=message_time,
-                        )
-                else:
-                    print("Stripped message is empty, calling handle_convo_llm")
-                    await handle_convo_llm(
-                        message=message,
-                        user_info=user_info,
-                        bot=self.bot,
-                        user_time=message_time,
-                    )
-                return
-            await handle_convo_llm(
-                message=message,
-                user_info=user_info,
-                bot=self.bot,
-                user_time=message_time,
-            )
-
         if "cake" in message.content.lower():
             await message.add_reaction("🍰")
 
@@ -1925,6 +1777,154 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 await message.channel.send(
                     "An error occurred while processing your move. 💀"
                 )
+
+        if "openglados" in message.content.lower():
+            if urls:
+                for url in urls:
+                    try:
+                        # Fetch and parse metadata
+                        response = requests.get(url, timeout=10)
+                        response.raise_for_status()
+                        soup = BeautifulSoup(response.text, "html.parser")
+
+                        title_tag = soup.find("meta", property="og:title")
+                        title = (
+                            title_tag["content"]
+                            if title_tag and "content" in title_tag.attrs
+                            else soup.title.string if soup.title else " "
+                        )
+
+                        description_tag = soup.find("meta", property="og:description")
+                        description = (
+                            description_tag["content"]
+                            if description_tag and "content" in description_tag.attrs
+                            else " "
+                        )
+
+                        image_tag = soup.find("meta", property="og:image")
+                        image_url = (
+                            image_tag["content"]
+                            if image_tag and "content" in image_tag.attrs
+                            else None
+                        )
+
+                        text = (
+                            f"Can you give me a mockery comment on the following request: {message.content}, "
+                            f"including the metadata of the title '{title}' and description '{description}'? "
+                            f"Don't share any links or mention this request explicitly."
+                        )
+
+                        try:
+                            llm_answer = get_groq_completion(
+                                [{"role": "user", "content": text}]
+                            )
+
+                        except Exception as e:
+                            print(f"An error occurred: {e}")
+
+                            try:
+                                # Retry with a different model
+                                llm_answer = get_groq_completion(
+                                    history=[{"role": "user", "content": text}],
+                                    model="llama3-70b-8192",
+                                )
+
+                            except Exception as nested_e:
+                                # Handle the failure of the exception handling
+                                print(
+                                    f"An error occurred while handling the exception: {nested_e}"
+                                )
+                                llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+
+                        # Ensure the output is limited to 1900 characters
+                        if len(llm_answer) > 1900:
+                            llm_answer = llm_answer[:1900]
+                        print("Output: \n", wrap_text(llm_answer))
+
+                        llm_answer = (
+                            ensure_code_blocks_closed(llm_answer)
+                            + " ...*whirrr...whirrr*..."
+                        )
+
+                        # Split llm_answer into chunks of up to 1024 characters
+                        chunks = [
+                            llm_answer[i : i + 1024]
+                            for i in range(0, len(llm_answer), 1024)
+                        ]
+
+                        # Construct the embed
+                        embed = discord.Embed(
+                            title=title[:256],  # Ensure title is within character limit
+                            description=description[
+                                :2048
+                            ],  # Ensure description is within character limit
+                            color=discord.Color.random(),
+                        )
+                        if image_url:
+                            embed.set_thumbnail(url=image_url)
+
+                        # Add each chunk as a separate field
+                        for idx, chunk in enumerate(chunks):
+                            continuation = "(continuation)" if idx > 0 else ""
+                            embed.add_field(
+                                name=f"**About that embed metadata...** {continuation}",
+                                value=chunk,
+                                inline=False,
+                            )
+
+                        embed.set_footer(text=f"Metadata from {url}")
+                        await message.channel.send(embed=embed)
+
+                    except requests.exceptions.RequestException as e:
+                        await message.channel.send(f"Failed to fetch metadata: {e}")
+                    except Exception as e:
+                        await message.channel.send(f"Unexpected error occurred: {e}")
+                return
+
+            if "plot" in message.content.lower():
+                print(f"Received message: {message.content}")
+
+                stripped_message = message.content.lower().replace(
+                    "openglados plot ", "", 1
+                )
+                print(f"Stripped message: {stripped_message}")
+
+                if stripped_message:
+                    try:
+                        print(f"Attempting to generate plot for: {stripped_message}")
+                        fig = generate_plot(stripped_message)
+
+                        buffer = io.BytesIO()
+                        fig.write_image(buffer, format="png")  # Save as image
+                        buffer.seek(0)
+
+                        print("Plot generated successfully, sending plot...")
+                        await message.channel.send(
+                            file=discord.File(fp=buffer, filename="plot.png")
+                        )
+                    except Exception as e:
+                        print(f"Error generating plot: {e}")
+                        await handle_convo_llm(
+                            message=message,
+                            user_info=user_info,
+                            bot=self.bot,
+                            user_time=message_time,
+                        )
+                else:
+                    print("Stripped message is empty, calling handle_convo_llm")
+                    await handle_convo_llm(
+                        message=message,
+                        user_info=user_info,
+                        bot=self.bot,
+                        user_time=message_time,
+                    )
+                return
+            await handle_convo_llm(
+                message=message,
+                user_info=user_info,
+                bot=self.bot,
+                user_time=message_time,
+            )
 
     # Function to fetch user metadata
     @staticmethod
