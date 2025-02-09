@@ -51,6 +51,7 @@ hti = Html2Image(
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
 SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
 WHITELIST_GUILDS_ID = [901576410374758420]
+BLACKLIST_USERS_ID = [1141909667790979082]
 
 # Load environment variables from .env file
 load_dotenv()
@@ -1291,7 +1292,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
     @commands.Cog.listener()
     async def on_message(self, message):
         # Ignore messages from any bot, including your own
-        if message.author.bot:
+        if message.author.bot or message.author.id in BLACKLIST_USERS_ID:
             return
 
         # Fetch user metadata
