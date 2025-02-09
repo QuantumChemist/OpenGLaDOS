@@ -315,8 +315,7 @@ def get_greeting(user_time):
                 "Yo",
                 "Sup",
                 "Hallo",
-                "Ohayo",
-                "Ohayou gozaimasu",
+                "Konnichiwa",
             ]
         )
     elif 17 <= user_time.hour < 22:
@@ -334,8 +333,7 @@ def get_greeting(user_time):
                 "Yo",
                 "Sup",
                 "Hallo",
-                "Ohayo",
-                "Ohayou gozaimasu",
+                "Konbanwa",
             ]
         )
     else:
