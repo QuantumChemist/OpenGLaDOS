@@ -35,7 +35,7 @@ from utils import (
     replace_mentions_with_display_names,
     generate_plot,
 )
-from variables import WHITELIST_GUILDS_ID, BLACKLIST_USERS_ID
+from variables import WHITELIST_GUILDS_ID, BLACKLIST_USERS_ID  # noqa: F401
 
 # Directory to save screenshots
 SCREENSHOTS_DIR = "screenshots"
