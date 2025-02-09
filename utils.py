@@ -10,6 +10,7 @@ import markovify
 import textwrap
 import requests
 from google.cloud import translate_v2 as translate
+from datetime import datetime, timezone
 from corpus import corpus
 from sympy import Symbol
 import plotly.graph_objs as go
@@ -344,7 +345,7 @@ def generate_markov_chain_convo_text(
     start_line: str = None,
     user_message: str = None,
     llm_bool: bool = False,
-    user_time=7,
+    user_time=None,
 ) -> str | tuple[str, str, str]:
 
     # Japan Standard Time (JST) timezone
@@ -357,6 +358,8 @@ def generate_markov_chain_convo_text(
         "My help might not always be helpful to you but helpful to me. ... *beep* \n"
         "So..."
     )
+    if user_time is None:
+        user_time = datetime.now(timezone.utc)
 
     local_time = user_time.astimezone(japan_tz)
     selected_greeting = get_greeting(local_time)
