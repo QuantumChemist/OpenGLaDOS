@@ -65,11 +65,6 @@ SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
 # Load environment variables from .env file
 load_dotenv()
 
-if not sys.modules["variables"].BLACKLIST_USERS_ID:
-    sys.modules["variables"].BLACKLIST_USERS_ID = []
-if not sys.modules["variables"].WHITELIST_GUILDS_ID:
-    sys.modules["variables"].WHITELIST_GUILDS_ID = []
-
 
 # Define your custom bot class
 class OpenGLaDOSBot(commands.Bot):
