@@ -280,21 +280,70 @@ def get_groq_completion(
     return chat_completion.choices[0].message.content
 
 
+def get_greeting(user_time):
+    if 5 <= user_time.hour < 12:
+        return random.choice(
+            [
+                "Good morning",
+                "Morning",
+                "Hello",
+                "Hi",
+                "Hey",
+                "Greetings",
+                "Salutations",
+                "Howdy",
+                "Yo",
+                "Sup",
+                "Hallo",
+                "Ohayo",
+                "Ohayou gozaimasu",
+            ]
+        )
+    elif 12 <= user_time.hour < 17:
+        return random.choice(
+            [
+                "Good day",
+                "Good afternoon",
+                "Morning",
+                "Hello",
+                "Hi",
+                "Hey",
+                "Greetings",
+                "Salutations",
+                "Howdy",
+                "Yo",
+                "Sup",
+                "Hallo",
+                "Ohayo",
+                "Ohayou gozaimasu",
+            ]
+        )
+    elif 17 <= user_time.hour < 22:
+        return random.choice(
+            [
+                "Good night",
+                "Good evening",
+                "Morning",
+                "Hello",
+                "Hi",
+                "Hey",
+                "Greetings",
+                "Salutations",
+                "Howdy",
+                "Yo",
+                "Sup",
+                "Hallo",
+                "Ohayo",
+                "Ohayou gozaimasu",
+            ]
+        )
+    else:
+        return "Hey"
+
+
 def generate_markov_chain_convo_text(
     start_line: str = None, user_message: str = None, llm_bool: bool = False
 ) -> str | tuple[str, str, str]:
-    # Randomly select a greeting
-    greetings = [
-        "Hi",
-        "Hey",
-        "Hello",
-        "Hallo",
-        "Good morning",
-        "Good afternoon",
-        "Good evening",
-        "Good day",
-        "Good night",
-    ]
 
     introduction = (
         "I'm the OpenGLaDOS chatbot. \n"
@@ -303,8 +352,8 @@ def generate_markov_chain_convo_text(
         "My help might not always be helpful to you but helpful to me. ... *beep* \n"
         "So..."
     )
-
-    selected_greeting = random.choice(greetings)
+    user_time = 7  # Placeholder time for the user
+    selected_greeting = get_greeting(user_time)
 
     if start_line is None:
         start_line = "Hello".split()
