@@ -448,7 +448,7 @@ def generate_markov_chain_convo_text(
             f"\n0xDEADBEEF: Traceback (recent thought call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
             f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
             f"...internal OpenGLaDOS thoughts restored...reading system logs terminated...\n ```"
-            f"Also your local time is UTC+9, which is {local_time}. The user's time in UTC is {user_time} ...*beep*...\n",
+            f"Also, your local time is UTC+9, which is {local_time}. The user's time in UTC is {user_time} ...*beep*...\n",
         )
     return f"{selected_greeting}, {introduction} {text_lines} ...*beep*..."
 
