@@ -342,7 +342,10 @@ def get_greeting(user_time):
 
 
 def generate_markov_chain_convo_text(
-    start_line: str = None, user_message: str = None, llm_bool: bool = False
+    start_line: str = None,
+    user_message: str = None,
+    llm_bool: bool = False,
+    user_time: int = 7,
 ) -> str | tuple[str, str, str]:
 
     introduction = (
@@ -352,7 +355,6 @@ def generate_markov_chain_convo_text(
         "My help might not always be helpful to you but helpful to me. ... *beep* \n"
         "So..."
     )
-    user_time = 7  # Placeholder time for the user
     selected_greeting = get_greeting(user_time)
 
     if start_line is None:
@@ -470,7 +472,9 @@ def check_mentions(llm_answer):
     return (user_mention_open + emoji_mention_open) <= discord_like_close
 
 
-def generate_llm_convo_text(start_line: str = None, message: str = None, history=None):
+def generate_llm_convo_text(
+    start_line: str = None, message: str = None, history=None, user_time=7
+):
     if history is None:
         history = []
 
@@ -479,7 +483,10 @@ def generate_llm_convo_text(start_line: str = None, message: str = None, history
 
     # Generate input text using a Markov chain or other logic (if required)
     user_lines, assistant_lines, log_lines = generate_markov_chain_convo_text(
-        start_line, message, llm_bool=True
+        start_line,
+        message,
+        llm_bool=True,
+        user_time=user_time,
     )
     history.append(
         {
@@ -561,7 +568,7 @@ async def throttle_requests():
     last_request_time = time.time()
 
 
-async def handle_convo_llm(message, user_info, bot, mess_ref=None):
+async def handle_convo_llm(message, user_info, bot, mess_ref=None, user_time=7):
     global last_request_time
     # Fetching message history and handling rate limits
     fetched_messages = []
@@ -648,7 +655,9 @@ async def handle_convo_llm(message, user_info, bot, mess_ref=None):
     # Generate the response using the modified history-aware function
     await throttle_requests()  # Throttle before generating the response
     llm_response = generate_llm_convo_text(
-        message=f"This is the current user inquiry: {message.content}", history=history
+        message=f"This is the current user inquiry: {message.content}",
+        history=history,
+        user_time=user_time,
     )
 
     mention_pattern = re.compile(r"`<@!?(\d+)>`")
