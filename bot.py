@@ -1272,7 +1272,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         if channel:
             fact = fetch_random_fact()  # Fetch a random fact from the API
-            await channel.send(f"🌍 **Random Useless Fact of the Day** 🌍\n{fact}")
+            await channel.send(
+                f"<:openglados_facts:1338163117737246761> **Random Useless Fact of the Day** <:openglados_facts:1338163117737246761>\n{fact}"
+            )
         else:
             print("Channel not found!")
 
@@ -1280,7 +1282,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         if channel_fox:
             french_fact = fetch_french_fact()  # Fetch a random fact from the API
             await channel_fox.send(
-                f"🌍 **Fait inutile aléatoire du jour** 🌍\n{french_fact}"
+                f"<:openglados_facts:1338163117737246761> **Fait inutile aléatoire du jour** <:openglados_facts:1338163117737246761>\n{french_fact}"
             )
         else:
             print("Channel not found!")
