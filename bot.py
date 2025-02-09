@@ -1296,6 +1296,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         user = message.author
         user_info = self.get_user_metadata(user)
 
+        message_time = message.created_at.replace(tzinfo=timezone.utc)  # UTC time
+
         # Process commands first
         ctx = await self.bot.get_context(message)
         if ctx.command is not None:
@@ -1432,12 +1434,27 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         )
                     except Exception as e:
                         print(f"Error generating plot: {e}")
-                        await handle_convo_llm(message, user_info, self.bot)
+                        await handle_convo_llm(
+                            message=message,
+                            user_info=user_info,
+                            bot=self.bot,
+                            user_time=message_time,
+                        )
                 else:
                     print("Stripped message is empty, calling handle_convo_llm")
-                    await handle_convo_llm(message, user_info, self)
+                    await handle_convo_llm(
+                        message=message,
+                        user_info=user_info,
+                        bot=self.bot,
+                        user_time=message_time,
+                    )
                 return
-            await handle_convo_llm(message, user_info, self.bot)
+            await handle_convo_llm(
+                message=message,
+                user_info=user_info,
+                bot=self.bot,
+                user_time=message_time,
+            )
 
         if "cake" in message.content.lower():
             await message.add_reaction("🍰")
@@ -1641,12 +1658,23 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             and message.reference.resolved
             and message.reference.resolved.author == self.bot.user
         ):
-            await handle_convo_llm(message, user_info, self.bot, message.reference)
+            await handle_convo_llm(
+                message=message,
+                user_info=user_info,
+                bot=self.bot,
+                user_time=message_time,
+                mess_ref=message.reference,
+            )
             return
 
         # Handle Mentions of the Bot
         if self.bot.user.mentioned_in(message):
-            await handle_convo_llm(message, user_info, self.bot)
+            await handle_convo_llm(
+                message=message,
+                user_info=user_info,
+                bot=self.bot,
+                user_time=message_time,
+            )
             return
 
         if message.guild.id not in WHITELIST_GUILDS_ID:
