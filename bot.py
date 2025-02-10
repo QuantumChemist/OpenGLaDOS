@@ -344,6 +344,7 @@ class OpenGLaDOS(commands.Cog):
                     await start_quiz_by_reaction(test_chambers_channel, user, self.bot)
                     # Restrict user permissions in other channels while the quiz is ongoing
                     await restrict_user_permissions(guild, user)
+            return
 
         # Check if the reaction is a peace flag emoji (🏳️) to stop the quiz
         elif str(reaction.emoji) == "🏳️":
@@ -357,6 +358,7 @@ class OpenGLaDOS(commands.Cog):
                 await stop_quiz_by_reaction(message.channel, user, self.bot)
                 # Unrestrict user permissions in other channels while the quiz is ongoing
                 await unrestrict_user_permissions(guild, user)
+            return
 
         # Part 3: Handle general knife emoji reactions
         knife_reaction = None
