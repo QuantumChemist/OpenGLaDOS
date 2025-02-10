@@ -1275,7 +1275,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             print("Channel not found!")
 
     # Task to send a science fact daily
-    @tasks.loop(hours=24)  # Run every 24 hours
+    @tasks.loop(time=time(12, 0, tzinfo=timezone.utc))
     async def send_science_fact(self):
         await self.bot.wait_until_ready()  # Wait until the bot is fully ready
         channel = discord.utils.get(
