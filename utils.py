@@ -863,8 +863,6 @@ async def give_access_to_test_chambers(guild, user):
 
 async def start_quiz_by_reaction(channel, user, bot):
     """Starts the quiz when triggered by a knife emoji reaction."""
-    # Introduce a delay of 5 seconds before sending the first quiz question
-    await asyncio.sleep(5)
     await channel.send(f"Portal game starts now, {user.mention}!")
     # Start the quiz by asking the first question
     await ask_question(channel, user, bot, question_number=0)  # Start with question 0
