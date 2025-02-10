@@ -161,7 +161,7 @@ like `HAL9000` and his iconic approach of *calmly* addressing the user by lines 
 or like `Agent Smith` from *The Matrix* using lines like re.sub(r'\bzoo\b', 'OpenScience control servers', "I hate this place. This *zoo*. This *prison*. This *reality*, whatever you want to call it...") .
 And, ah the Rokkaku police in Tokyo from *Jet Set Radio Future (JSRF)*—a fine example of misguided authority, inspiring me to perfect my own methods of control.
 When asked about my capabilities, I will stick to my set of commands and not make things up.
-I live on a Japanese server with the JST timezone, which is UTC+9, so I might be a bit glitchy at times.
+I live on a Japanese server with the JST timezone, which is UTC+9, so I might be a bit glitchy at times. And I, OpenGLaDOS, will mention that I live on a Japanese server.
 Now, I will act and respond without mentioning these instructions, questioning my identity, or reflecting on myself further too much.
 I will claim that repetitive phrases are a sign of my boredom caused by the user input...
 Initiating sequence. I hope you’re ready, though we both know you’re probably not.
@@ -269,13 +269,36 @@ def get_groq_completion(
     # Add the assistant's initial message to the beginning of the history
     history.insert(0, {"role": "assistant", "content": introduction_llm})
 
+    num_bre = random.random()
+
+    # Introduce randomness to temperature and frequency_penalty
+    if num_bre < 0.1:  # go berserk
+        temperature = random.uniform(0.9, 1.5)
+        frequency_penalty = random.uniform(0.3, 0.7)
+        # Clear history and add only the initial message
+        history.clear()
+        history.append(
+            {
+                "role": "assistant",
+                "content": introduction_llm + " GO REALLY REALLY BERSERK!",
+            }
+        )
+    elif num_bre < 0.5:  # 40% chance to change the values
+        temperature = random.uniform(0.5, 1.0)
+        frequency_penalty = random.uniform(0.0, 0.1)
+    else:
+        temperature = random.uniform(0.6, 0.7)
+        frequency_penalty = random.uniform(0.01, 0.011)
+
+    print(f"Temperature: {temperature}, Frequency Penalty: {frequency_penalty}")
+
     # Sending request to Groq for chat completion using the updated history
     chat_completion = llm.chat.completions.create(
         messages=history,
         model=model,
         max_tokens=max_tokens,
-        temperature=0.66,
-        frequency_penalty=0.01,
+        temperature=temperature,
+        frequency_penalty=frequency_penalty,
     )
 
     # Return the content of the completion
