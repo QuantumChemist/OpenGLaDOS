@@ -865,13 +865,15 @@ async def start_quiz_by_reaction(channel, user, bot):
     """Starts the quiz when triggered by a knife emoji reaction."""
 
     def check(m):
-        return (
-            m.author == user
-            and m.channel == channel
-            and any(
+        if m.author == user and m.channel == channel:
+            if any(
                 word in m.content.lower() for word in ["ready", "start", "let's go"]
-            )
-        )
+            ):
+                return True  # Accept valid responses
+            else:
+                # Schedule message deletion if it doesn't match
+                asyncio.create_task(m.delete())
+        return False
 
     await bot.wait_for("message", check=check)
 
