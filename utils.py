@@ -855,7 +855,7 @@ async def give_access_to_test_chambers(guild, user):
         )
         if welcome_channel:
             await welcome_channel.send(
-                f"{user.mention}, you now have access to the {test_chambers_channel.mention}."
+                f"{user.mention}, you now have access to the {test_chambers_channel.mention}. Switch to that channel and type 'ready' to start the quiz!"
             )
 
     return test_chambers_channel
@@ -863,6 +863,18 @@ async def give_access_to_test_chambers(guild, user):
 
 async def start_quiz_by_reaction(channel, user, bot):
     """Starts the quiz when triggered by a knife emoji reaction."""
+
+    def check(m):
+        return (
+            m.author == user
+            and m.channel == channel
+            and any(
+                word in m.content.lower() for word in ["ready", "start", "let's go"]
+            )
+        )
+
+    await bot.wait_for("message", check=check)
+
     await channel.send(f"Portal game starts now, {user.mention}!")
     # Start the quiz by asking the first question
     await ask_question(channel, user, bot, question_number=0)  # Start with question 0
