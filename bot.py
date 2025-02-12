@@ -262,7 +262,9 @@ class OpenGLaDOS(commands.Cog):
         # Check if the new member's ID is in the kicked users list
         if member.id in kicked_users:
             # Find the "survivor" role
-            survivor_role = discord.utils.get(member.guild.roles, name="survivor")
+            survivor_role = discord.utils.find(
+                lambda r: "survivor" in r.name.lower(), member.guild.roles
+            )
             if survivor_role:
                 await member.add_roles(survivor_role)
 
@@ -285,7 +287,9 @@ class OpenGLaDOS(commands.Cog):
 
         # If the member is not a rejoining survivor, proceed with the normal welcome
         # Welcome the new member and assign the "test subject" role
-        test_role = discord.utils.get(member.guild.roles, name="test subject")
+        test_role = discord.utils.find(
+            lambda r: "test subject" in r.name.lower(), member.guild.roles
+        )
         if test_role:
             await member.add_roles(test_role)
 
