@@ -840,8 +840,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         await interaction.response.send_message(gif_url)
 
     @app_commands.command(
-        name="get_mess_cont",
-        description="Get message content from link. Or not. I'm not your personal assistant.",
+        name="message_portal",
+        description="Get message portal via link. Or not. I'm not your personal assistant.",
     )
     async def get_message_content(
         self, interaction: discord.Interaction, message_link: str
