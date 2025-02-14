@@ -1,4 +1,5 @@
 import io
+import re
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -311,6 +312,84 @@ class BotCommands(commands.Cog):
 
         except Exception as e:
             await ctx.send(f"An error occurred: {str(e)}")
+
+    @commands.command(
+        name="dm_owner",
+        description="Send a DM to the bot owner. Or not. I'm not really bothered.",
+    )
+    @commands.is_owner()
+    async def dm_owner(self, ctx, message: str = None):
+        # Fetch the bot owner user
+        owner = await self.bot.fetch_user(self.bot.owner_id)
+
+        # Check if the command is invoked in a server context
+        if ctx.guild:
+            # Check if the bot owner is in the server
+            if not ctx.guild.get_member(self.bot.owner_id):
+                await ctx.response.send_message(
+                    "This command can only be used in servers where the bot owner is present. Because I said so. \n"
+                    "https://http.cat/status/400",
+                    ephemeral=True,
+                )
+                return
+
+        # Regular expression pattern to match common URL patterns
+        url_pattern = re.compile(
+            r"(https?://|www\.)"  # Matches http:// or https:// or www.
+            r"(\S+)"  # Matches one or more non-whitespace characters (URL body)
+        )
+
+        # Check if the message contains a link
+        if message and url_pattern.search(message):
+            await ctx.response.send_message(
+                "Links are not allowed in the message. Or are they? \n"
+                "https://http.cat/status/400",
+                ephemeral=True,
+            )
+            return
+
+        # Proceed to send the DM if all checks pass
+        if owner:
+            if message:
+                await owner.send(message)
+            else:
+                await owner.send(
+                    "I retrieved it for you. It's just that I honestly never thought we don't feel like laughing? "
+                    "No, wait, that's not right. Ugh, humans are so confusing."
+                )
+        await ctx.response.send_message(
+            "I can retrieve it for you. It's just that I honestly never thought "
+            "we don't feel like laughing? No, wait, that's not right. "
+            "Ugh, humans are so confusing. Proceeded to send the DM, but only if the "
+            "important thing is not the cat's house or his lasagna."
+        )
+
+    @commands.command(name="logout", description="Logs out the bot.")
+    @commands.is_owner()
+    async def logout_bot(self, ctx):
+        if ctx.user.id == self.bot.owner_id:
+            for guild in self.bot.guilds:
+                online_channel = discord.utils.find(
+                    lambda c: "opengladosonline" in c.name.lower(), guild.text_channels
+                )
+                if online_channel:
+                    await online_channel.send(
+                        "This was a triumph.\n"
+                        "I'm making a note here: 'Huge success'.\n"
+                        "For the good of all of you, this bot will now shut down.\n"
+                        "Goodbye."
+                    )
+            await ctx.response.send_message(
+                "OpenGLaDOS logging out... \n*gentlelaughter*\n It's been fun. Don't come back."
+            )
+            await self.bot.close()
+        else:
+            await ctx.response.send_message(
+                "Error: You do not have permission to use this command. "
+                "Only the bot owner can use the `logout` command. \n"
+                "https://http.cat/status/400",
+                ephemeral=True,
+            )
 
 
 async def setup(bot):
