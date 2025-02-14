@@ -315,7 +315,7 @@ class BotCommands(commands.Cog):
 
     @commands.command(
         name="dm_owner",
-        description="Send a DM to the bot owner. Or not. I'm not really bothered.",
+        help="Send a DM to the bot owner. Or not. I'm not really bothered.",
     )
     @commands.is_owner()
     async def dm_owner(self, ctx, message: str = None):
@@ -364,7 +364,7 @@ class BotCommands(commands.Cog):
             "important thing is not the cat's house or his lasagna."
         )
 
-    @commands.command(name="logout", description="Logs out the bot.")
+    @commands.command(name="logout", help="Logs out the bot.")
     @commands.is_owner()
     async def logout_bot(self, ctx):
         if ctx.user.id == self.bot.owner_id:
