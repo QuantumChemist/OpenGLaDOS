@@ -25,6 +25,7 @@ class BotCommands(commands.Cog):
 
     # Regular bot command implementation
     @commands.command(name="start", help="Start chat mode to send messages manually.")
+    @commands.is_owner()  # Only the bot owner can use this command
     async def start_text(self, ctx: commands.Context):
         if self.start_triggered:
             embed = discord.Embed(
