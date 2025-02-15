@@ -364,7 +364,7 @@ class OpenGLaDOS(commands.Cog):
                 await unrestrict_user_permissions(guild, user)
             return
 
-        if reaction.emoji == "<:openglados_stab:1338172819305009233>":
+        if str(reaction.emoji) == "<:openglados_stab:1338172819305009233>":
             try:
                 # Process the message content
                 processed_content = message.content or ""
