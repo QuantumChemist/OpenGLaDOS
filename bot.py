@@ -1187,9 +1187,10 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         if channel:
             gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
-            await channel.send(
-                f"🍰 **Black Forest Cake or Portal GIF of the Day!** 🍰\n{gif_url}"
-            )
+            if str(gif_url) != "https://tenor.com/bb2pW.gif":
+                await channel.send(
+                    f"🍰 **Black Forest Cake or Portal GIF of the Day!** 🍰\n{gif_url}"
+                )
         else:
             print("Channel not found!")
 
