@@ -900,7 +900,8 @@ async def ask_question(channel, user, bot, question_number=0):
     # Loop to handle the quiz flow
     while user.id in user_quiz_state:
         # Get the current question number
-        question_number = user_quiz_state[user.id]
+        if question_number != 666:
+            question_number = user_quiz_state[user.id]
 
         # Check if the user chose to stop the quiz
         if question_number == 666:

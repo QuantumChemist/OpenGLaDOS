@@ -351,7 +351,7 @@ class OpenGLaDOS(commands.Cog):
             return
 
         # Check if the reaction is a peace flag emoji (🏳️) to stop the quiz
-        elif str(reaction.emoji) == "🏳️":
+        if str(reaction.emoji) == "🏳️":
             # Ensure that the bot sent the message and it contains the quiz start prompt
             if (
                 message.author == self.bot.user
