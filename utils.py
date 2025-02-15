@@ -940,7 +940,7 @@ async def ask_question(channel, user, bot, question_number=0):
                     await unrestrict_user_permissions(channel.guild, user)
                 # Look for a channel that contains the word "general" in its name
                 general_channel = discord.utils.find(
-                    lambda c: "general" in c.name.lower(), channel.guild.text_channels
+                    lambda c: "welcome" in c.name.lower(), channel.guild.text_channels
                 )
                 if general_channel:
                     await general_channel.send(
@@ -956,7 +956,7 @@ async def ask_question(channel, user, bot, question_number=0):
                 )
                 # Look for a channel that contains the word "general" in its name
                 general_channel = discord.utils.find(
-                    lambda c: "general" in c.name.lower(), channel.guild.text_channels
+                    lambda c: "welcome" in c.name.lower(), channel.guild.text_channels
                 )
                 if general_channel:
                     await general_channel.send(
