@@ -893,15 +893,11 @@ async def stop_quiz_by_reaction(channel, user, bot):
 async def ask_question(channel, user, bot, question_number=0):
     """Handles the quiz by asking questions, checking answers, and managing the quiz state."""
     owner = await bot.fetch_user(bot.owner_id)
-
-    # Check if the user is already in the quiz state
-    if user.id in user_quiz_state:
-        await channel.send(f"{user.mention}, you are already taking the quiz.")
-        return
-
     # Initialize the user's quiz state if starting a new quiz
     if question_number == 0:
         user_quiz_state[user.id] = question_number
+
+    print(f"User Quiz State: {user_quiz_state}")
 
     # Loop to handle the quiz flow
     while user.id in user_quiz_state:
