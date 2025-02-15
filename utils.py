@@ -984,7 +984,9 @@ async def ask_question(channel, user, bot, question_number=0):
             if user_answer == correct_answer:
                 await channel.send(f"Correct, {user.mention}!")
                 user_quiz_state[user.id] += 1  # Move to the next question
-            else:
+            elif not any(
+                word in user_answer.lower() for word in ["ready", "start", "let's go"]
+            ):
                 await channel.send(f"Incorrect, {user.mention}. Please try again.")
                 await timeout_user(
                     channel, user, bot
