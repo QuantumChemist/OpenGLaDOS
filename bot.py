@@ -544,7 +544,7 @@ class OpenGLaDOS(commands.Cog):
                 if stab_channel:
                     # Send the screenshot directly to the stab channel
                     await stab_channel.send(
-                        f"Hey {message.author.mention}, a knife emoji reaction has been added to your message: {message.jump_url}. "
+                        f"Hey {message.author.mention}, a <:openglados_stab:1338172819305009233> reaction has been added to your message: {message.jump_url}. "
                         f"Looks like someone is ready to stab you! Here's a screenshot of the message:",
                     )
                     await stab_channel.send(file=discord.File(SCREENSHOT_FILE_PATH))
