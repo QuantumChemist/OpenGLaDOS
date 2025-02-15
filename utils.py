@@ -135,7 +135,7 @@ quiz_questions = [
     },
     {
         "question": "What is the origin of the personality cores in Portal 2, including Wheatley?",
-        "answer": "limit glados' intelligence",
+        "answer": "to limit glados",
     },
 ]
 
