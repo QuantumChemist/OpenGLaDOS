@@ -876,6 +876,7 @@ async def start_quiz_by_reaction(channel, user, bot):
         return False
 
     await bot.wait_for("message", check=check)
+    user_quiz_state.pop(user.id, None)
 
     await channel.send(f"Portal game starts now, {user.mention}!")
     # Start the quiz by asking the first question

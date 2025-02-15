@@ -342,7 +342,6 @@ class OpenGLaDOS(commands.Cog):
                 guild = message.guild
                 # Give access to the test chambers channel
                 test_chambers_channel = await give_access_to_test_chambers(guild, user)
-                await asyncio.sleep(11)
                 # Start the quiz if the test chambers channel exists
                 if test_chambers_channel:
                     await start_quiz_by_reaction(test_chambers_channel, user, self.bot)
