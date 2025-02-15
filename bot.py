@@ -364,14 +364,7 @@ class OpenGLaDOS(commands.Cog):
                 await unrestrict_user_permissions(guild, user)
             return
 
-        # Part 3: Handle general knife emoji reactions
-        knife_reaction = None
-        for react in message.reactions:
-            if str(react.emoji) == "🔪":
-                knife_reaction = react
-                break
-
-        if knife_reaction and knife_reaction.count >= 1:
+        if reaction.emoji == "<:openglados_stab:1338172819305009233>":
             try:
                 # Process the message content
                 processed_content = message.content or ""
