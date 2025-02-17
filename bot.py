@@ -561,29 +561,22 @@ class OpenGLaDOS(commands.Cog):
         name="start_typing_test", description="Start a touch typing practice session."
     )
     async def start_typing_test(self, interaction: discord.Interaction):
-        """Starts a typing test by creating a private thread and giving a test sentence."""
+        """Creates a private thread for typing practice."""
         user = interaction.user
         channel = interaction.channel
 
-        # Pick a random sentence
-        sentence = random.choice(TYPING_TEST_SENTENCES)
-
-        # Create a private thread for the typing test
+        # Create a private thread
         thread = await channel.create_thread(
             name=f"Typing Test - {user.display_name}",
             type=discord.ChannelType.private_thread,
         )
 
-        # Save test session with start time
-        self.active_tests[user.id] = (sentence, time.time(), thread.id)
+        self.active_tests[user.id] = (
+            None,
+            time.time(),
+            thread.id,
+        )  # Track test, sentence will be set in on_typing
 
-        # Send the test sentence inside the thread
-        await thread.send(
-            f"**Typing Test for {user.mention}**\n\nType the following sentence as quickly and accurately as possible:\n\n```{sentence}```",
-            allowed_mentions=discord.AllowedMentions.none(),
-        )
-
-        # Instead of defer(), use send_message immediately
         await interaction.response.send_message(
             f"Typing test started! Join {thread.mention} and start typing.",
             ephemeral=True,
@@ -591,49 +584,59 @@ class OpenGLaDOS(commands.Cog):
 
     @commands.Cog.listener()
     async def on_typing(self, channel, user, when):
-        """Monitors typing events and calculates real-time typing speed."""
-        if user.bot:
-            return  # Ignore bot messages
+        """Monitors typing and starts/stops test dynamically."""
+        if user.bot or user.id not in self.active_tests:
+            return  # Ignore bot typing & users who didn't start a test
 
-        if user.id in self.active_tests:
-            sentence, start_time, thread_id = self.active_tests[user.id]
+        test_data = self.active_tests[user.id]
+        sentence, start_time, thread_id = test_data
 
-            if channel.id != thread_id:
-                return  # Ignore typing outside the test thread
+        if channel.id != thread_id:
+            return  # Ignore typing outside the test thread
 
-            # Calculate elapsed time
-            elapsed_time = time.time() - start_time
+        # If this is the first time the user types, generate a test sentence
+        if sentence is None:
+            sentence = random.choice(TYPING_TEST_SENTENCES)
+            self.active_tests[user.id] = (sentence, start_time, thread_id)
 
-            # Estimate characters typed per second
-            typed_chars = max(1, int(elapsed_time * 5))  # Assume ~5 chars per sec
-            wpm = (
-                (typed_chars / 5) / (elapsed_time / 60) if elapsed_time > 0 else 0
-            )  # Approximate WPM
-
-            # Determine feedback based on estimated typing speed
-            if wpm > 80:
-                feedback = "You're typing like a machine! Almost suspicious..."
-            elif wpm > 60:
-                feedback = "Fast, but can you maintain accuracy?"
-            elif wpm > 40:
-                feedback = "Good speed, but are you making mistakes?"
-            elif wpm > 20:
-                feedback = "This is... slow. Did you forget how to use a keyboard?"
-            else:
-                feedback = random.choice(OPENGLADOS_MESSAGES)
-
-            # Send feedback message (no ping)
             await channel.send(
-                content=f"{user.mention}, {feedback}",
+                f"**Typing Test for {user.mention}**\n\nType this as fast as you can:\n\n```{sentence}```",
                 allowed_mentions=discord.AllowedMentions.none(),
             )
 
-            # If typing test reaches 60 seconds, end it
-            if elapsed_time > 60:
-                await channel.send(
-                    f"{user.mention}, your typing test has ended. Too slow? Perhaps."
-                )
-                del self.active_tests[user.id]
+        # Calculate elapsed time
+        elapsed_time = time.time() - start_time
+
+        # Estimate typing speed (characters per second)
+        typed_chars = max(1, int(elapsed_time * 5))  # Assume ~5 chars per sec
+        wpm = (
+            (typed_chars / 5) / (elapsed_time / 60) if elapsed_time > 0 else 0
+        )  # Approximate WPM
+
+        # Provide feedback based on WPM
+        if wpm > 80:
+            feedback = "You're typing like a machine! Almost suspicious..."
+        elif wpm > 60:
+            feedback = "Fast, but can you maintain accuracy?"
+        elif wpm > 40:
+            feedback = "Good speed, but are you making mistakes?"
+        elif wpm > 20:
+            feedback = "This is... slow. Did you forget how to use a keyboard?"
+        else:
+            feedback = random.choice(OPENGLADOS_MESSAGES)
+
+        # Send feedback message (no ping)
+        await channel.send(
+            content=f"{user.mention}, {feedback}",
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
+
+        # If typing test reaches 60 seconds, end it
+        if elapsed_time > 60:
+            await channel.send(
+                f"{user.mention}, your typing test has ended. Too slow? Perhaps."
+            )
+            del self.active_tests[user.id]
 
     @app_commands.command(
         name="rules",
