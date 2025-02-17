@@ -35,6 +35,7 @@ from utils import (
     replace_mentions_with_display_names,
     generate_plot,
     OPENGLADOS_MESSAGES,
+    TYPING_TEST_SENTENCES,
 )
 
 # Conditional import for testing
@@ -558,39 +559,78 @@ class OpenGLaDOS(commands.Cog):
 
     @commands.Cog.listener()
     async def on_typing(self, channel, user, when):
-        """Detects when a user starts typing and provides feedback."""
+        """Monitors typing events and calculates real-time typing speed."""
         if user.bot:
-            return  # Ignore bot activity
+            return  # Ignore bot messages
 
-        if (
-            user.id in self.active_threads
-            and self.active_threads[user.id] == channel.id
-        ):
-            # Simulate a delay before giving feedback (to make it seem like OpenGLaDOS is watching)
-            await asyncio.sleep(2)
+        if user.id in self.active_tests:
+            sentence, start_time, thread_id = self.active_tests[user.id]
 
-            # Pick a random GLaDOS-style response
-            feedback = random.choice(OPENGLADOS_MESSAGES)
+            if channel.id != thread_id:
+                return  # Ignore typing outside the test thread
+
+            # Calculate elapsed time
+            elapsed_time = time.time() - start_time
+
+            # Estimate characters typed per second (assuming active typing)
+            typed_chars = max(
+                1, int(elapsed_time * 5)
+            )  # Assume ~5 chars per sec if typing constantly
+            wpm = (
+                (typed_chars / 5) / (elapsed_time / 60) if elapsed_time > 0 else 0
+            )  # Approximate WPM
+
+            # Determine feedback based on estimated typing speed
+            if wpm > 80:
+                feedback = "You're typing like a machine! Almost suspicious..."
+            elif wpm > 60:
+                feedback = "Fast, but can you maintain accuracy?"
+            elif wpm > 40:
+                feedback = "Good speed, but are you making mistakes?"
+            elif wpm > 20:
+                feedback = "This is... slow. Did you forget how to use a keyboard?"
+            else:
+                feedback = random.choice(OPENGLADOS_MESSAGES)
+
+            # Send feedback message (no ping)
             await channel.send(
                 content=f"{user.mention}, {feedback}",
                 allowed_mentions=discord.AllowedMentions.none(),
             )
 
+            # If typing test reaches 60 seconds, end it
+            if elapsed_time > 60:
+                await channel.send(
+                    f"{user.mention}, your typing test has ended. Too slow? Perhaps."
+                )
+                del self.active_tests[user.id]
+
     @app_commands.command(
-        name="start_typing_test", description="Start a typing practice session."
+        name="start_typing_test", description="Start a touch typing practice session."
     )
     async def start_typing_test(self, interaction: discord.Interaction):
-        """Creates a private thread for typing practice."""
+        """Starts a typing test by creating a private thread and giving a test sentence."""
         user = interaction.user
         channel = interaction.channel
 
-        # Create a private thread
+        # Pick a random sentence
+        sentence = random.choice(TYPING_TEST_SENTENCES)
+
+        # Create a private thread for the typing test
         thread = await channel.create_thread(
             name=f"Typing Test - {user.display_name}",
             type=discord.ChannelType.private_thread,
         )
 
-        self.active_threads[user.id] = thread.id  # Track the thread
+        # Save test session with start time
+        self.active_tests[user.id] = (sentence, time.time(), thread.id)
+
+        # Send the test sentence
+        await thread.send(
+            f"**Typing Test for {user.mention}**\n\nType the following sentence as quickly and accurately as possible:\n\n```{sentence}```",
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
+
         await interaction.response.send_message(
             f"Typing test started! Join {thread.mention} and start typing.",
             ephemeral=True,
