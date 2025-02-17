@@ -35,7 +35,6 @@ from utils import (
     handle_conversation,
     replace_mentions_with_display_names,
     generate_plot,
-    end_typing_test,
     calculate_accuracy,
     calculate_wpm,
     OPENGLADOS_MESSAGES,
@@ -154,6 +153,18 @@ class OpenGLaDOS(commands.Cog):
         self.inactivity_check.start()  # Start the inactivity checker task
         self.active_threads = {}  # {user_id: thread_id}
         self.active_tests = {}  # {user_id: (sentence, start_time)}
+
+    async def end_typing_test(self, user, channel):
+        """Ends the typing test and cleans up."""
+        if user.id in self.active_threads:
+            del self.active_threads[user.id]
+        if user.id in self.active_tests:
+            del self.active_tests[user.id]
+
+        await channel.send(
+            f"{user.mention}, your typing test has ended. Too slow? Perhaps.",
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
 
     @tasks.loop(time=time(13, 13))  # Specify the exact time (13:30 PM UTC)
     async def report_server(self):
@@ -633,7 +644,7 @@ class OpenGLaDOS(commands.Cog):
 
         # If test reaches 120 seconds, end it
         if elapsed_time > 120:
-            await end_typing_test(user, channel)
+            await self.end_typing_test(user, channel)
 
     @app_commands.command(
         name="rules",
@@ -1739,7 +1750,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             )
 
             # End the test
-            await end_typing_test(message.author, message.channel)
+            await self.end_typing_test(message.author, message.channel)
 
         # playing chess
         # Check if the message is in an ongoing game thread
