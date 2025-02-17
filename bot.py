@@ -12,6 +12,7 @@ import asyncio
 import random
 from html import escape
 from html2image import Html2Image
+import time as t
 from datetime import time, timedelta, datetime, timezone
 from pymatgen.core import Element
 from utils import (
@@ -568,21 +569,26 @@ class OpenGLaDOS(commands.Cog):
 
         # Create a private thread
         thread = await channel.create_thread(
-            name=f"Typing Test - {user.display_name}",
+            name=f"Touch typing Test - {user.display_name}",
             type=discord.ChannelType.private_thread,
         )
 
         self.active_threads[user.id] = thread.id  # Track the thread
         await interaction.response.send_message(
-            f"Typing test started! Join {thread.mention} and start typing.",
+            f"Touch typing test started! Join {thread.mention} and start typing.",
             ephemeral=True,
         )
 
     @commands.Cog.listener()
     async def on_typing(self, channel, user, when):
         """Handles typing events, generates a sentence, tracks speed, and provides feedback."""
-        if user.bot or user.id not in self.active_threads:
-            return  # Ignore bots and users not in a typing test
+        print(f"[DEBUG] {user} is typing in {channel}")  # Debug log
+
+        if user.bot:
+            return  # Ignore bot typing
+
+        if user.id not in self.active_threads:
+            return  # Ignore users who didn't start a test
 
         thread_id = self.active_threads[user.id]
         if channel.id != thread_id:
@@ -591,20 +597,22 @@ class OpenGLaDOS(commands.Cog):
         # Check if user already has a test sentence
         if user.id not in self.active_tests:
             sentence = random.choice(TYPING_TEST_SENTENCES)
-            start_time = time.time()
+            try:
+                start_time = t.time()
+            except Exception as e:
+                print(f"An error occurred while starting the typing test: {e}")
             self.active_tests[user.id] = (sentence, start_time)
 
             await channel.send(
                 f"**Typing Test for {user.mention}**\n\nType this as fast as you can:\n\n```{sentence}```",
                 allowed_mentions=discord.AllowedMentions.none(),
             )
-            return  # No feedback on first typing event
 
         # Fetch stored sentence and start time
         sentence, start_time = self.active_tests[user.id]
 
         # Calculate elapsed time
-        elapsed_time = time.time() - start_time
+        elapsed_time = t.time() - start_time
 
         # Estimate typing speed (WPM)
         typed_chars = max(1, int(elapsed_time * 5))  # Assume ~5 chars per sec
