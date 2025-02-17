@@ -35,6 +35,9 @@ from utils import (
     handle_conversation,
     replace_mentions_with_display_names,
     generate_plot,
+    end_typing_test,
+    calculate_accuracy,
+    calculate_wpm,
     OPENGLADOS_MESSAGES,
     TYPING_TEST_SENTENCES,
 )
@@ -628,7 +631,7 @@ class OpenGLaDOS(commands.Cog):
 
         # If test reaches 120 seconds, end it
         if elapsed_time > 120:
-            await self.end_typing_test(user, channel)
+            await end_typing_test(user, channel)
 
     @app_commands.command(
         name="rules",
@@ -1684,10 +1687,18 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
             # Compare user input with the original sentence
             user_sentence = message.content.strip()
-            accuracy = self.calculate_accuracy(user_sentence, original_sentence)
-            wpm = self.calculate_wpm(user_sentence, elapsed_time)
+            accuracy = calculate_accuracy(user_sentence, original_sentence)
+            wpm = calculate_wpm(user_sentence, elapsed_time)
 
-            feedback = random.choice(OPENGLADOS_MESSAGES)
+            # Generate feedback
+            if accuracy == 100:
+                feedback = "You actually typed it correctly? I'm... surprised. Well done. I suppose."
+            elif accuracy > 90:
+                feedback = "Almost perfect. Just a few errors. I would clap, but I have no hands."
+            elif accuracy > 75:
+                feedback = "Not bad, but not great. You should try again and not disappoint me."
+            else:
+                feedback = random.choice(OPENGLADOS_MESSAGES)
 
             # Send results
             await message.channel.send(
@@ -1699,7 +1710,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             )
 
             # End the test
-            await self.end_typing_test(message.author, message.channel)
+            await end_typing_test(message.author, message.channel)
 
         # playing chess
         # Check if the message is in an ongoing game thread
@@ -1947,31 +1958,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 bot=self.bot,
                 user_time=message_time,
             )
-
-    async def end_typing_test(self, user, channel):
-        """Ends the typing test and cleans up."""
-        if user.id in self.active_threads:
-            del self.active_threads[user.id]
-        if user.id in self.active_tests:
-            del self.active_tests[user.id]
-
-        await channel.send(
-            f"{user.mention}, your typing test has ended. Too slow? Perhaps.",
-            allowed_mentions=discord.AllowedMentions.none(),
-        )
-
-    def calculate_accuracy(self, typed_sentence, original_sentence):
-        """Compares the user's typed sentence with the original and returns accuracy."""
-        correct_chars = sum(
-            1 for a, b in zip(typed_sentence, original_sentence) if a == b
-        )
-        total_chars = max(len(original_sentence), len(typed_sentence))
-        return (correct_chars / total_chars) * 100
-
-    def calculate_wpm(self, typed_sentence, elapsed_time):
-        """Calculates words per minute based on elapsed time and sentence length."""
-        words = len(typed_sentence.split())
-        return (words / elapsed_time) * 60 if elapsed_time > 0 else 0
 
     # Function to fetch user metadata
     @staticmethod
