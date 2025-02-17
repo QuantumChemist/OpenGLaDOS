@@ -572,7 +572,7 @@ class OpenGLaDOS(commands.Cog):
             # Pick a random GLaDOS-style response
             feedback = random.choice(OPENGLADOS_MESSAGES)
             await channel.send(
-                comtent=f"{user.mention}, {feedback}",
+                content=f"{user.mention}, {feedback}",
                 allowed_mentions=discord.AllowedMentions.none(),
             )
 
