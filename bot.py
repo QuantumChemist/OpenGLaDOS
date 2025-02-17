@@ -623,7 +623,7 @@ class OpenGLaDOS(commands.Cog):
 
         feedback = random.choice(OPENGLADOS_MESSAGES)
         await asyncio.sleep(
-            1 / (int(wpm) + 1)
+            3 / (int(wpm) + 1)
         )  # Add a slight delay for the bot's response
 
         await channel.send(
@@ -1685,7 +1685,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             original_sentence, start_time = self.active_tests[user_id]
 
             # Calculate elapsed time
-            elapsed_time = time.time() - start_time
+            elapsed_time = t.time() - start_time
 
             # Compare user input with the original sentence
             user_sentence = message.content.strip()
