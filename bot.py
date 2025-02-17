@@ -565,9 +565,6 @@ class OpenGLaDOS(commands.Cog):
         user = interaction.user
         channel = interaction.channel
 
-        # Defer the interaction to prevent timeout errors
-        await interaction.response.defer(thinking=True, ephemeral=True)
-
         # Pick a random sentence
         sentence = random.choice(TYPING_TEST_SENTENCES)
 
@@ -586,8 +583,8 @@ class OpenGLaDOS(commands.Cog):
             allowed_mentions=discord.AllowedMentions.none(),
         )
 
-        # Properly send a follow-up response to the user
-        await interaction.followup.send(
+        # Instead of defer(), use send_message immediately
+        await interaction.response.send_message(
             f"Typing test started! Join {thread.mention} and start typing.",
             ephemeral=True,
         )
