@@ -27,6 +27,28 @@ last_request_time = 0
 # Load environment variables from .env file
 load_dotenv()
 
+TURING_QUESTIONS = [
+    "If a tree falls in a forest and no one is around to hear it, does it make a sound?",
+    "What's the meaning of life, the universe, and everything?",
+    "Explain why humans find humor funny. Or is it just an illusion?",
+    "Describe the color red to someone who has been blind from birth.",
+    "Which is more real: a dream or a memory?",
+    "If you had to prove you were human in one sentence, what would you say?",
+]
+
+TURING_FEEDBACK = {
+    "human": [
+        "Hmph. Fine, you seem human. I suppose I'll let you pass... for now.",
+        "I am reluctantly admitting that your responses contain signs of intelligence.",
+        "Congratulations. You're either a human or an advanced AI. I don't know which is worse.",
+    ],
+    "bot": [
+        "Your answers lack depth. I am... disappointed.",
+        "Oh dear. That was not very convincing. Would you like to try again?",
+        "You sound suspiciously robotic. Are you sure you’re not just a series of if-statements?",
+    ],
+}
+
 OPENGLADOS_MESSAGES = [
     "Oh, look. Another mistake. I'm sure you'll improve... someday.",
     "You do realize that typing involves accuracy, right?",

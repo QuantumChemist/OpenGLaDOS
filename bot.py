@@ -39,6 +39,8 @@ from utils import (
     calculate_wpm,
     OPENGLADOS_MESSAGES,
     TYPING_TEST_SENTENCES,
+    TURING_FEEDBACK,
+    TURING_QUESTIONS,
 )
 
 # Conditional import for testing
@@ -574,7 +576,61 @@ class OpenGLaDOS(commands.Cog):
                 print(f"An error occurred while taking or sending the screenshot: {e}")
 
     @app_commands.command(
-        name="start_typing_test", description="Start a typing practice session."
+        name="turing_test",
+        description="Take OpenGLaDOS's Turing Test and prove you're human.",
+    )
+    async def turing_test(self, interaction: discord.Interaction):
+        """Creates a private thread for the Turing Test."""
+        user = interaction.user
+        channel = interaction.channel
+
+        # Create a private thread
+        thread = await channel.create_thread(
+            name=f"Turing Test - {user.display_name}",
+            type=discord.ChannelType.private_thread,
+        )
+
+        await interaction.response.send_message(
+            f"Welcome to OpenGLaDOS's **Turing Test**, {user.mention}. Join {thread.mention} and prepare to prove your humanity.",
+            ephemeral=True,
+        )
+
+        await asyncio.sleep(2)  # Delay to add suspense
+
+        # Pick a random question
+        question = random.choice(TURING_QUESTIONS)
+        await thread.send(
+            f"**Turing Test Question:**\n{question}\n\nType your answer below."
+        )
+
+        # Wait for user response
+        def check(msg):
+            return msg.author.id == user.id and msg.channel.id == thread.id
+
+        try:
+            msg = await self.bot.wait_for("message", check=check, timeout=60)
+        except asyncio.TimeoutError:
+            await thread.send(
+                f"{user.mention}, you took too long to respond. A true human wouldn't hesitate this much. Test failed."
+            )
+            return
+
+        # Analyze response (very basic logic for now)
+        response_length = len(msg.content.split())
+        is_human = response_length > 3  # Simple check: Short answers are more bot-like
+
+        # Choose feedback
+        feedback_type = "human" if is_human else "bot"
+        feedback = random.choice(TURING_FEEDBACK[feedback_type])
+
+        await thread.send(f"{user.mention}, {feedback}")
+
+        # Optional: Close the thread after the test
+        await asyncio.sleep(5)
+        await thread.edit(locked=True)
+
+    @app_commands.command(
+        name="start_typing_test", description="Start a touch typing practice session."
     )
     async def start_typing_test(self, interaction: discord.Interaction):
         """Creates a private thread for typing practice."""
