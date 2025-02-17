@@ -485,27 +485,14 @@ def generate_markov_chain_convo_text(
     return f"{selected_greeting}, {introduction} {text_lines} <a:typing:1338247126332735633>"
 
 
-async def end_typing_test(self, user, channel):
-    """Ends the typing test and cleans up."""
-    if user.id in self.active_threads:
-        del self.active_threads[user.id]
-    if user.id in self.active_tests:
-        del self.active_tests[user.id]
-
-    await channel.send(
-        f"{user.mention}, your typing test has ended. Too slow? Perhaps.",
-        allowed_mentions=discord.AllowedMentions.none(),
-    )
-
-
-def calculate_accuracy(self, typed_sentence, original_sentence):
+def calculate_accuracy(typed_sentence, original_sentence):
     """Compares the user's typed sentence with the original and returns accuracy."""
     correct_chars = sum(1 for a, b in zip(typed_sentence, original_sentence) if a == b)
     total_chars = max(len(original_sentence), len(typed_sentence))
     return (correct_chars / total_chars) * 100
 
 
-def calculate_wpm(self, typed_sentence, elapsed_time):
+def calculate_wpm(typed_sentence, elapsed_time):
     """Calculates words per minute based on elapsed time and sentence length."""
     words = len(typed_sentence.split())
     return (words / elapsed_time) * 60 if elapsed_time > 0 else 0
