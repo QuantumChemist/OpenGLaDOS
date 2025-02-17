@@ -148,7 +148,8 @@ class OpenGLaDOS(commands.Cog):
         self.report_server.start()
         self.ongoing_games = {}  # Store game data here
         self.inactivity_check.start()  # Start the inactivity checker task
-        self.active_threads = {}  # Track active typing threads
+        self.active_threads = {}  # {user_id: thread_id}
+        self.active_tests = {}  # {user_id: (sentence, start_time)}
 
     @tasks.loop(time=time(13, 13))  # Specify the exact time (13:30 PM UTC)
     async def report_server(self):
@@ -579,36 +580,39 @@ class OpenGLaDOS(commands.Cog):
 
     @commands.Cog.listener()
     async def on_typing(self, channel, user, when):
-        """Monitors typing and starts/stops test dynamically."""
-        if user.bot or user.id not in self.active_tests:
-            return  # Ignore bot typing & users who didn't start a test
+        """Handles typing events, generates a sentence, tracks speed, and provides feedback."""
+        if user.bot or user.id not in self.active_threads:
+            return  # Ignore bots and users not in a typing test
 
-        test_data = self.active_tests[user.id]
-        sentence, start_time, thread_id = test_data
-
+        thread_id = self.active_threads[user.id]
         if channel.id != thread_id:
             return  # Ignore typing outside the test thread
 
-        # If this is the first time the user types, generate a test sentence
-        if sentence is None:
+        # Check if user already has a test sentence
+        if user.id not in self.active_tests:
             sentence = random.choice(TYPING_TEST_SENTENCES)
-            self.active_tests[user.id] = (sentence, start_time, thread_id)
+            start_time = time.time()
+            self.active_tests[user.id] = (sentence, start_time)
 
             await channel.send(
                 f"**Typing Test for {user.mention}**\n\nType this as fast as you can:\n\n```{sentence}```",
                 allowed_mentions=discord.AllowedMentions.none(),
             )
+            return  # No feedback on first typing event
+
+        # Fetch stored sentence and start time
+        sentence, start_time = self.active_tests[user.id]
 
         # Calculate elapsed time
         elapsed_time = time.time() - start_time
 
-        # Estimate typing speed (characters per second)
+        # Estimate typing speed (WPM)
         typed_chars = max(1, int(elapsed_time * 5))  # Assume ~5 chars per sec
         wpm = (
             (typed_chars / 5) / (elapsed_time / 60) if elapsed_time > 0 else 0
         )  # Approximate WPM
 
-        # Provide feedback based on WPM
+        # Provide feedback based on typing speed
         if wpm > 80:
             feedback = "You're typing like a machine! Almost suspicious..."
         elif wpm > 60:
@@ -620,17 +624,18 @@ class OpenGLaDOS(commands.Cog):
         else:
             feedback = random.choice(OPENGLADOS_MESSAGES)
 
-        # Send feedback message (no ping)
+        # Send feedback (no ping)
         await channel.send(
             content=f"{user.mention}, {feedback}",
             allowed_mentions=discord.AllowedMentions.none(),
         )
 
-        # If typing test reaches 60 seconds, end it
+        # If test reaches 60 seconds, end it
         if elapsed_time > 60:
             await channel.send(
                 f"{user.mention}, your typing test has ended. Too slow? Perhaps."
             )
+            del self.active_threads[user.id]
             del self.active_tests[user.id]
 
     @app_commands.command(
