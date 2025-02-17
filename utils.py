@@ -919,6 +919,7 @@ async def ask_question(channel, user, bot, question_number=0):
                 "Thank you for participating in this OpenScience computer-aided enrichment activity.\n"
                 "Goodbye."
             )
+            await channel.send("https://tenor.com/bVfu2.gif")
             # Remove the user from the quiz state
             user_quiz_state.pop(user.id, None)
             await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
