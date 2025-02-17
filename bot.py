@@ -162,7 +162,7 @@ class OpenGLaDOS(commands.Cog):
             del self.active_tests[user.id]
 
         await channel.send(
-            f"{user.mention}, your typing test has ended. Too slow? Perhaps.",
+            f"{user.mention}, your typing test has ended. Too slow? Perhaps. Or not.",
             allowed_mentions=discord.AllowedMentions.none(),
         )
 
@@ -583,7 +583,7 @@ class OpenGLaDOS(commands.Cog):
 
         # Create a private thread
         thread = await channel.create_thread(
-            name=f"Touch typing Test - {user.display_name}",
+            name=f"Touch Typing Test - {user.display_name}",
             type=discord.ChannelType.private_thread,
         )
 
