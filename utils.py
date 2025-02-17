@@ -263,7 +263,7 @@ llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
 def get_groq_completion(
     history,
     model: str = "mixtral-8x7b-32768",
-    max_tokens=512,
+    max_tokens=475,
     text="Your initial text here",
 ):
     # Add the assistant's initial message to the beginning of the history
