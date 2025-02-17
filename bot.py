@@ -1683,14 +1683,41 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             and message.channel.id == self.active_threads[user_id]
         ):
             original_sentence, start_time = self.active_tests[user_id]
+            print(f"Original sentence: {original_sentence}")
 
             # Calculate elapsed time
             elapsed_time = t.time() - start_time
+            print(f"Elapsed time: {elapsed_time:.2f} seconds")
 
-            # Compare user input with the original sentence
-            user_sentence = message.content.strip()
-            accuracy = calculate_accuracy(user_sentence, original_sentence)
-            wpm = calculate_wpm(user_sentence, elapsed_time)
+            try:
+                user_sentence = message.content.strip()
+            except Exception as e:
+                print(f"An error occurred while processing the user sentence: {e}")
+                await message.channel.send(
+                    "An error occurred while processing your typing test results. Please try again.",
+                    allowed_mentions=discord.AllowedMentions.none(),
+                )
+                return
+
+            try:
+                accuracy = calculate_accuracy(user_sentence, original_sentence)
+            except Exception as e:
+                print(f"An error occurred while calculating accuracy: {e}")
+                await message.channel.send(
+                    "An error occurred while calculating your typing accuracy. Please try again.",
+                    allowed_mentions=discord.AllowedMentions.none(),
+                )
+                return
+
+            try:
+                wpm = calculate_wpm(user_sentence, elapsed_time)
+            except Exception as e:
+                print(f"An error occurred while calculating WPM: {e}")
+                await message.channel.send(
+                    "An error occurred while calculating your words per minute. Please try again.",
+                    allowed_mentions=discord.AllowedMentions.none(),
+                )
+                return
 
             # Generate feedback
             if accuracy == 100:
