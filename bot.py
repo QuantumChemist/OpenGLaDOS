@@ -622,7 +622,9 @@ class OpenGLaDOS(commands.Cog):
         )  # Approximate WPM
 
         feedback = random.choice(OPENGLADOS_MESSAGES)
-        await asyncio.sleep(int(wpm) * 2)  # Add a slight delay for the bot's response
+        await asyncio.sleep(
+            1 / (int(wpm) + 1)
+        )  # Add a slight delay for the bot's response
 
         await channel.send(
             content=f"{user.mention}, {feedback}",
