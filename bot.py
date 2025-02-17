@@ -591,7 +591,7 @@ class OpenGLaDOS(commands.Cog):
         )
 
         await interaction.response.send_message(
-            f"Welcome to OpenGLaDOS's **Turing Test**, {user.mention}. Join {thread.mention} and prepare to prove your humanity.",
+            f"Welcome to OpenGLaDOS's **Turing Test**. Join {thread.mention} and prepare to prove your humanity.",
             ephemeral=True,
         )
 
@@ -611,7 +611,8 @@ class OpenGLaDOS(commands.Cog):
             msg = await self.bot.wait_for("message", check=check, timeout=60)
         except asyncio.TimeoutError:
             await thread.send(
-                f"{user.mention}, you took too long to respond. A true human wouldn't hesitate this much. Test failed."
+                f"{user.mention}, you took too long to respond. A true human wouldn't hesitate this much. Test failed.",
+                allowed_mentions=discord.AllowedMentions.none(),
             )
             return
 
@@ -623,7 +624,10 @@ class OpenGLaDOS(commands.Cog):
         feedback_type = "human" if is_human else "bot"
         feedback = random.choice(TURING_FEEDBACK[feedback_type])
 
-        await thread.send(f"{user.mention}, {feedback}")
+        await thread.send(
+            f"{user.mention}, {feedback}",
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
 
         # Optional: Close the thread after the test
         await asyncio.sleep(5)
