@@ -558,7 +558,7 @@ class OpenGLaDOS(commands.Cog):
                 print(f"An error occurred while taking or sending the screenshot: {e}")
 
     @app_commands.command(
-        name="start_typing_test", description="Start a touch typing practice session."
+        name="start_typing_test", description="Start a typing practice session."
     )
     async def start_typing_test(self, interaction: discord.Interaction):
         """Creates a private thread for typing practice."""
@@ -571,12 +571,7 @@ class OpenGLaDOS(commands.Cog):
             type=discord.ChannelType.private_thread,
         )
 
-        self.active_tests[user.id] = (
-            None,
-            time.time(),
-            thread.id,
-        )  # Track test, sentence will be set in on_typing
-
+        self.active_threads[user.id] = thread.id  # Track the thread
         await interaction.response.send_message(
             f"Typing test started! Join {thread.mention} and start typing.",
             ephemeral=True,
