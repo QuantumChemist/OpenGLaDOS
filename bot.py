@@ -34,6 +34,7 @@ from utils import (
     handle_conversation,
     replace_mentions_with_display_names,
     generate_plot,
+    OPENGLADOS_MESSAGES,
 )
 
 # Conditional import for testing
@@ -146,6 +147,7 @@ class OpenGLaDOS(commands.Cog):
         self.report_server.start()
         self.ongoing_games = {}  # Store game data here
         self.inactivity_check.start()  # Start the inactivity checker task
+        self.active_threads = {}  # Track active typing threads
 
     @tasks.loop(time=time(13, 13))  # Specify the exact time (13:30 PM UTC)
     async def report_server(self):
@@ -553,6 +555,46 @@ class OpenGLaDOS(commands.Cog):
             except Exception as e:
                 # Log the error message to the console
                 print(f"An error occurred while taking or sending the screenshot: {e}")
+
+    @commands.Cog.listener()
+    async def on_typing(self, channel, user, when):
+        """Detects when a user starts typing and provides feedback."""
+        if user.bot:
+            return  # Ignore bot activity
+
+        if (
+            user.id in self.active_threads
+            and self.active_threads[user.id] == channel.id
+        ):
+            # Simulate a delay before giving feedback (to make it seem like OpenGLaDOS is watching)
+            await asyncio.sleep(2)
+
+            # Pick a random GLaDOS-style response
+            feedback = random.choice(OPENGLADOS_MESSAGES)
+            await channel.send(
+                comtent=f"{user.mention}, {feedback}",
+                allowed_mentions=discord.AllowedMentions.none(),
+            )
+
+    @app_commands.command(
+        name="start_typing_test", description="Start a typing practice session."
+    )
+    async def start_typing_test(self, interaction: discord.Interaction):
+        """Creates a private thread for typing practice."""
+        user = interaction.user
+        channel = interaction.channel
+
+        # Create a private thread
+        thread = await channel.create_thread(
+            name=f"Typing Test - {user.display_name}",
+            type=discord.ChannelType.private_thread,
+        )
+
+        self.active_threads[user.id] = thread.id  # Track the thread
+        await interaction.response.send_message(
+            f"Typing test started! Join {thread.mention} and start typing.",
+            ephemeral=True,
+        )
 
     @app_commands.command(
         name="rules",
