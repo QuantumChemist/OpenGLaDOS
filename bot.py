@@ -85,7 +85,7 @@ class OpenGLaDOSBot(commands.Bot):
                 print(f"Bot has full permissions in: {guild.name} ({guild.id})")
         activity = discord.Streaming(
             name="ⓘ Confusing people since 2024",
-            url="https://youtu.be/s2_FvT1lieU?si=OdbDLIErJdKLQ19k",
+            url="https://www.youtube.com/watch?v=c3IVTi6TlfE",
         )
         await self.change_presence(status=discord.Status.online, activity=activity)
         # Add any additional logic you want to execute when the bot is ready here
