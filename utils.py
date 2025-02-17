@@ -272,20 +272,9 @@ def get_groq_completion(
     num_bre = random.random()
 
     # Introduce randomness to temperature and frequency_penalty
-    if num_bre < 0.1:  # go berserk
-        temperature = random.uniform(0.9, 1.5)
-        frequency_penalty = random.uniform(0.3, 0.7)
-        # Clear history and add only the initial message
-        history.clear()
-        history.append(
-            {
-                "role": "assistant",
-                "content": introduction_llm + " GO REALLY REALLY BERSERK!",
-            }
-        )
-    elif num_bre < 0.5:  # 40% chance to change the values
-        temperature = random.uniform(0.5, 1.0)
-        frequency_penalty = random.uniform(0.0, 0.1)
+    if num_bre < 0.5:  # 40% chance to change the values
+        temperature = random.uniform(0.5, 1.1)
+        frequency_penalty = random.uniform(0.0, 0.7)
     else:
         temperature = random.uniform(0.6, 0.7)
         frequency_penalty = random.uniform(0.01, 0.011)
