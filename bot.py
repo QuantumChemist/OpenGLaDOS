@@ -1694,11 +1694,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             and message.channel.id == self.active_threads[user_id]
         ):
             original_sentence, start_time = self.active_tests[user_id]
-            print(f"Original sentence: {original_sentence}")
-
             # Calculate elapsed time
             elapsed_time = t.time() - start_time
-            print(f"Elapsed time: {elapsed_time:.2f} seconds")
 
             try:
                 user_sentence = message.content.strip()
