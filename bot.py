@@ -582,8 +582,6 @@ class OpenGLaDOS(commands.Cog):
     @commands.Cog.listener()
     async def on_typing(self, channel, user, when):
         """Handles typing events, generates a sentence, tracks speed, and provides feedback."""
-        print(f"[DEBUG] {user} is typing in {channel}")  # Debug log
-
         if user.bot:
             return  # Ignore bot typing
 
@@ -620,31 +618,17 @@ class OpenGLaDOS(commands.Cog):
             (typed_chars / 5) / (elapsed_time / 60) if elapsed_time > 0 else 0
         )  # Approximate WPM
 
-        # Provide feedback based on typing speed
-        if wpm > 80:
-            feedback = "You're typing like a machine! Almost suspicious..."
-        elif wpm > 60:
-            feedback = "Fast, but can you maintain accuracy?"
-        elif wpm > 40:
-            feedback = "Good speed, but are you making mistakes?"
-        elif wpm > 20:
-            feedback = "This is... slow. Did you forget how to use a keyboard?"
-        else:
-            feedback = random.choice(OPENGLADOS_MESSAGES)
+        feedback = random.choice(OPENGLADOS_MESSAGES)
+        await asyncio.sleep(int(wpm) * 2)  # Add a slight delay for the bot's response
 
-        # Send feedback (no ping)
         await channel.send(
             content=f"{user.mention}, {feedback}",
             allowed_mentions=discord.AllowedMentions.none(),
         )
 
-        # If test reaches 60 seconds, end it
-        if elapsed_time > 60:
-            await channel.send(
-                f"{user.mention}, your typing test has ended. Too slow? Perhaps."
-            )
-            del self.active_threads[user.id]
-            del self.active_tests[user.id]
+        # If test reaches 120 seconds, end it
+        if elapsed_time > 120:
+            await self.end_typing_test(user, channel)
 
     @app_commands.command(
         name="rules",
@@ -1320,6 +1304,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         # Fetch user metadata
         user = message.author
         user_info = self.get_user_metadata(user)
+        user_id = message.author.id
 
         message_time = message.created_at.replace(tzinfo=timezone.utc)  # UTC time
 
@@ -1687,6 +1672,35 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 except Exception as e:
                     print(f"An unexpected error occurred: {e}")
 
+        # Handle Typing Tests
+        if (
+            user_id in self.active_tests
+            and message.channel.id == self.active_threads[user_id]
+        ):
+            original_sentence, start_time = self.active_tests[user_id]
+
+            # Calculate elapsed time
+            elapsed_time = time.time() - start_time
+
+            # Compare user input with the original sentence
+            user_sentence = message.content.strip()
+            accuracy = self.calculate_accuracy(user_sentence, original_sentence)
+            wpm = self.calculate_wpm(user_sentence, elapsed_time)
+
+            feedback = random.choice(OPENGLADOS_MESSAGES)
+
+            # Send results
+            await message.channel.send(
+                f"**Typing Test Results for {message.author.mention}:**\n"
+                f"- **Accuracy:** {accuracy:.2f}%\n"
+                f"- **Words Per Minute:** {wpm:.2f} WPM\n"
+                f"- {feedback}",
+                allowed_mentions=discord.AllowedMentions.none(),
+            )
+
+            # End the test
+            await self.end_typing_test(message.author, message.channel)
+
         # playing chess
         # Check if the message is in an ongoing game thread
         thread_id = message.channel.id
@@ -1933,6 +1947,31 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 bot=self.bot,
                 user_time=message_time,
             )
+
+    async def end_typing_test(self, user, channel):
+        """Ends the typing test and cleans up."""
+        if user.id in self.active_threads:
+            del self.active_threads[user.id]
+        if user.id in self.active_tests:
+            del self.active_tests[user.id]
+
+        await channel.send(
+            f"{user.mention}, your typing test has ended. Too slow? Perhaps.",
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
+
+    def calculate_accuracy(self, typed_sentence, original_sentence):
+        """Compares the user's typed sentence with the original and returns accuracy."""
+        correct_chars = sum(
+            1 for a, b in zip(typed_sentence, original_sentence) if a == b
+        )
+        total_chars = max(len(original_sentence), len(typed_sentence))
+        return (correct_chars / total_chars) * 100
+
+    def calculate_wpm(self, typed_sentence, elapsed_time):
+        """Calculates words per minute based on elapsed time and sentence length."""
+        words = len(typed_sentence.split())
+        return (words / elapsed_time) * 60 if elapsed_time > 0 else 0
 
     # Function to fetch user metadata
     @staticmethod
