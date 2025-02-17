@@ -27,6 +27,16 @@ last_request_time = 0
 # Load environment variables from .env file
 load_dotenv()
 
+OPENGLADOS_MESSAGES = [
+    "Oh, look. Another mistake. I'm sure you'll improve... someday.",
+    "You do realize that typing involves accuracy, right?",
+    "Impressive. Another typo. You are truly an inspiration to all slow learners.",
+    "Your typing skills are almost as bad as your life choices.",
+    "Did you mean to hit that key? No? Well, too bad.",
+    "If your goal was to make errors, congratulations. You are excelling.",
+    "Maybe try using all your fingers next time? Just a thought.",
+]
+
 bot_description = """
 `OpenGLaDOS` is a Python-based **roleplay** text chatbot inspired by GLaDOS from the Portal video game series. It's built to function as a humorous and slightly sarcastic assistant, intended for use in environments like Discord servers. The bot interacts with users, providing guidance and entertainment with a touch of dark humor. The code is written in Python and uses a corpus of predefined responses and LLM to mimic the personality of GLaDOS. You can find more details and access the code to build your own `OpenGLaDOS` bot on the [GitHub repository](https://github.com/QuantumChemist/OpenGLaDOS).
 
