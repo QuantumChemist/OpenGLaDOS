@@ -557,6 +557,41 @@ class OpenGLaDOS(commands.Cog):
                 # Log the error message to the console
                 print(f"An error occurred while taking or sending the screenshot: {e}")
 
+    @app_commands.command(
+        name="start_typing_test", description="Start a touch typing practice session."
+    )
+    async def start_typing_test(self, interaction: discord.Interaction):
+        """Starts a typing test by creating a private thread and giving a test sentence."""
+        user = interaction.user
+        channel = interaction.channel
+
+        # Defer the interaction to prevent timeout errors
+        await interaction.response.defer(thinking=True, ephemeral=True)
+
+        # Pick a random sentence
+        sentence = random.choice(TYPING_TEST_SENTENCES)
+
+        # Create a private thread for the typing test
+        thread = await channel.create_thread(
+            name=f"Typing Test - {user.display_name}",
+            type=discord.ChannelType.private_thread,
+        )
+
+        # Save test session with start time
+        self.active_tests[user.id] = (sentence, time.time(), thread.id)
+
+        # Send the test sentence inside the thread
+        await thread.send(
+            f"**Typing Test for {user.mention}**\n\nType the following sentence as quickly and accurately as possible:\n\n```{sentence}```",
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
+
+        # Properly send a follow-up response to the user
+        await interaction.followup.send(
+            f"Typing test started! Join {thread.mention} and start typing.",
+            ephemeral=True,
+        )
+
     @commands.Cog.listener()
     async def on_typing(self, channel, user, when):
         """Monitors typing events and calculates real-time typing speed."""
@@ -572,10 +607,8 @@ class OpenGLaDOS(commands.Cog):
             # Calculate elapsed time
             elapsed_time = time.time() - start_time
 
-            # Estimate characters typed per second (assuming active typing)
-            typed_chars = max(
-                1, int(elapsed_time * 5)
-            )  # Assume ~5 chars per sec if typing constantly
+            # Estimate characters typed per second
+            typed_chars = max(1, int(elapsed_time * 5))  # Assume ~5 chars per sec
             wpm = (
                 (typed_chars / 5) / (elapsed_time / 60) if elapsed_time > 0 else 0
             )  # Approximate WPM
@@ -604,37 +637,6 @@ class OpenGLaDOS(commands.Cog):
                     f"{user.mention}, your typing test has ended. Too slow? Perhaps."
                 )
                 del self.active_tests[user.id]
-
-    @app_commands.command(
-        name="start_typing_test", description="Start a touch typing practice session."
-    )
-    async def start_typing_test(self, interaction: discord.Interaction):
-        """Starts a typing test by creating a private thread and giving a test sentence."""
-        user = interaction.user
-        channel = interaction.channel
-
-        # Pick a random sentence
-        sentence = random.choice(TYPING_TEST_SENTENCES)
-
-        # Create a private thread for the typing test
-        thread = await channel.create_thread(
-            name=f"Typing Test - {user.display_name}",
-            type=discord.ChannelType.private_thread,
-        )
-
-        # Save test session with start time
-        self.active_tests[user.id] = (sentence, time.time(), thread.id)
-
-        # Send the test sentence
-        await thread.send(
-            f"**Typing Test for {user.mention}**\n\nType the following sentence as quickly and accurately as possible:\n\n```{sentence}```",
-            allowed_mentions=discord.AllowedMentions.none(),
-        )
-
-        await interaction.response.send_message(
-            f"Typing test started! Join {thread.mention} and start typing.",
-            ephemeral=True,
-        )
 
     @app_commands.command(
         name="rules",
