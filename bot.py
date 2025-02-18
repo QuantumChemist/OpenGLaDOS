@@ -1045,11 +1045,13 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await interaction.response.send_message("User specific message.")
         elif interaction.user.name == "chichimeetsyoko":
             await interaction.response.send_message(
-                "Go back to the recovery annex. For your cake, Chris!"
+                content="Go back to the recovery annex. For your cake, Chris!",
+                allowed_mentions=discord.AllowedMentions.none(),
             )
         else:
             await interaction.response.send_message(
-                f"{invite_message} \nI'm not angry. Now, just go back to the testing area, {interaction.user.mention}!"
+                content=f"{invite_message} \nI'm not angry. Now, just go back to the testing area, {interaction.user.mention}!",
+                allowed_mentions=discord.AllowedMentions.none(),
             )
 
     @app_commands.command(
