@@ -229,7 +229,7 @@ invite_message = """
 
 <:openglados_blush:1338099865267343401> Oh, and don't forget to follow the rules, or else... 🙅‍♂️
 
-**Join our server now and experience the OpenScience Enrichment Center!** [Invite link](https://discord.com/invite/9rwzwUmXCa).
+**Join our server now and experience the OpenScience Enrichment Center!** [Invite link](https://discord.com/invite/9rwzwUmXCa) 🚀
 """
 
 # Define potential command descriptions
