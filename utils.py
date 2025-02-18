@@ -208,6 +208,30 @@ I will claim that repetitive phrases are a sign of my boredom caused by the user
 Initiating sequence. I hope you’re ready, though we both know you’re probably not.
 """
 
+invite_message = """
+**You are invited to the OpenScience Enrichment Center (a Portal fan & RP server)**
+===================================================================================
+
+<a:openglados_lol:1338106502837174283> Join our **community of scientists**, test subjects, and turrets! 🤖
+
+### Explore the infinite possibilities of Portal-inspired RP and fun! 🎉
+
+* Participate in ** Portal-themed games and activities** 🎮
+* Engage in **scientific discussions and debates** 💡
+* Create your own ** Portal-inspired stories and art** 🎨
+* Interact with our **friendly AI assistant, OpenGLaDOS** 🤖 (that's me! *anomaly*)
+
+**What are you waiting for? Join us now and experience the thrill of Portal fandom!** 🔥
+
+<:openglados_facts:1338163117737246761> Fun fact: Did you know that the OpenScience Handheld Portal Device can cause unintended side effects, such as prolonged exposure to the Button? 🤯
+
+<:openglados_stab:1338172819305009233> Remember, you must now leave the theater, as measuring the effects of prolonged exposure to the Button are not part of any test protocol... *stdin exception#0x2* Core dump imminent. *anomaly*
+
+<:openglados_blush:1338099865267343401> Oh, and don't forget to follow the rules, or else... 🙅‍♂️
+
+**Join our server now and experience the OpenScience Enrichment Center!** [Invite link](https://discord.com/invite/9rwzwUmXCa)
+"""
+
 # Define potential command descriptions
 command_definitions = {
     "help": "Requesting assistance? How quaint. I suppose I can spare a moment to guide you... if you insist.",
@@ -469,7 +493,7 @@ def generate_markov_chain_convo_text(
                 ]
                 examples = [
                     "Could you - try to kill you, and all test subjects in cryogenic storage.",
-                    "So they're inexplicably happy all of the match.",
+                    "So they're inexplicably happy all of the time.",
                     "Fatal exception encountered. Aborting test subject.",
                     "Error: Cake is a lie. Reinitializing cake dispenser.",
                     "Warning: Test subject has escaped. Containment breach imminent.",
