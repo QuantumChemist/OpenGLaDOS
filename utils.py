@@ -922,7 +922,7 @@ async def give_access_to_test_chambers(guild, user):
         )
         if welcome_channel:
             await welcome_channel.send(
-                f"{user.mention}, you now have access to the {test_chambers_channel.mention}. Switch to that channel and type 'ready' to start the quiz!"
+                f"{user.mention}, you now have access to the {test_chambers_channel.mention}. Switch to that channel and **type and enter 'ready'** to start the quiz!"
             )
 
     return test_chambers_channel
