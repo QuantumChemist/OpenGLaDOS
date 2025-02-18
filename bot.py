@@ -37,6 +37,7 @@ from utils import (
     generate_plot,
     calculate_accuracy,
     calculate_wpm,
+    invite_message,
     OPENGLADOS_MESSAGES,
     TYPING_TEST_SENTENCES,
     TURING_FEEDBACK,
@@ -1048,7 +1049,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             )
         else:
             await interaction.response.send_message(
-                f"I'm not angry. Just go back to the testing area, {interaction.user.mention}!"
+                f"{invite_message} \nI'm not angry. Now, just go back to the testing area, {interaction.user.mention}!"
             )
 
     @app_commands.command(
