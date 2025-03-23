@@ -327,7 +327,7 @@ llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
 # Define a function for chat completion with message history
 def get_groq_completion(
     history,
-    model: str = "mixtral-8x7b-32768",
+    model: str = "llama-3.3-70b-versatile",
     max_tokens=475,
     text="Your initial text here",
 ):
