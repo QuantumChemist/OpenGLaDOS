@@ -1407,6 +1407,13 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     f"Your name has been mentioned in https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
                 )
 
+        if "refresh" in message.content.lower():
+            refresh4ever = await self.bot.fetch_user(int(os.environ.get("REFRESH")))
+            if refresh4ever:
+                await refresh4ever.send(
+                    f"On y va: https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
+                )
+
         if "make an announce" in message.content.lower():
             announce_channel = discord.utils.find(
                 lambda c: "announc" in c.name.lower(), message.guild.text_channels
