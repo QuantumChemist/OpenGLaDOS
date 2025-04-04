@@ -4,7 +4,6 @@ import re
 import chess
 import discord
 import requests
-from google.cloud import translate_v2 as translate
 from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
 from discord import app_commands
@@ -1385,8 +1384,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         user = message.author
         user_info = self.get_user_metadata(user)
         user_id = message.author.id
-        content = message.content
-        guild_channel = message.guild.channel.id
 
         message_time = message.created_at.replace(tzinfo=timezone.utc)  # UTC time
 
@@ -1484,25 +1481,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 await message.channel.send(embed=embed)
             await message.delete(delay=7)
             return
-
-        if message.guild.id in WHITELIST_GUILDS_ID:
-            if message.channel.id == 1234567890123456789:
-                translate_client = translate.Client.from_service_account_json(
-                    "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
-                )
-            translation = translate_client.translate(content, target_language="en")
-            channel_en = discord.utils.find(guild_channel == 1234567890123456789)
-            if channel_en:
-                await channel_en.send(translation["translatedText"])
-
-            if message.channel.id == 1234567890123456789:
-                translate_client = translate.Client.from_service_account_json(
-                    "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
-                )
-            translation = translate_client.translate(content, target_language="en")
-            channel_fr = discord.utils.find(guild_channel == 1234567890123456789)
-            if channel_fr:
-                await channel_fr.send(translation["translatedText"])
 
         # Handle Direct Messages
         if isinstance(message.channel, discord.DMChannel):
