@@ -5,6 +5,7 @@ import chess
 import discord
 import requests
 from bs4 import BeautifulSoup
+from google.cloud import translate_v2 as translate
 from discord.ext import commands, tasks
 from discord import app_commands
 from dotenv import load_dotenv
@@ -58,6 +59,9 @@ else:
 # Directory to save screenshots
 SCREENSHOTS_DIR = "screenshots"
 os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
+
+chat_fr = 1263
+chat_en = 1263
 
 # Initialize the Html2Image object with the specified output path
 hti = Html2Image(
@@ -1600,11 +1604,25 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 print("Original message deleted after successful webhook.")
                 return
 
+        # Handle Mentions of the Bot
+        if self.bot.user.mentioned_in(message) and message.channel.id not in [
+            chat_fr,
+            chat_en,
+        ]:
+            await handle_convo_llm(
+                message=message,
+                user_info=user_info,
+                bot=self.bot,
+                user_time=message_time,
+            )
+            return
+
         # Handle Replies to the Bot
         if (
             message.reference
             and message.reference.resolved
             and message.reference.resolved.author == self.bot.user
+            and message.channel.id not in [chat_fr, chat_en]
         ):
             await handle_convo_llm(
                 message=message,
@@ -1612,16 +1630,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 bot=self.bot,
                 user_time=message_time,
                 mess_ref=message.reference,
-            )
-            return
-
-        # Handle Mentions of the Bot
-        if self.bot.user.mentioned_in(message):
-            await handle_convo_llm(
-                message=message,
-                user_info=user_info,
-                bot=self.bot,
-                user_time=message_time,
             )
             return
 
@@ -2059,12 +2067,165 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         user_time=message_time,
                     )
                 return
+
             await handle_convo_llm(
                 message=message,
                 user_info=user_info,
                 bot=self.bot,
                 user_time=message_time,
             )
+            return
+
+        # Handle other messages in the server
+        if message.guild.id in WHITELIST_GUILDS_ID:
+            if message.channel.id == chat_fr:
+                translate_client = translate.Client.from_service_account_json(
+                    "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
+                )
+                translation = translate_client.translate(
+                    message.content, target_language="en"
+                )
+                translated_text = translation["translatedText"]
+
+                # Handle special character encoding
+                translated_text = (
+                    escape(translated_text)
+                    .replace("&amp;#39;", "'")
+                    .replace("&amp;", "&")
+                    .replace("&lt;", "<")
+                    .replace("&gt;", ">")
+                    .replace("&quot;", '"')
+                    .replace("&amp;lt;", "<")
+                    .replace("&amp;gt;", ">")
+                    .replace("&amp;quot;", '"')
+                    .replace("&amp;nbsp;", " ")
+                    .replace("&amp;#x27;", "'")
+                    .replace("&amp;#x22;", '"')
+                    .replace("&amp;#x3C;", "<")
+                    .replace("&amp;#x3E;", ">")
+                    .replace("&amp;#x26;", "&")
+                    .replace("&#x27;", "'")
+                    .replace("&#x22;", '"')
+                    .replace("&#x3C;", "<")
+                    .replace("&#x3E;", ">")
+                    .replace("&#x26;", "&")
+                )
+
+                target_channel_en = self.bot.get_channel(chat_en)
+                if target_channel_en:
+                    embed = discord.Embed(
+                        title=f"Translated Message from {message.author.display_name}",
+                        description=translated_text,
+                        color=message.author.color,
+                    )
+                    embed.set_footer(text="Translated from French to English")
+                    embed.set_thumbnail(
+                        url=message.author.avatar.url if message.author.avatar else None
+                    )
+                    embed.add_field(
+                        name="Original Message",
+                        value=f"[Jump to Message]({message.jump_url})",
+                        inline=False,
+                    )
+
+                    # Add attachments to the embed
+                    for attachment in message.attachments:
+                        if attachment.url.endswith(
+                            (".png", ".jpg", ".jpeg", ".gif", ".webp")
+                        ):
+                            embed.set_image(url=attachment.url)
+                        else:
+                            embed.add_field(
+                                name="Attachment",
+                                value=f"[{attachment.filename}]({attachment.url})",
+                                inline=False,
+                            )
+
+                    # Add stickers to the embed
+                    if message.stickers:
+                        for sticker in message.stickers:
+                            embed.add_field(
+                                name="Sticker",
+                                value=f"[{sticker.name}]({sticker.url})",
+                                inline=False,
+                            )
+
+                    await target_channel_en.send(embed=embed)
+
+            if message.channel.id == chat_en:
+                translate_client = translate.Client.from_service_account_json(
+                    "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
+                )
+                translation = translate_client.translate(
+                    message.content, target_language="fr"
+                )
+                translated_text = translation["translatedText"]
+
+                # Handle special character encoding
+                translated_text = (
+                    escape(translated_text)
+                    .replace("&amp;#39;", "'")
+                    .replace("&amp;", "&")
+                    .replace("&lt;", "<")
+                    .replace("&gt;", ">")
+                    .replace("&quot;", '"')
+                    .replace("&amp;lt;", "<")
+                    .replace("&amp;gt;", ">")
+                    .replace("&amp;quot;", '"')
+                    .replace("&amp;nbsp;", " ")
+                    .replace("&amp;#x27;", "'")
+                    .replace("&amp;#x22;", '"')
+                    .replace("&amp;#x3C;", "<")
+                    .replace("&amp;#x3E;", ">")
+                    .replace("&amp;#x26;", "&")
+                    .replace("&#x27;", "'")
+                    .replace("&#x22;", '"')
+                    .replace("&#x3C;", "<")
+                    .replace("&#x3E;", ">")
+                    .replace("&#x26;", "&")
+                )
+
+                target_channel_fr = self.bot.get_channel(chat_fr)
+                if target_channel_fr:
+                    embed = discord.Embed(
+                        title=f"Message Traduit de {message.author.display_name}",
+                        description=translated_text,
+                        color=message.author.color,
+                    )
+                    embed.set_footer(text="Translated from English to French")
+                    embed.set_thumbnail(
+                        url=message.author.avatar.url if message.author.avatar else None
+                    )
+                    embed.add_field(
+                        name="Message Original",
+                        value=f"[Aller au message]({message.jump_url})",
+                        inline=False,
+                    )
+
+                    # Add attachments to the embed
+                    for attachment in message.attachments:
+                        if attachment.url.endswith(
+                            (".png", ".jpg", ".jpeg", ".gif", ".webp")
+                        ):
+                            embed.set_image(url=attachment.url)
+                        else:
+                            embed.add_field(
+                                name="Attachment",
+                                value=f"[{attachment.filename}]({attachment.url})",
+                                inline=False,
+                            )
+
+                    # Add stickers to the embed
+                    if message.stickers:
+                        for sticker in message.stickers:
+                            embed.add_field(
+                                name="Sticker",
+                                value=f"[{sticker.name}]({sticker.url})",
+                                inline=False,
+                            )
+
+                    await target_channel_fr.send(embed=embed)
+            return
 
     # Function to fetch user metadata
     @staticmethod
