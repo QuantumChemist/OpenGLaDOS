@@ -60,9 +60,6 @@ else:
 SCREENSHOTS_DIR = "screenshots"
 os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 
-chat_fr = 1263
-chat_en = 1263
-
 # Initialize the Html2Image object with the specified output path
 hti = Html2Image(
     output_path=SCREENSHOTS_DIR,
@@ -76,6 +73,12 @@ SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
 
 # Load environment variables from .env file
 load_dotenv()
+
+chat_fr = int(os.environ.get("BEBOU_FR"))
+chat_en = int(os.environ.get("BEBOU_EN"))
+chat_enn = int(os.environ.get("CHAT_EN"))
+chat_frr = int(os.environ.get("CHAT_FR"))
+chat_de = int(os.environ.get("CHAT_DE"))
 
 
 # Define your custom bot class
@@ -2077,7 +2080,12 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             return
 
         # Handle other messages in the server
-        if message.guild.id in WHITELIST_GUILDS_ID:
+        if message.guild.id not in WHITELIST_GUILDS_ID:
+            user_name = message.author.display_name  # Save user's display name
+            user_avatar = (
+                message.author.avatar.url if message.author.avatar else None
+            )  # Save avatar URL
+            user_attachments = message.attachments  # Save attachments, if any
             if message.channel.id == chat_fr:
                 translate_client = translate.Client.from_service_account_json(
                     "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
@@ -2113,44 +2121,54 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
                 target_channel_en = self.bot.get_channel(chat_en)
                 if target_channel_en:
-                    embed = discord.Embed(
-                        title=f"Translated Message from {message.author.display_name}",
-                        description=translated_text,
-                        color=message.author.color,
-                    )
-                    embed.set_footer(text="Translated from French to English")
-                    embed.set_thumbnail(
-                        url=message.author.avatar.url if message.author.avatar else None
-                    )
-                    embed.add_field(
-                        name="Original Message",
-                        value=f"[Jump to Message]({message.jump_url})",
-                        inline=False,
-                    )
+                    # Get the webhooks for the channel
+                    webhooks = await message.channel.webhooks()
+                    if not webhooks:
+                        # If no webhook exists, create a new one
+                        webhook = await message.channel.create_webhook(
+                            name="Translation Bot"
+                        )
+                        print(f"Webhook created: {webhook}")
+                    else:
+                        # Use the first available webhook if one exists
+                        webhook = webhooks[0]
+                        print(f"Webhook found: {webhook}")
 
-                    # Add attachments to the embed
-                    for attachment in message.attachments:
-                        if attachment.url.endswith(
-                            (".png", ".jpg", ".jpeg", ".gif", ".webp")
-                        ):
-                            embed.set_image(url=attachment.url)
-                        else:
-                            embed.add_field(
-                                name="Attachment",
-                                value=f"[{attachment.filename}]({attachment.url})",
-                                inline=False,
-                            )
+                    # Repost the user's message with their display name and avatar using the webhook
+                    if user_message:
+                        await webhook.send(
+                            content=f"**Translated Message:**\n{translated_text}\n\n[Jump to Original Message]({message.jump_url})",
+                            username=f"{user_name} (Translated)",
+                            avatar_url=user_avatar,
+                        )
+                        print(
+                            "Message reposted using webhook with reassembled message."
+                        )
+                    else:
+                        print("No message content to send.")
 
-                    # Add stickers to the embed
-                    if message.stickers:
-                        for sticker in message.stickers:
-                            embed.add_field(
-                                name="Sticker",
-                                value=f"[{sticker.name}]({sticker.url})",
-                                inline=False,
-                            )
+                    # Optionally, send the user's attachments if they exist
+                    for attachment in user_attachments:
+                        await webhook.send(
+                            file=await attachment.to_file(),
+                            username=f"{user_name} (Translated)",
+                            avatar_url=user_avatar,
+                        )
+                        print("Attachment reposted using webhook.")
 
-                    await target_channel_en.send(embed=embed)
+                    # Prepare the webhook message
+                    username = f"{message.author.display_name} (Translated)"
+                    avatar_url = (
+                        message.author.avatar.url if message.author.avatar else None
+                    )
+                    content = f"**Translated Message:**\n{translated_text}\n\n[Jump to Original Message]({message.jump_url})"
+
+                    # Send the message via webhook
+                    await webhook.send(
+                        content=content,
+                        username=username,
+                        avatar_url=avatar_url,
+                    )
 
             if message.channel.id == chat_en:
                 translate_client = translate.Client.from_service_account_json(
@@ -2187,44 +2205,41 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
                 target_channel_fr = self.bot.get_channel(chat_fr)
                 if target_channel_fr:
-                    embed = discord.Embed(
-                        title=f"Message Traduit de {message.author.display_name}",
-                        description=translated_text,
-                        color=message.author.color,
-                    )
-                    embed.set_footer(text="Translated from English to French")
-                    embed.set_thumbnail(
-                        url=message.author.avatar.url if message.author.avatar else None
-                    )
-                    embed.add_field(
-                        name="Message Original",
-                        value=f"[Aller au message]({message.jump_url})",
-                        inline=False,
-                    )
+                    # Get or create a webhook for the target channel
+                    # Get the webhooks for the channel
+                    webhooks = await message.channel.webhooks()
+                    if not webhooks:
+                        # If no webhook exists, create a new one
+                        webhook = await message.channel.create_webhook(
+                            name="Translation Bot"
+                        )
+                        print(f"Webhook created: {webhook}")
+                    else:
+                        # Use the first available webhook if one exists
+                        webhook = webhooks[0]
+                        print(f"Webhook found: {webhook}")
 
-                    # Add attachments to the embed
-                    for attachment in message.attachments:
-                        if attachment.url.endswith(
-                            (".png", ".jpg", ".jpeg", ".gif", ".webp")
-                        ):
-                            embed.set_image(url=attachment.url)
-                        else:
-                            embed.add_field(
-                                name="Attachment",
-                                value=f"[{attachment.filename}]({attachment.url})",
-                                inline=False,
-                            )
+                    # Repost the user's message with their display name and avatar using the webhook
+                    if user_message:
+                        await webhook.send(
+                            content=f"**Message Traduit:**\n{translated_text}\n\n[Aller au Message Original]({message.jump_url})",
+                            username=f"{user_name} (Traduit)",
+                            avatar_url=user_avatar,
+                        )
+                        print(
+                            "Message reposted using webhook with reassembled message."
+                        )
+                    else:
+                        print("No message content to send.")
 
-                    # Add stickers to the embed
-                    if message.stickers:
-                        for sticker in message.stickers:
-                            embed.add_field(
-                                name="Sticker",
-                                value=f"[{sticker.name}]({sticker.url})",
-                                inline=False,
-                            )
-
-                    await target_channel_fr.send(embed=embed)
+                    # Optionally, send the user's attachments if they exist
+                    for attachment in user_attachments:
+                        await webhook.send(
+                            file=await attachment.to_file(),
+                            username=f"{user_name} (Traduit)",
+                            avatar_url=user_avatar,
+                        )
+                        print("Attachment reposted using webhook.")
             return
 
     # Function to fetch user metadata
