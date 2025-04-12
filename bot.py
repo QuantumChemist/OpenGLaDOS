@@ -1383,6 +1383,121 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
     # Event: on_message to check if bot was mentioned, replied, or DM'd
     @commands.Cog.listener()
     async def on_message(self, message):
+        # translation
+        user_name = message.author.display_name
+        user_avatar = message.author.avatar.url if message.author.avatar else None
+        user_attachments = message.attachments
+        user_message = message.content  # This was likely missing before
+
+        if message.channel.id == chat_enn:
+            print("Translation handler activated for English channel.")
+
+            try:
+                translate_client = translate.Client.from_service_account_json(
+                    "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
+                )
+                print("Translate client initialized.")
+            except Exception as e:
+                print(f"Failed to initialize Translate client: {e}")
+                return
+
+            try:
+                translation = translate_client.translate(
+                    user_message, target_language="de"
+                )
+                translated_text = translation["translatedText"]
+                print(f"German translation successful: {translated_text}")
+            except Exception as e:
+                print(f"Error translating to German: {e}")
+                return
+
+            try:
+                translation_fr = translate_client.translate(
+                    user_message, target_language="fr"
+                )
+                translated_text_fr = translation_fr["translatedText"]
+                print(f"French translation successful: {translated_text_fr}")
+            except Exception as e:
+                print(f"Error translating to French: {e}")
+                return
+
+            # Character decoding (unchanged)...
+
+            for target_channel, translated, lang in [
+                (self.bot.get_channel(chat_de), translated_text, "DE"),
+                (self.bot.get_channel(chat_frr), translated_text_fr, "FR"),
+            ]:
+                translated = (
+                    escape(translated)
+                    .replace("&amp;#39;", "'")
+                    .replace("&amp;", "&")
+                    .replace("&lt;", "<")
+                    .replace("&gt;", ">")
+                    .replace("&quot;", '"')
+                    .replace("&amp;lt;", "<")
+                    .replace("&amp;gt;", ">")
+                    .replace("&amp;quot;", '"')
+                    .replace("&amp;nbsp;", " ")
+                    .replace("&amp;#x27;", "'")
+                    .replace("&amp;#x22;", '"')
+                    .replace("&amp;#x3C;", "<")
+                    .replace("&amp;#x3E;", ">")
+                    .replace("&amp;#x26;", "&")
+                    .replace("&#x27;", "'")
+                    .replace("&#x22;", '"')
+                    .replace("&#x3C;", "<")
+                    .replace("&#x3E;", ">")
+                    .replace("&#x26;", "&")
+                )
+
+                if not target_channel:
+                    print(f"Target channel for {lang} not found.")
+                    continue
+
+                try:
+                    webhooks = await target_channel.webhooks()
+                    print(f"Webhooks fetched for {lang}: {webhooks}")
+                except Exception as e:
+                    print(f"Error fetching webhooks for {lang}: {e}")
+                    continue
+
+                if not webhooks:
+                    try:
+                        webhook = await target_channel.create_webhook(
+                            name="Translation Bot"
+                        )
+                        print(f"Webhook created for {lang}: {webhook}")
+                    except Exception as e:
+                        print(f"Failed to create webhook for {lang}: {e}")
+                        continue
+                else:
+                    webhook = webhooks[0]
+                    print(f"Using existing webhook for {lang}: {webhook.name}")
+
+                if user_message:
+                    try:
+                        await webhook.send(
+                            content=f"{translated}\n\n[Jump to Original Message]({message.jump_url})",
+                            username=f"{user_name} (Translated)",
+                            avatar_url=user_avatar,
+                        )
+                        print(f"{lang} message sent.")
+                    except Exception as e:
+                        print(f"Error sending message via webhook for {lang}: {e}")
+                else:
+                    print(f"No message content to send for {lang}.")
+
+                for attachment in user_attachments:
+                    try:
+                        await webhook.send(
+                            file=await attachment.to_file(),
+                            username=f"{user_name} (Translated)",
+                            avatar_url=user_avatar,
+                        )
+                        print(f"{lang} attachment sent.")
+                    except Exception as e:
+                        print(f"Failed to send attachment to {lang}: {e}")
+
         # Ignore messages from any bot, including your own
         if message.author.bot or message.author.id in BLACKLIST_USERS_ID:
             return
@@ -2080,167 +2195,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             return
 
         # Handle other messages in the server
-        if message.guild.id not in WHITELIST_GUILDS_ID:
-            user_name = message.author.display_name  # Save user's display name
-            user_avatar = (
-                message.author.avatar.url if message.author.avatar else None
-            )  # Save avatar URL
-            user_attachments = message.attachments  # Save attachments, if any
-            if message.channel.id == chat_fr:
-                translate_client = translate.Client.from_service_account_json(
-                    "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
-                )
-                translation = translate_client.translate(
-                    message.content, target_language="en"
-                )
-                translated_text = translation["translatedText"]
-
-                # Handle special character encoding
-                translated_text = (
-                    escape(translated_text)
-                    .replace("&amp;#39;", "'")
-                    .replace("&amp;", "&")
-                    .replace("&lt;", "<")
-                    .replace("&gt;", ">")
-                    .replace("&quot;", '"')
-                    .replace("&amp;lt;", "<")
-                    .replace("&amp;gt;", ">")
-                    .replace("&amp;quot;", '"')
-                    .replace("&amp;nbsp;", " ")
-                    .replace("&amp;#x27;", "'")
-                    .replace("&amp;#x22;", '"')
-                    .replace("&amp;#x3C;", "<")
-                    .replace("&amp;#x3E;", ">")
-                    .replace("&amp;#x26;", "&")
-                    .replace("&#x27;", "'")
-                    .replace("&#x22;", '"')
-                    .replace("&#x3C;", "<")
-                    .replace("&#x3E;", ">")
-                    .replace("&#x26;", "&")
-                )
-
-                target_channel_en = self.bot.get_channel(chat_en)
-                if target_channel_en:
-                    # Get the webhooks for the channel
-                    webhooks = await message.channel.webhooks()
-                    if not webhooks:
-                        # If no webhook exists, create a new one
-                        webhook = await message.channel.create_webhook(
-                            name="Translation Bot"
-                        )
-                        print(f"Webhook created: {webhook}")
-                    else:
-                        # Use the first available webhook if one exists
-                        webhook = webhooks[0]
-                        print(f"Webhook found: {webhook}")
-
-                    # Repost the user's message with their display name and avatar using the webhook
-                    if user_message:
-                        await webhook.send(
-                            content=f"**Translated Message:**\n{translated_text}\n\n[Jump to Original Message]({message.jump_url})",
-                            username=f"{user_name} (Translated)",
-                            avatar_url=user_avatar,
-                        )
-                        print(
-                            "Message reposted using webhook with reassembled message."
-                        )
-                    else:
-                        print("No message content to send.")
-
-                    # Optionally, send the user's attachments if they exist
-                    for attachment in user_attachments:
-                        await webhook.send(
-                            file=await attachment.to_file(),
-                            username=f"{user_name} (Translated)",
-                            avatar_url=user_avatar,
-                        )
-                        print("Attachment reposted using webhook.")
-
-                    # Prepare the webhook message
-                    username = f"{message.author.display_name} (Translated)"
-                    avatar_url = (
-                        message.author.avatar.url if message.author.avatar else None
-                    )
-                    content = f"**Translated Message:**\n{translated_text}\n\n[Jump to Original Message]({message.jump_url})"
-
-                    # Send the message via webhook
-                    await webhook.send(
-                        content=content,
-                        username=username,
-                        avatar_url=avatar_url,
-                    )
-
-            if message.channel.id == chat_en:
-                translate_client = translate.Client.from_service_account_json(
-                    "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
-                )
-                translation = translate_client.translate(
-                    message.content, target_language="fr"
-                )
-                translated_text = translation["translatedText"]
-
-                # Handle special character encoding
-                translated_text = (
-                    escape(translated_text)
-                    .replace("&amp;#39;", "'")
-                    .replace("&amp;", "&")
-                    .replace("&lt;", "<")
-                    .replace("&gt;", ">")
-                    .replace("&quot;", '"')
-                    .replace("&amp;lt;", "<")
-                    .replace("&amp;gt;", ">")
-                    .replace("&amp;quot;", '"')
-                    .replace("&amp;nbsp;", " ")
-                    .replace("&amp;#x27;", "'")
-                    .replace("&amp;#x22;", '"')
-                    .replace("&amp;#x3C;", "<")
-                    .replace("&amp;#x3E;", ">")
-                    .replace("&amp;#x26;", "&")
-                    .replace("&#x27;", "'")
-                    .replace("&#x22;", '"')
-                    .replace("&#x3C;", "<")
-                    .replace("&#x3E;", ">")
-                    .replace("&#x26;", "&")
-                )
-
-                target_channel_fr = self.bot.get_channel(chat_fr)
-                if target_channel_fr:
-                    # Get or create a webhook for the target channel
-                    # Get the webhooks for the channel
-                    webhooks = await message.channel.webhooks()
-                    if not webhooks:
-                        # If no webhook exists, create a new one
-                        webhook = await message.channel.create_webhook(
-                            name="Translation Bot"
-                        )
-                        print(f"Webhook created: {webhook}")
-                    else:
-                        # Use the first available webhook if one exists
-                        webhook = webhooks[0]
-                        print(f"Webhook found: {webhook}")
-
-                    # Repost the user's message with their display name and avatar using the webhook
-                    if user_message:
-                        await webhook.send(
-                            content=f"**Message Traduit:**\n{translated_text}\n\n[Aller au Message Original]({message.jump_url})",
-                            username=f"{user_name} (Traduit)",
-                            avatar_url=user_avatar,
-                        )
-                        print(
-                            "Message reposted using webhook with reassembled message."
-                        )
-                    else:
-                        print("No message content to send.")
-
-                    # Optionally, send the user's attachments if they exist
-                    for attachment in user_attachments:
-                        await webhook.send(
-                            file=await attachment.to_file(),
-                            username=f"{user_name} (Traduit)",
-                            avatar_url=user_avatar,
-                        )
-                        print("Attachment reposted using webhook.")
-            return
 
     # Function to fetch user metadata
     @staticmethod
