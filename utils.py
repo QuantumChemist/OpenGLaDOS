@@ -1211,7 +1211,7 @@ def wrap_text(text, width=110):
     return textwrap.fill(text, width=width)
 
 
-def sanitize_mentions_all(translated, message):
+def sanitize_mentions(translated, message):
     # Step 1: Fully unescape
     while any(x in translated for x in ["&lt;", "&gt;", "&amp;", "&#"]):
         translated = html.unescape(translated)
