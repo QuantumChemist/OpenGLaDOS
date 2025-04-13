@@ -16,7 +16,6 @@ from sympy import Symbol
 import plotly.graph_objs as go
 from sympy import parse_expr
 import pytz
-import html
 
 
 # Define the minimum time between requests (in seconds)
@@ -1212,34 +1211,38 @@ def wrap_text(text, width=110):
 
 
 def sanitize_mentions(translated, message):
-    # Step 1: Fully unescape
-    while any(x in translated for x in ["&lt;", "&gt;", "&amp;", "&#"]):
-        translated = html.unescape(translated)
-
-    # Step 2: Get user mention map from actual mentions
+    # Step 1: Build ID → name map from mentions (if any)
     mention_map = {str(user.id): user.display_name for user in message.mentions}
 
-    # Step 3: Replace all forms of mention for each user
-    for user_id, name in mention_map.items():
-        safe_name = f"@{name}".replace("@", "@\u200b")
+    # Step 2: Also extract raw IDs just in case mentions are empty
+    raw_ids = set(re.findall(r"(?:&lt;|<)@(\d+)(?:&gt;|>)", translated))
+    raw_ids.update(re.findall(r"<@(\d+)>", translated))
+    for user_id in raw_ids:
+        if user_id not in mention_map:
+            mention_map[user_id] = f"user{user_id[-4:]}"  # fallback name
 
-        # These patterns all become valid *after* unescaping
-        patterns = [
-            f"<@{user_id}>",
+    # Step 3: Replace all variants for each user
+    for user_id, name in mention_map.items():
+        safe_name = f"@{name}".replace("@", "@\u200b")  # ping-safe
+
+        all_patterns = [
             f"&lt;@{user_id}&gt;",
             f"&amp;lt;@{user_id}&amp;gt;",
             f"&#60;@{user_id}&#62;",
             f"&amp;#60;@{user_id}&amp;#62;",
+            f"<@{user_id}>",  # unescaped raw
         ]
 
-        # Replace everything!
-        for pattern in patterns:
+        for pattern in all_patterns:
             if pattern in translated:
                 print(f"[Replacing] {pattern} → {safe_name}")
                 translated = translated.replace(pattern, safe_name)
 
-        # Final regex fallback (covers odd escapes)
+        # Regex fallback for any weird escape combo
         translated = re.sub(rf"(?:&lt;|<)@{user_id}(?:&gt;|>)", safe_name, translated)
+
+    # Step 4: Final sanity — protect any leftover @ signs
+    translated = translated.replace("@", "@\u200b")
 
     return translated
 
