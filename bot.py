@@ -77,6 +77,7 @@ load_dotenv()
 chat_fr = int(os.environ.get("BEBOU_FR"))
 chat_en = int(os.environ.get("BEBOU_EN"))
 chat_enn = int(os.environ.get("CHAT_EN"))
+chat_eng = int(os.environ.get("CHAT_ENG"))
 chat_frr = int(os.environ.get("CHAT_FR"))
 chat_de = int(os.environ.get("CHAT_DE"))
 
@@ -1402,6 +1403,16 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 return
 
             try:
+                translation_en = translate_client.translate(
+                    user_message, target_language="en"
+                )
+                translated_text_en = translation_en["translatedText"]
+                print(f"English translation successful: {translated_text_en}")
+            except Exception as e:
+                print(f"Error translating to English: {e}")
+                return
+
+            try:
                 translation = translate_client.translate(
                     user_message, target_language="de"
                 )
@@ -1424,6 +1435,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             # Character decoding (unchanged)...
 
             for target_channel, translated, lang in [
+                (self.bot.get_channel(chat_eng), translated_text_en, "EN"),
                 (self.bot.get_channel(chat_de), translated_text, "DE"),
                 (self.bot.get_channel(chat_frr), translated_text_fr, "FR"),
             ]:
