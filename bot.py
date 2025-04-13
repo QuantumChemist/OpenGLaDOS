@@ -1489,7 +1489,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 if user_message:
                     try:
                         await webhook.send(
-                            content=f"{translated}\n\n[Jump to Original Message]({message.jump_url})",
+                            content=f"{translated}\n\n-# [Jump to Original Message]({message.jump_url})",
                             username=f"{user_name} (Translated)",
                             avatar_url=user_avatar,
                         )
