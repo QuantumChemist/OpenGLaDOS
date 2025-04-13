@@ -16,6 +16,7 @@ from sympy import Symbol
 import plotly.graph_objs as go
 from sympy import parse_expr
 import pytz
+import html
 
 
 # Define the minimum time between requests (in seconds)
@@ -1211,17 +1212,16 @@ def wrap_text(text, width=110):
 
 
 def sanitize_mentions(translated, message):
+    # First, decode ALL HTML entities
+    translated = html.unescape(translated)
+
     for user in message.mentions:
         raw_mention = f"<@{user.id}>"
-        html_mention = f"&lt;@{user.id}&gt;"  # literal HTML-escaped format
-
         display_name = f"@{user.display_name}".replace("@", "@\u200b")
 
-        # Replace all known mention variants
-        for pattern in [raw_mention, html_mention]:
-            if pattern in translated:
-                print(f"Replacing {pattern} with {display_name}")
-                translated = translated.replace(pattern, display_name)
+        if raw_mention in translated:
+            print(f"Replacing {raw_mention} with {display_name}")
+            translated = translated.replace(raw_mention, display_name)
 
     return translated
 
