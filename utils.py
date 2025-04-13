@@ -1210,6 +1210,22 @@ def wrap_text(text, width=110):
     return textwrap.fill(text, width=width)
 
 
+def sanitize_mentions(translated, message):
+    for user in message.mentions:
+        raw_mention = f"<@{user.id}>"
+        html_mention = f"&lt;@{user.id}&gt;"  # literal HTML-escaped format
+
+        display_name = f"@{user.display_name}".replace("@", "@\u200b")
+
+        # Replace all known mention variants
+        for pattern in [raw_mention, html_mention]:
+            if pattern in translated:
+                print(f"Replacing {pattern} with {display_name}")
+                translated = translated.replace(pattern, display_name)
+
+    return translated
+
+
 # chess
 async def send_board_update(self, channel, board):
     board_display = self.generate_board_display(board)

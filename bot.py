@@ -39,6 +39,7 @@ from utils import (
     calculate_accuracy,
     calculate_wpm,
     invite_message,
+    sanitize_mentions,
     OPENGLADOS_MESSAGES,
     TYPING_TEST_SENTENCES,
     TURING_FEEDBACK,
@@ -1462,6 +1463,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     .replace("&#x26;", "&")
                 )
 
+                translated = sanitize_mentions(translated, message)
+
                 if not target_channel:
                     print(f"Target channel for {lang} not found.")
                     continue
@@ -1505,6 +1508,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                             file=await attachment.to_file(),
                             username=f"{user_name} (Translated)",
                             avatar_url=user_avatar,
+                            allowed_mentions=discord.AllowedMentions.none(),
                         )
                         print(f"{lang} attachment sent.")
                     except Exception as e:
