@@ -1211,17 +1211,35 @@ def wrap_text(text, width=110):
     return textwrap.fill(text, width=width)
 
 
-def sanitize_mentions(translated, message):
-    # First, decode ALL HTML entities
-    translated = html.unescape(translated)
+def sanitize_mentions_all(translated, message):
+    # Step 1: Fully unescape
+    while any(x in translated for x in ["&lt;", "&gt;", "&amp;", "&#"]):
+        translated = html.unescape(translated)
 
-    for user in message.mentions:
-        raw_mention = f"<@{user.id}>"
-        display_name = f"@{user.display_name}".replace("@", "@\u200b")
+    # Step 2: Get user mention map from actual mentions
+    mention_map = {str(user.id): user.display_name for user in message.mentions}
 
-        if raw_mention in translated:
-            print(f"Replacing {raw_mention} with {display_name}")
-            translated = translated.replace(raw_mention, display_name)
+    # Step 3: Replace all forms of mention for each user
+    for user_id, name in mention_map.items():
+        safe_name = f"@{name}".replace("@", "@\u200b")
+
+        # These patterns all become valid *after* unescaping
+        patterns = [
+            f"<@{user_id}>",
+            f"&lt;@{user_id}&gt;",
+            f"&amp;lt;@{user_id}&amp;gt;",
+            f"&#60;@{user_id}&#62;",
+            f"&amp;#60;@{user_id}&amp;#62;",
+        ]
+
+        # Replace everything!
+        for pattern in patterns:
+            if pattern in translated:
+                print(f"[Replacing] {pattern} → {safe_name}")
+                translated = translated.replace(pattern, safe_name)
+
+        # Final regex fallback (covers odd escapes)
+        translated = re.sub(rf"(?:&lt;|<)@{user_id}(?:&gt;|>)", safe_name, translated)
 
     return translated
 

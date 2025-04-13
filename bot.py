@@ -1465,6 +1465,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
                 translated = sanitize_mentions(translated, message)
 
+                print(f"Translated message for {lang}: {translated}")
+
                 if not target_channel:
                     print(f"Target channel for {lang} not found.")
                     continue
