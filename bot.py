@@ -1517,7 +1517,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         print(f"Failed to send attachment to {lang}: {e}")
 
         # Ignore messages from any bot, including your own
-        if message.author.bot or message.author.id in BLACKLIST_USERS_ID:
+        if message.author.bot:  # or message.author.id in BLACKLIST_USERS_ID:
             return
 
         # Fetch user metadata
