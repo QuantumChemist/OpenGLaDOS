@@ -1391,130 +1391,129 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         user_attachments = message.attachments
         user_message = message.content  # This was likely missing before
 
-        if message.channel.id == chat_enn:
-            print("Translation handler activated for English channel.")
-
-            try:
-                translate_client = translate.Client.from_service_account_json(
-                    "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
-                )
-                print("Translate client initialized.")
-            except Exception as e:
-                print(f"Failed to initialize Translate client: {e}")
-                return
-
-            try:
-                translation_en = translate_client.translate(
-                    user_message, target_language="en"
-                )
-                translated_text_en = translation_en["translatedText"]
-                print(f"English translation successful: {translated_text_en}")
-            except Exception as e:
-                print(f"Error translating to English: {e}")
-                return
-
-            try:
-                translation = translate_client.translate(
-                    user_message, target_language="de"
-                )
-                translated_text = translation["translatedText"]
-                print(f"German translation successful: {translated_text}")
-            except Exception as e:
-                print(f"Error translating to German: {e}")
-                return
-
-            try:
-                translation_fr = translate_client.translate(
-                    user_message, target_language="fr"
-                )
-                translated_text_fr = translation_fr["translatedText"]
-                print(f"French translation successful: {translated_text_fr}")
-            except Exception as e:
-                print(f"Error translating to French: {e}")
-                return
-
-            # Character decoding (unchanged)...
-
-            for target_channel, translated, lang in [
-                (self.bot.get_channel(chat_eng), translated_text_en, "EN"),
-                (self.bot.get_channel(chat_de), translated_text, "DE"),
-                (self.bot.get_channel(chat_frr), translated_text_fr, "FR"),
-            ]:
-                translated = (
-                    escape(translated)
-                    .replace("&amp;#39;", "'")
-                    .replace("&amp;", "&")
-                    .replace("&lt;", "<")
-                    .replace("&gt;", ">")
-                    .replace("&quot;", '"')
-                    .replace("&amp;lt;", "<")
-                    .replace("&amp;gt;", ">")
-                    .replace("&amp;quot;", '"')
-                    .replace("&amp;nbsp;", " ")
-                    .replace("&amp;#x27;", "'")
-                    .replace("&amp;#x22;", '"')
-                    .replace("&amp;#x3C;", "<")
-                    .replace("&amp;#x3E;", ">")
-                    .replace("&amp;#x26;", "&")
-                    .replace("&#x27;", "'")
-                    .replace("&#x22;", '"')
-                    .replace("&#x3C;", "<")
-                    .replace("&#x3E;", ">")
-                    .replace("&#x26;", "&")
-                )
-
-                translated = sanitize_mentions(translated, message)
-
-                print(f"Translated message for {lang}: {translated}")
-
-                if not target_channel:
-                    print(f"Target channel for {lang} not found.")
-                    continue
+        try:
+            if message.channel.id == chat_enn:
+                print("Translation handler activated for English channel.")
 
                 try:
-                    webhooks = await target_channel.webhooks()
-                    print(f"Webhooks fetched for {lang}: {webhooks}")
+                    translate_client = translate.Client.from_service_account_json(
+                        "/home/chichi/git/OpenGLaDOS/google_api_auth.json"
+                    )
+                    print("Translate client initialized.")
                 except Exception as e:
-                    print(f"Error fetching webhooks for {lang}: {e}")
-                    continue
+                    raise RuntimeError(f"Failed to initialize Translate client: {e}")
 
-                if not webhooks:
-                    try:
-                        webhook = await target_channel.create_webhook(
-                            name="Translation Bot"
-                        )
-                        print(f"Webhook created for {lang}: {webhook}")
-                    except Exception as e:
-                        print(f"Failed to create webhook for {lang}: {e}")
+                try:
+                    translation_en = translate_client.translate(
+                        user_message, target_language="en"
+                    )
+                    translated_text_en = translation_en["translatedText"]
+                    print(f"English translation successful: {translated_text_en}")
+                except Exception as e:
+                    raise RuntimeError(f"Error translating to English: {e}")
+
+                try:
+                    translation = translate_client.translate(
+                        user_message, target_language="de"
+                    )
+                    translated_text = translation["translatedText"]
+                    print(f"German translation successful: {translated_text}")
+                except Exception as e:
+                    raise RuntimeError(f"Error translating to German: {e}")
+
+                try:
+                    translation_fr = translate_client.translate(
+                        user_message, target_language="fr"
+                    )
+                    translated_text_fr = translation_fr["translatedText"]
+                    print(f"French translation successful: {translated_text_fr}")
+                except Exception as e:
+                    raise RuntimeError(f"Error translating to French: {e}")
+
+                # Character decoding (unchanged)...
+
+                for target_channel, translated, lang in [
+                    (self.bot.get_channel(chat_eng), translated_text_en, "EN"),
+                    (self.bot.get_channel(chat_de), translated_text, "DE"),
+                    (self.bot.get_channel(chat_frr), translated_text_fr, "FR"),
+                ]:
+                    translated = (
+                        escape(translated)
+                        .replace("&amp;#39;", "'")
+                        .replace("&amp;", "&")
+                        .replace("&lt;", "<")
+                        .replace("&gt;", ">")
+                        .replace("&quot;", '"')
+                        .replace("&amp;lt;", "<")
+                        .replace("&amp;gt;", ">")
+                        .replace("&amp;quot;", '"')
+                        .replace("&amp;nbsp;", " ")
+                        .replace("&amp;#x27;", "'")
+                        .replace("&amp;#x22;", '"')
+                        .replace("&amp;#x3C;", "<")
+                        .replace("&amp;#x3E;", ">")
+                        .replace("&amp;#x26;", "&")
+                        .replace("&#x27;", "'")
+                        .replace("&#x22;", '"')
+                        .replace("&#x3C;", "<")
+                        .replace("&#x3E;", ">")
+                        .replace("&#x26;", "&")
+                    )
+
+                    translated = sanitize_mentions(translated, message)
+
+                    print(f"Translated message for {lang}: {translated}")
+
+                    if not target_channel:
+                        print(f"Target channel for {lang} not found.")
                         continue
-                else:
-                    webhook = webhooks[0]
-                    print(f"Using existing webhook for {lang}: {webhook.name}")
 
-                if user_message:
                     try:
-                        await webhook.send(
-                            content=f"{translated}\n-# [Jump to Original Message]({message.jump_url})",
-                            username=f"{user_name} (Translated)",
-                            avatar_url=user_avatar,
-                        )
-                        print(f"{lang} message sent.")
+                        webhooks = await target_channel.webhooks()
+                        print(f"Webhooks fetched for {lang}: {webhooks}")
                     except Exception as e:
-                        print(f"Error sending message via webhook for {lang}: {e}")
-                else:
-                    print(f"No message content to send for {lang}.")
+                        print(f"Error fetching webhooks for {lang}: {e}")
+                        continue
 
-                for attachment in user_attachments:
-                    try:
-                        await webhook.send(
-                            file=await attachment.to_file(),
-                            username=f"{user_name} (Translated)",
-                            avatar_url=user_avatar,
-                            allowed_mentions=discord.AllowedMentions.none(),
-                        )
-                        print(f"{lang} attachment sent.")
-                    except Exception as e:
-                        print(f"Failed to send attachment to {lang}: {e}")
+                    if not webhooks:
+                        try:
+                            webhook = await target_channel.create_webhook(
+                                name="Translation Bot"
+                            )
+                            print(f"Webhook created for {lang}: {webhook}")
+                        except Exception as e:
+                            print(f"Failed to create webhook for {lang}: {e}")
+                            continue
+                    else:
+                        webhook = webhooks[0]
+                        print(f"Using existing webhook for {lang}: {webhook.name}")
+
+                    if user_message:
+                        try:
+                            await webhook.send(
+                                content=f"{translated}\n-# [Jump to Original Message]({message.jump_url})",
+                                username=f"{user_name} (Translated)",
+                                avatar_url=user_avatar,
+                            )
+                            print(f"{lang} message sent.")
+                        except Exception as e:
+                            print(f"Error sending message via webhook for {lang}: {e}")
+                    else:
+                        print(f"No message content to send for {lang}.")
+
+                    for attachment in user_attachments:
+                        try:
+                            await webhook.send(
+                                file=await attachment.to_file(),
+                                username=f"{user_name} (Translated)",
+                                avatar_url=user_avatar,
+                                allowed_mentions=discord.AllowedMentions.none(),
+                            )
+                            print(f"{lang} attachment sent.")
+                        except Exception as e:
+                            print(f"Failed to send attachment to {lang}: {e}")
+        except Exception as e:
+            print(f"Error in translation handler: {e}")
 
         # Ignore messages from any bot, including your own
         if message.author.bot:  # or message.author.id in BLACKLIST_USERS_ID:
