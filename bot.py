@@ -1392,7 +1392,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         user_message = message.content  # This was likely missing before
 
         try:
-            if message.channel.id == chat_enn:
+            if user_message and message.channel.id == chat_enn:
                 print("Translation handler activated for English channel.")
 
                 try:
