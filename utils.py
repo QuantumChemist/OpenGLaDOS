@@ -16,7 +16,7 @@ from sympy import Symbol
 import plotly.graph_objs as go
 from sympy import parse_expr
 import pytz
-from weights_api import generate_from_tts
+from weights_api import WeightsApi
 
 
 # Define the minimum time between requests (in seconds)
@@ -871,7 +871,7 @@ async def handle_convo_llm_audio(message, user_info, bot, mess_ref=None, user_ti
         llm_response, message.guild, mention_pattern, True
     )
 
-    llm_audio = await generate_from_tts(
+    llm_audio = await WeightsApi.generate_from_tts(
         voice_model_name="glados fr", text=llm_reply, pitch=3, male=False
     )
 
