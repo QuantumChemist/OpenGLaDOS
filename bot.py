@@ -1376,6 +1376,28 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         channel_fox = self.bot.get_channel(1263120140514492477)
         if channel_fox:
             french_fact = fetch_french_fact()  # Fetch a random fact from the API
+            french_fact = (
+                escape(french_fact)
+                .replace("&amp;#39;", "'")
+                .replace("&amp;", "&")
+                .replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&quot;", '"')
+                .replace("&amp;lt;", "<")
+                .replace("&amp;gt;", ">")
+                .replace("&amp;quot;", '"')
+                .replace("&amp;nbsp;", " ")
+                .replace("&amp;#x27;", "'")
+                .replace("&amp;#x22;", '"')
+                .replace("&amp;#x3C;", "<")
+                .replace("&amp;#x3E;", ">")
+                .replace("&amp;#x26;", "&")
+                .replace("&#x27;", "'")
+                .replace("&#x22;", '"')
+                .replace("&#x3C;", "<")
+                .replace("&#x3E;", ">")
+                .replace("&#x26;", "&")
+            )
             await channel_fox.send(
                 f"<:openglados_facts:1338163117737246761> **Fait inutile aléatoire du jour** <:openglados_facts:1338163117737246761>\n{french_fact}"
             )
