@@ -881,7 +881,7 @@ async def handle_convo_llm_audio(message, user_info, bot, mess_ref=None, user_ti
     )
 
     try:
-        llm_audio = await WeightsApi.generate_from_tts(
+        llm_audio = await WeightsApi().generate_from_tts(
             voice_model_name="glados fr", text=llm_reply, pitch=3, male=False
         )
     except asyncio.TimeoutError as e:
