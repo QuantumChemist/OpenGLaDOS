@@ -27,6 +27,7 @@ from utils import (
     fetch_french_fact,
     command_definitions,
     handle_convo_llm,
+    handle_convo_llm_audio,
     give_access_to_test_chambers,
     start_quiz_by_reaction,
     stop_quiz_by_reaction,
@@ -2184,6 +2185,15 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         await message.channel.send(f"Failed to fetch metadata: {e}")
                     except Exception as e:
                         await message.channel.send(f"Unexpected error occurred: {e}")
+                return
+
+            if "voice message" in message.content.lower():
+                await handle_convo_llm_audio(
+                    message=message,
+                    user_info=user_info,
+                    bot=self.bot,
+                    user_time=message_time,
+                )
                 return
 
             if "plot" in message.content.lower():
