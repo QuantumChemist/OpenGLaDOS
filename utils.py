@@ -16,7 +16,7 @@ from sympy import Symbol
 import plotly.graph_objs as go
 from sympy import parse_expr
 import pytz
-from ..weights.gg_api.libs.weights_api import generate_from_tts
+from weights_api import generate_from_tts
 
 
 # Define the minimum time between requests (in seconds)
