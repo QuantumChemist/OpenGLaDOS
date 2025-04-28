@@ -16,6 +16,7 @@ from sympy import Symbol
 import plotly.graph_objs as go
 from sympy import parse_expr
 import pytz
+from ..weights.gg_api.libs.weights_api import generate_from_tts
 
 
 # Define the minimum time between requests (in seconds)
@@ -769,6 +770,116 @@ async def handle_convo_llm(message, user_info, bot, mess_ref=None, user_time=7):
         await asyncio.sleep(7)  # Adjust this sleep duration if needed
         await message.reply(
             content=llm_reply, allowed_mentions=discord.AllowedMentions.none()
+        )
+
+
+async def handle_convo_llm_audio(message, user_info, bot, mess_ref=None, user_time=7):
+    global last_request_time
+    # Fetching message history and handling rate limits
+    fetched_messages = []
+    bot_id = message.guild.me.id  # Fetch the bot's ID
+    user_info_str = format_to_ror(user_info)
+
+    commands_list = []
+    for command in bot.tree.get_commands():
+        name = command.name
+        description = command_definitions.get(name, command.description)
+        commands_list.append(f"`/{name}` — {description}")
+
+    commands_str = "\n".join(sorted(commands_list))
+
+    try:
+        # Throttle before making any requests or actions
+        await throttle_requests()
+
+        # Fetch the last few messages for context
+        async for msg in message.channel.history(limit=7):
+            if len(msg.content) < 1900:
+                fetched_messages.append(msg)
+        fetched_messages.reverse()
+
+        # Construct the history list expected by the LLM
+        history = [
+            {
+                "role": "assistant",
+                "content": "...reading message history logs initiated...",
+            }
+        ]
+        for num, msg in enumerate(fetched_messages):
+            role, status = (
+                ("assistant", "`internal OpenGLaDOS systems output`")
+                if msg.author.id == bot_id
+                else ("user", f"`input received from user` user_id: <@{msg.author.id}>")
+            )
+            history.append(
+                {
+                    "role": role,
+                    "content": f"{status} >> message_content#{hex(num)}: {msg.content}",
+                }
+            )
+
+        if mess_ref:
+            replied_message = await message.channel.fetch_message(mess_ref.message_id)
+            history.append(
+                {
+                    "role": "assistant",
+                    "content": f"User replied to message_content#{hex(7)}: {replied_message.content}",
+                }
+            )
+
+        # Add the current user's message to the history
+        history.append(
+            {
+                "role": "assistant",
+                "content": f"```bash \nwith user_logic = {user_logic} && user_metadata = {user_info_str}; do ./user_logic < user_metadata; done \n```",
+            }
+        )
+        history.append(
+            {
+                "role": "assistant",
+                "content": f"In case the $CURRENT_USER wants to know more, "
+                f"I can provide my following commands console.log({commands_str}); .",
+            }
+        )
+
+    except discord.errors.Forbidden:
+        print(
+            "Bot does not have permission to read message history. Proceeding without history."
+        )
+        history = [{"role": "user", "content": message.content}]
+
+    except discord.errors.HTTPException as e:
+        if e.status == 429:  # Handle rate limit
+            print(f"Rate limit hit. Retrying after {e.retry_after} seconds...")
+            await asyncio.sleep(e.retry_after)
+            await throttle_requests()  # Apply throttling after retry
+        else:
+            print(f"Error fetching history: {str(e)}")
+        history = [{"role": "user", "content": message.content}]
+
+    # Generate the response using the modified history-aware function
+    await throttle_requests()  # Throttle before generating the response
+    llm_response = generate_llm_convo_text(
+        message=f"This is the current user inquiry: {message.content}",
+        history=history,
+        user_time=user_time,
+    )
+
+    mention_pattern = re.compile(r"`<@!?(\d+)>`")
+
+    llm_reply = await replace_mentions_with_display_names(
+        llm_response, message.guild, mention_pattern, True
+    )
+
+    llm_audio = await generate_from_tts(
+        voice_model_name="glados fr", text=llm_reply, pitch=3, male=False
+    )
+
+    # Respond to the user
+    async with message.channel.typing():
+        await asyncio.sleep(7)  # Adjust this sleep duration if needed
+        await message.reply(
+            content=llm_audio, allowed_mentions=discord.AllowedMentions.none()
         )
 
 
