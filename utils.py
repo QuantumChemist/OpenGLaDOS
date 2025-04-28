@@ -5,6 +5,7 @@ import discord
 from groq import Groq
 from dotenv import load_dotenv
 import asyncio
+import aiohttp
 import random
 import markovify
 import textwrap
@@ -17,6 +18,14 @@ import plotly.graph_objs as go
 from sympy import parse_expr
 import pytz
 from weights_api import WeightsApi
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)  # or DEBUG, WARNING, etc.
+handler = logging.StreamHandler()  # configure handlers/formatters as you like
+formatter = logging.Formatter("%(asctime)s %(name)s [%(levelname)s] %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 # Define the minimum time between requests (in seconds)
@@ -871,9 +880,25 @@ async def handle_convo_llm_audio(message, user_info, bot, mess_ref=None, user_ti
         llm_response, message.guild, mention_pattern, True
     )
 
-    llm_audio = await WeightsApi.generate_from_tts(
-        voice_model_name="glados fr", text=llm_reply, pitch=3, male=False
-    )
+    try:
+        llm_audio = await WeightsApi.generate_from_tts(
+            voice_model_name="glados fr", text=llm_reply, pitch=3, male=False
+        )
+    except asyncio.TimeoutError as e:
+        # handle a timeout specifically
+        logger.error(f"TTS request timed out: {e}")
+        llm_audio = None  # or some fallback
+    except aiohttp.ClientError as e:
+        # handle HTTP/client errors
+        logger.error(f"TTS HTTP error: {e}")
+        llm_audio = None
+    except Exception as e:
+        # catch-all for anything else
+        logger.exception(f"Unexpected error in TTS generation: {e}")
+        llm_audio = None
+
+    if llm_audio is None:
+        llm_audio = llm_reply  # or some fallback message
 
     # Respond to the user
     async with message.channel.typing():
