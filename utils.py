@@ -941,7 +941,37 @@ async def replace_mentions_with_display_names(
 
     # Replace standalone `:openglados:` (with or without backticks), but not those with an ID
     content = re.sub(
-        r"`?:openglados:(?!\d+>)`?", "<:openglados:1293144381884465182>", content
+        r"`?:openglados:(?!\d+>)`?", "<:openglados:1277250785150894151>", content
+    )
+
+    content = re.sub(
+        r"`?:openglados_facts:(?!\d+>)`?",
+        "<:openglados_facts:1338163117737246761>",
+        content,
+    )
+
+    content = re.sub(
+        r"`?:openglados_stab:(?!\d+>)`?",
+        "<:openglados_stab:1338172819305009233>",
+        content,
+    )
+
+    content = re.sub(
+        r"`?:openglados_blush:(?!\d+>)`?",
+        "<:openglados_blush:1338099865267343401>",
+        content,
+    )
+
+    content = re.sub(
+        r"`?:openglados_mad:(?!\d+>)`?",
+        "<a:openglados_mad:1338101613205651456>",
+        content,
+    )
+
+    content = re.sub(
+        r"`?:openglados_lol:(?!\d+>)`?",
+        "<a:openglados_lol:1338106502837174283>",
+        content,
     )
 
     # Optionally replace custom emoji mentions with their corresponding emoji name
