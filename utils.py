@@ -782,7 +782,7 @@ async def handle_convo_llm(message, user_info, bot, mess_ref=None, user_time=7):
         )
 
 
-async def handle_convo_llm_audio(message, user_info, bot, mess_ref=None, user_time=7):
+async def handle_convo_llm_image(message, user_info, bot, mess_ref=None, user_time=7):
     global last_request_time
     # Fetching message history and handling rate limits
     fetched_messages = []
@@ -881,30 +881,28 @@ async def handle_convo_llm_audio(message, user_info, bot, mess_ref=None, user_ti
     )
 
     try:
-        llm_audio = await WeightsApi().generate_from_tts(
-            voice_model_name="glados fr", text=llm_reply, pitch=3, male=False
-        )
+        llm_image = await WeightsApi().generate_image(prompt=llm_reply)
     except asyncio.TimeoutError as e:
         # handle a timeout specifically
-        logger.error(f"TTS request timed out: {e}")
-        llm_audio = None  # or some fallback
+        logger.error(f"Image gen request timed out: {e}")
+        llm_image = None  # or some fallback
     except aiohttp.ClientError as e:
         # handle HTTP/client errors
-        logger.error(f"TTS HTTP error: {e}")
-        llm_audio = None
+        logger.error(f"Image gen HTTP error: {e}")
+        llm_image = None
     except Exception as e:
         # catch-all for anything else
-        logger.exception(f"Unexpected error in TTS generation: {e}")
-        llm_audio = None
+        logger.exception(f"Unexpected error in image generation: {e}")
+        llm_image = None
 
-    if llm_audio is None:
-        llm_audio = llm_reply  # or some fallback message
+    if llm_image is None:
+        llm_image = llm_reply  # or some fallback message
 
     # Respond to the user
     async with message.channel.typing():
         await asyncio.sleep(7)  # Adjust this sleep duration if needed
         await message.reply(
-            content=llm_audio, allowed_mentions=discord.AllowedMentions.none()
+            content=llm_image, allowed_mentions=discord.AllowedMentions.none()
         )
 
 
