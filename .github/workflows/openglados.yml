@@ -27,8 +27,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest pytest-asyncio
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        mkdir -p libs
-        curl -L -o libs/weights_api.py https://raw.githubusercontent.com/fox3000foxy/weights.gg-api/prod/libs/weights_api.py
+        curl -L -o weights_api.py https://raw.githubusercontent.com/fox3000foxy/weights.gg-api/prod/libs/weights_api.py
+
 
 
     - name: Set PYTHONPATH
