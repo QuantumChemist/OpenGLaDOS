@@ -677,7 +677,6 @@ async def throttle_requests():
 
 
 async def handle_convo_llm(message, user_info, bot, mess_ref=None, user_time=7):
-    global last_request_time
     # Fetching message history and handling rate limits
     fetched_messages = []
     bot_id = message.guild.me.id  # Fetch the bot's ID
@@ -783,7 +782,6 @@ async def handle_convo_llm(message, user_info, bot, mess_ref=None, user_time=7):
 
 
 async def handle_convo_llm_image(message, user_info, bot, mess_ref=None, user_time=7):
-    global last_request_time
     # Fetching message history and handling rate limits
     fetched_messages = []
     bot_id = message.guild.me.id  # Fetch the bot's ID
