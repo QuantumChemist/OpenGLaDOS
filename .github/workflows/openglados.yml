@@ -50,6 +50,7 @@ jobs:
         GROQ_TOKEN: ${{ secrets.GROQ_TOKEN }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         CHICHI: ${{ secrets.CHICHI }}
+        REFRESH: ${{ secrets.REFRESH }}
         TENOR_API_KEY: ${{ secrets.TENOR_API_KEY }}
         PYTEST_RUNNING: "1"
       run: |
