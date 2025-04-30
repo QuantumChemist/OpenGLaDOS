@@ -76,12 +76,12 @@ SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
 # Load environment variables from .env file
 load_dotenv()
 
-chat_fr = int(os.environ.get("BEBOU_FR"))
-chat_en = int(os.environ.get("BEBOU_EN"))
-chat_enn = int(os.environ.get("CHAT_EN"))
-chat_eng = int(os.environ.get("CHAT_ENG"))
-chat_frr = int(os.environ.get("CHAT_FR"))
-chat_de = int(os.environ.get("CHAT_DE"))
+chat_fr = int(os.environ.get("BEBOU_FR", "0"))
+chat_en = int(os.environ.get("BEBOU_EN", "0"))
+chat_enn = int(os.environ.get("CHAT_EN", "0"))
+chat_eng = int(os.environ.get("CHAT_ENG", "0"))
+chat_frr = int(os.environ.get("CHAT_FR", "0"))
+chat_de = int(os.environ.get("CHAT_DE", "0"))
 
 
 # Define your custom bot class
