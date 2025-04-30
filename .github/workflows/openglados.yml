@@ -30,7 +30,6 @@ jobs:
         curl -L -o weights_api.py https://raw.githubusercontent.com/fox3000foxy/weights.gg-api/prod/libs/weights_api.py
 
 
-
     - name: Set PYTHONPATH
       run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
 
