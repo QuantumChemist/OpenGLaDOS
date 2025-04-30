@@ -935,7 +935,7 @@ async def replace_mentions_with_display_names(
                     f"`<@!{user_id}>`", f"`@{member.display_name}`"
                 )
 
-    # Replace standalone `:openglados:` and other emojis (with or without backticks), but not those with an ID
+    # Replace standalone `:openglados:` and other emojis (with or without backticks), but not those with an ID.
     content = re.sub(
         r"`?:openglados:(?!\d+>)`?", "<:openglados:1277250785150894151>", content
     )
