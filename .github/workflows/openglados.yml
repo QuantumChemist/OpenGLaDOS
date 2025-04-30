@@ -41,6 +41,12 @@ jobs:
 
     - name: Test with pytest
       env:
+        BEBOU_FR: ${{ secrets.BEBOU_FR }}
+        BEBOU_EN: ${{ secrets.BEBOU_EN }}
+        CHAT_EN: ${{ secrets.CHAT_EN }}
+        CHAT_ENG: ${{ secrets.CHAT_ENG }}
+        CHAT_FR: ${{ secrets.CHAT_FR }}
+        CHAT_DE: ${{ secrets.CHAT_DE }}
         GROQ_TOKEN: ${{ secrets.GROQ_TOKEN }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         CHICHI: ${{ secrets.CHICHI }}
