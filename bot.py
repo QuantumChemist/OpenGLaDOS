@@ -347,15 +347,6 @@ class OpenGLaDOS(commands.Cog):
         # Notify or log when a user leaves the server
         print(f"User {member.name} has left the server {member.guild.name}.")
 
-        # Fetch the bot owner (you) to DM when a user leaves
-        owner = await self.bot.fetch_user(self.bot.owner_id)
-
-        # Send a notification to the bot owner
-        if owner:
-            await owner.send(
-                f"User {member.name} (ID: {member.id}) has left the server {member.guild.name}."
-            )
-
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         # Ignore reactions from bots
