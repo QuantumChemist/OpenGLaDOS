@@ -1471,7 +1471,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             return
 
         if user_channel is openglados_channel and "play" in user_message.lower():
-            welcome_message = await openglados_channel.send(
+            welcome_message = (
                 f"Hello and, again, welcome {user_name}, to the ultimate Portal quiz conducted by me, "
                 "your one and only OpenGLaDOS! "
                 "We hope your brief detention in the relaxation vault has been a pleasant one. "
