@@ -21,7 +21,6 @@ from utils import (
     get_groq_completion,
     ensure_code_blocks_closed,
     wrap_text,
-    retrieve_kicked_from_dm,
     fetch_random_gif,
     fetch_random_fact,
     fetch_french_fact,
@@ -274,73 +273,7 @@ class OpenGLaDOS(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        # Retrieve kicked users from the bot owner's DMs
-        kicked_users = await retrieve_kicked_from_dm(self.bot)
-
-        guild = member.guild
-        test_subject_number = len(guild.members) - 2
-        new_nickname = f"test subject no. {test_subject_number}"
-
-        try:
-            await member.edit(nick=new_nickname)
-            print(f"Changed nickname for {member.name} to {new_nickname}")
-        except discord.Forbidden:
-            print(
-                f"Couldn't change nickname for {member.name} due to lack of permissions."
-            )
-        except Exception as e:
-            print(f"An error occurred: {e}")
-
-        # Check if the new member's ID is in the kicked users list
-        if member.id in kicked_users:
-            # Find the "survivor" role
-            survivor_role = discord.utils.find(
-                lambda r: "survivor" in r.name.lower(), member.guild.roles
-            )
-            if survivor_role:
-                await member.add_roles(survivor_role)
-
-                # Look for a channel that contains the word "welcome" in its name
-                welcome_channel = discord.utils.find(
-                    lambda c: "welcome" in c.name.lower(), member.guild.text_channels
-                )
-                if welcome_channel:
-                    welcome_message = await welcome_channel.send(
-                        f"Welcome back, {member.mention}! You've returned as a `survivor` test object after successfully "
-                        f"completing the OpenScience Enrichment Center test. "
-                        "So now let's endure the tortu--- uuuhhh test again to check your resilience and endurance capabilities. "
-                        "React with a knife emoji (`🔪`) to begin your Portal game again. "
-                    )
-                    await welcome_message.add_reaction(
-                        "🔪"
-                    )  # Add knife emoji reaction to the welcome message
-                    await welcome_message.add_reaction("🏳️")
-            return  # Exit early since the user has already been handled
-
-        # If the member is not a rejoining survivor, proceed with the normal welcome
-        # Welcome the new member and assign the "test subject" role
-        test_role = discord.utils.find(
-            lambda r: "test subject" in r.name.lower(), member.guild.roles
-        )
-        if test_role:
-            await member.add_roles(test_role)
-
-        # Find the welcome channel and send a welcome message
-        channel = discord.utils.find(
-            lambda c: "welcome" in c.name.lower(), member.guild.text_channels
-        )
-        if channel:
-            welcome_message = await channel.send(
-                f"Hello and, again, welcome {member.mention}, to {member.guild.name}! "
-                "We hope your brief detention in the relaxation vault has been a pleasant one. "
-                "Your specimen has been processed, and we are now ready to begin the test proper. "
-                "React with a knife emoji (`🔪`) to begin your Portal game. "
-                "Cake will be served at the end of your journey."
-            )
-            await welcome_message.add_reaction(
-                "🔪"
-            )  # Add knife emoji reaction to the welcome message
-            await welcome_message.add_reaction("🏳️")
+        print(f"User {member.name} has joined the server {member.guild.name}.")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
