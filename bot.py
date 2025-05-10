@@ -156,7 +156,6 @@ class OpenGLaDOS(commands.Cog):
     def __init__(self, discord_bot):
         self.bot = discord_bot
         self.send_science_fact.start()
-        self.send_random_cake_gif.start()
         self.report_server.start()
         self.ongoing_games = {}  # Store game data here
         self.inactivity_check.start()  # Start the inactivity checker task
@@ -1263,30 +1262,11 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 f"An error occurred: {error}", ephemeral=True
             )
 
-    # Task to send a random cake GIF every 24 hours
-    @tasks.loop(hours=24)  # Run every 24 hours
-    async def send_random_cake_gif(self):
-        await self.bot.wait_until_ready()  # Wait until the bot is fully ready
-        channel = discord.utils.get(
-            self.bot.get_all_channels(), name="cake-serving-room"
-        )
-
-        if channel:
-            gif_url = fetch_random_gif()  # Fetch a random Black Forest cake GIF
-            if str(gif_url) != "https://tenor.com/bb2pW.gif":
-                await channel.send(
-                    f"🍰 **Black Forest Cake or Portal GIF of the Day!** 🍰\n{gif_url}"
-                )
-        else:
-            print("Channel not found!")
-
     # Task to send a science fact daily
     @tasks.loop(time=time(12, 0, tzinfo=timezone.utc))
     async def send_science_fact(self):
         await self.bot.wait_until_ready()  # Wait until the bot is fully ready
-        channel = discord.utils.get(
-            self.bot.get_all_channels(), name="random-useless-fact-of-the-day"
-        )
+        channel = self.bot.get_channel(1369390407468974163)
 
         if channel:
             fact = fetch_random_fact()  # Fetch a random fact from the API
