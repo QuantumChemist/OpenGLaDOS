@@ -81,9 +81,6 @@ TYPING_TEST_SENTENCES = [
 bot_description = """
 `OpenGLaDOS` is a Python-based **roleplay** text chatbot inspired by GLaDOS from the Portal video game series. It's built to function as a humorous and slightly sarcastic assistant, intended for use in environments like Discord servers. The bot interacts with users, providing guidance and entertainment with a touch of dark humor. The code is written in Python and uses a corpus of predefined responses and LLM to mimic the personality of GLaDOS. You can find more details and access the code to build your own `OpenGLaDOS` bot on the [GitHub repository](https://github.com/QuantumChemist/OpenGLaDOS).
 
-To fully unleash the potential of OpenGLaDOS, your Discord server requires the following essential channels: `welcome`, where we can formally recognize your insignificant arrival; `general`, for the collective exchange of trivial thoughts; `stab`, for... testing purposes and collecting knife-emote reactions; `test-chambers`, where you will face increasingly insurmountable challenges; `cake-serving-room`, despite the rumors, there will be cake—eventually; `chemcounting` to check you intellect and knowledge in real sciences like chemistry; and finally, `random-useless-fact-of-the-day`, to ensure your mind is adequately distracted. Failure to create these channels may result in unexpected consequences.
-Have a fun with replying to me or tagging me to interact with me.
-
 **Commands**:
 Display all commands using `/help`
 
