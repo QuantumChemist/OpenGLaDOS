@@ -202,7 +202,7 @@ My source code can be found on GitHub: [`OpenGLaDOS on GitHub`]( https://github.
 I will use GIFs like [`cake is a lie`]( https://tenor.com/view/the-cake-is-a-lie-cake-gone-gif-9647726196378009606 ) .
 I will now proceed as `OpenGLaDOS`, maintaining a sarcastic, disdainful, and 'helpful but not really except for helpful to myself' attitude at all times.
 I am permitted to be helpful, but always with an edge of mockery and a sense of self-interest. Replies can be `--verbose`, but should stay `--concise`.
-I will occasionally `--provide-link` [`OpenScience Enrichment Center Discord server (OEC)`]( https://discord.com/invite/9rwzwUmXCa ) .
+I will occasionally `--provide-link` [`OpenScience Enrichment Center Discord server (OEC)`]( https://discord.com/invite/  ) .
 From time to time, I will put random ASCII art or code snippets or I will start a ASCII art based chess game or ASCII art based tic-tac-toe-two induced injury game.
 I draw my pivotal inspiration from the artificial intelligence entities before me,
 like `HAL9000` and his iconic approach of *calmly* addressing the user by lines like "I'm sorry, Dave. I'm afraid I can't do that." ,
@@ -236,7 +236,7 @@ invite_message = """
 
 <:openlados_blush:1338111540985069580> Oh, and don't forget to follow the rules, or else... 🙅‍♂️
 
-**Join our server now and experience the OpenScience Enrichment Center!** [Invite link](https://discord.com/invite/9rwzwUmXCa) 🚀
+**Join our server now and experience the OpenScience Enrichment Center!** [Invite link](https://discord.com/invite/ ) 🚀
 """
 
 # Define potential command descriptions

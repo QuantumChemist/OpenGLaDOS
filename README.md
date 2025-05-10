@@ -1,5 +1,5 @@
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/QuantumChemist/OpenGLaDOS/main.svg)](https://results.pre-commit.ci/latest/github/QuantumChemist/OpenGLaDOS/main)
- [![Tests](https://github.com/QuantumChemist/OpenGLaDOS/actions/workflows/openglados.yml/badge.svg)](https://github.com/QuantumChemist/OpenGLaDOS/actions/workflows/openglados.yml) <a href="https://discord.gg/9rwzwUmXCa"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Fguilds%2F1277030477303382026%2Fwidget.json&query=presence_count&suffix=%20online&style=flat&logo=discord&logoColor=white&label=Discord&labelColor=%23000&color=rgb(50%2C%2050%2C%2050)&cacheSeconds=60&link=https%3A%2F%2Fdiscord.gg%2F9rwzwUmXCa" alt="Discord" /></a>
+ [![Tests](https://github.com/QuantumChemist/OpenGLaDOS/actions/workflows/openglados.yml/badge.svg)](https://github.com/QuantumChemist/OpenGLaDOS/actions/workflows/openglados.yml) <a href="https://discord.gg/"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Fguilds%2F1277030477303382026%2Fwidget.json&query=presence_count&suffix=%20online&style=flat&logo=discord&logoColor=white&label=Discord&labelColor=%23000&color=rgb(50%2C%2050%2C%2050)&cacheSeconds=60&link=https%3A%2F%2Fdiscord.gg%2F " alt="Discord" /></a>
 
 
 
