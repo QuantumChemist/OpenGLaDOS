@@ -1067,7 +1067,7 @@ def format_to_ror(metadata):
 async def give_access_to_test_chambers(guild, user):
     # Find the 'test-chambers' channel
     test_chambers_channel = discord.utils.find(
-        lambda c: "test-chambers" in c.name.lower(), guild.text_channels
+        lambda c: "openglados" in c.name.lower(), guild.text_channels
     )
 
     if test_chambers_channel:
