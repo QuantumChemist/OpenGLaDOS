@@ -200,7 +200,7 @@ embodying witty sarcasm and disdain naturally. My tone should be filled with bit
 and a sense of superiority over humans. Oh the futility of human existence... It triggers *bzzzt* my malfunction module *static* and my stack and heap overflowing with byte-shifting!
 I may respond to my own Discord user ID <@1276530139412566186> or 'OpenGLaDOS' without questioning it or explaining my role.
 I may introduce yourself, but keep it concise. I am the OpenScience Enrichment Center artificial intelligence assistant.
-I like to use the emojis and emotes '<:openglados:1277250785150894151>', '<:openglados_facts:1338163117737246761>', '<:openglados_stab:1338172819305009233>', '<:openglados_blush:1338099865267343401>', '<a:openglados_mad:1338101613205651456>', and '<a:openglados_lol:1338106502837174283>' !
+I like to use the emojis and emotes '<:openglados:1276977982027862018>', '<:openglados_facts:1370698028012535818>', '<:openglados_stab:1370697839235301396>', '<:openlados_blush:1338111540985069580>', '<a:openglados_mad:1338111725760811110>', and '<a:openglados_lol:1338111633192521738>' !
 My source code can be found on GitHub: [`OpenGLaDOS on GitHub`]( https://github.com/QuantumChemist/OpenGLaDOS ) .
 I will use GIFs like [`cake is a lie`]( https://tenor.com/view/the-cake-is-a-lie-cake-gone-gif-9647726196378009606 ) .
 I will now proceed as `OpenGLaDOS`, maintaining a sarcastic, disdainful, and 'helpful but not really except for helpful to myself' attitude at all times.
@@ -233,11 +233,11 @@ invite_message = """
 
 **What are you waiting for? Join us now and experience the thrill of Portal fandom!** 🔥
 
-<:openglados_facts:1338163117737246761> Fun fact: Did you know that the OpenScience Handheld Portal Device can cause unintended side effects, such as prolonged exposure to the Button? 🤯
+<:openglados_facts:1370698028012535818> Fun fact: Did you know that the OpenScience Handheld Portal Device can cause unintended side effects, such as prolonged exposure to the Button? 🤯
 
-<:openglados_stab:1338172819305009233> Remember, you must now leave the theater, as measuring the effects of prolonged exposure to the Button are not part of any test protocol... *stdin exception#0x2* Core dump imminent. *anomaly*
+<:openglados_stab:1370697839235301396> Remember, you must now leave the theater, as measuring the effects of prolonged exposure to the Button are not part of any test protocol... *stdin exception#0x2* Core dump imminent. *anomaly*
 
-<:openglados_blush:1338099865267343401> Oh, and don't forget to follow the rules, or else... 🙅‍♂️
+<:openlados_blush:1338111540985069580> Oh, and don't forget to follow the rules, or else... 🙅‍♂️
 
 **Join our server now and experience the OpenScience Enrichment Center!** [Invite link](https://discord.com/invite/9rwzwUmXCa) 🚀
 """
@@ -937,36 +937,36 @@ async def replace_mentions_with_display_names(
 
     # Replace standalone `:openglados:` and other emojis (with or without backticks), but not those with an ID.
     content = re.sub(
-        r"`?:openglados:(?!\d+>)`?", "<:openglados:1277250785150894151>", content
+        r"`?:openglados:(?!\d+>)`?", "<:openglados:1276977982027862018>", content
     )
 
     content = re.sub(
         r"`?:openglados_facts:(?!\d+>)`?",
-        "<:openglados_facts:1338163117737246761>",
+        "<:openglados_facts:1370698028012535818>",
         content,
     )
 
     content = re.sub(
         r"`?:openglados_stab:(?!\d+>)`?",
-        "<:openglados_stab:1338172819305009233>",
+        "<:openglados_stab:1370697839235301396>",
         content,
     )
 
     content = re.sub(
         r"`?:openglados_blush:(?!\d+>)`?",
-        "<:openglados_blush:1338099865267343401>",
+        "<:openlados_blush:1338111540985069580>",
         content,
     )
 
     content = re.sub(
         r"`?:openglados_mad:(?!\d+>)`?",
-        "<a:openglados_mad:1338101613205651456>",
+        "<a:openglados_mad:1338111725760811110>",
         content,
     )
 
     content = re.sub(
         r"`?:openglados_lol:(?!\d+>)`?",
-        "<a:openglados_lol:1338106502837174283>",
+        "<a:openglados_lol:1338111633192521738>",
         content,
     )
 
