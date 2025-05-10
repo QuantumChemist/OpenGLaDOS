@@ -1077,11 +1077,11 @@ async def give_access_to_test_chambers(guild, user):
         )
         # Notify the user in the welcome channel
         welcome_channel = discord.utils.find(
-            lambda c: "welcome" in c.name.lower(), guild.text_channels
+            lambda c: "openglados" in c.name.lower(), guild.text_channels
         )
         if welcome_channel:
             await welcome_channel.send(
-                f"{user.mention}, you now have access to the {test_chambers_channel.mention}. Switch to that channel and **type and enter 'ready'** to start the quiz!"
+                f"{user.mention}, **type and enter 'ready'** to start the quiz!"
             )
 
     return test_chambers_channel
