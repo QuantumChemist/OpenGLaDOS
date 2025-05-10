@@ -84,7 +84,7 @@ bot_description = """
 **Commands**:
 Display all commands using `/help`
 
-Use a slash command to trigger a bot command. Reply to my messages or ping @ me to interact with me!
+Use a slash command to trigger a bot command. Reply to my messages or ping @ me to interact with me! In a `openglados` dedicated channel, you can send "play" to start a Portal quiz game.
 """
 
 user_logic = """
