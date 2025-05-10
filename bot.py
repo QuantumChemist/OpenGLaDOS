@@ -30,8 +30,6 @@ from utils import (
     give_access_to_test_chambers,
     start_quiz_by_reaction,
     stop_quiz_by_reaction,
-    restrict_user_permissions,
-    unrestrict_user_permissions,
     handle_conversation,
     replace_mentions_with_display_names,
     generate_plot,
@@ -285,37 +283,42 @@ class OpenGLaDOS(commands.Cog):
             return
 
         message = reaction.message
+        openglados_channel = discord.utils.find(
+            lambda c: "openglados" in c.name.lower(),
+            message.guild.text_channels,
+        )
 
-        # Check if the reaction is a knife emoji
-        if str(reaction.emoji) == "🔪":
-            # Ensure that the bot sent the message and it contains the quiz start prompt
-            if (
-                message.author == self.bot.user
-                and "begin your Portal game" in message.content
-            ):
-                guild = message.guild
-                # Give access to the test chambers channel
-                test_chambers_channel = await give_access_to_test_chambers(guild, user)
-                # Start the quiz if the test chambers channel exists
-                if test_chambers_channel:
-                    await start_quiz_by_reaction(test_chambers_channel, user, self.bot)
-                    # Restrict user permissions in other channels while the quiz is ongoing
-                    await restrict_user_permissions(guild, user)
-            return
+        if openglados_channel:
+            # Check if the reaction is a knife emoji
+            if str(reaction.emoji) == "🔪":
+                # Ensure that the bot sent the message and it contains the quiz start prompt
+                if (
+                    message.author == self.bot.user
+                    and "begin your Portal game" in message.content
+                ):
+                    guild = message.guild
+                    # Give access to the test chambers channel
+                    test_chambers_channel = await give_access_to_test_chambers(
+                        guild, user
+                    )
+                    # Start the quiz if the test chambers channel exists
+                    if test_chambers_channel:
+                        await start_quiz_by_reaction(
+                            test_chambers_channel, user, self.bot
+                        )
+                return
 
-        # Check if the reaction is a peace flag emoji (🏳️) to stop the quiz
-        if str(reaction.emoji) == "🏳️":
-            # Ensure that the bot sent the message and it contains the quiz start prompt
-            if (
-                message.author == self.bot.user
-                and "begin your Portal game" in message.content
-            ):
-                guild = message.guild
-                # Handle stopping the quiz
-                await stop_quiz_by_reaction(message.channel, user, self.bot)
-                # Unrestrict user permissions in other channels while the quiz is ongoing
-                await unrestrict_user_permissions(guild, user)
-            return
+            # Check if the reaction is a peace flag emoji (🏳️) to stop the quiz
+            if str(reaction.emoji) == "🏳️":
+                # Ensure that the bot sent the message and it contains the quiz start prompt
+                if (
+                    message.author == self.bot.user
+                    and "begin your Portal game" in message.content
+                ):
+                    guild = message.guild
+                    # Handle stopping the quiz
+                    await stop_quiz_by_reaction(message.channel, user, self.bot)
+                return
 
         if str(reaction.emoji) == "👀":
             try:
@@ -487,11 +490,6 @@ class OpenGLaDOS(commands.Cog):
                 # Create the screenshot with dynamic size capturing only the necessary area
                 hti.screenshot(
                     html_str=content, save_as=SCREENSHOT_FILE_NAME, size=(1300, 1000)
-                )
-
-                openglados_channel = discord.utils.find(
-                    lambda c: "openglados" in c.name.lower(),
-                    message.guild.text_channels,
                 )
 
                 if openglados_channel:

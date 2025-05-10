@@ -1118,7 +1118,7 @@ async def stop_quiz_by_reaction(channel, user, bot):
 
 async def ask_question(channel, user, bot, question_number=0):
     """Handles the quiz by asking questions, checking answers, and managing the quiz state."""
-    owner = await bot.fetch_user(bot.owner_id)
+    # owner = await bot.fetch_user(bot.owner_id)
     # Initialize the user's quiz state if starting a new quiz
     if question_number == 0:
         user_quiz_state[user.id] = question_number
@@ -1157,39 +1157,11 @@ async def ask_question(channel, user, bot, question_number=0):
                 "Goodbye."
             )
             await channel.send("https://tenor.com/bVfu2.gif")
+            await channel.send(
+                f"{user.mention} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhhhh nothing."
+            )
             # Remove the user from the quiz state
             user_quiz_state.pop(user.id, None)
-            await asyncio.sleep(30)  # Wait for 30 seconds before kicking the user
-            # Check if the user has the "Survivor" role
-            survivor_role = discord.utils.get(channel.guild.roles, name="survivor")
-            if survivor_role and survivor_role in user.roles:
-                for channel in channel.guild.text_channels:
-                    await unrestrict_user_permissions(channel.guild, user)
-                # Look for a channel that contains the word "general" in its name
-                general_channel = discord.utils.find(
-                    lambda c: "welcome" in c.name.lower(), channel.guild.text_channels
-                )
-                if general_channel:
-                    await general_channel.send(
-                        f"{user.mention} has successfully completed the OpenScience Enrichment Center test and made the correct party escort submission position decision. "
-                        f"{user.mention} survived because they are a `survivor` test subject."
-                    )
-            else:
-                # Send the user ID to the bot owner in a DM
-                await owner.send(f"Kicked User ID: {user.id}")
-                # Kick the user from the guild if they don't have the "Survivor" role
-                await channel.guild.kick(
-                    user, reason="Completed the OpenScience Enrichment Center test."
-                )
-                # Look for a channel that contains the word "general" in its name
-                general_channel = discord.utils.find(
-                    lambda c: "welcome" in c.name.lower(), channel.guild.text_channels
-                )
-                if general_channel:
-                    await general_channel.send(
-                        f"{user.mention} has successfully completed the OpenScience Enrichment Center test and therefore was kill--- uhh kicked."
-                    )
-
             return
 
         # Ask the current question
