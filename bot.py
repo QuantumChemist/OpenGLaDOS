@@ -277,7 +277,6 @@ class OpenGLaDOS(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        # Notify or log when a user leaves the server
         print(f"User {member.name} has left the server {member.guild.name}.")
 
     @commands.Cog.listener()
