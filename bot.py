@@ -35,7 +35,6 @@ from utils import (
     generate_plot,
     calculate_accuracy,
     calculate_wpm,
-    invite_message,
     sanitize_mentions,
     OPENGLADOS_MESSAGES,
     TYPING_TEST_SENTENCES,
@@ -981,7 +980,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             )
         else:
             await interaction.response.send_message(
-                content=f"{invite_message} \nI'm not angry. Now, just go back to the testing area, {interaction.user.mention}!",
+                content=f"I'm not angry. Now, just go back to the testing area, {interaction.user.mention}!",
                 allowed_mentions=discord.AllowedMentions.none(),
             )
 
