@@ -318,7 +318,7 @@ class OpenGLaDOS(commands.Cog):
                 await unrestrict_user_permissions(guild, user)
             return
 
-        if str(reaction.emoji) == "<:openglados_stab:1338172819305009233>":
+        if str(reaction.emoji) == "👀":
             try:
                 # Process the message content
                 processed_content = message.content or ""
@@ -490,18 +490,20 @@ class OpenGLaDOS(commands.Cog):
                     html_str=content, save_as=SCREENSHOT_FILE_NAME, size=(1300, 1000)
                 )
 
-                # Find a channel that contains "stab" in its name
-                stab_channel = discord.utils.find(
-                    lambda c: "stab" in c.name.lower(), message.guild.text_channels
+                openglados_channel = discord.utils.find(
+                    lambda c: "openglados" in c.name.lower(),
+                    message.guild.text_channels,
                 )
 
-                if stab_channel:
-                    # Send the screenshot directly to the stab channel
-                    await stab_channel.send(
-                        f"Hey {message.author.mention}, a <:openglados_stab:1338172819305009233> reaction has been added to your message: {message.jump_url}. "
-                        f"Looks like someone is ready to stab you! Here's a screenshot of the message:",
+                if openglados_channel:
+                    await openglados_channel.send(
+                        f"Hey {message.author.mention}, a 👀 reaction has been added to your message: {message.jump_url}. "
+                        f"Here's a screenshot of the message:",
+                        allowed_mentions=discord.AllowedMentions.none(),
                     )
-                    await stab_channel.send(file=discord.File(SCREENSHOT_FILE_PATH))
+                    await openglados_channel.send(
+                        file=discord.File(SCREENSHOT_FILE_PATH)
+                    )
                 else:
                     print("No channel with 'stab' in the name was found.")
 
