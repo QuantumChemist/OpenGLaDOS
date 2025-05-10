@@ -1342,19 +1342,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             message.guild.text_channels,
         )
 
-        if user_channel is openglados_channel and "play" in user_message.lower():
-            welcome_message = await openglados_channel.send(
-                f"Hello and, again, welcome {user_name}, to the ultimate Portal quiz conducted by me, "
-                "your one and only OpenGLaDOS! "
-                "We hope your brief detention in the relaxation vault has been a pleasant one. "
-                "Your specimen has been processed, and we are now ready to begin the test proper. "
-                "React with a knife emoji (`🔪`) to begin your Portal game. "
-                "Cake will be served at the end of your journey."
-            )
-            await openglados_channel.send(welcome_message)
-            await welcome_message.add_reaction("🔪")
-            await welcome_message.add_reaction("🏳️")
-
         try:
             if user_message and message.channel.id == chat_enn:
                 print("Translation handler activated for English channel.")
@@ -1482,6 +1469,19 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         # Ignore messages from any bot, including your own
         if message.author.bot:  # or message.author.id in BLACKLIST_USERS_ID:
             return
+
+        if user_channel is openglados_channel and "play" in user_message.lower():
+            welcome_message = await openglados_channel.send(
+                f"Hello and, again, welcome {user_name}, to the ultimate Portal quiz conducted by me, "
+                "your one and only OpenGLaDOS! "
+                "We hope your brief detention in the relaxation vault has been a pleasant one. "
+                "Your specimen has been processed, and we are now ready to begin the test proper. "
+                "React with a knife emoji (`🔪`) to begin your Portal game. "
+                "Cake will be served at the end of your journey."
+            )
+            await openglados_channel.send(welcome_message)
+            await welcome_message.add_reaction("🔪")
+            await welcome_message.add_reaction("🏳️")
 
         # Fetch user metadata
         user = message.author
