@@ -608,7 +608,9 @@ def generate_llm_convo_text(
 
     # Invoke the model with the user's prompt and history
     try:
-        llm_answer = get_groq_completion(history=history, model="llama3-70b-8192")
+        llm_answer = get_groq_completion(
+            history=history, model="llama-3.3-70b-versatile"
+        )
 
     except Exception as e:
         print(f"An error occurred: {e}")
