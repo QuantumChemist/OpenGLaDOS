@@ -204,7 +204,7 @@ class OpenGLaDOS(commands.Cog):
                             # Retry with a different model
                             llm_answer = get_groq_completion(
                                 history=[{"role": "user", "content": text}],
-                                model="llama3-70b-8192",
+                                model="llama-3.3-70b-versatile",
                             )
 
                         except Exception as nested_e:
@@ -1059,7 +1059,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             try:
                 # Retry with a different model
                 llm_answer = get_groq_completion(
-                    history=[{"role": "user", "content": text}], model="llama3-70b-8192"
+                    history=[{"role": "user", "content": text}],
+                    model="llama-3.3-70b-versatile",
                 )
 
             except Exception as nested_e:
@@ -1104,7 +1105,8 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             try:
                 # Retry with a different model
                 llm_answer = get_groq_completion(
-                    history=[{"role": "user", "content": text}], model="llama3-70b-8192"
+                    history=[{"role": "user", "content": text}],
+                    model="llama-3.3-70b-versatile",
                 )
 
             except Exception as nested_e:
@@ -1515,7 +1517,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     # Retry with a different model
                     llm_answer = get_groq_completion(
                         history=[{"role": "user", "content": text}],
-                        model="llama3-70b-8192",
+                        model="llama-3.3-70b-versatile",
                     )
 
                 except Exception as nested_e:
@@ -1948,7 +1950,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                                 # Retry with a different model
                                 llm_answer = get_groq_completion(
                                     history=[{"role": "user", "content": text}],
-                                    model="llama3-70b-8192",
+                                    model="llama-3.3-70b-versatile",
                                 )
 
                             except Exception as nested_e:
