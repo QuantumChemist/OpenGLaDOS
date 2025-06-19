@@ -1729,6 +1729,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             if custom_emoji:
                 await message.add_reaction(custom_emoji)
 
+        if "cv" in message.content.lower():
+            await message.channel.send(file=discord.File("utils/chichivi.jpeg"))
+
         if message.guild.id not in WHITELIST_GUILDS_ID:
             banned_words = ["stfu", "hitler"]
             if any(word in message.content.lower() for word in banned_words):
