@@ -1729,7 +1729,10 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             if custom_emoji:
                 await message.add_reaction(custom_emoji)
 
-        if "cv" in message.content.lower():
+        # Avoid matching 'cv' in links (e.g., http://, https://, .cv domain)
+        if "cv" in message.content.lower() and not re.search(
+            r"https?://|\.cv\b", message.content.lower()
+        ):
             await message.channel.send(file=discord.File("utils/chichivi.jpeg"))
 
         if message.guild.id not in WHITELIST_GUILDS_ID:
