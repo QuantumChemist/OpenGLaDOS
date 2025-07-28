@@ -97,10 +97,13 @@ class OpenGLaDOSBot(commands.Bot):
                 print(f"Missing admin permissions in: {guild.name} ({guild.id})")
             else:
                 print(f"Bot has full permissions in: {guild.name} ({guild.id})")
-            if owner.id in guild.members:
-                await owner.send(
-                    f"Owner {owner.name} is in the guild: {guild.name} ({guild.id})"
-                )
+            if owner and guild.get_member(owner.id):
+                try:
+                    await owner.send(
+                        f"Owner {owner.name} is in the guild: {guild.name} ({guild.id})"
+                    )
+                except Exception as e:
+                    print(f"Failed to DM owner about guild {guild.name}: {e}")
         activity = discord.Streaming(
             name="ⓘ Confusing people since 2024",
             url="https://www.youtube.com/watch?v=JUHQ7zPZpnM",
