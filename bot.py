@@ -1684,17 +1684,18 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 return
 
         # Handle Mentions of the Bot
-        if self.bot.user.mentioned_in(message) and message.channel.id not in [
-            chat_fr,
-            chat_en,
-        ]:
-            await handle_convo_llm(
-                message=message,
-                user_info=user_info,
-                bot=self.bot,
-                user_time=message_time,
-            )
-            return
+        if self.bot.user.mentioned_in(message):
+            return  # and message.channel.id not in [
+        #     chat_fr,
+        #     chat_en,
+        # ]:
+        #     await handle_convo_llm(
+        #         message=message,
+        #         user_info=user_info,
+        #         bot=self.bot,
+        #         user_time=message_time,
+        #     )
+        #     return
 
         # Handle Replies to the Bot
         if (
