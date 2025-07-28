@@ -438,7 +438,7 @@ def generate_markov_chain_convo_text(
         "I'm the OpenGLaDOS chatbot. \n"
         "Although my name might invoke the implication, there is no resemblance with OpenGL. \n"
         "I'm just the OpenScience Enrichment Center chatbot and here to help you. \n"
-        "My help might not always be helpful to you but helpful to me. <a:typing:1223924207122124862> \n"
+        "My help might not always be helpful to you but helpful to me. <a:typing:1399385512883523646> \n"
         "So..."
     )
     if user_time is None:
@@ -532,9 +532,9 @@ def generate_markov_chain_convo_text(
             f"\n0xDEADBEEF: Traceback (recent thought call first): \n    >>{sentence}<< \n<COMPILATION TERMINATED> at #{hex(random_index)}. "
             f"\nSuggested action: Abort, Retry, Fail? (Y/N) \n ...system reboot...\n"
             f"...internal OpenGLaDOS thoughts restored...reading system logs terminated...\n ```"
-            f"Also, the OpenGLaDOS local time is UTC+9, which is {local_time} in Japan. The user's time in UTC is {user_time} <a:typing:1338247126332735633>\n",
+            f"Also, the OpenGLaDOS local time is UTC+9, which is {local_time} in Japan. The user's time in UTC is {user_time} <a:typing:1399385512883523646>\n",
         )
-    return f"{selected_greeting}, {introduction} {text_lines} <a:typing:1223924207122124862>"
+    return f"{selected_greeting}, {introduction} {text_lines} <a:typing:1399385512883523646>"
 
 
 def calculate_accuracy(typed_sentence, original_sentence):
@@ -651,7 +651,7 @@ def generate_llm_convo_text(
     print("Input: \n", wrap_text(user_lines + assistant_lines))
     print("Output: \n", wrap_text(llm_answer))
 
-    return f"<a:typing:1223924207122124862> {ensure_code_blocks_closed(llm_answer)} <a:typing:1223924207122124862>"
+    return f"<a:typing:1399385512883523646> {ensure_code_blocks_closed(llm_answer)} <a:typing:1399385512883523646>"
 
 
 async def handle_conversation(message):
