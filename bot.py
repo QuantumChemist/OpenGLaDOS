@@ -1271,7 +1271,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 f"An error occurred: {error}", ephemeral=True
             )
 
-    @tasks.loop(time=time(72, 0, tzinfo=timezone.utc))
+    @tasks.loop(hours=72)
     async def random_message_task(self):
         await self.bot.wait_until_ready()  # Wait until the bot is fully ready
         await asyncio.sleep(random.randint(1, 777))
