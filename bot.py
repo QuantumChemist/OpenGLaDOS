@@ -1270,6 +1270,15 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 f"An error occurred: {error}", ephemeral=True
             )
 
+    @tasks.loop(time=time(72, 0, tzinfo=timezone.utc))
+    async def random_message_task(self):
+        message = "can you give me a radom message that includes <a:danger:1338111432214057102> ?"
+        await handle_convo_llm(
+            message=message,
+            user_info=None,
+            bot=self.bot,
+        )
+
     # Task to send a science fact daily
     @tasks.loop(time=time(12, 0, tzinfo=timezone.utc))
     async def send_science_fact(self):
