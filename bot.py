@@ -87,6 +87,7 @@ class OpenGLaDOSBot(commands.Bot):
     async def on_ready(self):
         print(f"Logged in as {self.user} (ID: {self.user.id})")
         print("------")
+        owner = await self.fetch_user(self.owner_id)
         for guild in self.guilds:
             bot_member = guild.me
             permissions = bot_member.guild_permissions
@@ -96,13 +97,16 @@ class OpenGLaDOSBot(commands.Bot):
                 print(f"Missing admin permissions in: {guild.name} ({guild.id})")
             else:
                 print(f"Bot has full permissions in: {guild.name} ({guild.id})")
+            if owner.id in guild.members:
+                await owner.send(
+                    f"Owner {owner.name} is in the guild: {guild.name} ({guild.id})"
+                )
         activity = discord.Streaming(
             name="ⓘ Confusing people since 2024",
             url="https://www.youtube.com/watch?v=JUHQ7zPZpnM",
         )
         await self.change_presence(status=discord.Status.online, activity=activity)
         # Add any additional logic you want to execute when the bot is ready here
-        owner = await self.fetch_user(self.owner_id)
         if owner:
             await owner.send(f"Hello! This is a DM from your bot. You are {owner}")
         # Find the 'general' channel in the connected servers
