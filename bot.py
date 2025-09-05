@@ -1568,7 +1568,9 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             owner = await self.bot.fetch_user(self.bot.owner_id)
             if owner:
                 await owner.send(
-                    f"Your name has been mentioned in https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
+                    f"Your name has been mentioned in https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id} \n"
+                    f"by {message.author} ({message.author.id}) \n"
+                    f"Message content: {message.content}"
                 )
 
         if "refresh" in message.content.lower():
