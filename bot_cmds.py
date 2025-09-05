@@ -12,6 +12,10 @@ from utils import (
     split_text_by_period,
 )
 
+JUMP_URL_RE = re.compile(
+    r"https?://(?:canary\.|ptb\.)?discord(?:app)?\.com/channels/(?P<guild_id>\d+|@me)/(?P<channel_id>\d+)/(?P<message_id>\d+)"
+)
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -391,6 +395,100 @@ class BotCommands(commands.Cog):
                 "https://http.cat/status/400",
                 ephemeral=True,
             )
+
+    async def _fetch_message_from_jump_url(self, url: str) -> discord.Message:
+        """
+        Parse a Discord jump URL and fetch the corresponding message.
+        Supports: guild text channels, threads, and DMs (@me).
+        """
+        m = JUMP_URL_RE.fullmatch(url.strip())
+        if not m:
+            raise ValueError("Invalid Discord message URL format.")
+
+        guild_id_raw = m.group("guild_id")
+        channel_id = int(m.group("channel_id"))
+        message_id = int(m.group("message_id"))
+
+        # Get channel (works for TextChannel, Thread, DMChannel)
+        channel = self.bot.get_channel(channel_id)
+        if channel is None:
+            # Fallback to API fetch (also works for threads/DMs if the bot has access)
+            channel = await self.bot.fetch_channel(channel_id)
+
+        # Optional sanity check for guild links (skip for @me/DMs)
+        if guild_id_raw != "@me" and hasattr(channel, "guild") and channel.guild:
+            expected_gid = int(guild_id_raw)
+            if channel.guild.id != expected_gid:
+                # Could be a thread whose parent lives in the guild; still OK as long as ID matches
+                parent_gid = getattr(getattr(channel, "guild", None), "id", None)
+                if parent_gid != expected_gid:
+                    raise ValueError("Channel does not belong to the expected guild.")
+
+        # Finally fetch the message
+        return await channel.fetch_message(message_id)
+
+    @commands.command(name="getmsg", help="Fetch a message by Discord jump URL.")
+    @commands.is_owner()
+    async def get_message_by_url(self, ctx: commands.Context, url: str):
+        """
+        Usage: getmsg <discord jump URL>
+        Example: getmsg https://discord.com/channels/123/456/789
+        """
+        try:
+            msg = await self._fetch_message_from_jump_url(url)
+
+            # Build a compact preview
+            author = f"{msg.author} ({msg.author.id})"
+            jump = msg.jump_url
+            content = msg.content if msg.content else "*[no text content]*"
+            if len(content) > 500:
+                content = content[:497] + "..."
+
+            embed = discord.Embed(
+                title="Retrieved Message",
+                description=content,
+                color=discord.Color.blurple(),
+                timestamp=msg.created_at,
+            )
+            embed.add_field(name="Author", value=author, inline=False)
+            if msg.channel and hasattr(msg.channel, "name"):
+                ch_name = f"#{msg.channel.name}"
+            else:
+                ch_name = str(msg.channel)
+            embed.add_field(
+                name="Channel", value=f"{ch_name} ({msg.channel.id})", inline=False
+            )
+            if getattr(msg, "guild", None):
+                embed.add_field(
+                    name="Server",
+                    value=f"{msg.guild.name} ({msg.guild.id})",
+                    inline=False,
+                )
+            embed.add_field(name="Jump", value=jump, inline=False)
+
+            # Attachments summary (if any)
+            if msg.attachments:
+                files_list = "\n".join(
+                    f"- {a.filename} ({a.url})" for a in msg.attachments[:5]
+                )
+                if len(msg.attachments) > 5:
+                    files_list += f"\n… and {len(msg.attachments) - 5} more"
+                embed.add_field(name="Attachments", value=files_list, inline=False)
+
+            await ctx.send(embed=embed)
+
+        except discord.Forbidden:
+            await ctx.send(
+                "I can’t view that message (missing permissions or not in that channel)."
+            )
+        except discord.NotFound:
+            await ctx.send(
+                "Message not found. It may have been deleted or the link is wrong."
+            )
+        except ValueError as e:
+            await ctx.send(f"Error: {e}")
+        except Exception as e:
+            await ctx.send(f"Unexpected error: {e}")
 
 
 async def setup(bot):
