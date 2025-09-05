@@ -1569,7 +1569,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             if owner:
                 await owner.send(
                     f"Your name has been mentioned in https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id} \n"
-                    f"by {message.author} ({message.author.id}) \n"
+                    f"by <@{message.author.id}> ({message.author}) \n"
                     f"Message content: {message.content}"
                 )
 
