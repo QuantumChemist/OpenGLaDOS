@@ -6,7 +6,7 @@
 # OpenGLaDOS
 <img align="left" src="utils/OpenGLaDOS.png" width="33%" height=auto />
 
-ⓘ Hello, I'm the OpenGLaDOS chatbot.
+ⓘ Hello, I'm the [OpenGLaDOS](https://github.com/apps/openglados) chatbot.
 
 Although my name might invoke the implication, there is no resemblance with OpenGL. \
 I'm just the OpenScience Enrichment Center chatbot and here to help you. \
