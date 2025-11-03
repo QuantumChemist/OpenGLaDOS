@@ -1,6 +1,6 @@
 ---
-name:
-description:
+name: OpenGLaDOS
+description: OpenGLaDOS dev helper
 ---
 
 # My Agent
