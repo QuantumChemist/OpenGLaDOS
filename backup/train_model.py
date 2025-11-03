@@ -3,7 +3,7 @@ from datasets import load_dataset
 import json
 
 # Read the text file
-with open("corpus.txt", "r", encoding="utf-8") as file:
+with open("corpus.txt", encoding="utf-8") as file:
     lines = file.readlines()
 
 # Remove any unnecessary whitespace characters
