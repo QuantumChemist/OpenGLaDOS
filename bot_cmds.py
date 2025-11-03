@@ -9,7 +9,8 @@ import random
 import requests
 import cairosvg
 from io import BytesIO
-from github import Github
+from github import Github, GithubIntegration
+import base64
 from utils import (
     get_groq_completion,
     wrap_text,
@@ -23,6 +24,41 @@ JUMP_URL_RE = re.compile(
 
 # Load environment variables from .env file
 load_dotenv()
+
+
+def get_github_app_token():
+    """
+    Generate GitHub App access token using JWT authentication
+    """
+    try:
+        # Get GitHub App credentials from environment variables
+        app_id = os.environ.get("APP_ID")
+        installation_id = os.environ.get("INSTALLATION_ID")
+        private_key_b64 = os.environ.get("PRIVATE_KEY")
+
+        if not all([app_id, installation_id, private_key_b64]):
+            raise ValueError("Missing GitHub App environment variables")
+
+        # Decode the base64 encoded private key
+        private_key = base64.b64decode(private_key_b64).decode("utf-8")
+
+        # Create JWT payload
+        # payload = {
+        #     "iat": int(time.time()),
+        #     "exp": int(time.time()) + 600,  # 10 minutes
+        #     "iss": app_id,
+        # }
+
+        # Generate JWT token
+        # jwt_token = jwt.encode(payload, private_key, algorithm="RS256")
+
+        # Get installation access token
+        gi = GithubIntegration(app_id, private_key)
+        return gi.get_access_token(installation_id).token
+
+    except Exception as e:
+        print(f"Error generating GitHub App token: {e}")
+        return None
 
 
 class BotCommands(commands.Cog):
@@ -517,14 +553,33 @@ class BotCommands(commands.Cog):
         # await owner.send(file=discord.File(local_file))
         await owner.send(file=discord.File(png_data, "trophy.png"))
 
-        # Push to GitHub Pages repo
+        # Push to GitHub Pages repo using GitHub App
         try:
-            GITHUB_TOKEN = f"{os.environ.get('GITHUB_TOKEN')}"  # repo access token
+            # Get GitHub App access token
+            app_token = get_github_app_token()
+            if not app_token:
+                await owner.send(
+                    "❌ Failed to get GitHub App token. Check your environment variables."
+                )
+                return
+
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
             FILE_PATH = "utils/trophy.svg"
-            COMMIT_MESSAGE = "Update trophy.svg automatically by OpenGLaDOS hehehehe"
 
-            g = Github(GITHUB_TOKEN)
+            # Enhanced commit message with bot signature and metadata
+            import datetime
+
+            timestamp = datetime.datetime.now().isoformat()
+            COMMIT_MESSAGE = f"""🤖 Auto-update trophy.svg by OpenGLaDOS Bot
+
+Bot Details:
+- Automated by: OpenGLaDOS Discord Bot
+- Timestamp: {timestamp}
+- Triggered by: /trophy command
+
+This commit was made automatically by the OpenGLaDOS bot, not manually by QuantumChemist."""
+
+            g = Github(app_token)
             repo = g.get_repo(REPO_NAME)
 
             try:
