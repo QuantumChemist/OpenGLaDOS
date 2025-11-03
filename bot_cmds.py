@@ -5,6 +5,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import asyncio
 import random
+import requests
 from utils import (
     get_groq_completion,
     wrap_text,
@@ -496,7 +497,14 @@ class BotCommands(commands.Cog):
         owner = await self.bot.fetch_user(self.bot.owner_id)
         # Send the trophy URL to owner
         trophy_url = "http://localhost:8080/?username=QuantumChemist&column=-1&theme=discord&no-bg=true"
-        await owner.send(trophy_url)
+        response = requests.get(trophy_url)
+        svg_data = response.content  # binary content of SVG
+
+        # Save to a file
+        with open("trophy.svg", "wb") as f:
+            f.write(svg_data)
+
+        await owner.send(file=discord.File("trophy.svg"))
 
 
 async def setup(bot):
