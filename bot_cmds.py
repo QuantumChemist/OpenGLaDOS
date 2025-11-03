@@ -1,4 +1,5 @@
 import io
+import os
 import re
 import discord
 from discord.ext import commands
@@ -6,6 +7,7 @@ from dotenv import load_dotenv
 import asyncio
 import random
 import requests
+from github import Github
 from utils import (
     get_groq_completion,
     wrap_text,
@@ -505,8 +507,31 @@ class BotCommands(commands.Cog):
         with open(local_file, "wb") as f:
             f.write(svg_data)
 
-        # 3. Send the file to yourself
+        # Send the file to yourself
         await owner.send(file=discord.File(local_file))
+
+        # Push to GitHub Pages repo
+        try:
+            GITHUB_TOKEN = f"{os.environ.get('GITHUB_TOKEN')}"  # repo access token
+            REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
+            FILE_PATH = "utils/trophy.svg"
+            COMMIT_MESSAGE = "Update trophy.svg automatically by OpenGLaDOS hehehehe"
+
+            g = Github(GITHUB_TOKEN)
+            repo = g.get_repo(REPO_NAME)
+
+            try:
+                contents = repo.get_contents(FILE_PATH)
+                repo.update_file(contents.path, COMMIT_MESSAGE, svg_data, contents.sha)
+                await ctx.send(f"✅ Updated {FILE_PATH} on GitHub successfully!")
+            except Exception as ex:
+                repo.create_file(FILE_PATH, COMMIT_MESSAGE, svg_data)
+                await ctx.send(
+                    f"✅ Created {FILE_PATH} on GitHub successfully! But exception > {ex} < happened."
+                )
+
+        except Exception as e:
+            await ctx.send(f"❌ Error pushing to GitHub: {e}")
 
 
 async def setup(bot):
