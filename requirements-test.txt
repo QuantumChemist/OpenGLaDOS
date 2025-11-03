@@ -1,0 +1,4 @@
+# Test-specific requirements
+pytest
+pytest-asyncio
+pytest-mock
