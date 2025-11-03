@@ -1,6 +1,13 @@
 import unittest
 from unittest.mock import AsyncMock, patch, MagicMock
 import pytest
+import sys
+
+# Mock problematic imports before importing our modules
+sys.modules['cairosvg'] = MagicMock()
+sys.modules['jwt'] = MagicMock()
+sys.modules['github'] = MagicMock()
+
 import bot
 import utils
 import bot_cmds
@@ -20,7 +27,7 @@ def mock_ctx() -> MagicMock:
 async def test_start_text(mock_ctx):
     bot_instance = bot_cmds.BotCommands(MagicMock())
     bot_instance.start_triggered = False
-    await bot_instance.start_text.callback(bot_instance, mock_ctx)
+    await bot_instance.start_text(mock_ctx)
     assert bot_instance.start_triggered
     mock_ctx.send.assert_awaited()
 
@@ -30,7 +37,7 @@ async def test_server_stats(mock_ctx):
     bot_instance = bot_cmds.BotCommands(MagicMock())
     bot_instance.server_stats_triggered = False
     bot_instance.bot.guilds = [MagicMock()]  # Mocked guilds
-    await bot_instance.server_stats.callback(bot_instance, mock_ctx)
+    await bot_instance.server_stats(mock_ctx)
     mock_ctx.author.send.assert_awaited()
 
 class TestOpenGLaDOSBot(unittest.IsolatedAsyncioTestCase):

@@ -14,3 +14,7 @@ kaleido==0.1.0.*
 plotly
 sympy
 pytz
+cairosvg
+PyGithub
+PyJWT
+cryptography
