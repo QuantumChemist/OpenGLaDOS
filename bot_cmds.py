@@ -500,11 +500,13 @@ class BotCommands(commands.Cog):
         response = requests.get(trophy_url)
         svg_data = response.content  # binary content of SVG
 
-        # Save to a file
-        with open("trophy.svg", "wb") as f:
+        # Save to a local file
+        local_file = "trophy.svg"
+        with open(local_file, "wb") as f:
             f.write(svg_data)
 
-        await owner.send(file=discord.File("trophy.svg"))
+        # 3. Send the file to yourself
+        await owner.send(file=discord.File(local_file))
 
 
 async def setup(bot):
