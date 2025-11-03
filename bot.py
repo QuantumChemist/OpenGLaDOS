@@ -36,6 +36,7 @@ from utils import (
     calculate_accuracy,
     calculate_wpm,
     sanitize_mentions,
+    create_cat_error_embed,
     OPENGLADOS_MESSAGES,
     TYPING_TEST_SENTENCES,
     TURING_FEEDBACK,
@@ -1253,12 +1254,15 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         # Handle missing permissions error
         if isinstance(error, app_commands.MissingPermissions):
             if interaction.command.name == "logout":
-                await interaction.response.send_message(
-                    "Error: You do not have permission to use this command. "
-                    "Only the bot owner can use the `logout` command. \n"
-                    "https://http.cat/status/400",
-                    ephemeral=True,
+                embed = create_cat_error_embed(
+                    status_code=403,
+                    title="Permission Denied",
+                    description=(
+                        "Error: You do not have permission to use this command. "
+                        "Only the bot owner can use the `logout` command."
+                    ),
                 )
+                await interaction.response.send_message(embed=embed, ephemeral=True)
         # Handle command not found error
         elif isinstance(error, app_commands.CommandNotFound):
             await interaction.response.send_message(
