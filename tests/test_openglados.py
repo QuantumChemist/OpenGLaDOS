@@ -59,5 +59,22 @@ class TestUtils(unittest.TestCase):
         fact = utils.fetch_random_fact()
         self.assertEqual(fact, 'Random Fact')
 
+    def test_create_cat_error_embed(self):
+        # Test default parameters
+        embed = utils.create_cat_error_embed()
+        self.assertEqual(embed.title, "Error")
+        self.assertEqual(embed.color, discord.Color.red())
+        self.assertEqual(embed.image.url, "https://http.cat/400")
+        
+        # Test custom parameters
+        embed = utils.create_cat_error_embed(
+            status_code=403,
+            title="Permission Denied",
+            description="You don't have access"
+        )
+        self.assertEqual(embed.title, "Permission Denied")
+        self.assertEqual(embed.description, "You don't have access")
+        self.assertEqual(embed.image.url, "https://http.cat/403")
+
 if __name__ == '__main__':
     unittest.main()

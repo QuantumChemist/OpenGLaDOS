@@ -1403,3 +1403,27 @@ async def unlock_channel(channel, user):  # unused
         await unlocked_channel.set_permissions(
             user, read_messages=True, send_messages=True
         )
+
+
+def create_cat_error_embed(
+    status_code: int = 400, title: str = "Error", description: str = ""
+) -> discord.Embed:
+    """
+    Creates a Discord embed with an HTTP cat image for error messages.
+
+    Args:
+        status_code: HTTP status code (default: 400)
+        title: Title for the embed
+        description: Description text for the error
+
+    Returns:
+        Discord Embed object with cat image
+    """
+    embed = discord.Embed(
+        title=title,
+        description=description,
+        color=discord.Color.red(),
+    )
+    embed.set_image(url=f"https://http.cat/{status_code}")
+    embed.set_footer(text="HTTP Cat Status Code")
+    return embed
