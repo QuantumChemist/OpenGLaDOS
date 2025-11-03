@@ -530,15 +530,15 @@ class BotCommands(commands.Cog):
             try:
                 contents = repo.get_contents(FILE_PATH)
                 repo.update_file(contents.path, COMMIT_MESSAGE, svg_data, contents.sha)
-                await ctx.send(f"✅ Updated {FILE_PATH} on GitHub successfully!")
+                await owner.send(f"✅ Updated {FILE_PATH} on GitHub successfully!")
             except Exception as ex:
                 repo.create_file(FILE_PATH, COMMIT_MESSAGE, svg_data)
-                await ctx.send(
+                await owner.send(
                     f"✅ Created {FILE_PATH} on GitHub successfully! But exception > {ex} < happened."
                 )
 
         except Exception as e:
-            await ctx.send(f"❌ Error pushing to GitHub: {e}")
+            await owner.send(f"❌ Error pushing to GitHub: {e}")
 
 
 async def setup(bot):
