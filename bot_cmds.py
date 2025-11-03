@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 import asyncio
 import random
 import requests
+import cairosvg
+from io import BytesIO
 from github import Github
 from utils import (
     get_groq_completion,
@@ -502,13 +504,18 @@ class BotCommands(commands.Cog):
         response = requests.get(trophy_url)
         svg_data = response.content  # binary content of SVG
 
+        png_data = BytesIO()
+        cairosvg.svg2png(bytestring=svg_data, write_to=png_data)
+        png_data.seek(0)
+
         # Save to a local file
         local_file = "trophy.svg"
         with open(local_file, "wb") as f:
             f.write(svg_data)
 
         # Send the file to yourself
-        await owner.send(file=discord.File(local_file))
+        # await owner.send(file=discord.File(local_file))
+        await owner.send(file=discord.File(png_data, "trophy.png"))
 
         # Push to GitHub Pages repo
         try:
