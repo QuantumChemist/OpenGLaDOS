@@ -490,6 +490,14 @@ class BotCommands(commands.Cog):
         except Exception as e:
             await ctx.send(f"Unexpected error: {e}")
 
+    @commands.command(name="trophy", help="Get the QuantumChemist trophy.")
+    @commands.is_owner()
+    async def trophy(self, ctx):
+        owner = await self.bot.fetch_user(self.bot.owner_id)
+        # Send the trophy URL to owner
+        trophy_url = "http://localhost:8080/?username=QuantumChemist&column=-1&theme=discord&no-bg=true"
+        await owner.send(trophy_url)
+
 
 async def setup(bot):
     await bot.add_cog(BotCommands(bot))
