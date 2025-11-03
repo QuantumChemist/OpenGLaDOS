@@ -10,7 +10,6 @@ import requests
 import cairosvg
 from io import BytesIO
 from github import Github, GithubIntegration
-import base64
 from utils import (
     get_groq_completion,
     wrap_text,
@@ -34,25 +33,19 @@ def get_github_app_token():
         # Get GitHub App credentials from environment variables
         app_id = os.environ.get("APP_ID")
         installation_id = os.environ.get("INSTALLATION_ID")
-        private_key_b64 = os.environ.get("PRIVATE_KEY")
+        private_key_path = os.environ.get("PRIVATE_KEY")
 
-        if not all([app_id, installation_id, private_key_b64]):
+        if not all([app_id, installation_id, private_key_path]):
             raise ValueError("Missing GitHub App environment variables")
 
-        # Decode the base64 encoded private key
-        private_key = base64.b64decode(private_key_b64).decode("utf-8")
+        # Read private key from file
+        if not os.path.exists(private_key_path):
+            raise ValueError(f"Private key file not found: {private_key_path}")
 
-        # Create JWT payload
-        # payload = {
-        #     "iat": int(time.time()),
-        #     "exp": int(time.time()) + 600,  # 10 minutes
-        #     "iss": app_id,
-        # }
+        with open(private_key_path) as f:
+            private_key = f.read()
 
-        # Generate JWT token
-        # jwt_token = jwt.encode(payload, private_key, algorithm="RS256")
-
-        # Get installation access token
+        # Get installation access token using GithubIntegration
         gi = GithubIntegration(app_id, private_key)
         return gi.get_access_token(installation_id).token
 
