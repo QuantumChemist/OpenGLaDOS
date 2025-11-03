@@ -531,7 +531,7 @@ class BotCommands(commands.Cog):
                 contents = repo.get_contents(FILE_PATH)
                 repo.update_file(contents.path, COMMIT_MESSAGE, svg_data, contents.sha)
                 await owner.send(
-                    f"✅ Updated {FILE_PATH} on GitHub successfully! See https://github.com/{REPO_NAME}"
+                    f"✅ Updated {FILE_PATH} on GitHub successfully! See https://github.com/{REPO_NAME}/commits/main/{FILE_PATH}"
                 )
             except Exception as ex:
                 repo.create_file(FILE_PATH, COMMIT_MESSAGE, svg_data)
