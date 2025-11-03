@@ -15,6 +15,7 @@ from utils import (
     wrap_text,
     ensure_code_blocks_closed,
     split_text_by_period,
+    create_cat_error_embed,
 )
 
 JUMP_URL_RE = re.compile(
@@ -365,11 +366,15 @@ class BotCommands(commands.Cog):
         if ctx.guild:
             # Check if the bot owner is in the server
             if not ctx.guild.get_member(self.bot.owner_id):
-                await ctx.response.send_message(
-                    "This command can only be used in servers where the bot owner is present. Because I said so. \n"
-                    "https://http.cat/status/400",
-                    ephemeral=True,
+                embed = create_cat_error_embed(
+                    status_code=403,
+                    title="Owner Not Present",
+                    description=(
+                        "This command can only be used in servers where the bot owner is present. "
+                        "Because I said so."
+                    ),
                 )
+                await ctx.response.send_message(embed=embed, ephemeral=True)
                 return
 
         # Regular expression pattern to match common URL patterns
@@ -380,11 +385,12 @@ class BotCommands(commands.Cog):
 
         # Check if the message contains a link
         if message and url_pattern.search(message):
-            await ctx.response.send_message(
-                "Links are not allowed in the message. Or are they? \n"
-                "https://http.cat/status/400",
-                ephemeral=True,
+            embed = create_cat_error_embed(
+                status_code=400,
+                title="Links Not Allowed",
+                description="Links are not allowed in the message. Or are they?",
             )
+            await ctx.response.send_message(embed=embed, ephemeral=True)
             return
 
         # Proceed to send the DM if all checks pass
@@ -423,12 +429,15 @@ class BotCommands(commands.Cog):
             )
             await self.bot.close()
         else:
-            await ctx.response.send_message(
-                "Error: You do not have permission to use this command. "
-                "Only the bot owner can use the `logout` command. \n"
-                "https://http.cat/status/400",
-                ephemeral=True,
+            embed = create_cat_error_embed(
+                status_code=403,
+                title="Permission Denied",
+                description=(
+                    "Error: You do not have permission to use this command. "
+                    "Only the bot owner can use the `logout` command."
+                ),
             )
+            await ctx.response.send_message(embed=embed, ephemeral=True)
 
     async def _fetch_message_from_jump_url(self, url: str) -> discord.Message:
         """
