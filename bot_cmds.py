@@ -633,6 +633,9 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
             g = Github(app_token)
             repo = g.get_repo(REPO_NAME)
 
+            # Prepare all files for batch commit
+            files_to_commit = []
+
             for FILE_PATH, content in [
                 (FILE_PATH_HTML, index_html),
                 (FILE_PATH_CSS, styles_css),
@@ -657,21 +660,67 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     content = llm_answer
                 except Exception as e:
                     print(f"An error occurred: {e}")
-                    llm_answer = "An error occurred."
+                    content = "An error occurred."
 
-                try:
-                    contents = repo.get_contents(FILE_PATH)
-                    repo.update_file(
-                        contents.path, COMMIT_MESSAGE, content, contents.sha
+                files_to_commit.append({"path": FILE_PATH, "content": content})
+
+            # Commit all files at once
+            try:
+                # Get the current commit SHA
+                main_branch = repo.get_branch("main")
+                base_commit = repo.get_commit(main_branch.commit.sha)
+
+                # Create blobs for all files
+                blobs = []
+                for file_data in files_to_commit:
+                    blob = repo.create_git_blob(file_data["content"], "utf-8")
+                    blobs.append(
+                        {
+                            "path": file_data["path"],
+                            "mode": "100644",  # File mode for regular files
+                            "type": "blob",
+                            "sha": blob.sha,
+                        }
                     )
-                    await owner.send(
-                        f"✅ Updated {FILE_PATH} on GitHub successfully!\n[See the commit history](https://github.com/{REPO_NAME}/commits?author=openglados[bot])."
-                    )
-                except Exception as ex:
-                    repo.create_file(FILE_PATH, COMMIT_MESSAGE, content)
-                    await owner.send(
-                        f"✅ Created {FILE_PATH} on GitHub successfully! But exception > {ex} < happened."
-                    )
+
+                # Create tree
+                tree = repo.create_git_tree(blobs, base_commit.commit.tree)
+
+                # Create commit
+                commit = repo.create_git_commit(
+                    COMMIT_MESSAGE, tree, [base_commit.commit]
+                )
+
+                # Update branch reference
+                main_branch_ref = repo.get_git_ref("heads/main")
+                main_branch_ref.edit(commit.sha)
+
+                await owner.send(
+                    f"✅ Updated all OpenGLaDOS website files on GitHub successfully in a single commit!\n"
+                    f"[See the commit](https://github.com/{REPO_NAME}/commit/{commit.sha})"
+                )
+
+            except Exception as ex:
+                await owner.send(f"❌ Error committing files to GitHub: {ex}")
+                # Fallback to individual commits if batch commit fails
+                for file_data in files_to_commit:
+                    try:
+                        try:
+                            contents = repo.get_contents(file_data["path"])
+                            repo.update_file(
+                                contents.path,
+                                COMMIT_MESSAGE,
+                                file_data["content"],
+                                contents.sha,
+                            )
+                        except Exception:
+                            repo.create_file(
+                                file_data["path"], COMMIT_MESSAGE, file_data["content"]
+                            )
+                    except Exception as fallback_ex:
+                        await owner.send(
+                            f"❌ Failed to update {file_data['path']}: {fallback_ex}"
+                        )
 
         except Exception as e:
             await owner.send(f"❌ Error pushing to GitHub: {e}")
