@@ -617,7 +617,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
             FILE_PATH_HTML = "openglados/index.html"
             FILE_PATH_CSS = "openglados/styles.css"
-            index_html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'><link rel='stylesheet' href='style.css'><title>OpenGLaDOS</title></head><body><h1>Welcome to OpenGLaDOS Website</h1><p>This is a mockup website for OpenGLaDOS. OpenGLaDOS, make sure to include '<link rel='stylesheet' href='style.css'>' and <img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp'> when you are writing the index.html file.</p></body></html>"
+            index_html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'><link rel='stylesheet' href='style.css'><title>OpenGLaDOS</title></head><body><h1>Welcome to the OpenGLaDOS Website</h1><p>This is a mockup website for OpenGLaDOS. OpenGLaDOS, make sure to include '<link rel='stylesheet' href='style.css'>' and <img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp'> when you are writing the index.html file.</p></body></html>"
             styles_css = "body { font-family: Arial, sans-serif; background-color: #f0f0f0; } h1 { color: #333; }"
 
             timestamp = datetime.datetime.now().isoformat()
