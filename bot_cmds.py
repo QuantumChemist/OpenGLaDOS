@@ -660,21 +660,22 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     content = llm_answer
                 except Exception as e:
                     print(f"An error occurred: {e}")
-                    content = "An error occurred."
+                    content += f"\nAn error occurred for {FILE_PATH}."  # Make content unique per file
 
                 files_to_commit.append({"path": FILE_PATH, "content": content})
 
             # Commit all files at once
             try:
+
                 # Get the current commit SHA
                 main_branch = repo.get_branch("main")
                 base_commit = repo.get_commit(main_branch.commit.sha)
 
                 # Create blobs for all files
-                blobs = []
+                tree_elements = []
                 for file_data in files_to_commit:
                     blob = repo.create_git_blob(file_data["content"], "utf-8")
-                    blobs.append(
+                    tree_elements.append(
                         {
                             "path": file_data["path"],
                             "mode": "100644",  # File mode for regular files
@@ -683,8 +684,8 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                         }
                     )
 
-                # Create tree
-                tree = repo.create_git_tree(blobs, base_commit.commit.tree)
+                # Create tree (use InputGitTreeElement format)
+                tree = repo.create_git_tree(tree_elements, base_commit.commit.tree)
 
                 # Create commit
                 commit = repo.create_git_commit(
