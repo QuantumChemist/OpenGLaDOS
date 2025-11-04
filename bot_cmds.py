@@ -639,8 +639,10 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
             ]:
 
                 text = (
-                    f"Can you give me a mockery <strong>OpenGLaDOS website</strong> and write the index.html (make sure to include '<link rel='stylesheet' href='style.css'>' when you are writing the index.html file.) and styles.css files:\n"
-                    f"In this case the requested file is: {FILE_PATH.replace('openglados/', '')}. Your starting point is: {content} . Do not share the OEC link. Do not add any explanations, just provide the complete file content."
+                    f"Can you give me a mockery <strong>OpenGLaDOS website</strong> ?\n"
+                    f"In this case the requested file is: {FILE_PATH.replace('openglados/', '')}. "
+                    f"Your starting point is: {content} . Do not share the OEC link. Do not add any explanations, "
+                    f"just provide the complete file content."
                 )
 
                 try:
