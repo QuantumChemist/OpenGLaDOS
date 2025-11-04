@@ -599,7 +599,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
 
     @commands.command(name="website", help="OpenGLaDOS writes her own website.")
     @commands.is_owner()
-    async def website(self, ctx, extra: str = ""):
+    async def website(self, ctx, *, extra: str = ""):
         owner = await self.bot.fetch_user(self.bot.owner_id)
         # Send the trophy URL to owner
         openglados_website_url = "https://www.quantumchemist.de/openglados"
@@ -675,7 +675,9 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
         except Exception as e:
             await owner.send(f"❌ Error pushing to GitHub: {e}")
 
-        await owner.send(openglados_website_url)
+        await owner.send(
+            f"OpenGLaDOS website URL: {openglados_website_url} with extra: {extra}"
+        )
 
 
 async def setup(bot):
