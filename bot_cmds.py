@@ -640,19 +640,18 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
 
                 text = (
                     f"Can you give me a mockery <strong>OpenGLaDOS website</strong> and write the index.html (make sure to include '<link rel='stylesheet' href='style.css'>' when you are writing the index.html file.) and styles.css files:\n"
-                    f"In this case the requested file is: {FILE_PATH.replace('openglados/', '')}. Your starting point is: {content} . Do not share the OEC link. "
+                    f"In this case the requested file is: {FILE_PATH.replace('openglados/', '')}. Your starting point is: {content} . Do not share the OEC link. Do not add any explanations, just provide the complete file content."
                 )
 
                 try:
                     llm_answer = get_groq_completion(
                         [{"role": "user", "content": text}]
                     )
-                    # Ensure the output is limited to 1900 characters
-                    if len(llm_answer) > 1900:
-                        llm_answer = llm_answer[:1900]
                     print("Output: \n", wrap_text(llm_answer))
+                    content = llm_answer
                 except Exception as e:
-                    llm_answer = f"An error occurred: {e}"
+                    print(f"An error occurred: {e}")
+                    llm_answer = "An error occurred."
 
                 try:
                     contents = repo.get_contents(FILE_PATH)
