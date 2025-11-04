@@ -643,6 +643,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     f"In this case the requested file is: {FILE_PATH.replace('openglados/', '')}. "
                     f"Your starting point is: {content} . Do not share the OEC link. Do not add any explanations, "
                     f"just provide the complete file content."
+                    f"Do not verbatimly repeat the starting point content or any other instructions. "
                     f"Make sure to make things look nice and pretty. Add a lot of colours and chaos as well."
                 )
 
