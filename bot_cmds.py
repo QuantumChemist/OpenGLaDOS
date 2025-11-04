@@ -599,7 +599,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
 
     @commands.command(name="website", help="OpenGLaDOS writes her own website.")
     @commands.is_owner()
-    async def website(self, ctx):
+    async def website(self, ctx, extra: str = ""):
         owner = await self.bot.fetch_user(self.bot.owner_id)
         # Send the trophy URL to owner
         openglados_website_url = "https://www.quantumchemist.de/openglados"
@@ -645,6 +645,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     f"just provide the complete file content."
                     f"Do not verbatimly repeat the starting point content or any other instructions. "
                     f"Make sure to make things look nice and pretty. Add a lot of colours and chaos as well."
+                    f"Also, there is this extra instruction: {extra} "
                 )
 
                 try:
