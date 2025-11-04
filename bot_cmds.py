@@ -8,6 +8,7 @@ import asyncio
 import random
 import requests
 import cairosvg
+import datetime
 from io import BytesIO
 from github import Github, GithubIntegration
 from utils import (
@@ -568,9 +569,6 @@ class BotCommands(commands.Cog):
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
             FILE_PATH = "utils/trophy.svg"
 
-            # Enhanced commit message with bot signature and metadata
-            import datetime
-
             timestamp = datetime.datetime.now().isoformat()
             COMMIT_MESSAGE = f"""🤖 Auto-update trophy.svg by OpenGLaDOS Bot
 
@@ -604,22 +602,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
     async def website(self, ctx):
         owner = await self.bot.fetch_user(self.bot.owner_id)
         # Send the trophy URL to owner
-        trophy_url = "http://localhost:8080/?username=QuantumChemist&column=-1&theme=discord&no-bg=true"
-        response = requests.get(trophy_url)
-        svg_data = response.content  # binary content of SVG
-
-        png_data = BytesIO()
-        cairosvg.svg2png(bytestring=svg_data, write_to=png_data)
-        png_data.seek(0)
-
-        # Save to a local file
-        local_file = "trophy.svg"
-        with open(local_file, "wb") as f:
-            f.write(svg_data)
-
-        # Send the file to yourself
-        # await owner.send(file=discord.File(local_file))
-        await owner.send(file=discord.File(png_data, "trophy.png"))
+        openglados_website_url = "https://www.quantumchemist.de/openglados"
 
         # Push to GitHub Pages repo using GitHub App
         try:
@@ -632,38 +615,46 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                 return
 
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
-            FILE_PATH = "utils/trophy.svg"
-
-            # Enhanced commit message with bot signature and metadata
-            import datetime
+            FILE_PATH_HTML = "openglados/index.html"
+            FILE_PATH_CSS = "openglados/styles.css"
+            index_html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'><link rel='stylesheet' href='style.css'><title>OpenGLaDOS</title></head><body><h1>Welcome to OpenGLaDOS Website</h1></body></html>"
+            styles_css = "body { font-family: Arial, sans-serif; background-color: #f0f0f0; } h1 { color: #333; }"
 
             timestamp = datetime.datetime.now().isoformat()
-            COMMIT_MESSAGE = f"""🤖 Auto-update trophy.svg by OpenGLaDOS Bot
+            COMMIT_MESSAGE = f"""🤖 Auto-update OpenGLaDOS website by OpenGLaDOS Bot
 
 Bot Details:
 - Automated by: OpenGLaDOS Discord Bot
 - Timestamp: {timestamp}
-- Triggered by: /trophy command
+- Triggered by: /website command
 
 This commit was made automatically by the OpenGLaDOS bot, not manually by QuantumChemist."""
 
             g = Github(app_token)
             repo = g.get_repo(REPO_NAME)
 
-            try:
-                contents = repo.get_contents(FILE_PATH)
-                repo.update_file(contents.path, COMMIT_MESSAGE, svg_data, contents.sha)
-                await owner.send(
-                    f"✅ Updated {FILE_PATH} on GitHub successfully!\n[See the commit history](https://github.com/{REPO_NAME}/commits?author=openglados[bot])."
-                )
-            except Exception as ex:
-                repo.create_file(FILE_PATH, COMMIT_MESSAGE, svg_data)
-                await owner.send(
-                    f"✅ Created {FILE_PATH} on GitHub successfully! But exception > {ex} < happened."
-                )
+            for FILE_PATH, content in [
+                (FILE_PATH_HTML, index_html),
+                (FILE_PATH_CSS, styles_css),
+            ]:
+                try:
+                    contents = repo.get_contents(FILE_PATH)
+                    repo.update_file(
+                        contents.path, COMMIT_MESSAGE, content, contents.sha
+                    )
+                    await owner.send(
+                        f"✅ Updated {FILE_PATH} on GitHub successfully!\n[See the commit history](https://github.com/{REPO_NAME}/commits?author=openglados[bot])."
+                    )
+                except Exception as ex:
+                    repo.create_file(FILE_PATH, COMMIT_MESSAGE, content)
+                    await owner.send(
+                        f"✅ Created {FILE_PATH} on GitHub successfully! But exception > {ex} < happened."
+                    )
 
         except Exception as e:
             await owner.send(f"❌ Error pushing to GitHub: {e}")
+
+        await owner.send(openglados_website_url)
 
 
 async def setup(bot):
