@@ -1275,12 +1275,13 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 f"An error occurred: {error}", ephemeral=True
             )
 
-    @tasks.loop(hours=72)
+    @tasks.loop(hours=12)
     async def random_message_task(self):
         await self.bot.wait_until_ready()  # Wait until the bot is fully ready
         await asyncio.sleep(random.randint(1, 777))
         # Iterate over all servers the bot is in
-        for guild in self.bot.guilds:
+        guild = random.choice(self.bot.guilds)
+        if guild:
 
             # Choose a random text channel from the available channels
             if guild.text_channels:
