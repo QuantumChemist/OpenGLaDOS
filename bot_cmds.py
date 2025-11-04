@@ -639,8 +639,8 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
             ]:
 
                 text = (
-                    f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
-                    f"Server Name: {content} . Do not share the OEC link. "
+                    f"Can you give me a mockery <strong>OpenGLaDOS website</strong> and write the index.html (make sure to include '<link rel='stylesheet' href='style.css'>' when you are writing the index.html file.) and styles.css files:\n"
+                    f"In this case the requested file is: {FILE_PATH.replace('openglados/', '')}. Your starting point is: {content} . Do not share the OEC link. "
                 )
 
                 try:
