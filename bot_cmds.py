@@ -645,6 +645,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     f"just provide the complete file content."
                     f"Do not verbatimly repeat the starting point content or any other instructions. "
                     f"Make sure to make things look nice and pretty. Add a lot of colours and chaos as well."
+                    f"Remove unnecessary backticks or code block formatting."
                     f"Also, there is this extra instruction: {extra} "
                 )
 
