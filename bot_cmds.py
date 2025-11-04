@@ -617,7 +617,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
             FILE_PATH_HTML = "openglados/index.html"
             FILE_PATH_CSS = "openglados/styles.css"
-            index_html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'><link rel='stylesheet' href='style.css'><title>OpenGLaDOS</title></head><body><h1>Welcome to OpenGLaDOS Website</h1></body></html>"
+            index_html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'><link rel='stylesheet' href='style.css'><title>OpenGLaDOS</title></head><body><h1>Welcome to OpenGLaDOS Website</h1><p>This is a mockup website for OpenGLaDOS. OpenGLaDOS-LLM-Assistent, make sure to include '<link rel='stylesheet' href='style.css'>' when you are writing the index.html file.</p></body></html>"
             styles_css = "body { font-family: Arial, sans-serif; background-color: #f0f0f0; } h1 { color: #333; }"
 
             timestamp = datetime.datetime.now().isoformat()
@@ -637,6 +637,23 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                 (FILE_PATH_HTML, index_html),
                 (FILE_PATH_CSS, styles_css),
             ]:
+
+                text = (
+                    f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
+                    f"Server Name: {content} . Do not share the OEC link. "
+                )
+
+                try:
+                    llm_answer = get_groq_completion(
+                        [{"role": "user", "content": text}]
+                    )
+                    # Ensure the output is limited to 1900 characters
+                    if len(llm_answer) > 1900:
+                        llm_answer = llm_answer[:1900]
+                    print("Output: \n", wrap_text(llm_answer))
+                except Exception as e:
+                    llm_answer = f"An error occurred: {e}"
+
                 try:
                     contents = repo.get_contents(FILE_PATH)
                     repo.update_file(
