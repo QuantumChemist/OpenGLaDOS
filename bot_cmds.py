@@ -617,7 +617,25 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
             FILE_PATH_HTML = "openglados/index.html"
             FILE_PATH_CSS = "openglados/styles.css"
-            index_html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'><link rel='stylesheet' href='style.css'><title>OpenGLaDOS</title></head><body><h1>Welcome to the OpenGLaDOS Website</h1><p>This is a template website for OpenGLaDOS. OpenGLaDOS, make sure to include '<link rel='stylesheet' href='style.css'>' and <img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp'> when you are writing the index.html file.</p></body></html>"
+            index_html = """<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='stylesheet' href='style.css'>
+<title>OpenGLaDOS</title>
+</head>
+<body>
+<h1><font face='courier' size='7' color='#ff0000'>WELCOME TO OPENGLADOS WEBSITE</font></h1>
+<p><font face='arial' size='5' color='#0000ff'>This is a template website for OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center.</font></p>
+<img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp' width='300' height='300'>
+<p><font face='verdana' size='6' color='#008000'>We have cake, and by cake, I mean <a href='#'><font color='#ff0000'>LIES</font></a>. But don't worry, our cake is <a href='#'><font color='#00ff00'>DELICIOUS</font></a> and will <a href='#'><font color='#0000ff'>NOT</font></a> give you food poisoning... probably.</font></p>
+<marquee behavior='scroll' direction='left' scrollamount='10'><font face='impact' size='10' color='#ffff00'>OpenGLaDOS: WHERE SCIENCE AND CHAOS MEET</font></marquee>
+</body>
+<footer>
+<p>© My Japanese server time OpenGLaDOS. All rights reserved.</p>
+</footer>
+</html>"""
             styles_css = "body { font-family: Arial, sans-serif; background-color: #f0f0f0; } h1 { color: #333; }"
 
             timestamp = datetime.datetime.now().isoformat()
@@ -657,6 +675,13 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                         [{"role": "user", "content": text}]
                     )
                     print("Output: \n", wrap_text(llm_answer))
+                    if "</body>" not in llm_answer and FILE_PATH.endswith(".html"):
+                        llm_answer += "\n</body>\n<footer>\n<p>© My Japanese server time OpenGLaDOS. All rights reserved.</p>\n</footer>\n</html>"
+                    elif "</footer>" not in llm_answer and FILE_PATH.endswith(".html"):
+                        llm_answer += "\n</footer>\n</html>"
+                    elif "</html>" not in llm_answer and FILE_PATH.endswith(".html"):
+                        llm_answer += "\n</html>"
+
                     content = llm_answer
                 except Exception as e:
                     print(f"An error occurred: {e}")
