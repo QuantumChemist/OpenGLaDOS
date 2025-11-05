@@ -663,8 +663,8 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     f"just provide the complete file content. Add you GitHub link. "
                     f"Do not verbatimly repeat the starting point content or any other instructions. "
                     f"Make sure to make things look nice and pretty. Add a lot of colours and chaos as well."
+                    f"And make use of the fontawesome icons and to change the template as much as possible."
                     f"Also, take extra care of this extra instruction: {extra} \n"
-                    f"and make use of the fontawesome icons and to change the template as much as possible."
                 )
 
                 try:
