@@ -187,14 +187,29 @@ class OpenGLaDOS(commands.Cog):
         # Check if today is the last Friday of the month
         today = datetime.now(timezone.utc)  # Use timezone-aware datetime in UTC
         if today.weekday() == 4 and (today + timedelta(days=7)).month != today.month:
-            # Iterate over all servers the bot is in
+            # Filter guilds to only include those where bot has embed permissions
+            valid_guilds = []
             for guild in self.bot.guilds:
+                # Check if bot has embed links permission in any text channel
+                for channel in guild.text_channels:
+                    if channel.permissions_for(guild.me).embed_links:
+                        if guild not in valid_guilds:  # Avoid duplicates
+                            valid_guilds.append(guild)
+
+            # Iterate over servers where bot has embed permissions
+            for guild in valid_guilds:
                 server_name = guild.name
                 member_count = guild.member_count
 
-                # Choose a random text channel from the available channels
-                if guild.text_channels:
-                    report_channel = random.choice(guild.text_channels)
+                # Choose a random text channel where bot has embed permissions
+                valid_channels = [
+                    channel
+                    for channel in guild.text_channels
+                    if channel.permissions_for(guild.me).embed_links
+                ]
+
+                if valid_channels:
+                    report_channel = random.choice(valid_channels)
 
                     text = (
                         f"Can you give me a mockery **Monthly Server Report** comment on the following data: "
@@ -1279,13 +1294,27 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
     async def random_message_task(self):
         await self.bot.wait_until_ready()  # Wait until the bot is fully ready
         await asyncio.sleep(random.randint(1, 777))
-        # Iterate over all servers the bot is in
-        guild = random.choice(self.bot.guilds)
+        # Filter guilds to only include those where bot has embed permissions
+        valid_guilds = []
+        for guild in self.bot.guilds:
+            # Check if bot has embed links permission in any text channel
+            for channel in guild.text_channels:
+                if channel.permissions_for(guild.me).embed_links:
+                    if guild not in valid_guilds:  # Avoid duplicates
+                        valid_guilds.append(guild)
+
+        guild = random.choice(valid_guilds)
         if guild:
 
-            # Choose a random text channel from the available channels
-            if guild.text_channels:
-                report_channel = random.choice(guild.text_channels)
+            # Choose a random text channel where bot has embed permissions
+            valid_channels = [
+                channel
+                for channel in guild.text_channels
+                if channel.permissions_for(guild.me).embed_links
+            ]
+
+            if valid_channels:
+                report_channel = random.choice(valid_channels)
 
                 text = "Can you give me a radom message that includes <a:danger:1338111432214057102> ?"
 
