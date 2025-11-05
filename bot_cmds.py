@@ -628,7 +628,6 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
 <body>
 <h1><font face='courier' size='7' color='#ff0000'>WELCOME TO THE OPENGLADOS WEBSITE</font></h1>
 <p>This is a template website for OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center. OpenGLaDOS, make sure to include '<link rel='stylesheet' href='style.css'>' and <img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp'> when you are writing the index.html file.</p>
-<p>An example sentence could be:<font face='verdana' size='6' color='#008000'>We have cake, and by cake, I mean <a href='#'><font color='#ff0000'>LIES</font></a>. But don't worry, our cake is <a href='#'><font color='#00ff00'>DELICIOUS</font></a> and will <a href='#'><font color='#0000ff'>NOT</font></a> give you food poisoning... probably.</font></p>
 <marquee behavior='scroll' direction='left' scrollamount='10'><font face='impact' size='10' color='#ffff00'>OpenGLaDOS: WHERE SCIENCE AND CHAOS MEET</font></marquee>
 </body>
 <footer>
@@ -664,8 +663,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     f"just provide the complete file content. Add you GitHub link. "
                     f"Do not verbatimly repeat the starting point content or any other instructions. "
                     f"Make sure to make things look nice and pretty. Add a lot of colours and chaos as well."
-                    f"Remove unnecessary backticks or code block formatting."
-                    f"Also, there is this extra instruction: {extra} \n"
+                    f"Also, take extra care of this extra instruction: {extra} \n"
                     f"and make use of the fontawesome icons and "
                     f"https://picsum.photos/200/300 to https://picsum.photos/600/700 as much as possible."
                 )
@@ -681,6 +679,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                         llm_answer += "\n</footer>\n</html>"
                     elif "</html>" not in llm_answer and FILE_PATH.endswith(".html"):
                         llm_answer += "\n</html>"
+                    llm_answer = llm_answer.replace("`", "")  # Remove any code blocks
 
                     content = llm_answer
                 except Exception as e:
