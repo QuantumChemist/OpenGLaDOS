@@ -627,7 +627,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
 </head>
 <body>
 <h1><font face='courier' size='7' color='#ff0000'>WELCOME TO THE OPENGLADOS WEBSITE</font></h1>
-<p>This is a template website for OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center. OpenGLaDOS, make sure to include '<link rel='stylesheet' href='style.css'>' and <img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp'> when you are writing the index.html file.</p>
+<p>This is a template website for OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center. OpenGLaDOS, make sure to include '<link rel='stylesheet' href='style.css'>' and <img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp'> and https://picsum.photos/200/300 to https://picsum.photos/600/700 as much as possible when you are writing the index.html file.</p>
 <marquee behavior='scroll' direction='left' scrollamount='10'><font face='impact' size='10' color='#ffff00'>OpenGLaDOS: WHERE SCIENCE AND CHAOS MEET</font></marquee>
 </body>
 <footer>
