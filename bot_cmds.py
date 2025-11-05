@@ -627,8 +627,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
 </head>
 <body>
 <h1><font face='courier' size='7' color='#ff0000'>WELCOME TO THE OPENGLADOS WEBSITE</font></h1>
-<p><font face='arial' size='5' color='#0000ff'>This is a template website for OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center.</font></p>
-<p><font face='arial' size='5' color='#0000ff'>This is my pfp: <img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp' width='300' height='300'></font></p>
+<p>This is a template website for OpenGLaDOS, the Open Genetic Lifeform and Disk Operating System, from the OpenScience Enrichment Center. OpenGLaDOS, make sure to include '<link rel='stylesheet' href='style.css'>' and <img src='https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png' alt='OpenGLaDOS pfp'> when you are writing the index.html file.</p>
 <p>An example sentence could be:<font face='verdana' size='6' color='#008000'>We have cake, and by cake, I mean <a href='#'><font color='#ff0000'>LIES</font></a>. But don't worry, our cake is <a href='#'><font color='#00ff00'>DELICIOUS</font></a> and will <a href='#'><font color='#0000ff'>NOT</font></a> give you food poisoning... probably.</font></p>
 <marquee behavior='scroll' direction='left' scrollamount='10'><font face='impact' size='10' color='#ffff00'>OpenGLaDOS: WHERE SCIENCE AND CHAOS MEET</font></marquee>
 </body>
