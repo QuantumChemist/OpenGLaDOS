@@ -664,8 +664,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     f"Do not verbatimly repeat the starting point content or any other instructions. "
                     f"Make sure to make things look nice and pretty. Add a lot of colours and chaos as well."
                     f"Also, take extra care of this extra instruction: {extra} \n"
-                    f"and make use of the fontawesome icons and "
-                    f"https://picsum.photos/200/300 to https://picsum.photos/600/700 as much as possible."
+                    f"and make use of the fontawesome icons."
                 )
 
                 try:
