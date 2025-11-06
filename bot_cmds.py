@@ -698,7 +698,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                 (FILE_PATH_HTML, index_html),
                 (FILE_PATH_CSS, styles_css),
             ]:
-                await asyncio.sleep(7)
+                await asyncio.sleep(77)
 
                 text = (
                     f"Can you give me a mockery <strong>OpenGLaDOS website</strong> ?\n"
