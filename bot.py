@@ -63,7 +63,7 @@ hti = Html2Image(
     output_path=SCREENSHOTS_DIR,
     custom_flags=["--disable-gpu", "--disable-software-rasterizer", "--no-sandbox"],
 )
-# hti.browser.executable = "/usr/bin/chromium-browser"
+hti.browser.executable = "/usr/bin/chromium-browser"
 
 # Set a constant file name for the screenshot
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
