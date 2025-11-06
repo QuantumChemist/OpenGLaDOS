@@ -22,7 +22,7 @@ from utils import (
 
 def clean_html_content(html_content: str) -> str:
     """
-    Clean HTML content by removing everything before <html> and after </html>
+    Clean HTML content by removing everything before <!DOCTYPE html> or <html> and after </html>
     """
     # Fix missing closing tags
     if "</body>" not in html_content:
@@ -32,17 +32,27 @@ def clean_html_content(html_content: str) -> str:
     elif "</html>" not in html_content:
         html_content += "\n</html>"
 
-    # Find the start of HTML content
-    html_start = html_content.find("<html")
-    if html_start == -1:
-        html_start = html_content.find("<HTML>")  # Case insensitive fallback
+    # Find the start of HTML content - prefer DOCTYPE, fallback to <html>
+    doctype_start = html_content.find("<!DOCTYPE html>")
+    if doctype_start == -1:
+        doctype_start = html_content.find(
+            "<!doctype html>"
+        )  # Case insensitive fallback
+
+    if doctype_start != -1:
+        html_start = doctype_start
+    else:
+        # Fallback to looking for <html> tag
+        html_start = html_content.find("<html>")
+        if html_start == -1:
+            html_start = html_content.find("<HTML>")  # Case insensitive fallback
 
     # Find the end of HTML content
     html_end = html_content.rfind("</html>")
     if html_end == -1:
         html_end = html_content.rfind("</HTML>")  # Case insensitive fallback
 
-    # If both tags are found, extract content between them (inclusive)
+    # If both start and end are found, extract content between them (inclusive)
     if html_start != -1 and html_end != -1:
         # Include the closing tag
         html_end += len("</html>")
