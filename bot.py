@@ -12,7 +12,8 @@ from dotenv import load_dotenv
 import asyncio
 import random
 from html import escape
-from html2image import Html2Image
+import subprocess
+import tempfile
 import time as t
 from datetime import time, timedelta, datetime, timezone
 from pymatgen.core import Element
@@ -58,21 +59,44 @@ else:
 SCREENSHOTS_DIR = "screenshots"
 os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 
-# Initialize the Html2Image object with the specified output path
-hti = Html2Image(
-    output_path=SCREENSHOTS_DIR,
-    custom_flags=[
-        "--headless=new",
-        "--disable-gpu",
-        "--disable-software-rasterizer",
-        "--no-sandbox",
-    ],
-)
-hti.browser.executable = "/usr/bin/chromium-browser"
-
 # Set a constant file name for the screenshot
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
 SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
+
+
+def create_screenshot_with_wkhtmltoimage(html_content: str, output_path: str) -> bool:
+    """Create screenshot using wkhtmltoimage"""
+    try:
+        # Create temporary HTML file
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
+            f.write(html_content)
+            temp_html_path = f.name
+
+        # Run wkhtmltoimage
+        result = subprocess.run(
+            [
+                "wkhtmltoimage",
+                "--width",
+                "1300",
+                "--height",
+                "1000",
+                "--quality",
+                "95",
+                temp_html_path,
+                output_path,
+            ],
+            capture_output=True,
+            text=True,
+        )
+
+        # Clean up temporary file
+        os.unlink(temp_html_path)
+
+        return result.returncode == 0
+    except Exception as e:
+        print(f"Error creating screenshot: {e}")
+        return False
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -514,10 +538,12 @@ class OpenGLaDOS(commands.Cog):
                 </html>
                 """
 
-                # Create the screenshot with dynamic size capturing only the necessary area
-                hti.screenshot(
-                    html_str=content, save_as=SCREENSHOT_FILE_NAME, size=(1300, 1000)
+                # Create the screenshot using wkhtmltoimage
+                success = create_screenshot_with_wkhtmltoimage(
+                    content, SCREENSHOT_FILE_PATH
                 )
+                if not success:
+                    print("Failed to create screenshot with wkhtmltoimage")
 
                 if openglados_channel:
                     await openglados_channel.send(
