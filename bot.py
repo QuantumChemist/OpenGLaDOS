@@ -12,8 +12,6 @@ from dotenv import load_dotenv
 import asyncio
 import random
 from html import escape
-import subprocess
-import tempfile
 import time as t
 from datetime import time, timedelta, datetime, timezone
 from pymatgen.core import Element
@@ -38,6 +36,7 @@ from utils import (
     calculate_wpm,
     sanitize_mentions,
     create_cat_error_embed,
+    create_screenshot_with_wkhtmltoimage,
     OPENGLADOS_MESSAGES,
     TYPING_TEST_SENTENCES,
     TURING_FEEDBACK,
@@ -62,41 +61,6 @@ os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 # Set a constant file name for the screenshot
 SCREENSHOT_FILE_NAME = "message_screenshot.png"
 SCREENSHOT_FILE_PATH = os.path.join(SCREENSHOTS_DIR, SCREENSHOT_FILE_NAME)
-
-
-def create_screenshot_with_wkhtmltoimage(html_content: str, output_path: str) -> bool:
-    """Create screenshot using wkhtmltoimage"""
-    try:
-        # Create temporary HTML file
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
-            f.write(html_content)
-            temp_html_path = f.name
-
-        # Run wkhtmltoimage
-        result = subprocess.run(
-            [
-                "wkhtmltoimage",
-                "--width",
-                "1300",
-                "--height",
-                "1000",
-                "--quality",
-                "95",
-                temp_html_path,
-                output_path,
-            ],
-            capture_output=True,
-            text=True,
-        )
-
-        # Clean up temporary file
-        os.unlink(temp_html_path)
-
-        return result.returncode == 0
-    except Exception as e:
-        print(f"Error creating screenshot: {e}")
-        return False
-
 
 # Load environment variables from .env file
 load_dotenv()
