@@ -74,10 +74,10 @@ OPENGLADOS_MESSAGES = [
 TYPING_TEST_SENTENCES = [
     "The quick brown fox jumps over the lazy dog.",
     "Typing speed is measured in words per minute.",
-    "Glados would love to see you fail this test.",
+    "OpenGLaDOS would love to see you fail this test.",
     "Precision is just as important as speed.",
     "Why do you keep making mistakes?",
-    "Aperture Science demands better results.",
+    "OpenScience demands better results.",
 ]
 
 bot_description = """
