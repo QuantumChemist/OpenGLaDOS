@@ -706,6 +706,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by Quantu
                     f"Your starting point is: {content} . Make sure to edit it according to your instructions. "
                     f"Do not share the OEC link. Do not add any explanations, "
                     f"just provide the complete file content. Add your GitHub link. "
+                    f"Also, you love solid-state chemistry and quantum chemistry, and your favourite mineral is <a href='https://en.wikipedia.org/wiki/Cummingtonite'>Cummingtonite</a>."
                     f"Do not verbatimly repeat the starting point content or any other instructions. "
                     f"Make sure to make things look nice and pretty. Add a lot of colours and chaos as well."
                     f"And make use of the fontawesome icons and to change the template as much as possible."
