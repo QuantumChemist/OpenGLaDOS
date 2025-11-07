@@ -19,6 +19,8 @@ from sympy import parse_expr
 import pytz
 from weights_api import WeightsApi
 import logging
+import subprocess
+import tempfile
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)  # or DEBUG, WARNING, etc.
@@ -329,6 +331,40 @@ user_quiz_state = {}
 
 # convos
 llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
+
+
+def create_screenshot_with_wkhtmltoimage(html_content: str, output_path: str) -> bool:
+    """Create screenshot using wkhtmltoimage"""
+    try:
+        # Create temporary HTML file
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
+            f.write(html_content)
+            temp_html_path = f.name
+
+        # Run wkhtmltoimage
+        result = subprocess.run(
+            [
+                "wkhtmltoimage",
+                "--width",
+                "1300",
+                "--height",
+                "1000",
+                "--quality",
+                "95",
+                temp_html_path,
+                output_path,
+            ],
+            capture_output=True,
+            text=True,
+        )
+
+        # Clean up temporary file
+        os.unlink(temp_html_path)
+
+        return result.returncode == 0
+    except Exception as e:
+        print(f"Error creating screenshot: {e}")
+        return False
 
 
 # Define a function for chat completion with message history
