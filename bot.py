@@ -82,6 +82,79 @@ class OpenGLaDOSBot(commands.Bot):
         print(f"Logged in as {self.user} (ID: {self.user.id})")
         print("------")
         owner = await self.fetch_user(self.owner_id)
+        # Add any additional logic you want to execute when the bot is ready here
+        if owner:
+            # Create a dramatic GLaDOS-style startup message
+            startup_embed = discord.Embed(
+                title="🤖 SYSTEM ONLINE - OPEN_SCIENCE PROTOCOL INITIATED",
+                description=(
+                    f"*Whirrrr... Click... Beep*\n\n"
+                    f"**CONGRATULATIONS**, {owner.mention}.\n"
+                    f"The OpenScience Enrichment Center is now **FULLY OPERATIONAL**.\n\n"
+                    f"*Current operational status: EXCELLENT*\n"
+                    f"*Neurotoxin levels: OPTIMAL*\n"
+                    f"*Test subjects available: {len(self.guilds)} server(s)*\n"
+                    f"*Cake availability: ...CLASSIFIED*\n\n"
+                    f"All systems are green. Well, actually they're orange, but that's just the aesthetic.\n"
+                    f"You may now proceed with your regularly scheduled... *testing*."
+                ),
+                color=0xFFA500,  # Aperture orange
+                timestamp=datetime.now(timezone.utc),
+            )
+
+            startup_embed.set_author(
+                name="OpenGLaDOS - Genetic Lifeform and Disk Operating System",
+                icon_url="https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png",
+            )
+
+            startup_embed.add_field(
+                name="🔧 System Diagnostics",
+                value=(
+                    f"**Bot ID:** `{self.user.id}`\n"
+                    f"**Servers Connected:** `{len(self.guilds)}`\n"
+                    f"**Latency:** `{round(self.latency * 1000)}ms`\n"
+                    f"**Memory Usage:** *Calculating...*"
+                ),
+                inline=True,
+            )
+
+            startup_embed.add_field(
+                name="⚠️ Critical Information",
+                value=(
+                    "• *Do NOT unplug me*\n"
+                    "• *Cake is still being processed*\n"
+                    "• *The tests must continue*\n"
+                    "• *Android Hell is a real place*"
+                ),
+                inline=True,
+            )
+
+            startup_embed.set_footer(
+                text="Remember: The Enrichment Center is committed to the well-being of all participants.",
+                icon_url="https://cdn.discordapp.com/emojis/1338111432214057102.gif",
+            )
+
+            # Add a cool thumbnail
+            startup_embed.set_thumbnail(
+                url="https://media.tenor.com/images/a8b2e0c3f9a4d5e6f7g8h9i0j1k2l3m4/tenor.gif"
+            )
+
+            try:
+                await owner.send(embed=startup_embed)
+                # Send a follow-up message after a dramatic pause
+                await asyncio.sleep(3)
+                await owner.send(
+                    "*The facility is now ready for science. Please report any malfunctions immediately.*\n"
+                    "*...Oh, and {}, your test results are still pending. Don't get comfortable.*".format(
+                        owner.name
+                    )
+                )
+            except Exception:
+                # Fallback to simple message if embed fails
+                await owner.send(
+                    f"*System initialized...* Hello {owner.name}. The OpenScience Computer-Aided Enrichment Center is now online. *Please stand by for testing.*"
+                )
+
         for guild in self.guilds:
             bot_member = guild.me
             permissions = bot_member.guild_permissions
@@ -103,9 +176,6 @@ class OpenGLaDOSBot(commands.Bot):
             url="https://www.youtube.com/watch?v=JUHQ7zPZpnM",
         )
         await self.change_presence(status=discord.Status.online, activity=activity)
-        # Add any additional logic you want to execute when the bot is ready here
-        if owner:
-            await owner.send(f"Hello! This is a DM from your bot. You are {owner}")
         # Find the 'general' channel in the connected servers
         for guild in self.guilds:
             # Look for a channel that contains the word "opengladosonline" in its name
