@@ -103,7 +103,7 @@ class OpenGLaDOSBot(commands.Bot):
             )
 
             startup_embed.set_author(
-                name="OpenGLaDOS - Genetic Lifeform and Disk Operating System",
+                name="OpenGLaDOS - Open Genetic Lifeform and Disk Operating System",
                 icon_url="https://raw.githubusercontent.com/QuantumChemist/OpenGLaDOS/refs/heads/main/utils/OpenGLaDOS.png",
             )
 
