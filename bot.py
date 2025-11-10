@@ -1447,7 +1447,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
     @tasks.loop(time=time(12, 0, tzinfo=timezone.utc))
     async def send_science_fact(self):
         await self.bot.wait_until_ready()  # Wait until the bot is fully ready
-        channel = self.bot.get_channel(1369390407468974163)
+        channel = self.bot.get_channel(1370736170421714994)
 
         if channel:
             fact = fetch_random_fact()  # Fetch a random fact from the API
