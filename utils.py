@@ -687,7 +687,7 @@ def generate_llm_convo_text(
 
     print("Input: \n", wrap_text(user_lines + assistant_lines))
     print("Output: \n", wrap_text(llm_answer))
-    return f"<a:typing:1399385512883523646> {ensure_code_blocks_closed(llm_answer)} <a:typing:1399385512883523646>"
+    return f"<a:typing:1399385512883523646> {ensure_code_blocks_closed(llm_answer)}...<a:typing:1399385512883523646>"
 
 
 async def handle_conversation(message):
