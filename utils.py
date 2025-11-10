@@ -687,7 +687,6 @@ def generate_llm_convo_text(
 
     print("Input: \n", wrap_text(user_lines + assistant_lines))
     print("Output: \n", wrap_text(llm_answer))
-
     return f"<a:typing:1399385512883523646> {ensure_code_blocks_closed(llm_answer)} <a:typing:1399385512883523646>"
 
 
@@ -979,6 +978,12 @@ async def replace_mentions_with_display_names(
         "openglados_mad": "<a:openglados_mad:1338111725760811110>",
         "openglados_lol": "<a:openglados_lol:1338111633192521738>",
     }
+
+    # Correct any wrongly generated emojis (animated/static mismatch)
+    for name, correct_emoji in emoji_map.items():
+        # Match both static <:name:id> and animated <a:name:id>
+        pattern = rf"<a?:{name}:\d+>"
+        content = re.sub(pattern, correct_emoji, content)
 
     # Replace standalone :name: (with or without backticks), unless followed by an ID
     for name, replacement in emoji_map.items():
