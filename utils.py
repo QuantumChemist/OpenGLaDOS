@@ -970,41 +970,40 @@ async def replace_mentions_with_display_names(
                     f"`<@!{user_id}>`", f"`@{member.display_name}`"
                 )
 
-    # Normalize common OpenGLaDOS custom-emoji mentions into the proper
-    # Discord `<:name:id>` or `<a:name:id>` form.
-    emoji_map = {
-        "openglados": ("1276977982027862018", False),
-        "openglados_facts": ("1370698028012535818", False),
-        "openglados_stab": ("1370697839235301396", False),
-        "openglados_blush": ("1338111540985069580", False),
-        "openglados_mad": ("1338111725760811110", True),
-        "openglados_lol": ("1338111633192521738", True),
-    }
+    # Replace standalone `:openglados:` and other emojis (with or without backticks), but not those with an ID.
+    content = re.sub(
+        r"`?:openglados:(?!\d+>)`?", "<:openglados:1276977982027862018>", content
+    )
 
-    # Unescape any HTML-escaped angle-bracketed content so we can detect
-    # both normal and animated emoji reliably. Examples:
-    #   &lt;:name:123&gt;   -> <:name:123>
-    #   &lt;a:name:123&gt; -> <a:name:123>
-    content = re.sub(r"&(?:amp;)?lt;(.*?)&(?:amp;)?gt;", r"<\1>", content)
+    content = re.sub(
+        r"`?:openglados_facts:(?!\d+>)`?",
+        "<:openglados_facts:1370698028012535818>",
+        content,
+    )
 
-    # For each known emoji name, replace naked `:name:` (optionally wrapped in
-    # backticks) with `<:name:id>` (or `<a:name:id>` for animated), but skip
-    # if the occurrence is already part of a `<:name:<digits>>` form or is
-    # preceded by an HTML escape like '&lt;'
-    for name, (eid, animated) in emoji_map.items():
-        # pattern matches optional backtick before/after and the literal :name:
-        # but only when NOT already preceded by a formatted open bracket like
-        # '<:' or '<a:'. This prevents double-replacing already-correct tokens.
-        pat = re.compile(
-            rf"(?<!<:)(?<!<a:)(?:`?:{re.escape(name)}:`?)", flags=re.IGNORECASE
-        )
+    content = re.sub(
+        r"`?:openglados_stab:(?!\d+>)`?",
+        "<:openglados_stab:1370697839235301396>",
+        content,
+    )
 
-        def _repl(m: re.Match) -> str:
-            # produce the normalized emoji. Use the animated form `<a:name:id>`
-            # when needed, else `<:name:id>`.
-            return f"<a:{name}:{eid}>" if animated else f"<:{name}:{eid}>"
+    content = re.sub(
+        r"`?:openglados_blush:(?!\d+>)`?",
+        "<:openglados_blush:1338111540985069580>",
+        content,
+    )
 
-        content = pat.sub(_repl, content)
+    content = re.sub(
+        r"`?:openglados_mad:(?!\d+>)`?",
+        "<a:openglados_mad:1338111725760811110>",
+        content,
+    )
+
+    content = re.sub(
+        r"`?:openglados_lol:(?!\d+>)`?",
+        "<a:openglados_lol:1338111633192521738>",
+        content,
+    )
 
     # Optionally replace custom emoji mentions with their corresponding emoji name
     if replace_emojis:
@@ -1029,7 +1028,7 @@ async def replace_mentions_with_display_names(
                         rf"`?<:{emoji_name}:{emoji_id}>`?", normalized_emoji, content
                     )
     else:
-        print("No emoji mentions found in the content.")
+        print("No user mentions found in the content.")
 
     return content
 
