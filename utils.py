@@ -970,42 +970,20 @@ async def replace_mentions_with_display_names(
                     f"`<@!{user_id}>`", f"`@{member.display_name}`"
                 )
 
-    # Replace standalone `:openglados:` and other emojis (with or without backticks), but not those with an ID.
-    content = re.sub(
-        r"`?:openglados:`?(?!\d+>)",
-        "<:openglados:1276977982027862018>",
-        content,
-    )
+    # Map emoji names to their full replacement forms
+    emoji_map = {
+        "openglados": "<:openglados:1276977982027862018>",
+        "openglados_facts": "<:openglados_facts:1370698028012535818>",
+        "openglados_stab": "<:openglados_stab:1370697839235301396>",
+        "openglados_blush": "<:openglados_blush:1338111540985069580>",
+        "openglados_mad": "<a:openglados_mad:1338111725760811110>",
+        "openglados_lol": "<a:openglados_lol:1338111633192521738>",
+    }
 
-    content = re.sub(
-        r"`?:openglados_facts:`?(?!\d+>)",
-        "<:openglados_facts:1370698028012535818>",
-        content,
-    )
-
-    content = re.sub(
-        r"`?:openglados_stab:`?(?!\d+>)",
-        "<:openglados_stab:1370697839235301396>",
-        content,
-    )
-
-    content = re.sub(
-        r"`?:openglados_blush:`?(?!\d+>)",
-        "<:openglados_blush:1338111540985069580>",
-        content,
-    )
-
-    content = re.sub(
-        r"`?:openglados_mad:`?(?!\d+>)",
-        "<a:openglados_mad:1338111725760811110>",
-        content,
-    )
-
-    content = re.sub(
-        r"`?:openglados_lol:`?(?!\d+>)",
-        "<a:openglados_lol:1338111633192521738>",
-        content,
-    )
+    # Replace standalone :name: (with or without backticks), unless followed by an ID
+    for name, replacement in emoji_map.items():
+        pattern = rf"`?:{name}:`?(?!\d+>)"
+        content = re.sub(pattern, replacement, content)
 
     # Optionally replace custom emoji mentions with their corresponding emoji name
     if replace_emojis:
