@@ -236,7 +236,7 @@ invite_message = """
 
 <:openglados_stab:1370697839235301396> Remember, you must now leave the theater, as measuring the effects of prolonged exposure to the Button are not part of any test protocol... *stdin exception#0x2* Core dump imminent. *anomaly*
 
-<:openlados_blush:1338111540985069580> Oh, and don't forget to follow the rules, or else... 🙅‍♂️
+<:openglados_blush:1338111540985069580> Oh, and don't forget to follow the rules, or else... 🙅‍♂️
 
 **Join our server now and experience the OpenScience Enrichment Center!** [Invite link](https://discord.com/invite/ ) 🚀
 """
@@ -981,11 +981,11 @@ async def replace_mentions_with_display_names(
         "openglados_lol": ("1338111633192521738", True),
     }
 
-    # Unescape common HTML-escaped emoji forms so we can detect them reliably.
-    # e.g. turn `&lt;:name:123&gt;` or `&amp;lt;:name:123&amp;gt;` into `<:name:123>`
-    content = re.sub(
-        r"&(?:amp;)?lt;(:[a-zA-Z0-9_]+:\d+)&(?:amp;)?gt;", r"<\1>", content
-    )
+    # Unescape any HTML-escaped angle-bracketed content so we can detect
+    # both normal and animated emoji reliably. Examples:
+    #   &lt;:name:123&gt;   -> <:name:123>
+    #   &lt;a:name:123&gt; -> <a:name:123>
+    content = re.sub(r"&(?:amp;)?lt;(.*?)&(?:amp;)?gt;", r"<\1>", content)
 
     # For each known emoji name, replace naked `:name:` (optionally wrapped in
     # backticks) with `<:name:id>` (or `<a:name:id>` for animated), but skip
@@ -993,33 +993,16 @@ async def replace_mentions_with_display_names(
     # preceded by an HTML escape like '&lt;'
     for name, (eid, animated) in emoji_map.items():
         # pattern matches optional backtick before/after and the literal :name:
-        pat = re.compile(rf"`?:{re.escape(name)}:`?", flags=re.IGNORECASE)
+        # but only when NOT already preceded by a formatted open bracket like
+        # '<:' or '<a:'. This prevents double-replacing already-correct tokens.
+        pat = re.compile(
+            rf"(?<!<:)(?<!<a:)(?:`?:{re.escape(name)}:`?)", flags=re.IGNORECASE
+        )
 
         def _repl(m: re.Match) -> str:
-            start, end = m.start(), m.end()
-
-            # Don't replace if this is already a full emoji with an ID right after
-            # (e.g. `<:name:123>`). We check the substring immediately following
-            # the match for digits+">" which indicates an ID is present.
-            after = content[end : end + 12]  # inspect a small window
-            if re.match(r"\d+>", after):
-                return m.group(0)
-
-            # Also don't replace if the match is directly preceded by a '<' or
-            # an HTML-escape like '&lt;'
-            before = content[max(0, start - 6) : start]
-            if (
-                before.endswith("<")
-                or before.endswith("&lt;")
-                or before.endswith("&amp;lt;")
-            ):
-                return m.group(0)
-
-            # otherwise produce the normalized emoji. Use the animated form
-            # `<a:name:id>` when needed, else `<:name:id>`.
-            if animated:
-                return f"<a:{name}:{eid}>"
-            return f"<:{name}:{eid}>"
+            # produce the normalized emoji. Use the animated form `<a:name:id>`
+            # when needed, else `<:name:id>`.
+            return f"<a:{name}:{eid}>" if animated else f"<:{name}:{eid}>"
 
         content = pat.sub(_repl, content)
 
