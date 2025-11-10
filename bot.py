@@ -1916,7 +1916,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             await message.channel.send(file=discord.File("utils/chichivi.jpeg"))
 
         if message.guild.id not in WHITELIST_GUILDS_ID:
-            banned_words = ["stfu", "hitler"]
+            banned_words = ["stfu", "hitler", "urgaynigga"]
             if any(word in message.content.lower() for word in banned_words):
                 await message.delete()
                 if message.author.id != self.bot.owner_id:  # Skip kicking the bot owner
