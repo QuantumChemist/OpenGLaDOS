@@ -676,14 +676,14 @@ class BotCommands(commands.Cog):
             FILE_PATH = "utils/trophy.svg"
 
             timestamp = datetime.datetime.now().isoformat()
-            COMMIT_MESSAGE = f"""🤖 Auto-update trophy.svg by OpenGLaDOS Bot
+            COMMIT_MESSAGE = f"""🤖 Auto-update trophy.svg for @QuantumChemist by OpenGLaDOS Bot
 
 Bot Details:
 - Automated by: OpenGLaDOS Discord Bot
 - Timestamp: {timestamp}
 - Triggered by: /trophy command
 
-This commit was made automatically by the OpenGLaDOS bot, not manually by QuantumChemist."""
+This commit was made automatically by the OpenGLaDOS bot, not manually by @QuantumChemist."""
 
             g = Github(app_token)
             repo = g.get_repo(REPO_NAME)
@@ -751,7 +751,7 @@ Bot Details:
 - Timestamp: {timestamp}
 - Triggered by: /website command
 
-This commit was made automatically by the OpenGLaDOS bot, not manually by QuantumChemist."""
+This commit was made automatically by the OpenGLaDOS bot, not manually by @QuantumChemist."""
 
             g = Github(app_token)
             repo = g.get_repo(REPO_NAME)
