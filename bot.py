@@ -1722,7 +1722,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
             # Create the embed
             embed = discord.Embed(
-                title="<:openglados:1277250785150894151>🎉📣 Announcement 📣🎉<:openglados:1277250785150894151>",
+                title="<:openglados:1276977982027862018>🎉📣 Announcement 📣🎉<:openglados:1276977982027862018>",
                 description="**Attention, all test subjects!** We have a critically important announcement to make! *dramatic music plays*",
                 color=discord.Color.random(),
             )
