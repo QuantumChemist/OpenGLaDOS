@@ -1793,7 +1793,10 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     await message.channel.send(
                         f"Failed to react to the message. Error: {str(e)}"
                     )
-            await handle_conversation(message=message)
+            try:
+                await handle_conversation(message=message)
+            except Exception as e:
+                print(f"Error in handle_conversation: {e}")
             return
 
         if "chemcounting" in message.channel.name:
