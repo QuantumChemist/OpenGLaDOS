@@ -1454,7 +1454,7 @@ def create_cat_error_embed(
     return embed
 
 
-async def anti_spam(guild_id, message):
+async def anti_spam(message):
     # Inside on_message
     guild_id = message.guild.id
     now = t.time()

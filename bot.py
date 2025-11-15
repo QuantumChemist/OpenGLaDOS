@@ -37,6 +37,7 @@ from utils import (
     sanitize_mentions,
     create_cat_error_embed,
     create_screenshot_with_wkhtmltoimage,
+    anti_spam,
     OPENGLADOS_MESSAGES,
     TYPING_TEST_SENTENCES,
     TURING_FEEDBACK,
@@ -1681,6 +1682,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 )
 
         if "make an announce" in message.content.lower():
+            await anti_spam(message.guild.id, message)
             announce_channel = discord.utils.find(
                 lambda c: "announc" in c.name.lower(), message.guild.text_channels
             )
