@@ -1454,12 +1454,13 @@ def create_cat_error_embed(
     return embed
 
 
-async def anti_spam(message):
+async def anti_spam(message, bot):
     # Inside on_message
     guild_id = message.guild.id
     now = t.time()
     window = 60  # seconds
     threshold = 100  # messages per minute
+    owner = await bot.fetch_user(bot.owner_id)
 
     # Initialize tracking
     if guild_id not in guild_message_counts:
@@ -1475,4 +1476,7 @@ async def anti_spam(message):
 
     if guild_message_counts[guild_id] > threshold:
         await message.channel.send("Too many messages. Leaving the server.")
+        await owner.send(
+            f"Left guild '{message.guild.name}' (ID: {guild_id}) due to message spam."
+        )
         await message.guild.leave()
