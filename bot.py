@@ -2103,6 +2103,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 )
 
         if "openglados" in message.content.lower():
+            await anti_spam(message, bot=self.bot)
             if urls:
                 for url in urls:
                     try:
