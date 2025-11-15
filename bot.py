@@ -2248,12 +2248,15 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     )
                 return
 
-            await handle_convo_llm(
-                message=message,
-                user_info=user_info,
-                bot=self.bot,
-                user_time=message_time,
-            )
+            try:
+                await handle_convo_llm(
+                    message=message,
+                    user_info=user_info,
+                    bot=self.bot,
+                    user_time=message_time,
+                )
+            except Exception as e:
+                print(f"Error in handle_convo_llm (openglados): {e}")
             return
 
         # Handle other messages in the server
