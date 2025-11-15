@@ -1466,11 +1466,17 @@ async def anti_spam(message, bot):
     if guild_id not in guild_message_counts:
         guild_message_counts[guild_id] = 0
         guild_message_timestamps[guild_id] = now
+        await owner.send(
+            f"Started monitoring guild '{message.guild.name}' (ID: {guild_id}) for message spam."
+        )
 
     # Reset count if window has passed
     if now - guild_message_timestamps[guild_id] > window:
         guild_message_counts[guild_id] = 0
         guild_message_timestamps[guild_id] = now
+        await owner.send(
+            f"Reset message count for guild '{message.guild.name}' (ID: {guild_id})."
+        )
 
     guild_message_counts[guild_id] += 1
 
