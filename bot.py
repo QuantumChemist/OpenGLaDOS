@@ -1682,7 +1682,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 )
 
         if "make an announce" in message.content.lower():
-            await anti_spam(message)
+            await anti_spam(message, bot=self.bot)
             announce_channel = discord.utils.find(
                 lambda c: "announc" in c.name.lower(), message.guild.text_channels
             )
@@ -1802,7 +1802,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             return
 
         if "chemcounting" in message.channel.name:
-            await anti_spam(message)
+            await anti_spam(message, bot=self.bot)
             chem_elem: list = [(element.symbol).lower() for element in Element]
             previous_msg = "og"
             async for msg in message.channel.history(limit=2):
@@ -1874,7 +1874,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         # Handle Mentions of the Bot
         if self.bot.user.mentioned_in(message):
-            await anti_spam(message)
+            await anti_spam(message, bot=self.bot)
             try:
                 await handle_convo_llm(
                     message=message,
@@ -1893,7 +1893,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             and message.reference.resolved.author == self.bot.user
             and message.channel.id not in [chat_fr, chat_en]
         ):
-            await anti_spam(message)
+            await anti_spam(message, bot=self.bot)
             try:
                 await handle_convo_llm(
                     message=message,
