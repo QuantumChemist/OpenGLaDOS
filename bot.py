@@ -2259,8 +2259,6 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 print(f"Error in handle_convo_llm (openglados): {e}")
             return
 
-        # Handle other messages in the server
-
     # Function to fetch user metadata
     @staticmethod
     def get_user_metadata(user):
