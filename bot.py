@@ -1871,12 +1871,15 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
         # Handle Mentions of the Bot
         if self.bot.user.mentioned_in(message):
-            await handle_convo_llm(
-                message=message,
-                user_info=user_info,
-                bot=self.bot,
-                user_time=message_time,
-            )
+            try:
+                await handle_convo_llm(
+                    message=message,
+                    user_info=user_info,
+                    bot=self.bot,
+                    user_time=message_time,
+                )
+            except Exception as e:
+                print(f"Error in handle_convo_llm (mention): {e}")
             return
 
         # Handle Replies to the Bot
@@ -1886,13 +1889,16 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             and message.reference.resolved.author == self.bot.user
             and message.channel.id not in [chat_fr, chat_en]
         ):
-            await handle_convo_llm(
-                message=message,
-                user_info=user_info,
-                bot=self.bot,
-                user_time=message_time,
-                mess_ref=message.reference,
-            )
+            try:
+                await handle_convo_llm(
+                    message=message,
+                    user_info=user_info,
+                    bot=self.bot,
+                    user_time=message_time,
+                    mess_ref=message.reference,
+                )
+            except Exception as e:
+                print(f"Error in handle_convo_llm (reply): {e}")
             return
 
         if message.guild.id not in WHITELIST_GUILDS_ID:
@@ -2194,7 +2200,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         await message.channel.send(f"Unexpected error occurred: {e}")
                 return
 
-            if "image message" in message.content.lower():
+            if "image message" in message.content.lower():  # Weight GG API shit
                 await handle_convo_llm_image(
                     message=message,
                     user_info=user_info,
