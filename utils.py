@@ -21,6 +21,7 @@ from weights_api import WeightsApi
 import logging
 import subprocess
 import tempfile
+import time as t
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)  # or DEBUG, WARNING, etc.
@@ -29,6 +30,8 @@ formatter = logging.Formatter("%(asctime)s %(name)s [%(levelname)s] %(message)s"
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+guild_message_counts = {}
+guild_message_timestamps = {}
 
 # Define the minimum time between requests (in seconds)
 REQUEST_INTERVAL = 3  # Example: 3 seconds between requests
@@ -1449,3 +1452,27 @@ def create_cat_error_embed(
     embed.set_image(url=f"https://http.cat/{status_code}")
     embed.set_footer(text="HTTP Cat Status Code")
     return embed
+
+
+async def anti_spam(guild_id, message):
+    # Inside on_message
+    guild_id = message.guild.id
+    now = t.time()
+    window = 60  # seconds
+    threshold = 100  # messages per minute
+
+    # Initialize tracking
+    if guild_id not in guild_message_counts:
+        guild_message_counts[guild_id] = 0
+        guild_message_timestamps[guild_id] = now
+
+    # Reset count if window has passed
+    if now - guild_message_timestamps[guild_id] > window:
+        guild_message_counts[guild_id] = 0
+        guild_message_timestamps[guild_id] = now
+
+    guild_message_counts[guild_id] += 1
+
+    if guild_message_counts[guild_id] > threshold:
+        await message.channel.send("Too many messages. Leaving the server.")
+        await message.guild.leave()
