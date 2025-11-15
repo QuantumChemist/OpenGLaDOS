@@ -1459,7 +1459,7 @@ async def anti_spam(message, bot):
     guild_id = message.guild.id
     now = t.time()
     window = 60  # seconds
-    threshold = 100  # messages per minute
+    threshold = 10  # messages per minute
     owner = await bot.fetch_user(bot.owner_id)
 
     # Initialize tracking
