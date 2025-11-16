@@ -22,6 +22,8 @@ import logging
 import subprocess
 import tempfile
 import time as t
+from playwright.async_api import async_playwright
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)  # or DEBUG, WARNING, etc.
@@ -401,6 +403,23 @@ def create_screenshot_with_wkhtmltoimage_cert(
 
     except Exception as e:
         return (False, "", f"Python error: {e}")
+
+
+async def render_certificate_playwright(url: str, output_path: str):
+    """Render a webpage using Playwright and take a screenshot."""
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page(viewport={"width": 1300, "height": 1000})
+        await page.goto(url, wait_until="networkidle")
+
+        # Allow React to finish rendering
+        await page.wait_for_timeout(1500)
+
+        await page.screenshot(path=output_path, full_page=True)
+        await browser.close()
+
+    return True
 
 
 # Define a function for chat completion with message history
