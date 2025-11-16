@@ -18,7 +18,7 @@ from utils import (
     ensure_code_blocks_closed,
     split_text_by_period,
     create_cat_error_embed,
-    create_screenshot_with_wkhtmltoimage,
+    create_screenshot_with_wkhtmltoimage_cert,
 )
 
 
@@ -657,9 +657,15 @@ class BotCommands(commands.Cog):
         output_path = "certificate.png"
 
         try:
-            success = create_screenshot_with_wkhtmltoimage(html_content, output_path)
+            success, out, err = create_screenshot_with_wkhtmltoimage_cert(
+                html_content, output_path
+            )
             if not success:
-                await owner.send("❌ wkhtmltoimage failed to generate the screenshot.")
+                await owner.send(
+                    "❌ wkhtmltoimage failed.\n"
+                    f"**stdout:**\n```\n{out}\n```\n"
+                    f"**stderr:**\n```\n{err}\n```"
+                )
                 return
         except Exception as e:
             await owner.send(f"❌ Error while calling wkhtmltoimage: {e}")
