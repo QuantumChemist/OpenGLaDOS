@@ -647,70 +647,72 @@ class BotCommands(commands.Cog):
     async def cert(self, ctx):
         owner = await self.bot.fetch_user(self.bot.owner_id)
         cert_url = "https://www.freecodecamp.org/certification/chichimeetsyoko/foundational-c-sharp-with-microsoft"
+
+        # Fetch the raw HTML
         response = requests.get(cert_url)
         html_content = response.text
 
-        # Extract the certificate section (SVG or main certificate div)
-        import re
+        # Convert the page directly to PNG with html2image (html2png equivalent)
+        from html2image import Html2Image
 
-        cert_svg_match = re.search(r"(<svg[\s\S]+?</svg>)", html_content)
-        if cert_svg_match:
-            svg_data = cert_svg_match.group(1).encode("utf-8")
-        else:
-            # Fallback: convert the whole HTML to SVG (not ideal, but better than nothing)
-            svg_data = html_content.encode("utf-8")
+        hti = Html2Image()
 
-        png_data = BytesIO()
+        png_path = "certificate.png"
         try:
-            cairosvg.svg2png(bytestring=svg_data, write_to=png_data)
-            png_data.seek(0)
+            hti.screenshot(
+                html_str=html_content,
+                save_as=png_path,
+                size=(1920, 1080),  # adjust if needed
+            )
         except Exception as e:
-            await owner.send(f"❌ Error converting to PNG: {e}")
+            await owner.send(f"❌ Error converting HTML to PNG: {e}")
             return
 
-        # Save SVG locally
-        local_file = "certificate.svg"
-        with open(local_file, "wb") as f:
-            f.write(svg_data)
+        # Read PNG bytes for sending
+        with open(png_path, "rb") as f:
+            png_data = BytesIO(f.read())
+            png_data.seek(0)
+
+        # Save HTML directly instead of SVG — html2png gives us PNG only
+        local_file = "certificate.html"
+        with open(local_file, "w", encoding="utf-8") as f:
+            f.write(html_content)
 
         # Send PNG to owner
         await owner.send(file=discord.File(png_data, "certificate.png"))
 
-        # Push SVG to GitHub Pages repo using GitHub App
+        # Push HTML to GitHub
         try:
             app_token = get_github_app_token()
             if not app_token:
-                await owner.send(
-                    "❌ Failed to get GitHub App token. Check your environment variables."
-                )
+                await owner.send("❌ Failed to get GitHub App token.")
                 return
 
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
-            FILE_PATH = "utils/certificate.svg"
+            FILE_PATH = "utils/certificate.html"
 
             timestamp = datetime.datetime.now().isoformat()
-            COMMIT_MESSAGE = f"""🤖 Auto-update certificate.svg for @QuantumChemist by OpenGLaDOS Bot
+            COMMIT_MESSAGE = f"""🤖 Auto-update certificate.html for @QuantumChemist by OpenGLaDOS Bot
 
-Bot Details:
-- Automated by: OpenGLaDOS Discord Bot
-- Timestamp: {timestamp}
-- Triggered by: /cert command
-
-This commit was made automatically by the OpenGLaDOS bot, not manually by @QuantumChemist."""
+    Bot Details:
+    - Automated by: OpenGLaDOS Discord Bot
+    - Timestamp: {timestamp}
+    - Triggered by: /cert command
+    """
 
             g = Github(app_token)
             repo = g.get_repo(REPO_NAME)
 
             try:
                 contents = repo.get_contents(FILE_PATH)
-                repo.update_file(contents.path, COMMIT_MESSAGE, svg_data, contents.sha)
-                await owner.send(
-                    f"✅ Updated {FILE_PATH} on GitHub successfully!\n[See the commit history](https://github.com/{REPO_NAME}/commits?author=openglados[bot])."
+                repo.update_file(
+                    contents.path, COMMIT_MESSAGE, html_content, contents.sha
                 )
+                await owner.send(f"✅ Updated {FILE_PATH} on GitHub successfully!")
             except Exception as ex:
-                repo.create_file(FILE_PATH, COMMIT_MESSAGE, svg_data)
+                repo.create_file(FILE_PATH, COMMIT_MESSAGE, html_content)
                 await owner.send(
-                    f"✅ Created {FILE_PATH} on GitHub successfully! But exception > {ex} < happened."
+                    f"✅ Created {FILE_PATH} on GitHub successfully! But exception > {ex} < occurred."
                 )
 
         except Exception as e:
