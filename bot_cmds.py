@@ -650,7 +650,14 @@ class BotCommands(commands.Cog):
         if cert_url is None:
             cert_url = "https://www.freecodecamp.org/certification/chichimeetsyoko/foundational-c-sharp-with-microsoft"
 
-        output_path = "certificate.png"
+        # Only allow freecodecamp.org URLs
+        if "freecodecamp.org" not in cert_url:
+            await owner.send("❌ Only freecodecamp.org certificate URLs are allowed.")
+            return
+
+        # Use last part of cert_url for filename
+        cert_slug = cert_url.rstrip("/").split("/")[-1]
+        output_path = f"certificate_{cert_slug}.png"
         try:
             await render_certificate_playwright(cert_url, output_path)
         except Exception as e:
@@ -664,7 +671,7 @@ class BotCommands(commands.Cog):
         png_data.seek(0)
 
         # Send PNG to owner
-        await owner.send(file=discord.File(png_data, "certificate.png"))
+        await owner.send(file=discord.File(png_data, output_path))
 
         # Push PNG to GitHub
         try:
@@ -674,10 +681,10 @@ class BotCommands(commands.Cog):
                 return
 
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
-            FILE_PATH = "utils/certificate.png"
+            FILE_PATH = f"utils/{output_path}"
 
             timestamp = datetime.datetime.now().isoformat()
-            COMMIT_MESSAGE = f"""🤖 Auto-update certificate.png for @QuantumChemist by OpenGLaDOS Bot
+            COMMIT_MESSAGE = f"""🤖 Auto-update {output_path} for @QuantumChemist by OpenGLaDOS Bot
 
     Bot Details:
     - Automated by: OpenGLaDOS Discord Bot
