@@ -370,6 +370,39 @@ def create_screenshot_with_wkhtmltoimage(html_content: str, output_path: str) ->
         return False
 
 
+def create_screenshot_with_wkhtmltoimage_cert(
+    html_content: str, output_path: str
+) -> tuple[bool, str, str]:
+    """Create screenshot using wkhtmltoimage and return (success, stdout, stderr)."""
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
+            f.write(html_content)
+            temp_html_path = f.name
+
+        result = subprocess.run(
+            [
+                "wkhtmltoimage",
+                "--enable-local-file-access",
+                "--javascript-delay",
+                "2000",
+                "--width",
+                "1300",
+                "--quality",
+                "95",
+                temp_html_path,
+                output_path,
+            ],
+            capture_output=True,
+            text=True,
+        )
+
+        os.unlink(temp_html_path)
+        return (result.returncode == 0, result.stdout, result.stderr)
+
+    except Exception as e:
+        return (False, "", f"Python error: {e}")
+
+
 # Define a function for chat completion with message history
 def get_groq_completion(
     history,
