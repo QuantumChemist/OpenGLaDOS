@@ -406,19 +406,27 @@ def create_screenshot_with_wkhtmltoimage_cert(
 
 
 async def render_certificate_playwright(url: str, output_path: str):
-    """Render a webpage using Playwright and take a screenshot."""
-
+    """Render FreeCodeCamp certificate using Playwright and save screenshot."""
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": 1300, "height": 1000})
-        await page.goto(url, wait_until="networkidle")
 
-        # Allow React to finish rendering
-        await page.wait_for_timeout(1500)
+        # Load the page — no networkidle (FCC never settles)
+        await page.goto(url, wait_until="domcontentloaded")
 
+        # Allow React to mount
+        await page.wait_for_timeout(2000)
+
+        # Force lazy-loaded components to render
+        await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+        await page.wait_for_timeout(700)
+        await page.evaluate("window.scrollTo(0, 0)")
+        await page.wait_for_timeout(700)
+
+        # Screenshot full certificate
         await page.screenshot(path=output_path, full_page=True)
-        await browser.close()
 
+        await browser.close()
     return True
 
 
