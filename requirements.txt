@@ -18,3 +18,4 @@ cairosvg
 PyGithub
 PyJWT
 cryptography
+playwright
