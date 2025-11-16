@@ -784,6 +784,9 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
                     f"Also, take extra care of this extra instruction: {extra} \n"
                 )
 
+                if content is styles_css:
+                    text += f"make a css file that matches >>>{index_html}<<<!\n"
+
                 try:
                     llm_answer = get_groq_completion(
                         [{"role": "user", "content": text}]
