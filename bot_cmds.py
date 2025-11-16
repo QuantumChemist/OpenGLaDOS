@@ -640,31 +640,44 @@ class BotCommands(commands.Cog):
         except Exception as e:
             await ctx.send(f"Unexpected error: {e}")
 
-    @commands.command(name="trophy", help="Get the QuantumChemist trophy.")
+    @commands.command(
+        name="cert", help="Get the QuantumChemist/chichimeetsyoko certificate."
+    )
     @commands.is_owner()
-    async def trophy(self, ctx):
+    async def cert(self, ctx):
         owner = await self.bot.fetch_user(self.bot.owner_id)
-        # Send the trophy URL to owner
-        trophy_url = "http://localhost:8080/?username=QuantumChemist&column=-1&theme=discord&no-bg=true"
-        response = requests.get(trophy_url)
-        svg_data = response.content  # binary content of SVG
+        cert_url = "https://www.freecodecamp.org/certification/chichimeetsyoko/foundational-c-sharp-with-microsoft"
+        response = requests.get(cert_url)
+        html_content = response.text
+
+        # Extract the certificate section (SVG or main certificate div)
+        import re
+
+        cert_svg_match = re.search(r"(<svg[\s\S]+?</svg>)", html_content)
+        if cert_svg_match:
+            svg_data = cert_svg_match.group(1).encode("utf-8")
+        else:
+            # Fallback: convert the whole HTML to SVG (not ideal, but better than nothing)
+            svg_data = html_content.encode("utf-8")
 
         png_data = BytesIO()
-        cairosvg.svg2png(bytestring=svg_data, write_to=png_data)
-        png_data.seek(0)
+        try:
+            cairosvg.svg2png(bytestring=svg_data, write_to=png_data)
+            png_data.seek(0)
+        except Exception as e:
+            await owner.send(f"❌ Error converting to PNG: {e}")
+            return
 
-        # Save to a local file
-        local_file = "trophy.svg"
+        # Save SVG locally
+        local_file = "certificate.svg"
         with open(local_file, "wb") as f:
             f.write(svg_data)
 
-        # Send the file to yourself
-        # await owner.send(file=discord.File(local_file))
-        await owner.send(file=discord.File(png_data, "trophy.png"))
+        # Send PNG to owner
+        await owner.send(file=discord.File(png_data, "certificate.png"))
 
-        # Push to GitHub Pages repo using GitHub App
+        # Push SVG to GitHub Pages repo using GitHub App
         try:
-            # Get GitHub App access token
             app_token = get_github_app_token()
             if not app_token:
                 await owner.send(
@@ -673,15 +686,15 @@ class BotCommands(commands.Cog):
                 return
 
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
-            FILE_PATH = "utils/trophy.svg"
+            FILE_PATH = "utils/certificate.svg"
 
             timestamp = datetime.datetime.now().isoformat()
-            COMMIT_MESSAGE = f"""🤖 Auto-update trophy.svg for @QuantumChemist by OpenGLaDOS Bot
+            COMMIT_MESSAGE = f"""🤖 Auto-update certificate.svg for @QuantumChemist by OpenGLaDOS Bot
 
 Bot Details:
 - Automated by: OpenGLaDOS Discord Bot
 - Timestamp: {timestamp}
-- Triggered by: /trophy command
+- Triggered by: /cert command
 
 This commit was made automatically by the OpenGLaDOS bot, not manually by @QuantumChemist."""
 
@@ -813,6 +826,69 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
         await owner.send(
             f"OpenGLaDOS website URL: {openglados_website_url} with extra: {extra}"
         )
+
+    @commands.command(name="trophy", help="Get the QuantumChemist trophy.")
+    @commands.is_owner()
+    async def trophy(self, ctx):
+        owner = await self.bot.fetch_user(self.bot.owner_id)
+        # Send the trophy URL to owner
+        trophy_url = "http://localhost:8080/?username=QuantumChemist&column=-1&theme=discord&no-bg=true"
+        response = requests.get(trophy_url)
+        svg_data = response.content  # binary content of SVG
+
+        png_data = BytesIO()
+        cairosvg.svg2png(bytestring=svg_data, write_to=png_data)
+        png_data.seek(0)
+
+        # Save to a local file
+        local_file = "trophy.svg"
+        with open(local_file, "wb") as f:
+            f.write(svg_data)
+
+        # Send the file to yourself
+        # await owner.send(file=discord.File(local_file))
+        await owner.send(file=discord.File(png_data, "trophy.png"))
+
+        # Push to GitHub Pages repo using GitHub App
+        try:
+            # Get GitHub App access token
+            app_token = get_github_app_token()
+            if not app_token:
+                await owner.send(
+                    "❌ Failed to get GitHub App token. Check your environment variables."
+                )
+                return
+
+            REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
+            FILE_PATH = "utils/trophy.svg"
+
+            timestamp = datetime.datetime.now().isoformat()
+            COMMIT_MESSAGE = f"""🤖 Auto-update trophy.svg for @QuantumChemist by OpenGLaDOS Bot
+
+Bot Details:
+- Automated by: OpenGLaDOS Discord Bot
+- Timestamp: {timestamp}
+- Triggered by: /trophy command
+
+This commit was made automatically by the OpenGLaDOS bot, not manually by @QuantumChemist."""
+
+            g = Github(app_token)
+            repo = g.get_repo(REPO_NAME)
+
+            try:
+                contents = repo.get_contents(FILE_PATH)
+                repo.update_file(contents.path, COMMIT_MESSAGE, svg_data, contents.sha)
+                await owner.send(
+                    f"✅ Updated {FILE_PATH} on GitHub successfully!\n[See the commit history](https://github.com/{REPO_NAME}/commits?author=openglados[bot])."
+                )
+            except Exception as ex:
+                repo.create_file(FILE_PATH, COMMIT_MESSAGE, svg_data)
+                await owner.send(
+                    f"✅ Created {FILE_PATH} on GitHub successfully! But exception > {ex} < happened."
+                )
+
+        except Exception as e:
+            await owner.send(f"❌ Error pushing to GitHub: {e}")
 
 
 async def setup(bot):
