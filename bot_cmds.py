@@ -18,6 +18,7 @@ from utils import (
     ensure_code_blocks_closed,
     split_text_by_period,
     create_cat_error_embed,
+    create_screenshot_with_wkhtmltoimage,
 )
 
 
@@ -648,34 +649,31 @@ class BotCommands(commands.Cog):
         owner = await self.bot.fetch_user(self.bot.owner_id)
         cert_url = "https://www.freecodecamp.org/certification/chichimeetsyoko/foundational-c-sharp-with-microsoft"
 
-        # Fetch the raw HTML
+        # Fetch raw HTML
         response = requests.get(cert_url)
         html_content = response.text
 
-        # Convert the page directly to PNG with html2image (html2png equivalent)
-        from html2image import Html2Image
+        # Use wkhtmltoimage to convert HTML → PNG
+        output_path = "certificate.png"
 
-        hti = Html2Image()
-
-        png_path = "certificate.png"
         try:
-            hti.screenshot(
-                html_str=html_content,
-                save_as=png_path,
-                size=(1920, 1080),  # adjust if needed
-            )
+            success = create_screenshot_with_wkhtmltoimage(html_content, output_path)
+            if not success:
+                await owner.send("❌ wkhtmltoimage failed to generate the screenshot.")
+                return
         except Exception as e:
-            await owner.send(f"❌ Error converting HTML to PNG: {e}")
+            await owner.send(f"❌ Error while calling wkhtmltoimage: {e}")
             return
 
-        # Read PNG bytes for sending
-        with open(png_path, "rb") as f:
-            png_data = BytesIO(f.read())
-            png_data.seek(0)
+        # Read PNG bytes for Discord upload
+        png_data = BytesIO()
+        with open(output_path, "rb") as f:
+            png_data.write(f.read())
+        png_data.seek(0)
 
-        # Save HTML directly instead of SVG — html2png gives us PNG only
-        local_file = "certificate.html"
-        with open(local_file, "w", encoding="utf-8") as f:
+        # Save HTML locally (replaces old SVG)
+        local_html = "certificate.html"
+        with open(local_html, "w", encoding="utf-8") as f:
             f.write(html_content)
 
         # Send PNG to owner
@@ -685,7 +683,7 @@ class BotCommands(commands.Cog):
         try:
             app_token = get_github_app_token()
             if not app_token:
-                await owner.send("❌ Failed to get GitHub App token.")
+                await owner.send("❌ Failed to obtain GitHub App token.")
                 return
 
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
