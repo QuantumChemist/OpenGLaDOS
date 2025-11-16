@@ -645,9 +645,10 @@ class BotCommands(commands.Cog):
         name="cert", help="Get the QuantumChemist/chichimeetsyoko certificate."
     )
     @commands.is_owner()
-    async def cert(self, ctx):
+    async def cert(self, ctx, cert_url: str = None):
         owner = await self.bot.fetch_user(self.bot.owner_id)
-        cert_url = "https://www.freecodecamp.org/certification/chichimeetsyoko/foundational-c-sharp-with-microsoft"
+        if cert_url is None:
+            cert_url = "https://www.freecodecamp.org/certification/chichimeetsyoko/foundational-c-sharp-with-microsoft"
 
         output_path = "certificate.png"
         try:
