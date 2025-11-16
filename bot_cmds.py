@@ -701,7 +701,9 @@ class BotCommands(commands.Cog):
                 repo.update_file(
                     contents.path, COMMIT_MESSAGE, html_content, contents.sha
                 )
-                await owner.send(f"✅ Updated {FILE_PATH} on GitHub successfully!")
+                await owner.send(
+                    f"✅ Updated {FILE_PATH} on GitHub successfully!\n[See the commit history](https://github.com/{REPO_NAME}/commits?author=openglados[bot])."
+                )
             except Exception as ex:
                 repo.create_file(FILE_PATH, COMMIT_MESSAGE, html_content)
                 await owner.send(
