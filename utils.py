@@ -423,16 +423,6 @@ async def render_certificate_playwright(url: str, output_path: str):
         await page.evaluate("window.scrollTo(0, 0)")
         await page.wait_for_timeout(700)
 
-        await page.add_style_tag(
-            content="""
-    .certification-container, .main-content, body {
-        border-radius: 32px !important;
-        overflow: hidden !important;
-        box-shadow: 0 0 24px #0004;
-    }
-"""
-        )
-
         # Screenshot full certificate
         await page.screenshot(path=output_path, full_page=True)
 
