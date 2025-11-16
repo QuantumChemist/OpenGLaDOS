@@ -18,7 +18,7 @@ from utils import (
     ensure_code_blocks_closed,
     split_text_by_period,
     create_cat_error_embed,
-    create_screenshot_with_wkhtmltoimage_cert,
+    render_certificate_playwright,
 )
 
 
@@ -653,22 +653,11 @@ class BotCommands(commands.Cog):
         response = requests.get(cert_url)
         html_content = response.text
 
-        # Use wkhtmltoimage to convert HTML → PNG
         output_path = "certificate.png"
-
         try:
-            success, out, err = create_screenshot_with_wkhtmltoimage_cert(
-                html_content, output_path
-            )
-            if not success:
-                await owner.send(
-                    "❌ wkhtmltoimage failed.\n"
-                    f"**stdout:**\n```\n{out}\n```\n"
-                    f"**stderr:**\n```\n{err}\n```"
-                )
-                return
+            await render_certificate_playwright(cert_url, output_path)
         except Exception as e:
-            await owner.send(f"❌ Error while calling wkhtmltoimage: {e}")
+            await owner.send(f"❌ Playwright error: {e}")
             return
 
         # Read PNG bytes for Discord upload
