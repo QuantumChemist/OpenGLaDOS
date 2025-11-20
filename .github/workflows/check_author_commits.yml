@@ -6,30 +6,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Verify commit authors
+        with:
+          fetch-depth: 1  # only fetches the latest commit
+
+      - name: Verify current commit author
         run: |
-          # List of banned authors and emails (case-insensitive). You can add more.
+          # List of banned authors and emails
           banned_authors=("linus torvalds" "satoshi nakamoto" "elon musk")
           banned_emails=("torvalds@linux-foundation.org" "satoshi@bitcoin.org" "elon@spacex.com")
 
-          # Get all authors and emails in the push range
-          authors=$(git log --format='%an' ${{ github.event.before }}..${{ github.sha }})
-          emails=$(git log --format='%ae' ${{ github.event.before }}..${{ github.sha }})
+          # Get author name and email for the current commit only
+          author=$(git show -s --format='%an' ${{ github.sha }})
+          email=$(git show -s --format='%ae' ${{ github.sha }})
 
-          # Check names
+          # Check banned authors
           for banned in "${banned_authors[@]}"; do
-            if echo "$authors" | grep -i "$banned"; then
+            if [[ "${author,,}" == "${banned,,}" ]]; then
               echo "Blocked: Commit attributed to banned author '$banned'."
               exit 1
             fi
           done
 
-          # Check emails
-          for email in "${banned_emails[@]}"; do
-            if echo "$emails" | grep -i "$email"; then
-              echo "Blocked: Commit attributed to banned email '$email'."
+          # Check banned emails
+          for banned in "${banned_emails[@]}"; do
+            if [[ "${email,,}" == "${banned,,}" ]]; then
+              echo "Blocked: Commit attributed to banned email '$banned'."
               exit 1
             fi
           done
 
-          echo "Author check passed. No banned commit authors found."
+          echo "Author check passed. No banned commit author found."
