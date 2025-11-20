@@ -1,0 +1,35 @@
+name: Check Commit Author
+on: push
+jobs:
+  author-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Verify commit authors
+        run: |
+          # List of banned authors and emails (case-insensitive). You can add more.
+          banned_authors=("linus torvalds" "satoshi nakamoto" "elon musk")
+          banned_emails=("torvalds@linux-foundation.org" "satoshi@bitcoin.org" "elon@spacex.com")
+
+          # Get all authors and emails in the push range
+          authors=$(git log --format='%an' ${{ github.event.before }}..${{ github.sha }})
+          emails=$(git log --format='%ae' ${{ github.event.before }}..${{ github.sha }})
+
+          # Check names
+          for banned in "${banned_authors[@]}"; do
+            if echo "$authors" | grep -i "$banned"; then
+              echo "Blocked: Commit attributed to banned author '$banned'."
+              exit 1
+            fi
+          done
+
+          # Check emails
+          for email in "${banned_emails[@]}"; do
+            if echo "$emails" | grep -i "$email"; then
+              echo "Blocked: Commit attributed to banned email '$email'."
+              exit 1
+            fi
+          done
+
+          echo "Author check passed. No banned commit authors found."
