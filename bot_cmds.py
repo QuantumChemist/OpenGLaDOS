@@ -828,10 +828,29 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
 
     @commands.command(name="trophy", help="Get the QuantumChemist trophy.")
     @commands.is_owner()
-    async def trophy(self, ctx):
+    async def trophy(self, ctx, trophy_arg: str = None):
         owner = await self.bot.fetch_user(self.bot.owner_id)
-        # Send the trophy URL to owner
-        trophy_url = "http://localhost:8080/?username=QuantumChemist&column=-1&theme=discord&no-bg=true"
+
+        if trophy_arg is None:
+            # Send the trophy URL to owner
+            trophy_url = "http://localhost:8080/?username=QuantumChemist&column=-1&theme=discord&no-bg=true"
+            # Save to a local file
+            local_file = "trophy.svg"
+            username = "QuantumChemist"
+        else:
+            # Parse trophy_arg for username, column, theme
+            parts = trophy_arg.split()
+            username = parts[0] if len(parts) > 0 else "QuantumChemist"
+            column = parts[1] if len(parts) > 1 else "-1"
+            theme = parts[2] if len(parts) > 2 else "discord"
+            bg = parts[3] if len(parts) > 3 else "true"
+            kwargs = ""
+            if len(parts) > 4:
+                for extra in parts[4:]:
+                    kwargs += f"&{extra}"
+            trophy_url = f"http://localhost:8080/?username={username}&column={column}&theme={theme}&no-bg={bg}{kwargs}"
+            local_file = f"trophy_{username}.svg"
+
         response = requests.get(trophy_url)
         svg_data = response.content  # binary content of SVG
 
@@ -839,13 +858,12 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
         cairosvg.svg2png(bytestring=svg_data, write_to=png_data)
         png_data.seek(0)
 
-        # Save to a local file
-        local_file = "trophy.svg"
         with open(local_file, "wb") as f:
             f.write(svg_data)
 
         # Send the file to yourself
         # await owner.send(file=discord.File(local_file))
+        await owner.send(f"Trophy for {username} generated from URL: {trophy_url}")
         await owner.send(file=discord.File(png_data, "trophy.png"))
 
         # Push to GitHub Pages repo using GitHub App
