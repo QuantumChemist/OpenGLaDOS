@@ -877,7 +877,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
                 return
 
             REPO_NAME = "QuantumChemist/QuantumChemist.github.io"
-            FILE_PATH = "utils/trophy.svg"
+            FILE_PATH = f"utils/trophy_{username}.svg"
 
             timestamp = datetime.datetime.now().isoformat()
             COMMIT_MESSAGE = f"""🤖 Auto-update trophy.svg for @QuantumChemist by OpenGLaDOS Bot
