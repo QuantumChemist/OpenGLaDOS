@@ -839,16 +839,9 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
             username = "QuantumChemist"
         else:
             # Parse trophy_arg for username, column, theme
-            parts = trophy_arg.split()
-            username = parts[0] if len(parts) > 0 else "QuantumChemist"
-            column = parts[1] if len(parts) > 1 else "-1"
-            theme = parts[2] if len(parts) > 2 else "discord"
-            bg = parts[3] if len(parts) > 3 else "true"
-            kwargs = ""
-            if len(parts) > 4:
-                for extra in parts[4:]:
-                    kwargs += f"&{extra}"
-            trophy_url = f"http://localhost:8080/?username={username}&column={column}&theme={theme}&no-bg={bg}{kwargs}"
+            trophy_url = f"http://localhost:8080/?{trophy_arg}"
+            username_match = re.search(r"username=([^&]+)", trophy_arg)
+            username = username_match.group(1) if username_match else "QuantumChemist"
             local_file = f"trophy_{username}.svg"
 
         response = requests.get(trophy_url)
