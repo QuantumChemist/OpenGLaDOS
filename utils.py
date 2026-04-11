@@ -24,7 +24,6 @@ import tempfile
 import time as t
 from playwright.async_api import async_playwright
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)  # or DEBUG, WARNING, etc.
 handler = logging.StreamHandler()  # configure handlers/formatters as you like
