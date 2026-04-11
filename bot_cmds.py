@@ -900,6 +900,23 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
         except Exception as e:
             await owner.send(f"❌ Error pushing to GitHub: {e}")
 
+    @commands.command(
+        name="ownerserverjoin",
+        help="Let's the bot owner join a server by providing the server name.",
+    )
+    @commands.is_owner()
+    async def owner_server_join(self, ctx, *, server_name: str):
+        try:
+            # Search for the guild by name
+            guild = discord.utils.find(lambda g: g.name == server_name, self.bot.guilds)
+            if guild:
+                invite = await guild.text_channels[0].create_invite(max_age=300)
+                await ctx.send(f"Here's an invite link to {server_name}: {invite.url}")
+            else:
+                await ctx.send(f"Could not find a server with the name: {server_name}")
+        except Exception as e:
+            await ctx.send(f"An error occurred: {str(e)}")
+
 
 async def setup(bot):
     await bot.add_cog(BotCommands(bot))
