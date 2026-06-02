@@ -400,21 +400,51 @@ class BotCommands(commands.Cog):
 
     @commands.command(
         name="leave",
-        help="Allows the bot to leave a server via DM by using the guild name",
+        help="Bans the bot from a server via DM by using the guild name (fallback: leave)",
     )
     @commands.is_owner()  # Only the bot owner can execute this command
     async def leave(self, ctx, *, guild_name: str):
-        """Allows the bot to leave a server via DM by using the guild name"""
+        """Bans the bot from a server via DM by using the guild name."""
         if isinstance(ctx.message.channel, discord.DMChannel):
             guild, suggestions = self._find_guild_by_name(guild_name)
             if guild:
                 try:
-                    await guild.leave()
-                    await ctx.send(f"Successfully left the server: {guild.name}")
-                except discord.Forbidden:
-                    await ctx.send(
-                        f"Failed to leave the server: {guild.name}. I don't have the required permissions."
+                    # Prefer self-ban so accidental re-adds are blocked unless manually unbanned.
+                    await guild.ban(
+                        self.bot.user,
+                        reason=f"Self-ban requested by owner {ctx.author} via DM command.",
                     )
+                    await ctx.send(
+                        f"Successfully banned myself from the server: {guild.name}"
+                    )
+                except discord.Forbidden:
+                    # If ban permission is missing, still leave as a fallback.
+                    try:
+                        await guild.leave()
+                        await ctx.send(
+                            f"I couldn't ban myself in {guild.name} (missing permissions), but I left the server instead."
+                        )
+                    except discord.Forbidden:
+                        await ctx.send(
+                            f"Failed to self-ban or leave {guild.name}. I don't have the required permissions."
+                        )
+                    except discord.HTTPException as e:
+                        await ctx.send(
+                            f"Failed to self-ban and failed to leave {guild.name}: {e}"
+                        )
+                except discord.HTTPException as e:
+                    await ctx.send(
+                        f"Failed to self-ban from {guild.name}: {e}. Attempting to leave instead."
+                    )
+                    try:
+                        await guild.leave()
+                        await ctx.send(
+                            f"Fallback successful: left the server {guild.name}."
+                        )
+                    except Exception as leave_error:
+                        await ctx.send(
+                            f"Fallback leave failed for {guild.name}: {leave_error}"
+                        )
             else:
                 if suggestions:
                     suggestion_text = "\n".join(f"- {name}" for name in suggestions)
