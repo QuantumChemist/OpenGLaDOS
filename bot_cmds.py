@@ -109,6 +109,65 @@ class BotCommands(commands.Cog):
         self.manual_report_triggered = False
         self.start_triggered = False
 
+    @staticmethod
+    def _normalize_guild_name(name: str) -> str:
+        """Normalize guild names for resilient matching from user input."""
+        if not name:
+            return ""
+
+        cleaned = name.strip()
+        # Remove common wrappers/decorators users add around names.
+        cleaned = cleaned.strip("`'\"|/\\-_")
+        cleaned = re.sub(r"[|/\\]+", " ", cleaned)
+        cleaned = re.sub(r"\s+", " ", cleaned).strip()
+        return cleaned.casefold()
+
+    @staticmethod
+    def _compact_name(name: str) -> str:
+        """Keep only letters and numbers for tolerant fallback matching."""
+        return re.sub(r"[^a-z0-9]", "", name.casefold())
+
+    def _find_guild_by_name(self, raw_name: str):
+        """
+        Find a guild by user-provided name using normalized exact match,
+        then tolerant fallback matching.
+        Returns (guild_or_none, suggestion_names).
+        """
+        query = self._normalize_guild_name(raw_name)
+        if not query:
+            return None, []
+
+        normalized = {
+            g: self._normalize_guild_name(g.name)
+            for g in self.bot.guilds
+            if g and g.name
+        }
+
+        # 1) Exact normalized match.
+        for guild, norm_name in normalized.items():
+            if norm_name == query:
+                return guild, []
+
+        # 2) Exact compact match (ignores punctuation entirely).
+        query_compact = self._compact_name(query)
+        compact_matches = [
+            guild
+            for guild, norm_name in normalized.items()
+            if self._compact_name(norm_name) == query_compact
+        ]
+        if len(compact_matches) == 1:
+            return compact_matches[0], []
+
+        # 3) Substring match for convenience.
+        substring_matches = [
+            guild for guild, norm_name in normalized.items() if query in norm_name
+        ]
+        if len(substring_matches) == 1:
+            return substring_matches[0], []
+
+        suggestions = compact_matches or substring_matches
+        return None, [g.name for g in suggestions[:5]]
+
     # Regular bot command implementation
     @commands.command(name="start", help="Start chat mode to send messages manually.")
     @commands.is_owner()  # Only the bot owner can use this command
@@ -347,8 +406,7 @@ class BotCommands(commands.Cog):
     async def leave(self, ctx, *, guild_name: str):
         """Allows the bot to leave a server via DM by using the guild name"""
         if isinstance(ctx.message.channel, discord.DMChannel):
-            # Search for the guild by name
-            guild = discord.utils.find(lambda g: g.name == guild_name, self.bot.guilds)
+            guild, suggestions = self._find_guild_by_name(guild_name)
             if guild:
                 try:
                     await guild.leave()
@@ -358,7 +416,16 @@ class BotCommands(commands.Cog):
                         f"Failed to leave the server: {guild.name}. I don't have the required permissions."
                     )
             else:
-                await ctx.send(f"Could not find a server with the name: {guild_name}")
+                if suggestions:
+                    suggestion_text = "\n".join(f"- {name}" for name in suggestions)
+                    await ctx.send(
+                        "Could not find an exact server match. Did you mean:\n"
+                        f"{suggestion_text}"
+                    )
+                else:
+                    await ctx.send(
+                        f"Could not find a server with the name: {guild_name}"
+                    )
         else:
             await ctx.send("This command can only be used in DMs.")
 
