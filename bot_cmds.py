@@ -109,6 +109,8 @@ class BotCommands(commands.Cog):
         self.manual_report_triggered = False
         self.start_triggered = False
 
+        self.music_looping = {}  # Dictionary to track looping state per guild
+
     @staticmethod
     def _normalize_guild_name(name: str) -> str:
         """Normalize guild names for resilient matching from user input."""
@@ -167,6 +169,17 @@ class BotCommands(commands.Cog):
 
         suggestions = compact_matches or substring_matches
         return None, [g.name for g in suggestions[:5]]
+
+    async def _play_loop(self, ctx, voice_client):
+        guild_id = ctx.guild.id
+
+        while self.music_looping.get(guild_id):
+            source = discord.FFmpegPCMAudio("openglados_loop.webm", options="-vn")
+
+            voice_client.play(source)
+
+            while voice_client.is_playing() or voice_client.is_paused():
+                await asyncio.sleep(1)
 
     # Regular bot command implementation
     @commands.command(name="start", help="Start chat mode to send messages manually.")
@@ -1013,6 +1026,56 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
                 await ctx.send(f"Could not find a server with the name: {server_name}")
         except Exception as e:
             await ctx.send(f"An error occurred: {str(e)}")
+
+    @commands.command(
+        name="ytloop", help="Join your voice channel and loop the fixed YouTube video."
+    )
+    @commands.is_owner()
+    async def ytloop(self, ctx: commands.Context):
+        if not ctx.guild:
+            await ctx.send("Use this in a server, not DMs.")
+            return
+
+        if not ctx.author.voice or not ctx.author.voice.channel:
+            await ctx.send("Join a voice channel first.")
+            return
+
+        voice_channel = ctx.author.voice.channel
+        guild_id = ctx.guild.id
+
+        if ctx.voice_client and ctx.voice_client.is_connected():
+            voice_client = ctx.voice_client
+            await voice_client.move_to(voice_channel)
+        else:
+            voice_client = await voice_channel.connect()
+
+        if self.music_looping.get(guild_id):
+            await ctx.send("Already looping.")
+            return
+
+        self.music_looping[guild_id] = True
+        await ctx.send(f"Joined **{voice_channel.name}** and started looping.")
+
+        self.bot.loop.create_task(self._play_loop(ctx, voice_client))
+
+    @commands.command(name="ytstop", help="Stop YouTube loop and leave voice.")
+    @commands.is_owner()
+    async def ytstop(self, ctx: commands.Context):
+        if not ctx.guild:
+            await ctx.send("Use this in a server, not DMs.")
+            return
+
+        guild_id = ctx.guild.id
+        self.music_looping[guild_id] = False
+
+        if ctx.voice_client:
+            if ctx.voice_client.is_playing() or ctx.voice_client.is_paused():
+                ctx.voice_client.stop()
+
+            await ctx.voice_client.disconnect(force=True)
+            await ctx.send("Stopped loop and left the voice channel.")
+        else:
+            await ctx.send("I am not in a voice channel.")
 
 
 async def setup(bot):
