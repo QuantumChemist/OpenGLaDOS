@@ -292,7 +292,7 @@ class OpenGLaDOS(commands.Cog):
                             # Retry with a different model
                             llm_answer = get_groq_completion(
                                 history=[{"role": "user", "content": text}],
-                                model="qwen/qwen3.6-27b",
+                                model="meta-llama/llama-prompt-guard-2-22m",
                             )
 
                         except Exception as nested_e:
@@ -1150,7 +1150,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 # Retry with a different model
                 llm_answer = get_groq_completion(
                     history=[{"role": "user", "content": text}],
-                    model="qwen/qwen3.6-27b",
+                    model="meta-llama/llama-prompt-guard-2-22m",
                 )
 
             except Exception as nested_e:
@@ -1196,7 +1196,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 # Retry with a different model
                 llm_answer = get_groq_completion(
                     history=[{"role": "user", "content": text}],
-                    model="qwen/qwen3.6-27b",
+                    model="meta-llama/llama-prompt-guard-2-22m",
                 )
 
             except Exception as nested_e:
@@ -1396,7 +1396,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         # Retry with a different model
                         llm_answer = get_groq_completion(
                             history=[{"role": "user", "content": text}],
-                            model="qwen/qwen3.6-27b",
+                            model="meta-llama/llama-prompt-guard-2-22m",
                         )
 
                     except Exception as nested_e:
@@ -1702,7 +1702,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     # Retry with a different model
                     llm_answer = get_groq_completion(
                         history=[{"role": "user", "content": text}],
-                        model="qwen/qwen3.6-27b",
+                        model="meta-llama/llama-prompt-guard-2-22m",
                     )
 
                 except Exception as nested_e:
@@ -2151,7 +2151,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                                 # Retry with a different model
                                 llm_answer = get_groq_completion(
                                     history=[{"role": "user", "content": text}],
-                                    model="qwen/qwen3.6-27b",
+                                    model="meta-llama/llama-prompt-guard-2-22m",
                                 )
 
                             except Exception as nested_e:
