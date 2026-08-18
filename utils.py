@@ -737,7 +737,7 @@ def generate_llm_convo_text(
         # 1. Attempt the request through OpenRouter's free pool router
         llm_answer = fetch_chat_completion(history=history, model="openrouter/free")
     except Exception as e:
-        # 2. This block will NOW execute perfectly if status code 429, 400, or 500 triggers
+        # 2. This block will execute if status code 429, 400, or 500 triggers
         print(f"Logged Exception: {e}")
         llm_answer = "<a:openglados_mad:1338111725760811110> *BZZZT*... Core temperature critical. Upstream networks are congested. Try testing me again in a moment."
 
