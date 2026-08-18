@@ -432,7 +432,7 @@ async def render_certificate_playwright(url: str, output_path: str):
 # Define a function for chat completion with message history
 def get_groq_completion(
     history,
-    model: str = "llama-3.3-70b-versatile",
+    model: str = "qwen/qwen3.6-27b",
     max_tokens=475,
     text="Your initial text here",
 ):
@@ -707,9 +707,7 @@ def generate_llm_convo_text(
 
     # Invoke the model with the user's prompt and history
     try:
-        llm_answer = get_groq_completion(
-            history=history, model="llama-3.3-70b-versatile"
-        )
+        llm_answer = get_groq_completion(history=history, model="qwen/qwen3.6-27b")
 
     except Exception as e:
         print(f"An error occurred: {e}")
