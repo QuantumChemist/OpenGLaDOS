@@ -735,21 +735,22 @@ def generate_llm_convo_text(
 
     # Invoke the model with the user's prompt and history
     try:
+        # Attempt Primary Free Model Call
         llm_answer = fetch_chat_completion(
             history=history, model="google/gemma-4-31b-it:free"
         )
-
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"Primary model rate-limited: {e}")
 
         try:
-            # Retry with a different model
-            llm_answer = fetch_chat_completion(history=history)
-
+            # Fall back to a completely different free provider cluster
+            llm_answer = fetch_chat_completion(
+                history=history, model="nvidia/llama-3.1-nemotron-ultra-253b:free"
+            )
         except Exception as nested_e:
-            # Handle the failure of the exception handling
-            print(f"An error occurred while handling the exception: {nested_e}")
-            llm_answer = "*system failure*... unable to process request... shutting down.... *bzzzt*"
+            print(f"Backup model failed as well: {nested_e}")
+            # Final safety net string sent directly to Discord
+            llm_answer = "<a:openglados_mad:1338111725760811110> *BZZZT*... Core temperature critical. Upstream networks are congested. Try testing me again in a moment."
 
     # Ensure the output is limited to 1900 characters
     if len(llm_answer) > 1900:
