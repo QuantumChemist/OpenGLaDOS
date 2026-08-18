@@ -735,7 +735,9 @@ def generate_llm_convo_text(
 
     # Invoke the model with the user's prompt and history
     try:
-        llm_answer = fetch_chat_completion(history=history, model="...'),")
+        llm_answer = fetch_chat_completion(
+            history=history, model="google/gemma-4-31b-it:free"
+        )
 
     except Exception as e:
         print(f"An error occurred: {e}")
