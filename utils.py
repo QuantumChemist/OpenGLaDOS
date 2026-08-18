@@ -2,7 +2,8 @@ import os
 import re
 import time
 import discord
-from groq import Groq
+import http.client
+import json
 from dotenv import load_dotenv
 import asyncio
 import aiohttp
@@ -333,9 +334,6 @@ valid_status_codes = [
 
 user_quiz_state = {}
 
-# convos
-llm = Groq(api_key=os.environ.get("GROQ_TOKEN"))
-
 
 def create_screenshot_with_wkhtmltoimage(html_content: str, output_path: str) -> bool:
     """Create screenshot using wkhtmltoimage"""
@@ -429,10 +427,10 @@ async def render_certificate_playwright(url: str, output_path: str):
     return True
 
 
-# Define a function for chat completion with message history
+# Updated function for OpenRouter chat completion with message history
 def get_groq_completion(
     history,
-    model: str = "...'),",
+    model: str = "google/gemma-4-31b-it:free",  # Default to 100% Free Google model
     max_tokens=475,
     text="Your initial text here",
 ):
@@ -441,8 +439,8 @@ def get_groq_completion(
 
     num_bre = random.random()
 
-    # Introduce randomness to temperature and frequency_penalty
-    if num_bre < 0.5:  # 40% chance to change the values
+    # Introduce randomness to temperature and frequency_penalty (Preserved your logic)
+    if num_bre < 0.5:
         temperature = random.uniform(0.5, 1.1)
         frequency_penalty = random.uniform(0.0, 0.7)
     else:
@@ -451,17 +449,48 @@ def get_groq_completion(
 
     print(f"Temperature: {temperature}, Frequency Penalty: {frequency_penalty}")
 
-    # Sending request to Groq for chat completion using the updated history
-    chat_completion = llm.chat.completions.create(
-        messages=history,
-        model=model,
-        max_tokens=max_tokens,
-        temperature=temperature,
-        frequency_penalty=frequency_penalty,
-    )
+    # --- NATIVE OPENROUTER NETWORK CALL ---
 
-    # Return the content of the completion
-    return chat_completion.choices[0].message.content
+    # 1. Establish network connection
+    conn = http.client.HTTPSConnection("openrouter.ai")
+
+    # 2. Structure payload with your randomized variables and chat history
+    payload_data = {
+        "model": model,
+        "messages": history,
+        "max_tokens": max_tokens,
+        "temperature": temperature,
+        "frequency_penalty": frequency_penalty,
+    }
+
+    # 3. Secure headers using your OpenRouter token
+    # (Make sure to set OPENROUTER_TOKEN in your environment variables/ .env file)
+    headers = {
+        "Authorization": f"Bearer {os.environ.get('OPENROUTER_TOKEN')}",
+        "Content-Type": "application/json",
+    }
+
+    try:
+        # 4. Fire the payload natively via HTTP POST
+        conn.request(
+            "POST", "/api/v1/chat/completions", json.dumps(payload_data), headers
+        )
+
+        # 5. Extract and parse network data
+        response = conn.getresponse()
+        raw_data = response.read().decode("utf-8")
+
+        if response.status == 200:
+            parsed_json = json.loads(raw_data)
+            # Return text output exactly like the old client did
+            return parsed_json["choices"][0]["message"]["content"]
+        else:
+            return f"Error: API returned status code {response.status}. Details: {raw_data}"
+
+    except Exception as e:
+        return f"Network failure connecting to OpenRouter: {str(e)}"
+    finally:
+        conn.close()
 
 
 def get_greeting(user_time):
