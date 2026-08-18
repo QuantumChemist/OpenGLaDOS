@@ -430,7 +430,7 @@ async def render_certificate_playwright(url: str, output_path: str):
 # Updated function for OpenRouter chat completion with message history
 def fetch_chat_completion(
     history,
-    model: str = "google/gemma-4-31b-it:free",  # Default to 100% Free Google model
+    model: str = "openrouter/free",  # Default to 100% Free Google model
     max_tokens=475,
     text="Your initial text here",
 ):
@@ -736,9 +736,7 @@ def generate_llm_convo_text(
     # Invoke the model with the user's prompt and history
     try:
         # Attempt Primary Free Model Call
-        llm_answer = fetch_chat_completion(
-            history=history, model="google/gemma-4-31b-it:free"
-        )
+        llm_answer = fetch_chat_completion(history=history, model="openrouter/free")
     except Exception as e:
         print(f"Primary model rate-limited: {e}")
 
