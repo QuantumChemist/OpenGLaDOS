@@ -300,7 +300,7 @@ class OpenGLaDOS(commands.Cog):
                             print(
                                 f"An error occurred while handling the exception: {nested_e}"
                             )
-                            llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
+                            llm_answer = "*system failure*... unable to process request... shutting down.... *bzzzt*"
 
                     # Ensure the output is limited to 1900 characters
                     if len(llm_answer) > 1900:
@@ -1156,7 +1156,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             except Exception as nested_e:
                 # Handle the failure of the exception handling
                 print(f"An error occurred while handling the exception: {nested_e}")
-                llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
+                llm_answer = "*system failure*... unable to process request... shutting down.... *bzzzt*"
 
         # Ensure the output is limited to 1900 characters
         if len(llm_answer) > 1900:
@@ -1202,7 +1202,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             except Exception as nested_e:
                 # Handle the failure of the exception handling
                 print(f"An error occurred while handling the exception: {nested_e}")
-                llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
+                llm_answer = "*system failure*... unable to process request... shutting down.... *bzzzt*"
 
         # Ensure the output is limited to 1900 characters
         if len(llm_answer) > 1900:
@@ -1404,7 +1404,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         print(
                             f"An error occurred while handling the exception: {nested_e}"
                         )
-                        llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
+                        llm_answer = "*system failure*... unable to process request... shutting down.... *bzzzt*"
 
                 # Ensure the output is limited to 1900 characters
                 if len(llm_answer) > 1900:
@@ -1708,7 +1708,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 except Exception as nested_e:
                     # Handle the failure of the exception handling
                     print(f"An error occurred while handling the exception: {nested_e}")
-                    llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
+                    llm_answer = "*system failure*... unable to process request... shutting down.... *bzzzt*"
 
             # Ensure the output is limited to 1900 characters
             if len(llm_answer) > 1900:
@@ -2159,7 +2159,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                                 print(
                                     f"An error occurred while handling the exception: {nested_e}"
                                 )
-                                llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
+                                llm_answer = "*system failure*... unable to process request... shutting down.... *bzzzt*"
 
                         # Ensure the output is limited to 1900 characters
                         if len(llm_answer) > 1900:
