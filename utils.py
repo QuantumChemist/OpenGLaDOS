@@ -485,7 +485,7 @@ def fetch_chat_completion(
             content = parsed_json["choices"][0]["message"]["content"]
             actual_model_used = parsed_json.get("model", model)
 
-            print(f"OpenRouter Model Used: {actual_model_used}\n")  # Debugging output
+            print(f"\nOpenRouter Model Used: {actual_model_used}\n")  # Debugging output
 
             # Return them together as a tuple
             return content
