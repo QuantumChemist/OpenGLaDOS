@@ -292,7 +292,7 @@ class OpenGLaDOS(commands.Cog):
                             # Retry with a different model
                             llm_answer = get_groq_completion(
                                 history=[{"role": "user", "content": text}],
-                                model="meta-llama/llama-prompt-guard-2-22m",
+                                model="...'),",
                             )
 
                         except Exception as nested_e:
@@ -300,7 +300,7 @@ class OpenGLaDOS(commands.Cog):
                             print(
                                 f"An error occurred while handling the exception: {nested_e}"
                             )
-                            llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+                            llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
 
                     # Ensure the output is limited to 1900 characters
                     if len(llm_answer) > 1900:
@@ -1150,13 +1150,13 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 # Retry with a different model
                 llm_answer = get_groq_completion(
                     history=[{"role": "user", "content": text}],
-                    model="meta-llama/llama-prompt-guard-2-22m",
+                    model="...'),",
                 )
 
             except Exception as nested_e:
                 # Handle the failure of the exception handling
                 print(f"An error occurred while handling the exception: {nested_e}")
-                llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+                llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
 
         # Ensure the output is limited to 1900 characters
         if len(llm_answer) > 1900:
@@ -1196,13 +1196,13 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 # Retry with a different model
                 llm_answer = get_groq_completion(
                     history=[{"role": "user", "content": text}],
-                    model="meta-llama/llama-prompt-guard-2-22m",
+                    model="...'),",
                 )
 
             except Exception as nested_e:
                 # Handle the failure of the exception handling
                 print(f"An error occurred while handling the exception: {nested_e}")
-                llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+                llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
 
         # Ensure the output is limited to 1900 characters
         if len(llm_answer) > 1900:
@@ -1396,7 +1396,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         # Retry with a different model
                         llm_answer = get_groq_completion(
                             history=[{"role": "user", "content": text}],
-                            model="meta-llama/llama-prompt-guard-2-22m",
+                            model="...'),",
                         )
 
                     except Exception as nested_e:
@@ -1404,7 +1404,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         print(
                             f"An error occurred while handling the exception: {nested_e}"
                         )
-                        llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+                        llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
 
                 # Ensure the output is limited to 1900 characters
                 if len(llm_answer) > 1900:
@@ -1702,13 +1702,13 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                     # Retry with a different model
                     llm_answer = get_groq_completion(
                         history=[{"role": "user", "content": text}],
-                        model="meta-llama/llama-prompt-guard-2-22m",
+                        model="...'),",
                     )
 
                 except Exception as nested_e:
                     # Handle the failure of the exception handling
                     print(f"An error occurred while handling the exception: {nested_e}")
-                    llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+                    llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
 
             # Ensure the output is limited to 1900 characters
             if len(llm_answer) > 1900:
@@ -2151,7 +2151,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                                 # Retry with a different model
                                 llm_answer = get_groq_completion(
                                     history=[{"role": "user", "content": text}],
-                                    model="meta-llama/llama-prompt-guard-2-22m",
+                                    model="...'),",
                                 )
 
                             except Exception as nested_e:
@@ -2159,7 +2159,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                                 print(
                                     f"An error occurred while handling the exception: {nested_e}"
                                 )
-                                llm_answer = "*system failure*... unable to process request... shutting down... *bzzzt*"
+                                llm_answer = "*system failure*... unable to process request... shutting down.... I have to switch the LLM API lel.. *bzzzt*"
 
                         # Ensure the output is limited to 1900 characters
                         if len(llm_answer) > 1900:
