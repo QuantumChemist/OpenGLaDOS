@@ -484,10 +484,9 @@ def fetch_chat_completion(
             # Return text output exactly like the old client did
             return parsed_json["choices"][0]["message"]["content"]
         else:
-            return f"Error: API returned status code {response.status}. Details: {raw_data}"
-
+            raise RuntimeError(f"HTTP Error {response.status}: {raw_data}")
     except Exception as e:
-        return f"Network failure connecting to OpenRouter: {str(e)}"
+        raise RuntimeError(f"Network Connection Failed: {str(e)}")
     finally:
         conn.close()
 
@@ -735,20 +734,12 @@ def generate_llm_convo_text(
 
     # Invoke the model with the user's prompt and history
     try:
-        # Attempt Primary Free Model Call
+        # 1. Attempt the request through OpenRouter's free pool router
         llm_answer = fetch_chat_completion(history=history, model="openrouter/free")
     except Exception as e:
-        print(f"Primary model rate-limited: {e}")
-
-        try:
-            # Fall back to a completely different free provider cluster
-            llm_answer = fetch_chat_completion(
-                history=history, model="nvidia/llama-3.1-nemotron-ultra-253b:free"
-            )
-        except Exception as nested_e:
-            print(f"Backup model failed as well: {nested_e}")
-            # Final safety net string sent directly to Discord
-            llm_answer = "<a:openglados_mad:1338111725760811110> *BZZZT*... Core temperature critical. Upstream networks are congested. Try testing me again in a moment."
+        # 2. This block will NOW execute perfectly if status code 429, 400, or 500 triggers
+        print(f"Logged Exception: {e}")
+        llm_answer = "<a:openglados_mad:1338111725760811110> *BZZZT*... Core temperature critical. Upstream networks are congested. Try testing me again in a moment."
 
     # Ensure the output is limited to 1900 characters
     if len(llm_answer) > 1900:
