@@ -481,8 +481,14 @@ def fetch_chat_completion(
 
         if response.status == 200:
             parsed_json = json.loads(raw_data)
-            # Return text output exactly like the old client did
-            return parsed_json["choices"][0]["message"]["content"]
+            # Extract both the text response AND the actual model used by OpenRouter
+            content = parsed_json["choices"][0]["message"]["content"]
+            actual_model_used = parsed_json.get("model", model)
+
+            print(f"OpenRouter Model Used: {actual_model_used}\n")  # Debugging output
+
+            # Return them together as a tuple
+            return content
         else:
             raise RuntimeError(f"HTTP Error {response.status}: {raw_data}")
     except Exception as e:
