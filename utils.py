@@ -464,9 +464,8 @@ def fetch_chat_completion(
     }
 
     # 3. Secure headers using your OpenRouter token
-    # (Make sure to set OPENROUTER_TOKEN in your environment variables/ .env file)
     headers = {
-        "Authorization": f"Bearer {os.environ.get('OPENROUTER_TOKEN')}",
+        "Authorization": f"Bearer {os.environ.get('OPENROUTER_KEY')}",
         "Content-Type": "application/json",
     }
 
