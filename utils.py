@@ -428,7 +428,7 @@ async def render_certificate_playwright(url: str, output_path: str):
 
 
 # Updated function for OpenRouter chat completion with message history
-def get_groq_completion(
+def fetch_chat_completion(
     history,
     model: str = "google/gemma-4-31b-it:free",  # Default to 100% Free Google model
     max_tokens=475,
@@ -736,14 +736,14 @@ def generate_llm_convo_text(
 
     # Invoke the model with the user's prompt and history
     try:
-        llm_answer = get_groq_completion(history=history, model="...'),")
+        llm_answer = fetch_chat_completion(history=history, model="...'),")
 
     except Exception as e:
         print(f"An error occurred: {e}")
 
         try:
             # Retry with a different model
-            llm_answer = get_groq_completion(history=history)
+            llm_answer = fetch_chat_completion(history=history)
 
         except Exception as nested_e:
             # Handle the failure of the exception handling
@@ -760,7 +760,7 @@ def generate_llm_convo_text(
     # Loop to check for unbalanced mentions
     while not check_mentions(llm_answer) and attempts < max_attempts:
         print("Unbalanced mentions detected, regenerating response.")
-        llm_answer = get_groq_completion(history)
+        llm_answer = fetch_chat_completion(history)
 
         # Apply character limit again after regeneration
         if len(llm_answer) > 1900:

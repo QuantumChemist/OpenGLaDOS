@@ -13,7 +13,7 @@ import datetime
 from io import BytesIO
 from github import Github, GithubIntegration
 from utils import (
-    get_groq_completion,
+    fetch_chat_completion,
     wrap_text,
     ensure_code_blocks_closed,
     split_text_by_period,
@@ -496,7 +496,7 @@ class BotCommands(commands.Cog):
         )
 
         try:
-            llm_answer = get_groq_completion([{"role": "user", "content": text}])
+            llm_answer = fetch_chat_completion([{"role": "user", "content": text}])
             # Ensure the output is limited to 1900 characters
             if len(llm_answer) > 1900:
                 llm_answer = llm_answer[:1900]
@@ -898,7 +898,7 @@ This commit was made automatically by the OpenGLaDOS bot, not manually by @Quant
                     text += f"make a css file that matches >>>{index_html}<<<!\n"
 
                 try:
-                    llm_answer = get_groq_completion(
+                    llm_answer = fetch_chat_completion(
                         [{"role": "user", "content": text}]
                     )
                     print("Output: \n", wrap_text(llm_answer))

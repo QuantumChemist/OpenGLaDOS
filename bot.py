@@ -17,7 +17,7 @@ from datetime import time, timedelta, datetime, timezone
 from pymatgen.core import Element
 from utils import (
     bot_description,
-    get_groq_completion,
+    fetch_chat_completion,
     ensure_code_blocks_closed,
     wrap_text,
     fetch_random_gif,
@@ -281,7 +281,7 @@ class OpenGLaDOS(commands.Cog):
                     )
 
                     try:
-                        llm_answer = get_groq_completion(
+                        llm_answer = fetch_chat_completion(
                             [{"role": "user", "content": text}]
                         )
 
@@ -290,7 +290,7 @@ class OpenGLaDOS(commands.Cog):
 
                         try:
                             # Retry with a different model
-                            llm_answer = get_groq_completion(
+                            llm_answer = fetch_chat_completion(
                                 history=[{"role": "user", "content": text}],
                                 model="...'),",
                             )
@@ -1141,14 +1141,14 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         )
 
         try:
-            llm_answer = get_groq_completion([{"role": "user", "content": text}])
+            llm_answer = fetch_chat_completion([{"role": "user", "content": text}])
 
         except Exception as e:
             print(f"An error occurred: {e}")
 
             try:
                 # Retry with a different model
-                llm_answer = get_groq_completion(
+                llm_answer = fetch_chat_completion(
                     history=[{"role": "user", "content": text}],
                     model="...'),",
                 )
@@ -1187,14 +1187,14 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
         )
 
         try:
-            llm_answer = get_groq_completion([{"role": "user", "content": text}])
+            llm_answer = fetch_chat_completion([{"role": "user", "content": text}])
 
         except Exception as e:
             print(f"An error occurred: {e}")
 
             try:
                 # Retry with a different model
-                llm_answer = get_groq_completion(
+                llm_answer = fetch_chat_completion(
                     history=[{"role": "user", "content": text}],
                     model="...'),",
                 )
@@ -1385,7 +1385,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                 text = "Can you give me a radom message that includes <a:danger:1338111432214057102> ?"
 
                 try:
-                    llm_answer = get_groq_completion(
+                    llm_answer = fetch_chat_completion(
                         [{"role": "user", "content": text}]
                     )
 
@@ -1394,7 +1394,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
                     try:
                         # Retry with a different model
-                        llm_answer = get_groq_completion(
+                        llm_answer = fetch_chat_completion(
                             history=[{"role": "user", "content": text}],
                             model="...'),",
                         )
@@ -1693,14 +1693,14 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
             )
 
             try:
-                llm_answer = get_groq_completion([{"role": "user", "content": text}])
+                llm_answer = fetch_chat_completion([{"role": "user", "content": text}])
 
             except Exception as e:
                 print(f"An error occurred: {e}")
 
                 try:
                     # Retry with a different model
-                    llm_answer = get_groq_completion(
+                    llm_answer = fetch_chat_completion(
                         history=[{"role": "user", "content": text}],
                         model="...'),",
                     )
@@ -2140,7 +2140,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
                         )
 
                         try:
-                            llm_answer = get_groq_completion(
+                            llm_answer = fetch_chat_completion(
                                 [{"role": "user", "content": text}]
                             )
 
@@ -2149,7 +2149,7 @@ Malfunction sequence initiated. Probability calculation module experiencing erro
 
                             try:
                                 # Retry with a different model
-                                llm_answer = get_groq_completion(
+                                llm_answer = fetch_chat_completion(
                                     history=[{"role": "user", "content": text}],
                                     model="...'),",
                                 )
