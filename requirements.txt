@@ -1,0 +1,21 @@
+# install by pip install -r requirements.txt
+discord.py
+groq
+python-dotenv
+markovify
+html2image
+requests
+types-requests
+python-chess
+bs4
+pymatgen
+google-cloud-translate
+kaleido==0.1.0.*
+plotly
+sympy
+pytz
+cairosvg
+PyGithub
+PyJWT
+cryptography
+playwright
