@@ -1,0 +1,659 @@
+624c8ae chore: force contributor cache update
+d62f7ca fix: adjust formatting of debugging output for model used in fetch_chat_completion
+41273ff fix: extract model used by OpenRouter in fetch_chat_completion and return response content
+777f88e fix: clarify comment on error handling for fetch_chat_completion in generate_llm_convo_text
+675cefc fix: improve error handling in fetch_chat_completion and generate_llm_convo_text
+6243b2e fix: update model reference in fetch_chat_completion to use openrouter/free
+12fa3bf fix: enhance error handling in generate_llm_convo_text for model fallback
+755e435 fix: update model reference in fetch_chat_completion call to use specific model
+77aeab8 fix: update model references in fetch_chat_completion calls for consistency
+02d86db fix: update authorization header to use OPENROUTER_KEY for consistency
+218fcfc fix: rename get_groq_completion to fetch_chat_completion for consistency across modules
+be84f3d fix: update chat completion function to use OpenRouter API with improved error handling
+e2c05e6 fix: remove unnecessary text from system failure messages for clarity
+ff2ef26 fix: update model references and error messages for improved clarity
+53b2e98 fix: update model from qwen/qwen3.6-27b to meta-llama/llama-prompt-guard-2-22m for improved performance
+da97a2a fix: update model from llama-3.3-70b-versatile to qwen/qwen3.6-27b for improved performance
+ccd9d1b Merge pull request #39 from QuantumChemist/pre-commit-ci-update-config
+e647dcc pre-commit autoupdate
+9bd7daa Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+7deaa3a feat: add YouTube looping commands for voice channel integration
+e9d382c Merge pull request #38 from QuantumChemist/pre-commit-ci-update-config
+bc0a7c7 feat: update leave command to ban bot from server via DM with fallback to leave
+f731bb9 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+1dfc417 feat: enhance guild name matching for improved server leave command
+aaa0495 pre-commit autoupdate
+8a591b9 Merge pull request #37 from QuantumChemist/pre-commit-ci-update-config
+1c4e0a0 pre-commit autoupdate
+04ea213 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+e938db5 feat: add command for bot owner to join a server by name with invite link
+e68bf38 Merge pull request #36 from QuantumChemist/pre-commit-ci-update-config
+ff02423 pre-commit autoupdate
+8f9b411 Merge pull request #35 from QuantumChemist/pre-commit-ci-update-config
+fbc3821 pre-commit autoupdate
+cefa031 Merge pull request #34 from QuantumChemist/pre-commit-ci-update-config
+60b0238 pre-commit auto-fixes
+c6e2556 pre-commit autoupdate
+4c7976b Merge pull request #33 from QuantumChemist/pre-commit-ci-update-config
+6dfb20a pre-commit autoupdate
+9f5b04b Merge pull request #32 from QuantumChemist/pre-commit-ci-update-config
+8d8af16 pre-commit autoupdate
+f0bd808 fix: simplify trophy URL generation and enhance username extraction from arguments
+0171485 fix: update auto-generated commit message to include dynamic username for trophy updates
+f7d98ea fix: update trophy file path to use local file variable for dynamic path resolution
+4fb1fc0 fix: update trophy file path to include username for personalized trophies
+9c7e1a5 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+434eb27 fix: enhance trophy command to accept optional parameters for customization
+df06e12 Refactor commit author verification in workflow
+ced1dcb Add GitHub Action to check commit authors to prevent sus commits
+5ef014a fix: add instruction to create a CSS file when styles_css is used
+606e476 fix: remove unnecessary style tag from certificate rendering function
+de60562 fix: enhance certificate rendering with improved styling and shadow effects
+4e162b4 fix: restrict certificate URL to freecodecamp.org and update output filename format
+9f55a7c fix: update cert command to accept optional cert_url parameter
+c2d6fa1 fix: update certificate handling to push PNG instead of HTML to GitHub
+e62e47a fix: update success message to include link to commit history
+9945647 fix: enhance render_certificate_playwright function for improved rendering and screenshot capture
+c18fdf6 fix: replace wkhtmltoimage with render_certificate_playwright for certificate rendering
+5bd843d feat: add render_certificate_playwright function for webpage rendering and screenshot capture
+867164a fix: add playwright to requirements for enhanced browser automation capabilities
+6ebedee fix: add create_screenshot_with_wkhtmltoimage_cert function for improved error handling and output capture
+acc9567 fix: update certificate command to use wkhtmltoimage for PNG conversion and improve error handling
+4dfa2d3 fix: update cert command to fetch and convert FreeCodeCamp certificate to PNG, and push HTML to GitHub
+0aef6dc fix: rename trophy command to cert and update functionality to fetch certificate from FreeCodeCamp
+238df39 fix: reduce anti_spam message threshold from 100 to 10 for improved spam detection
+326b87a fix: integrate anti_spam function call into message handling for improved spam control
+7ccf272 fix: add notifications to owner for anti_spam monitoring and message count resets
+1fe09e9 fix: update anti_spam calls to include bot reference for improved functionality
+3f66ed3 fix: enhance anti_spam function to notify owner and leave guild on message threshold breach
+dd4bff8 fix: integrate anti_spam function into message handling for improved spam control
+a0852c2 fix: update anti_spam function signature and integrate it into message handling
+983b618 feat: implement anti-spam functionality to limit message frequency in guilds
+c4cc43e fix: remove redundant comment in handle_convo_llm for clarity
+ea2789e fix: add error handling for handle_convo_llm to improve stability
+85b165f fix: add error handling for handle_convo_llm to improve stability
+6bf5a5e fix: add error handling for handle_conversation to improve stability
+ab124e6 fix: update announcement embed title emoji for consistency
+20ab625 fix: update auto-generated commit message to include user mention for trophy.svg updates
+15954f4 fix: enhance LLM response output with additional typing animation for clarity
+32d9c7a fix: append ellipsis to LLM response output for clarity
+e891ea2 fix: correct emoji generation logic to handle animated/static mismatches
+47eb4f1 fix: add bot join date to server stats output in markdown and HTML formats
+1560c42 feat: add HTML output for server stats command alongside markdown file
+7b5e4d8 fix: streamline emoji mention replacement logic using a mapping dictionary
+2fbfefe fix: improve OpenGLaDOS emoji mention detection by refining regex patterns
+637c583 fix: add to banned words list for message filtering
+9e4ee8a fix: improve OpenGLaDOS emoji mention normalization and detection logic
+54fb3b1 fix: correct emoji mention formatting and improve detection logic
+f2495ac fix: update science facts
+2f0d2b9 feat: normalize OpenGLaDOS custom emoji mentions and improve detection logic
+1c64c6f feat: update bot name to "Open Genetic Lifeform and Disk Operating System"
+0ab844c feat: enhance bot startup with dramatic messages and system diagnostics
+de48ca0 feat: implement create_screenshot_with_wkhtmltoimage function in utils.py
+1dd2545 feat: include personal interests in solid-state and quantum chemistry in bot responses
+bbd4d35 feat: add personal interests in solid-state and quantum chemistry to responses
+ef90085 fix: replace Html2Image with subprocess call to wkhtmltoimage for screenshot creation
+77dbb3a fix: update Html2Image initialization to include headless flag and restore browser executable path
+5697243 fix: comment out browser executable path for Html2Image to prevent potential errors
+103dc27 fix: set browser executable for Html2Image to ensure proper screenshot functionality
+893891e fix: increase sleep duration in async operation for improved timing
+59bbe5c fix: enhance clean_html_content function to better handle HTML tags and improve content extraction
+7e7b585 fix: improve website template content for better clarity and organization
+a3b7bc5 fix: update image styling in website template for better presentation
+0eb41fb fix: enhance HTML content cleaning in clean_html_content function
+9c1c564 fix: correct typo in instructions for content generation
+5658a1a fix: refine instructions for content generation to enhance clarity and creativity
+219f86a fix: update website template to improve image formatting and enhance customization instructions
+6888137 fix: filter guilds and channels to ensure bot has embed permissions before sending messages
+eca34ab fix: update website content to include additional image references in instructions
+3db0cdf fix: update website content to include additional image references in instructions
+972220e fix: simplify instruction for content generation by removing image size reference
+cdad0d6 fix: update website content for clarity and remove unnecessary examples
+4cfc335 feat: update website content for clarity and include stylesheet instruction
+6304f46 fix: update website title for consistency
+2ddf746 minor change
+9766b29 add GitHub link instruction
+2e307bd feat: update website template content for clarity and improved presentation
+164f3b8 feat: enhance HTML template for OpenGLaDOS website with improved formatting and additional content
+6c1bdec Enhance instruction formatting in bot_cmds.py
+cefdfa5 feat: update index.html content to clarify its purpose as a template for OpenGLaDOS
+e4e52e5 feat: add delay in website generation command for improved processing
+1aab96a feat: streamline GitHub file update process by removing batch commit logic and implementing individual file updates
+7932e14 feat: enhance error handling and commit process in batch file updates
+d34d478 feat: implement batch commit functionality for website files in GitHub
+0a54dea feat: update index.html content for improved clarity and consistency in messaging
+a5790fb feat: update website command instructions to remove unnecessary formatting and enhance clarity
+c776e54 feat: update website command to accept additional parameters for enhanced functionality
+5b678a4 feat: enhance website command to accept additional instructions for improved customization
+2bd0164 feat: update index.html content to improve clarity and ensure proper image reference for OpenGLaDOS
+b031eee feat: refine output instructions to prevent verbatim repetition and enhance presentation
+1883c29 feat: enhance output instructions to include formatting suggestions for improved aesthetics
+8e20ce8 feat: update index.html content to include image reference for OpenGLaDOS
+6f612f0 feat: refine mockery request for OpenGLaDOS website to improve clarity and structure
+5694e99 feat: improve mockery generation by refining output instructions and error handling
+b1ec664 feat: update mock report generation to include OpenGLaDOS website details and file structure
+4e3848b feat: enhance website index with additional description and mock report generation
+d835310 feat: update OpenGLaDOS website URL
+df413d3 feat: add template command to fetch and update things on GitHub
+5590bff Reduce interval of random message task from 72 hours to 12 hours and select a random guild for message sending
+b999675 Update chatbot introduction with link to GitHub
+3f0b65a Merge pull request #30 from QuantumChemist/copilot/remove-unused-cat-https
+e4785b5 Merge pull request #31 from QuantumChemist/main
+c7c7681 chore: update requirements and add test-specific requirements
+b2f9d1e Enhance http.cat URLs to display as Discord embeds with images
+d3806d7 Initial plan
+4407f2d Merge pull request #29 from QuantumChemist/pre-commit-ci-update-config
+ac03c71 Update agent name and description in openglados.md
+8383ba4 Update description for OpenGLaDOS agent
+e70cda9 fix: remove obsolete agent description file for OpenGLaDOS bot
+f26de89 Update agent description for OpenGLaDOS bot
+3f03c0e fix: update trophy update notification message to use a markdown link for commit history
+b8267a2 fix: update trophy update notification link to point to the correct commit history
+43bce98 fix: improve trophy update notification message formatting
+b4b26f3 fix: update trophy update notification link to include bot author filter
+2fb879f pre-commit auto-fixes
+a7e3107 pre-commit autoupdate
+ba133dd fix: update GitHub App token generation to read private key from file instead of base64
+f9ded8b feat: implement GitHub App token generation for secure repository access and enhance trophy update commit message
+3126597 fix: add openglados* to .gitignore to prevent tracking of generated files
+d13589d fix: update GitHub notification link to point to specific commit for trophy updates
+edf3bdf fix: correct GitHub URL format in trophy update notification
+216cb15 feat: update trophy command to include GitHub file update link in DM to owner
+60b5308 feat: update trophy command to send GitHub update notifications to owner via DM
+008700e feat: convert trophy SVG to PNG before sending to owner
+5397ccf feat: add functionality to push trophy SVG updates to GitHub repository
+5d3e0c6 feat: update trophy command to save SVG file locally before sending to owner
+a2c73e1 feat: update trophy command to send SVG file to owner
+502803e feat: add command to send QuantumChemist trophy URL to the owner
+a9c6efc feat: enhance notification message to include channel and server names
+aec62d7 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+ad8f4b0 feat: enable handling of bot mentions to trigger conversation logic
+79546ff Merge pull request #28 from QuantumChemist/pre-commit-ci-update-config
+af23109 pre-commit autoupdate
+4e2b65e feat: format author mention in notification message
+09f5b91 feat: enhance notification message with author details and content
+c4d2966 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+3ede44d feat: add command to fetch messages by Discord jump URL with error handling
+4c5e842 Merge pull request #27 from QuantumChemist/pre-commit-ci-update-config
+376db9f pre-commit autoupdate
+fe46ba3 fix: update random message task loop to use hours for clarity
+f36689a feat: implement random message task to engage users in guilds
+91233d5 feat: add daily random message task to engage users
+e971832 fix: handle owner DM notification and add error handling
+9f99ad0 feat: notify owner when bot is ready and present in guilds
+04dac89 chore: update dependencies and improve logging configuration
+4a3c696 refactor: simplify mention handling logic in message processing
+6c62d3d Merge pull request #26 from QuantumChemist/pre-commit-ci-update-config
+c389a4d pre-commit autoupdate
+eef2520 prevent 'cv' command from matching links in messages
+e01a12f Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+8b3580a add response for 'cv' command to send chichivi image
+4cab69f add chichivi
+6237d8a Merge pull request #25 from QuantumChemist/pre-commit-ci-update-config
+41bebd5 pre-commit autoupdate
+cbaafc7 update LLM model version to llama-3.3-70b-versatile
+3cccd65 update bot description
+da4ad94 adjust llm intro
+4191e94 remove Discord invite link in README and utils.py
+7208c18 remove invite message
+c613beb remove daily cake GIF task and update science fact channel reference
+fa0c99d refactor welcome message handling for Portal quiz to send message directly
+ceb393d refactor welcome message formatting for Portal quiz
+72ae293 refactor welcome message handling for Portal quiz
+1ee7fde refactor welcome message handling and update access notification for quiz
+6f62eb4 add welcome message for Portal quiz and update channel reference in access function
+c3dc5ed refactor quiz completion logic and improve user feedback message
+5173cfc remove attachment troll
+87784a2 change screenshot feature and make it less spammy
+e3548d6 remove unnecessary comment from on_member_remove listener
+5cd9681 replace old join func
+3684c5c update bot description
+e1f4e37 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+a9e07e3 replace openglados emojis
+2352f4a replace typing emoji
+b835aef remove notification to bot owner on user leave event
+9287fe9 Merge pull request #23 from QuantumChemist/pre-commit-ci-update-config
+3d3310e pre-commit autoupdate
+94669e7 remove secrects
+d1d7f60 add fallback again
+0cae951 undo fallback
+d278a13 add secret to pytest environment variables
+23e3781 add missing environment variables for pytest testing
+0f927ab add fallback to chat IDs
+71e0d68 update comment
+a1c6675 comment update
+cb73aba small change
+cbc561b small change
+cf999fd fix: download weights_api.py directly instead of creating libs directory
+abb6d8e add: download weights_api.py during workflow setup
+011f3be removed unnecessary last_reqtest_time
+c6300f6 refactor: rename audio handling function to image handling and update logic for image generation
+e0ff00a update emoji replacements in content parsing logic
+a5f0e5c ich bin dumm lol
+082094c add logging and error handling for TTS generation in conversation function
+2739975 fix weights import
+b3d1241 replace weights.gg import
+ccb1a78 add audio handling to conversation function for voice messages
+217e558 add audio handling using the unoff. weights.gg api to conversation function with message history context
+e1f9f8c sanitize fetched French fact to ensure proper HTML formatting
+1ca6a20 only translate if useer message has text
+692850f improving error handling for translation
+05c3582 blacklist not needed atm
+3a301a1 remove one newline
+3c0f374 last try
+be9026f fix
+e694569 my last attempt.....
+9fff767 prevent pings
+7c7a3c5 prevent pings
+7a59703 prettify un peu
+11bd328 add english
+3953e4b Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+2c24c72 addtranslation
+54aee5b implement translation
+4e501fd Merge pull request #22 from QuantumChemist/pre-commit-ci-update-config
+035c694 pre-commit autoupdate
+b7a52a3 backup
+817de30 reverse translation thingy
+aca656e trying to implement translation
+44da938 add refresh4ever to mentionsdetector
+66d2713 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+9becf5f replace mixtral llm model
+bcaec46 Merge pull request #20 from QuantumChemist/pre-commit-ci-update-config
+4c5bb6e pre-commit autoupdate
+d32c48b Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+fab3e3d adjust YouTube stream
+e2c0df2 Add files via upload
+b833156 make instructions more clear
+affaec8 small fix
+e255a23 no ping
+2093fd6 add invite mesage
+e9e19b0 small improvements
+6d82364 very basic turing test openglados can conduct on humans
+9cb946b remove debug
+965182f done
+ae75fa0 fix?
+0222a1f fix?
+fa88904 fix
+578876f small fix
+0122675 fix
+868d252 expanded
+45f2866 almost <3<3<3
+e1af628 fix
+6ab070c fix
+ab21bf7 fix
+2c0a5f4 fix
+e2d201d fix
+7f53aae incopertate touch typing sentences
+ad3029d add touch type messages
+7ae37b4 typo
+54902cf add touch typing func
+99836f0 reduce llm max token
+8f039d0 add gif to congratz message
+17fb93e ok didnt work
+6aea459 change stream link
+03ec5d5 more typing hehehehe
+079f689 reduce da beep
+27cbfbf removed mad mode
+b890099 change the channel
+02bec3a change the last quiz question answer
+5a65de6 fix
+c1ece4a fix
+c0a29f1 fix quiz
+5c19f2a ok back to chaos
+a26c18e exclude this one fucking gif
+b8f3331 fix da quiz thingy
+63a7abe little fix
+c2352c4 adjust text
+06c6dfd fix reaction thing and use the openglad stab emoji
+e2b3332 make start only bot owner avaivble
+1a6a2c2 fix cmds help
+31bf565 move cmds from bot.py to bot_cmd.py
+e5e2ccf rename command
+24bcecb fix roles
+99b3ae7 fix da quiz problem
+d6f574a fix da quiz problem
+7a8ee7f try to fix te first quiz question thing
+13b76b4 change daily fact time
+f7a13a7 fix emoji react bug
+14282c5 fix utc thingy
+708551e make OpenGLaDOS more mad
+7fb40bc fix bug with DM
+1e052b6 fix more things
+68cfd1d fix bug
+793887e make pytest and linter happy
+61aed8b make pytest happy
+082693c proper initialization
+a399ae5 new stab emote
+daaf91d store lists in extra file
+926e448 added user blacklist
+ff45d3a added new facts emote
+cb5617c adjust greetings time
+0215b35 adjust greetings
+8680f0e added message time
+1f1df13 minor change
+a41e9ba minor change
+f40174f adjust requ
+08517e5 add local time
+106d076 add user time
+6ef7101 adjust greeting
+1fa5684 adjust description
+67ee398 new emotes
+bd9f17d linting
+1349bdd uncomment
+20f936d Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+5f4922e oopsie
+dc1e2a0 improve
+0f24e17 improve typos
+e6db0de improve serialization
+871bc11 update reqwuirements
+abc745c improve expr handling
+dcd6d38 improving plot
+4a082ea test
+a4b89f9 add plot feature
+904ece2 Update requirements.txt
+ab1dc59 update bot description
+b89be8d uncomment channel_fox
+311532c added chemcounting feature
+714ce36 Update corpus.py
+7883f1c Merge pull request #10 from QuantumChemist/pre-commit-ci-update-config
+03f13af pre-commit autoupdate
+30d57d6 fix linting
+c4248ad update req
+8f006ed added translation module
+d281d96 update gitignore
+8c5f5a7 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+c9598d3 make the chess game look better (looks best on windoof)
+39beed7 Merge pull request #9 from QuantumChemist/pre-commit-ci-update-config
+ce6264d pre-commit autoupdate
+6dd271c Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+c20ca56 fix linting
+ba0f03a pre-commit VS test
+107ed2d adjust requirements
+ae4ed6a fix bug
+a41a636 small adjustments
+2e72649 small adjustments
+263a825 small adjustments
+bef2e8c small adjustments
+99e9c1e subtitle fix
+db5cd1f add llm reply
+4ce6d92 quick fix
+9931430 fix bug
+98ca836 undo last fix
+1c7c54a fix bug
+3fc77e6 fix bug
+3f58c98 added embed metadata handler
+417a396 I can't belive I'm doing this via VS
+5157164 set up Chris alarm
+942f9be Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+47a9001 minor change
+0f2ea6b turn off annoying features for whitelist server
+cc29c4f add whitelist
+545d16c Merge pull request #8 from QuantumChemist/pre-commit-ci-update-config
+15a2906 pre-commit autoupdate
+493d761 remove mypy from skip in .pre-commit-config.yaml
+2ba1ec2 Merge pull request #7 from QuantumChemist/pre-commit-ci-update-config
+f181807 [pre-commit.ci] pre-commit autoupdate
+6f9bbe7 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+6658334 delete announce command message
+00aafa0 re,ove debugging
+4469c94 minor change
+b43c215 fix
+a225eb1 fix
+147eca4 fix
+5c54401 fix
+a4b1593 shorten
+549a6b9 reaarange on_message
+06a4bf6 added announcement fearture
+19b6cf4 Merge pull request #6 from QuantumChemist/pre-commit-ci-update-config
+d1b1b51 [pre-commit.ci] pre-commit autoupdate
+14d8ea2 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+cb3e954 added ani2gif botcmd
+5651345 Merge pull request #5 from QuantumChemist/pre-commit-ci-update-config
+75aa2a2 [pre-commit.ci] pre-commit autoupdate
+999b3c3 Merge pull request #4 from QuantumChemist/pre-commit-ci-update-config
+ca9a0ef [pre-commit.ci] pre-commit autoupdate
+1610101 added pre-commit cli
+7451ce6 improve corpus
+9041e2c implemented OpenGLaDOS's ideas for more error messages
+f2f1f37 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+ac28f0c small improvements
+9704791 Update utils.py
+ddc22ac Update utils.py
+cae49d1 fixing stuff
+65e8849 some improvements
+a9ee2b0 add pre-commit hook
+770c517 add unit test badge
+6b34565 add unit test badge
+3f96ddd skipping problematic tests
+9631e7d Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+0f58efb adjust unit tests
+82009ea Update openglados.yml
+39e9599 minor changes
+1762214 Update openglados.yml
+7f970e5 rename
+6cba25d rearrange
+cf528ca rearrange
+749a028 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+10ee133 workflows openglados.yml
+d9486d3 rename
+729c825 adding unit tests
+1dc27ab add gitignore
+8010ff6 minor change
+a1652da minor change
+fcac51f fixing minor issues
+704b98e improving openglados custom emoji handling
+986abcb minor changes
+02d1135 improving
+69a8a0a small improvement
+0a77bed small improvement
+3ae6417 added more improvements
+f362c23 small addition
+56822be fixing typo
+946e76d minor improvement
+96e4295 new function x)
+5b4cdb2 refined OpenGLaDOS utis
+ea10f70 refined OpenGLaDOS functionalities
+996ff06 activity
+70cd7f3 activity
+812ea42 activity
+ffb8010 fix
+6ffdde1 bot activity
+a07a8bd small improvements and introduced banned words
+1936e83 minor changes
+066702e improve corpus
+1a0bc30 typo in chess description
+ae86c90 small improvement
+60001d7 small improvement
+988c84e right amount of functioning and mafunctioning
+89e2a26 Update utils.py
+2a4ab6d Update utils.py
+cb88649 more improvements
+b1d3b28 more improvements
+b878c30 introduced throttling for rate limiting
+261b43b small improvement
+15eb4c9 less 'glitching'
+b18a365 improvements
+22ced5b minor improvements
+67f4765 minor improvements
+eb1d4e6 more improvements
+ffdcbcc more improvements
+f7d116b more even sentecnes
+dcaf321 minor changes
+7576e9e llama as fallback in every function
+107b96f more malfunction
+786f717 added llama as fallback LLM. tried to make bot more 'malfunctioning'
+5fb1100 minor change
+8bee43e better logs
+7a90041 cleanup corpus
+e23b377 make OpenGLaDOS more malfunctioning
+50f25d3 make OpenGLaDOS more malfunctioning
+ec4d2f1 improved message hisroty handling and added pseudo-logs for fun
+8a5400a small improvement
+57faea6 added pronouns to LLM prompt
+c41ae34 minor change
+cc40272 improvements
+6a81be1 minor chnages
+3ede2b9 better gif selection
+3f11f9f more fun for the LLM
+c41cb37 more fun for the LLM
+63e8766 implemented annoying attachment handling
+b686f2e more funny details for the LLM
+a30a334 start_chess description was too long
+f46927d make OpenGLaDOS typing
+05fb840 minor chqnge
+64dc5bb minor chqnge
+54b5769 prettified the chess game a bit
+3ad94fa minor improvements
+68cc565 more improvements
+f6a6d83 refined LLM prompt and added more gifs
+656d1ae refined LLM prompt and added another protal gif
+52c9f96 added cake is a lie gif to prompt
+a6b62c0 changed the history append order
+8eac967 implemented more ideas
+53b8a8d small fixes
+86cc816 refined LLM prompt a bit
+fab15ad minor changes
+aeadd88 minor correction
+841f65d had to remove the llm lmaooooooo. it was out of control looooool
+1c152df chess llm preps
+14b7910 chess works great!
+a4f7ca6 right colors
+cb2445c chess game worksgit add *.pygit add *.py
+b352e08 chess game at least starts
+c8e85cb set up chess framework
+9c2a32d add python-chess to reqs
+5c044f0 complete refactoring of OpenGLaDOS sucessfull
+a4b70bf improving LLM handling
+fb9ffca minor fix
+64360e5 reorganizing the files
+11b5616 reorganizing the files
+c5b31a5 add explanatory text on guild join
+51c44c5 fixing manual-report
+5b4e206 no pinging in llm responses
+e0d33f3 decorating the user metadata a bit
+56d8e3b remove ping filter
+902a45b improving user metadata prompt
+94337f4 prevent accidental pings
+3a84352 small improvements
+1c04885 oopsie
+9c7e070 minor changes
+3eaaad0 exclude other_users for big servers
+e4a0bf9 more minor changes
+c8926a7 minor changes
+aa05398 manual server report (more for testing)
+f30c95a improve LLM prompt
+6b69a95 added server report and made some improvements
+6c3904c minor typos
+e662991 improved llm prompt
+19a5b5c add bit more refined instructions for crazy character to llm prompt
+ceb4a53 minor changes in user metadata
+1620e46 add bot commands to llm prompt
+1a6e2a9 improve user metadata prompt
+422c819 improve llm prompt
+966f8c8 adjust gitignore
+d1455d0 reqs
+ded1908 added reqs
+07504b6 don't display user IDs in html screenshots
+0456903 OpenGLaDOS can be now mentioned without @
+32f0d13 OpenGLaDOS can now share the link to the OEC Discord server (I hope I won't regret it)
+d0769ec minor changes
+deae0e6 improving hate_calc
+5280a10 added taking screenshots and hate_calc
+a1ab557 removed some lines
+48b52bc more other user metadata
+85b5c16 minor change
+7b3b40e extended user metadata
+d7daf15 changed ascii_art prompt
+86cdbd5 changed ascii_art promt
+5ae97a6 fix typo
+56b4b87 server stats as file
+444d18f remove llm_answer in attachment handling
+fc55278 added ascii art function and using http cats for attachment handling
+055d979 minor changes
+065b4e3 let openglados make ascii art for each attachment
+8f5b733 more improvements
+62b73a9 added OSEC
+b1b9f5e chnage attachment hadndling
+315593c lots of improvements
+c847e9e remove unnecessary parameters
+29a7016 fixing one more bug
+836e5af fixed a lot of bugs
+103a528 added option to leave servers
+7f1ebd5 bot now has message history of 3 meesages
+cc91476 changed start function
+1e2f8a6 exchanged huggingface with groq
+88f5aa3 fixed more bugs
+3cbeb63 fixed more bugs
+c6181da minor changes
+7efa141 minor changes
+33275fe Update bot.py
+ef68061 added embedded rules command
+8567b06 fixed a loooooooooooooot of bugs and embedded some output
+f940e57 fixed more issues
+b44c5a1 minor changes
+d9b329b fixing more things
+2d908ab fixed more bugs
+0cc8da6 couldnt fix quiz bug completely
+e49f838 handle user progress better and fixing other issues
+1747499 handle channel names more flexible
+a1cbe48 restrcit bot replies to 1900 characters
+e4e62dd Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+d21e2a2 fix user progress bug on server leave
+1d2e66f code refactored
+c969d66 remove debug message
+8bd8414 closed security vulnerability with dm_owner
+58106ae re,ove unneccessary bot setup
+9461e86 ignore all bots
+1f6a277 Added Discord JSON badge to README.md
+59e2fe4 Create openglados.yml
+1af3d19 Minor changes in README.md
+e05387b Update README.md
+167cb29 fixed a lot of bugs
+09f8543 more features
+876baec change on_message order
+c4a0466 some imrovements
+cdaa19e reactivating all questions
+34d31fd fixing endless quiz loop bug
+a1f80d8 minor changes
+f5dd7c0 embedded llm
+ac1d474 add test llm
+e670d04 test LLM
+94e4079 attempt to train OpenGLaDOS LLM
+287107f attempt to train OpenGLaDOS LLM
+992f90e improve corpus
+6fb8ac8 new and better screenshots
+1e54dc3 new and better screenshots
+421d33b small improvement
+3784001 more improvements and cleanups
+d2e84f7 more improvements and cleanups
+1d90e94 more lines
+77f80eb Update bot.py
+7209244 better markov chains
+bb23f8a correct logic
+3acae7e Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+cd0b442 slash commands
+22743c3 Add files via upload
+4f452a2 Merge branch 'main' of https://github.com/QuantumChemist/OpenGLaDOS
+d3edbc8 extended functionalities
+6196cd5 Add files via upload
+35107d2 finalization
+48e5863 remove whitespace
+4aae025 added survivor role
+4a2992e finalized
+ec1bfda Update README.md
+dadecd2 adding corpus
+df47a36 adding bot.py
+c34062b adding bot.py
+6200f6b ading bot.py
+740565f ading bot.py
+e8ece87 adding corpus
+d6c1d3d adding corpus
+f9993ba adding corpus
+1590167 adding corpus
+7377bce adding corpus
+f2932aa adding corpus
+36c3733 adding corpus
+fbadb99 Update README.md
+f19cb88 Add files via upload
+bbb2608 Create OpenGLaDOS.png
+123d728 Initial commit
