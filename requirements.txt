@@ -1,6 +1,5 @@
 # install by pip install -r requirements.txt
 discord.py
-groq
 python-dotenv
 markovify
 html2image
